@@ -1,0 +1,9 @@
+theme: jekyll-theme-cayman
+title: openHistorian API for Python
+description: openHistorian Python API
+github:
+  repository_name: openhistorian-python
+  owner_url: https://www.gridprotectionalliance.org
+  owner_name: Grid Protection Alliance
+plugins:
+  - jemoji

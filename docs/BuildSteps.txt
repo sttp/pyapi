@@ -1,0 +1,28 @@
+Note: run these steps from root source directory (where setup.cfg is located).
+
+Make sure root-level README.md exists, if not:
+    Run CreateReadMeSymLink.cmd to create symbolic link to docs/README.md markdown.
+    The .gitignore file ensures that this file will not be checked in since the one in
+    the "docs" folder is considered the primary source. Note that it is easy for the
+    root README.md link relationship to its parent in the docs folder to be broken,
+    always delete README.md in the root and run CreateReadMeSymLink.cmd again before
+    a new build to ensure the README.md will contain the latest updates.
+
+For updates, always increment version number in:
+    setup.cfg
+
+If docs/README.md is updated:
+    delete README.md in the root and re-run CreateReadMeSymLink.cmd
+
+It is always best to delete the following folders before a new build:
+    build/
+    dist/
+
+Build Distribution: 
+    python -m build
+
+Validate Distribution:
+    twine check dist/*
+
+Upload to PiPy:
+    twine upload dist/*
