@@ -1,8 +1,8 @@
 theme: jekyll-theme-cayman
-title: openHistorian API for Python
-description: openHistorian Python API
+title: STTP API for Python
+description: STTP Python API
 github:
-  repository_name: openhistorian-python
+  repository_name: pyapi
   owner_url: https://www.gridprotectionalliance.org
   owner_name: Grid Protection Alliance
 plugins:
