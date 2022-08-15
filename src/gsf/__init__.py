@@ -1,4 +1,4 @@
-#******************************************************************************************************
+# ******************************************************************************************************
 #  __init__.py - Gbtc
 #
 #  Copyright © 2021, Grid Protection Alliance.  All Rights Reserved.
@@ -19,7 +19,7 @@
 #  02/01/2021 - J. Ritchie Carroll
 #       Generated original version of source code.
 #
-#******************************************************************************************************
+# ******************************************************************************************************
 
 from typing import Sequence
 from datetime import datetime, timedelta
@@ -27,6 +27,7 @@ from uuid import UUID
 from decimal import Decimal
 from enum import IntEnum
 import numpy as np
+
 
 def static_init(cls):
     """
@@ -38,16 +39,21 @@ def static_init(cls):
 
     return cls
 
+
 def override(self):
     """
     Marks a method as an override (for documentation purposes).
     """
     return self
 
+
 class Empty:
     GUID = UUID("00000000-0000-0000-0000-000000000000")
     DATETIME = datetime(1, 1, 1)
     DECIMAL = Decimal(0)
+    TICKS = np.uint64(0)
+    STRING = ""
+
 
 class Limits(IntEnum):
     MAXTICKS = 3155378975999999999
@@ -59,6 +65,7 @@ class Limits(IntEnum):
     MAXINT64 = 9223372036854775807
     MAXUINT64 = 18446744073709551615
 
+
 class ByteSize(IntEnum):
     INT8 = 1
     UINT8 = 1
@@ -69,22 +76,14 @@ class ByteSize(IntEnum):
     INT64 = 8
     UINT64 = 8
 
-class Ticks:
-    @staticmethod
-    def FromDateTime(dt: datetime) -> np.uint64:
-        return np.uint64((dt - Empty.DATETIME).total_seconds() * 10000000)
-
-    @staticmethod
-    def FromTimeDelta(td: timedelta) -> np.uint64:
-        return np.uint64(td.total_seconds() * 10000000)
-    
-    @staticmethod
-    def ToDateTime(ticks: np.uint64) -> datetime:
-        return Empty.DATETIME + timedelta(microseconds = ticks // 10)
 
 class Validate:
     @staticmethod
     def Parameters(array: Sequence, startIndex: int, length: int):
+        """
+        Validates array or buffer parameters.
+        """
+
         if array is None:
             raise TypeError("array is None")
 
@@ -95,5 +94,5 @@ class Validate:
             raise ValueError("value cannot be negative")
 
         if startIndex + length > len(array):
-            raise ValueError(f"startIndex of {startIndex:,} and length of {length:,} will exceed array size of {len(array):,}")
-
+            raise ValueError(
+                f"startIndex of {startIndex:,} and length of {length:,} will exceed array size of {len(array):,}")
