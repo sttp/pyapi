@@ -34,6 +34,11 @@ class Measurement:
     Represents a basic unit of measured data for transmission or reception in the STTP API.
     """
 
+    DEFAULT_SIGNALID = Empty.GUID
+    DEFAULT_VALUE = np.float64(np.NAN)
+    DEFAULT_TIMESTAMP = Empty.TICKS
+    DEFAULT_FLAGS = StateFlags.NORMAL
+
     def __init__(self,
                  signalid: UUID = ...,
                  value: np.float64 = ...,
@@ -41,22 +46,22 @@ class Measurement:
                  flags: StateFlags = ...
                  ):
 
-        self.signalid = Empty.GUID if signalid is ... else signalid
+        self.signalid = Measurement.DEFAULT_SIGNALID if signalid is ... else signalid
         """
         Defines measurement's globally unique identifier.
         """
 
-        self.value = np.float64(np.NAN) if value is ... else value
+        self.value = Measurement.DEFAULT_VALUE if value is ... else value
         """
         Defines instantaneous value of the measurement.
         """
 
-        self.timestamp = Empty.TICKS if timestamp is ... else timestamp
+        self.timestamp = Measurement.DEFAULT_TIMESTAMP if timestamp is ... else timestamp
         """
         Defines the time, in ticks, that measurement was taken.
         """
 
-        self.flags = StateFlags.NORMAL if flags is ... else flags
+        self.flags = Measurement.DEFAULT_FLAGS if flags is ... else flags
         """
         Defines flags indicating the state of the measurement as reported by the device that took it.
         """
