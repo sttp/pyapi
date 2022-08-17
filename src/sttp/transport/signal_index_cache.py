@@ -21,7 +21,7 @@
 #
 #******************************************************************************************************
 
-from ..gsf import Empty, Limits
+from gsf import Empty, Limits
 from typing import Dict, List, Set, Tuple, Optional
 from uuid import UUID
 import numpy as np

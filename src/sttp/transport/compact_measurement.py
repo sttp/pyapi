@@ -22,11 +22,11 @@
 #******************************************************************************************************
 
 from enum import IntFlags
-from ..gsf import Limits
-from ..ticks.ticks import Ticks
-from .measurement import Measurement
-from .constants import StateFlags
-from .signal_index_cache import SignalIndexCache
+from gsf import Limits
+from ticks import Ticks
+from measurement import Measurement
+from constants import StateFlags
+from signal_index_cache import SignalIndexCache
 from uuid import UUID
 import numpy as np
 

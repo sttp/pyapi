@@ -21,7 +21,7 @@
 #
 # ******************************************************************************************************
 
-from ..gsf import Empty
+from gsf import Empty
 from uuid import UUID
 from datetime import datetime
 import numpy as np
