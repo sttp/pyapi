@@ -79,7 +79,7 @@ class ByteSize(IntEnum):
 
 class Validate:
     @staticmethod
-    def Parameters(array: Sequence, startIndex: int, length: int):
+    def parameters(array: Sequence, startIndex: int, length: int):
         """
         Validates array or buffer parameters.
         """

@@ -21,9 +21,9 @@
 #
 #******************************************************************************************************
 
-from .metadataCache import metadataCache
-from gsf.streamEncoder import streamEncoder
-from gsf.binaryStream import binaryStream
+from ..src.sttp.metadata_cache import MetadataCache
+from gsf.stream_encoder import StreamEncoder
+from gsf.binary_stream import BinaryStream
 from gsf import override
 from typing import Optional, Callable
 from enum import IntEnum
@@ -32,11 +32,13 @@ import socket
 import gzip
 import numpy as np
 
+
 class ServerCommand(IntEnum):
     # Meta data refresh command.
     METADATAREFRESH = 0x01
     # Define operational modes for subscriber connection.
     DEFINEOPERATIONALMODES = 0x06
+
 
 class ServerResponse(IntEnum):
     # Command succeeded response.
@@ -44,110 +46,123 @@ class ServerResponse(IntEnum):
     # Command failed response.
     FAILED = 0x81
 
-class connection():
+
+class Connection():
     """
     Defines API functionality for connecting to an STTP instance
     """
 
     def __init__(self, hostAddress: str):
-        self.metadata: Optional[metadataCache] = None
+        self.metadata: Optional[MetadataCache] = None
 
     @property
-    def Metadata(self) -> Optional[metadataCache]:
+    def Metadata(self) -> Optional[MetadataCache]:
         return self.metadata
 
     def RefreshMetadata(self, sttpPort: int = 7175, logOutput: Optional[Callable[[str], None]] = None) -> int:
         """
         Requests updated metadata from STTP connection.
         """
-        sttpSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP)        
+        sttpSocket = socket.socket(
+            socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP)
         self.socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-        stream = binaryStream(streamEncoder((lambda length: sttpSocket.recv(length)), (lambda buffer: sttpSocket.send(buffer)), "big"))
-        
-        logOutput = (lambda value: print(value)) if logOutput is None else logOutput
+        stream = BinaryStream(StreamEncoder((lambda length: sttpSocket.recv(
+            length)), (lambda buffer: sttpSocket.send(buffer)), "big"))
+
+        logOutput = (lambda value: print(value)
+                     ) if logOutput is None else logOutput
         logOutput("Requesting metadata from STTP...")
         opStart = time()
 
         # Using STTP connection to get metadata only (no subscription), hence the following operational modes:
-        # OperationalModes.CompressMetadata | CompressionModes.GZip | OperationalEncoding.UTF8 | (OperationalModes.VersionMask & 1U) 
+        # OperationalModes.CompressMetadata | CompressionModes.GZip | OperationalEncoding.UTF8 | (OperationalModes.VersionMask & 1U)
         operationalModes = 0x80000221
 
         try:
             sttpSocket.connect((self.HostIPAddress, sttpPort))
 
             # Establish operational modes for STTP connection
-            stream.WriteInt32(5) # Payload aware buffer length
+            stream.WriteInt32(5)  # Payload aware buffer length
             stream.WriteByte(ServerCommand.DEFINEOPERATIONALMODES)
             stream.WriteUInt32(operationalModes)
 
             # Request metadata refresh
-            stream.WriteInt32(1) # Payload aware buffer length
+            stream.WriteInt32(1)  # Payload aware buffer length
             stream.WriteByte(ServerCommand.METADATAREFRESH)
             stream.Flush()
 
             while True:
                 # Get payload aware buffer length
                 bufferLength = stream.ReadInt32()
-                
+
                 # Get server response
                 responseCode = ServerResponse(stream.ReadByte())
                 commandCode = ServerCommand(stream.ReadByte())
                 length = 0 if bufferLength < 3 else stream.ReadInt32()
-                
+
                 # Read response payload
-                buffer = connection.ReadBytes(stream, length)
+                buffer = Connection.ReadBytes(stream, length)
 
                 # Other commands can come spontaneously, like NoOp,
                 # only interested in MetadataRefresh response
                 if commandCode != ServerCommand.METADATAREFRESH:
-                    logOutput(f"Ignoring response 0x{responseCode.value:x} received for command 0x{commandCode.value:x}...")
+                    logOutput(
+                        f"Ignoring response 0x{responseCode.value:x} received for command 0x{commandCode.value:x}...")
                     continue
-            
-                if responseCode == ServerResponse.SUCCEEDED:                
-                    logOutput(f"Received {length:,} bytes of metadata in {(time() - opStart):.2f} seconds. Decompressing...")
+
+                if responseCode == ServerResponse.SUCCEEDED:
+                    logOutput(
+                        f"Received {length:,} bytes of metadata in {(time() - opStart):.2f} seconds. Decompressing...")
                     opStart = time()
 
                     try:
                         # Decompress full metadata response XML
                         buffer = gzip.decompress(buffer)
                     except Exception as ex:
-                        raise RuntimeError(f"Failed to decompress metadata: {ex}")
+                        raise RuntimeError(
+                            f"Failed to decompress metadata: {ex}")
 
-                    logOutput(f"Decompressed {len(buffer):,} bytes of metadata in {(time() - opStart):.2f} seconds. Parsing...")
+                    logOutput(
+                        f"Decompressed {len(buffer):,} bytes of metadata in {(time() - opStart):.2f} seconds. Parsing...")
                     opStart = time()
 
                     try:
                         # Parse and cache received metadata XML
-                        self.metadata = metadataCache(buffer.decode("utf-8"))
+                        self.metadata = MetadataCache(buffer.decode("utf-8"))
                     except Exception as ex:
                         raise RuntimeError(f"Failed to parse metadata: {ex}")
 
-                    measurementRecordCount = len(self.metadata.MeasurementRecords)
+                    measurementRecordCount = len(
+                        self.metadata.measurement_records)
                     deviceRecordCount = len(self.metadata.DeviceRecords)
                     phasorRecordCount = len(self.metadata.PhasorRecords)
                     recordCount = measurementRecordCount + deviceRecordCount + phasorRecordCount
-                    
-                    logOutput(f"Parsed {recordCount:,} metadata records in {(time() - opStart):.2f} seconds.")
+
+                    logOutput(
+                        f"Parsed {recordCount:,} metadata records in {(time() - opStart):.2f} seconds.")
                     logOutput(f"    Discovered:")
-                    logOutput(f"        {measurementRecordCount:,} measurement records")
-                    logOutput(f"        {deviceRecordCount:,} device records, and")
+                    logOutput(
+                        f"        {measurementRecordCount:,} measurement records")
+                    logOutput(
+                        f"        {deviceRecordCount:,} device records, and")
                     logOutput(f"        {phasorRecordCount:,} phasor records")
 
                     # Return total number of metadata records
                     return recordCount
                 else:
-                    raise RuntimeError(f"Failure code received in response to STTP metadata refresh request: {buffer.decode('utf-8')}")
+                    raise RuntimeError(
+                        f"Failure code received in response to STTP metadata refresh request: {buffer.decode('utf-8')}")
         finally:
             sttpSocket.close()
 
     @staticmethod
-    def ReadBytes(stream: binaryStream, length: int) -> bytes:
+    def ReadBytes(stream: BinaryStream, length: int) -> bytes:
         buffer = bytearray(length)
         position = 0
 
         while length > 0:
             bytesRead = stream.Read(buffer, position, length)
-            
+
             if bytesRead == 0:
                 raise RuntimeError("End of stream")
 
@@ -155,4 +170,3 @@ class connection():
             position += bytesRead
 
         return bytes(buffer)
-

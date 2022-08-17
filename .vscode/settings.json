@@ -1,10 +1,37 @@
 {
     "cSpell.words": [
+        "accessid",
+        "ALOG",
+        "ALRM",
+        "basekv",
+        "deviceid",
+        "DFDT",
+        "DIGI",
+        "dtype",
+        "fracsecpart",
+        "fsparts",
         "Gbtc",
+        "idlist",
+        "IPHA",
+        "IPHM",
         "IVINDEX",
+        "nodeid",
+        "NOFLAGS",
+        "Phasor",
+        "phasors",
+        "pointid",
+        "RECEIVEDASBAD",
         "Ritchie",
+        "signalid",
+        "signalidcache",
+        "signalidlist",
         "STTP",
         "TSSC",
-        "unsynchronized"
+        "tzparts",
+        "unsynchronized",
+        "VPHA",
+        "VPHM",
+        "Δfreq",
+        "Δtime"
     ]
 }

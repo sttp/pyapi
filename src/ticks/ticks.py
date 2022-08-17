@@ -86,64 +86,64 @@ class Ticks:
     """
 
     @staticmethod
-    def FromDateTime(dt: datetime) -> np.uint64:
+    def fromdatetime(dt: datetime) -> np.uint64:
         """
         Converts a standard Python dattime value to a Ticks value.
         """
         return np.uint64((dt - Empty.DATETIME).total_seconds() * 10000000)
 
     @staticmethod
-    def FromTimeDelta(td: timedelta) -> np.uint64:
+    def fromtimedelta(td: timedelta) -> np.uint64:
         """
         Converts a standard Python timedelta value to a Ticks value.
         """
         return np.uint64(td.total_seconds() * 10000000)
 
     @staticmethod
-    def ToDateTime(ticks: np.uint64) -> datetime:
+    def todatetime(ticks: np.uint64) -> datetime:
         """
         Converts a Ticks value to standard Python datetime value.
         """
         return Empty.DATETIME + timedelta(microseconds=ticks // 10)
 
     @staticmethod
-    def IsLeapSecond(ticks: np.uint64) -> bool:
+    def isleapsecond(ticks: np.uint64) -> bool:
         """
         Determines if the deserialized Ticks value represents a leap second, i.e., second 60.
         """
         return (ticks & Ticks.LEAPSECONDFLAG) > 0
 
     @staticmethod
-    def SetLeapSecond(ticks: np.uint64) -> np.uint64:
+    def setleapsecond(ticks: np.uint64) -> np.uint64:
         """
         Flags a Ticks value to represent a leap second, i.e., second 60, before wire serialization.
         """
         return np.uint64(ticks | Ticks.LEAPSECONDFLAG)
 
     @staticmethod
-    def Now() -> np.uint64:
+    def now() -> np.uint64:
         """
         Gets the current local time as a Ticks value.
         """
-        return Ticks.FromDateTime(datetime.now())
+        return Ticks.fromdatetime(datetime.now())
 
     @staticmethod
-    def UtcNow() -> np.uint64:
+    def utcnow() -> np.uint64:
         """
         Gets the current time in UTC as a Ticks value.
         """
-        return Ticks.FromDateTime(datetime.utcnow())
+        return Ticks.fromdatetime(datetime.utcnow())
 
     @staticmethod
-    def ToString(ticks: np.uint64, timespec: str = 'microseconds') -> str:
+    def tostring(ticks: np.uint64, timespec: str = 'microseconds') -> str:
         """
         Standard timestamp representation for a Ticks value, e.g., 2006-01-02 15:04:05.999999999.
         """
-        return Ticks.ToDateTime(ticks).isoformat(sep=' ', timespec=timespec)
+        return Ticks.todatetime(ticks).isoformat(sep=' ', timespec=timespec)
 
     @staticmethod
-    def ToShortString(ticks: np.uint64) -> str:
+    def toshortstring(ticks: np.uint64) -> str:
         """
         Shows just the timestamp portion of a Ticks value with milliseconds, e.g., 15:04:05.999.
         """
-        return Ticks.ToString(ticks, "milliseconds").split(" ")[1]
+        return Ticks.tostring(ticks, "milliseconds").split(" ")[1]

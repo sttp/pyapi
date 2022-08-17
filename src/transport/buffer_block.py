@@ -31,38 +31,20 @@ class BufferBlock:
     """
 
     def __init__(self,
-                 signalID: UUID = Empty.GUID,
-                 buffer: bytearray = bytearray()
+                 signalid: UUID = ...,
+                 buffer: bytearray = ...
                  ):
-        self.signalID = signalID
-        self.buffer = buffer
+        self.signalid = Empty.GUID if signalid is ... else signalid
+        """
+        Defines measurement's globally unique identifier.
+        """
+
+        self._buffer = bytearray() if buffer is ... else buffer
 
     @property
-    def SignalID(self) -> UUID:
-        """
-        Gets measurement's globally unique identifier.
-        """
-        return self.signalID
-
-    @SignalID.setter
-    def SignalID(self, value: UUID):
-        """
-        Sets measurement's globally unique identifier.
-        """
-        self.signalID = value
-
-    @property
-    def Buffer(self) -> bytearray:
+    def buffer(self) -> bytearray:
         """
         Gets measurement buffer as an atomic unit of data, i.e., a binary buffer.
         This buffer typically represents a partial image of a larger whole.
         """
-        return self.buffer
-
-    @Buffer.setter
-    def Buffer(self, value: bytearray):
-        """
-        Gets measurement buffer as an atomic unit of data, i.e., a binary buffer.
-        This buffer typically represents a partial image of a larger whole.
-        """
-        self.buffer = value
+        return self._buffer

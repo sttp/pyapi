@@ -1,4 +1,4 @@
-#******************************************************************************************************
+# ******************************************************************************************************
 #  main.py - Gbtc
 #
 #  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.
@@ -19,49 +19,49 @@
 #  08/12/2022 - J. Ritchie Carroll
 #       Generated original version of source code.
 #
-#******************************************************************************************************
+# ******************************************************************************************************
 
+import numpy as np
+from time import time, sleep
+from datetime import datetime, timedelta
+from typing import Optional, List
+from gsf import Ticks
+from sttp.metadata_cache import MetadataCache
+from sttp.measurement_record import SignalType
+from tests.connection import Connection
 import sys
 import os
 
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../src")
 
-from sttp.connection import connection
-from sttp.measurementRecord import SignalType
-from sttp.metadataCache import metadataCache
-from gsf import Ticks
-from typing import Optional, List
-from datetime import datetime, timedelta
-from time import time, sleep
-import numpy as np
 
 def main():
     print("Creating STTP API")
-    
-    sttpapi = connection("localhost")
+
+    sttpapi = Connection("localhost")
 
     print("Connecting...")
-    
+
     try:
         sttpapi.Connect()
-        
+
         if sttpapi.IsConnected:
             print(f"Connected to \"{sttpapi.HostAddress}\"!")
 
             # Suppress default output with: sttpapi.RefreshMetadata(logOutput = lambda value: None)
             recordCount = sttpapi.RefreshMetadata()
-                
+
             # Get a reference to the STTP metadata cache
             metadata = sttpapi.Metadata
 
             # Lookup measurements for frequency signals
-            records = metadata.GetMeasurementsBySignalType(SignalType.FREQ)
+            records = metadata.measurements_with_signaltype(SignalType.FREQ)
 
             # Lookup measurements for voltage phase magnitudes
             #records.extend(metadata.GetMeasurementsBySignalType(SignalType.VPHM, instance.Name))
 
             # Lookup devices by matching text fields
-            #for device in metadata.GetDevicesByTextSearch("WESTPNT"):
+            # for device in metadata.GetDevicesByTextSearch("WESTPNT"):
             #    records.extend(device.Measurements)
 
             recordCount = len(records)
@@ -74,7 +74,7 @@ def main():
     finally:
         if sttpapi.IsConnected:
             print("Disconnecting.")
-        
+
         sttpapi.Disconnect()
 
 

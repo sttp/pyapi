@@ -35,84 +35,44 @@ class Measurement:
     """
 
     def __init__(self,
-                 signalID: UUID = ...,
+                 signalid: UUID = ...,
                  value: np.float64 = ...,
                  timestamp: np.uint64 = ...,
                  flags: StateFlags = ...
                  ):
-        self.signalID = Empty.GUID if signalID is ... else signalID
+
+        self.signalid = Empty.GUID if signalid is ... else signalid
+        """
+        Defines measurement's globally unique identifier.
+        """
+
         self.value = np.float64(np.NAN) if value is ... else value
+        """
+        Defines instantaneous value of the measurement.
+        """
+
         self.timestamp = Empty.TICKS if timestamp is ... else timestamp
-        self.flags = StateFlags.Normal if flags is ... else flags
+        """
+        Defines the time, in ticks, that measurement was taken.
+        """
 
-    @property
-    def SignalID(self) -> UUID:
+        self.flags = StateFlags.NORMAL if flags is ... else flags
         """
-        Gets measurement's globally unique identifier.
+        Defines flags indicating the state of the measurement as reported by the device that took it.
         """
-        return self.signalID
 
-    @SignalID.setter
-    def SignalID(self, value: UUID):
-        """
-        Sets measurement's globally unique identifier.
-        """
-        self.signalID = value
-
-    @property
-    def Value(self) -> np.float64:
-        """
-        Gets instantaneous value of the measurement.
-        """
-        return self.value
-
-    @Value.setter
-    def Value(self, value: np.float64):
-        """
-        Sets instantaneous value of the measurement.
-        """
-        self.value = value
-
-    @property
-    def Timestamp(self) -> np.uint64:
-        """
-        Gets the time, in ticks, that this measurement was taken.
-        """
-        return self.timestamp
-
-    @Timestamp.setter
-    def Timestamp(self, value: np.uint64):
-        """
-        Sets the time, in ticks, that this measurement was taken.
-        """
-        self.timestamp = value
-
-    @property
-    def Flags(self) -> StateFlags:
-        """
-        Gets flags indicating the state of the measurement as reported by the device that took it.
-        """
-        return self.flags
-
-    @Flags.setter
-    def Flags(self, value: StateFlags):
-        """
-        Sets flags indicating the state of the measurement as reported by the device that took it.
-        """
-        self.flags = value
-
-    def TicksValue(self) -> np.int64:
+    def ticksvalue(self) -> np.int64:
         """
         Gets the integer-based time from a Measurement Ticks based timestamp, i.e.,
         the 62-bit time value excluding any reserved flags.
         """
-        return self.Timestamp & Ticks.VALUEMASK
+        return self.timestamp & Ticks.VALUEMASK
 
-    def DateTime(self) -> datetime:
+    def datetime(self) -> datetime:
         """
         Gets a Measurement Ticks based timestamp as a standard Python datetime value.
         """
-        return Ticks.ToDateTime(self.timestamp)
+        return Ticks.todatetime(self.timestamp)
 
     def __repr__(self):
-        return f"{self.SignalID} @ {Ticks.ToShortString(self.Timestamp)} = {self.Value:.3f} ({str(self.Flags).split('.')[1]})"
+        return f"{self.signalid} @ {Ticks.toshortstring(self.timestamp)} = {self.value:.3f} ({str(self.flags).split('.')[1]})"
