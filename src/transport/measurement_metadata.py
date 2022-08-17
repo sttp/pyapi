@@ -29,8 +29,8 @@ import numpy as np
 
 class MeasurementMetadata:
     """
-    Represents the ancillary information associated with a Measurement.
-    Metadata gets cached in a registry associated with a DataSubscriber.
+    Represents the ancillary information associated with a `Measurement`.
+    Metadata gets cached in a registry associated with a `DataSubscriber`.
     """
 
     def __init__(self,
