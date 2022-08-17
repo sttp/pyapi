@@ -1,5 +1,5 @@
 #******************************************************************************************************
-#  signalindexCache.py - Gbtc
+#  signal_index_cache.py - Gbtc
 #
 #  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.
 #

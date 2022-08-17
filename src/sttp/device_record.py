@@ -1,5 +1,5 @@
 #******************************************************************************************************
-#  deviceRecord.py - Gbtc
+#  device_record.py - Gbtc
 #
 #  Copyright © 2021, Grid Protection Alliance.  All Rights Reserved.
 #

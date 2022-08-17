@@ -22,8 +22,8 @@
 #******************************************************************************************************
 
 from ..src.sttp.metadata_cache import MetadataCache
-from gsf.stream_encoder import StreamEncoder
-from gsf.binary_stream import BinaryStream
+from gsf.streamencoder import StreamEncoder
+from gsf.binarystream import BinaryStream
 from gsf import override
 from typing import Optional, Callable
 from enum import IntEnum

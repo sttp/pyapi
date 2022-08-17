@@ -1,5 +1,5 @@
 # ******************************************************************************************************
-#  encoding7Bit.py - Gbtc
+#  encoding7bit.py - Gbtc
 #
 #  Copyright © 2021, Grid Protection Alliance.  All Rights Reserved.
 #
@@ -184,13 +184,13 @@ class Encoding7Bit:
             (value >> (np7 + np7 + np7 + np7 + np7 + np7)) | np128)  # 7
         if value < np128 * np128 * np128 * np128 * np128 * np128 * np128 * np128:
             np_stream_writer(value >> (np7 + np7 + np7 +
-                           np7 + np7 + np7 + np7))  # 8
+                                       np7 + np7 + np7 + np7))  # 8
             return 8
 
         np_stream_writer(value >> (np7 + np7 + np7 + np7 +
-                       np7 + np7 + np7) | np128)  # 8
+                                   np7 + np7 + np7) | np128)  # 8
         np_stream_writer(value >> (np7 + np7 + np7 +
-                       np7 + np7 + np7 + np7 + np7))  # 9
+                                   np7 + np7 + np7 + np7 + np7))  # 9
         return 9
 
     @staticmethod

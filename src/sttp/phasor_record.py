@@ -1,5 +1,5 @@
 #******************************************************************************************************
-#  phasorRecord.py - Gbtc
+#  phasor_record.py - Gbtc
 #
 #  Copyright © 2021, Grid Protection Alliance.  All Rights Reserved.
 #

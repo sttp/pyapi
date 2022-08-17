@@ -1,5 +1,5 @@
 # ******************************************************************************************************
-#  bufferBlock.py - Gbtc
+#  buffer_block.py - Gbtc
 #
 #  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.
 #

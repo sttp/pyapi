@@ -1,5 +1,5 @@
 #******************************************************************************************************
-#  compactMeasurement.py - Gbtc
+#  compact_measurement.py - Gbtc
 #
 #  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.
 #

@@ -1,5 +1,5 @@
 #******************************************************************************************************
-#  binaryStream.py - Gbtc
+#  binarystream.py - Gbtc
 #
 #  Copyright © 2021, Grid Protection Alliance.  All Rights Reserved.
 #
@@ -21,7 +21,7 @@
 #
 #******************************************************************************************************
 
-from .stream_encoder import StreamEncoder
+from .streamencoder import StreamEncoder
 from .encoding7bit import Encoding7Bit
 from . import ByteSize, Validate
 from typing import Optional

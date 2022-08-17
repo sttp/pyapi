@@ -1,5 +1,5 @@
 #******************************************************************************************************
-#  streamEncoding.py - Gbtc
+#  streamencoder.py - Gbtc
 #
 #  Copyright © 2021, Grid Protection Alliance.  All Rights Reserved.
 #
