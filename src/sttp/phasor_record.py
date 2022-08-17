@@ -21,8 +21,8 @@
 #
 #******************************************************************************************************
 
-from .measurement_record import MeasurementRecord
-from .device_record import DeviceRecord
+from measurement_record import MeasurementRecord
+from device_record import DeviceRecord
 from gsf import Empty
 from typing import Optional, List
 from enum import IntEnum
