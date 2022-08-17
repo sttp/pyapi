@@ -56,7 +56,7 @@ DISCARDEDVALUEMASK: StateFlags = 0x00400000
 FIXEDLENGTH: np.uint32 = 9
 
 
-def map_to_full_flags(compactflags: CompactStateFlags) -> StateFlags:
+def _map_to_full_flags(compactflags: CompactStateFlags) -> StateFlags:
     fullflags: StateFlags = StateFlags.NORMAL
 
     if (compactflags & CompactStateFlags.DATARANGE) > 0:
@@ -80,7 +80,7 @@ def map_to_full_flags(compactflags: CompactStateFlags) -> StateFlags:
     return fullflags
 
 
-def map_to_compact_flags(fullflags: StateFlags) -> CompactStateFlags:
+def _map_to_compact_flags(fullflags: StateFlags) -> CompactStateFlags:
     compactflags: CompactStateFlags = 0
 
     if (fullflags & DATARANGEMASK) > 0:
@@ -186,7 +186,7 @@ class CompactMeasurement(Measurement):
         """
 
         # Encode compact state flags
-        flags: CompactStateFlags = map_to_compact_flags(self.flags)
+        flags: CompactStateFlags = _map_to_compact_flags(self.flags)
 
         if self._timeindex != 0:
             flags |= CompactStateFlags.TIMEINDEX
@@ -204,7 +204,7 @@ class CompactMeasurement(Measurement):
         # Decode compact state flags
         flags = CompactStateFlags(value)
 
-        self.flags = map_to_full_flags(flags)
+        self.flags = _map_to_full_flags(flags)
 
         if (flags & CompactStateFlags.TIMEINDEX) > 0:
             self._timeindex = 1
