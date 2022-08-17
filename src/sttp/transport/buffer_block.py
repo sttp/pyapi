@@ -30,16 +30,20 @@ class BufferBlock:
     BufferBlock defines an atomic unit of data, i.e., a binary buffer, for transport in STTP.
     """
 
+    DEFAULT_SIGNALID = Empty.GUID
+    DEFAULT_BUFFER = bytearray()
+
     def __init__(self,
                  signalid: UUID = ...,
                  buffer: bytearray = ...
                  ):
-        self.signalid = Empty.GUID if signalid is ... else signalid
+
+        self.signalid = BufferBlock.DEFAULT_SIGNALID if signalid is ... else signalid
         """
         Defines measurement's globally unique identifier.
         """
 
-        self._buffer = bytearray() if buffer is ... else buffer
+        self._buffer = BufferBlock.DEFAULT_BUFFER if buffer is ... else buffer
 
     @property
     def buffer(self) -> bytearray:
