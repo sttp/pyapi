@@ -21,6 +21,9 @@
 #
 #******************************************************************************************************
 
+from curses.ascii import EM
+from email.policy import default
+from .signalkind import SignalKind, SignalKindEnum
 from ..gsf import Empty
 from uuid import UUID
 from datetime import datetime
@@ -32,6 +35,17 @@ class MeasurementMetadata:
     Represents the ancillary information associated with a `Measurement`.
     Metadata gets cached in a registry associated with a `DataSubscriber`.
     """
+
+    DEFAULT_SIGNALID = Empty.GUID
+    DEFAULT_ADDER = np.float64(0.0)
+    DEFAULT_MULTIPLIER = np.float64(1.0)
+    DEFAULT_ID = np.uint64(0)
+    DEFAULT_SOURCE = Empty.STRING
+    DEFAULT_SIGNALTYPE = Empty.STRING
+    DEFAULT_SIGNALREFERENCE = Empty.STRING
+    DEFAULT_DESCRIPTION = Empty.STRING
+    DEFAULT_UPDATEDON = Empty.DATETIME
+    DEFAULT_TAG = Empty.STRING
 
     def __init__(self,
                  signalID: UUID = ...,
@@ -46,52 +60,52 @@ class MeasurementMetadata:
                  tag: str = ...
                  ):
 
-        self.signalid = Empty.GUID if signalID is ... else signalID
+        self.signalid = MeasurementMetadata.DEFAULT_SIGNALID if signalID is ... else signalID
         """
         Defines measurement's globally unique identifier.
         """
 
-        self.adder = np.float64(0) if adder is ... else adder
+        self.adder = MeasurementMetadata.DEFAULT_ADDER if adder is ... else adder
         """
         Defines additive value modifier. Allows for linear value adjustment. Defaults to zero.
         """
 
-        self.multiplier = np.float64(1) if multiplier is ... else multiplier
+        self.multiplier = MeasurementMetadata.DEFAULT_MULTIPLIER if multiplier is ... else multiplier
         """
         Defines multiplicative value modifier. Allows for linear value adjustment. Defaults to one.
         """
 
-        self.id = np.uint64(0) if id is ... else id
+        self.id = MeasurementMetadata.DEFAULT_ID if id is ... else id
         """
         Defines identification number used in human-readable measurement key.
         """
 
-        self.source = Empty.STRING if source is ... else source
+        self.source = MeasurementMetadata.DEFAULT_SOURCE if source is ... else source
         """
         Defines source used in human-readable measurement key.
         """
 
-        self.signaltype = Empty.STRING if signaltype is ... else signaltype
+        self.signaltype = MeasurementMetadata.DEFAULT_SIGNALTYPE if signaltype is ... else signaltype
         """
         Defines signal type acronym for the measurement, e.g., FREQ.
         """
 
-        self.signalreference = Empty.STRING if signalreference is ... else signalreference
+        self.signalreference = MeasurementMetadata.DEFAULT_SIGNALREFERENCE if signalreference is ... else signalreference
         """
         Defines reference info about a signal based on measurement original source.
         """
 
-        self.description = Empty.STRING if description is ... else description
+        self.description = MeasurementMetadata.DEFAULT_DESCRIPTION if description is ... else description
         """
         Defines general description for the measurement.
         """
 
-        self.updatedon = Empty.TICKS if updatedon is ... else updatedon
+        self.updatedon = MeasurementMetadata.DEFAULT_UPDATEDON if updatedon is ... else updatedon
         """
         Defines the timestamp of when the metadata was last updated.
         """
 
-        self.tag = Empty.STRING if tag is ... else tag
+        self.tag = MeasurementMetadata.DEFAULT_TAG if tag is ... else tag
         """
         Defines human-readable tag name or reference value used to help describe or help identify the measurement.
         """
