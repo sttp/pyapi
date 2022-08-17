@@ -1,4 +1,4 @@
-#******************************************************************************************************
+# ******************************************************************************************************
 #  measurement_metadata.py - Gbtc
 #
 #  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.
@@ -19,11 +19,8 @@
 #  08/16/2022 - J. Ritchie Carroll
 #       Generated original version of source code.
 #
-#******************************************************************************************************
+# ******************************************************************************************************
 
-from curses.ascii import EM
-from email.policy import default
-from .signalkind import SignalKind, SignalKindEnum
 from ..gsf import Empty
 from uuid import UUID
 from datetime import datetime
