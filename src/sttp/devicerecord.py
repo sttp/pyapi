@@ -21,8 +21,8 @@
 #
 #******************************************************************************************************
 
-from measurement_record import MeasurementRecord
-from phasor_record import PhasorRecord
+from measurementrecord import MeasurementRecord
+from phasorrecord import PhasorRecord
 from gsf import Empty
 from typing import Set
 from datetime import datetime

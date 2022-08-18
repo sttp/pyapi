@@ -21,9 +21,9 @@
 #
 # ******************************************************************************************************
 
-from measurement_record import MeasurementRecord, SignalType
-from device_record import DeviceRecord
-from phasor_record import PhasorRecord
+from measurementrecord import MeasurementRecord, SignalType
+from devicerecord import DeviceRecord
+from phasorrecord import PhasorRecord
 from gsf import Empty
 import xml.etree.ElementTree as xmlParser
 from typing import Optional, List, Dict, Set, Tuple

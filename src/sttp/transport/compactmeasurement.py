@@ -26,7 +26,7 @@ from gsf import Limits
 from ticks import Ticks
 from measurement import Measurement
 from constants import StateFlags
-from signal_index_cache import SignalIndexCache
+from signalindexcache import SignalIndexCache
 from uuid import UUID
 import numpy as np
 

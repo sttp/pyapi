@@ -21,8 +21,8 @@
 #
 #******************************************************************************************************
 
-from device_record import DeviceRecord
-from phasor_record import PhasorRecord
+from devicerecord import DeviceRecord
+from phasorrecord import PhasorRecord
 from gsf import Empty
 from typing import Optional
 from enum import IntEnum

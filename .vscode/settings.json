@@ -18,6 +18,7 @@
         "nodeid",
         "NOFLAGS",
         "Phasor",
+        "phasorrecord",
         "phasors",
         "phasortype",
         "pointid",
