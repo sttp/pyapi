@@ -1,1 +1,2 @@
 numpy>=1.22
+readerwriterlock>=1.0.9

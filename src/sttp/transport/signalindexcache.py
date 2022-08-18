@@ -1,5 +1,5 @@
 #******************************************************************************************************
-#  signal_index_cache.py - Gbtc
+#  signalindexcache.py - Gbtc
 #
 #  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.
 #
@@ -22,6 +22,7 @@
 #******************************************************************************************************
 
 from gsf import Empty, Limits
+from datasubscriber import DataSubscriber
 from typing import Dict, List, Set, Tuple, Optional
 from uuid import UUID
 import numpy as np
@@ -43,7 +44,7 @@ class SignalIndexCache:
         self._maxsignalindex = np.uint32(0)
         #self.tsscDecoder = tssc.Decoder()
 
-    def _addRecord(self, signalindex: np.int32, signalid: UUID, source: str, id: np.uint64, charsizeestimate: np.uint32 = 1):
+    def _addRecord(self, datasubscriber: DataSubscriber, signalindex: np.int32, signalid: UUID, source: str, id: np.uint64, charsizeestimate: np.uint32 = 1):
         index = np.uint32(len(self._signalidlist))
         self._reference[signalindex] = index
         self._signalidlist.append(signalid)
@@ -54,14 +55,13 @@ class SignalIndexCache:
         if index > self._maxsignalindex:
             self._maxsignalindex = index
 
-        # TODO: Uncomment when DataSubscriber is available
-        # metadata = ds.lookup_metadata(signalID)
+        metadata = datasubscriber.lookup_metadata(signalid)
 
-        # # Register measurement metadata if not defined already
-        # if len(metadata.source) == 0 {
-        #     metadata.source = source
-        #     metadata.id = id
-        # }
+        # Register measurement metadata if not defined already
+        if len(metadata.source) == 0 {
+            metadata.source = source
+            metadata.id = id
+        }
 
         # Char size here helps provide a rough-estimate on binary length used to reserve
         # bytes for a vector, if exact size is needed call RecalculateBinaryLength first
@@ -69,13 +69,13 @@ class SignalIndexCache:
 
     def contains(self, signalindex: np.int32) -> bool:
         """
-        Determines if the specified signalindex exists with the SignalIndexCache.
+        Determines if the specified signalindex exists with the `SignalIndexCache`.
         """
         return signalindex in self._reference
 
     def signalid(self, signalindex: np.uint32) -> UUID:
         """
-        Returns the signal ID Guid for the specified signalindex in the SignalIndexCache.
+        Returns the signal ID Guid for the specified signalindex in the `SignalIndexCache`.
         """
         if signalindex in self._reference:
             return self._signalidlist[self._reference[signalindex]]
@@ -85,13 +85,13 @@ class SignalIndexCache:
     @property
     def signalids(self) -> Set[UUID]:
         """
-        Gets a set for all the Guid values found in the SignalIndexCache.
+        Gets a set for all the Guid values found in the `SignalIndexCache`.
         """
         return set(self._signalidlist)
 
     def source(self, signalindex: np.int32) -> str:
         """
-        Returns the Measurement source string for the specified signalindex in the SignalIndexCache.
+        Returns the `Measurement` source string for the specified signalindex in the `SignalIndexCache`.
         """
         if signalindex in self._reference:
             return self._sourcelist[self._reference[signalindex]]
@@ -100,7 +100,7 @@ class SignalIndexCache:
 
     def id(self, signalindex: np.int32) -> np.uint64:
         """
-        Returns the Measurement integer ID for the specified signalindex in the SignalIndexCache.
+        Returns the `Measurement` integer ID for the specified signalindex in the `SignalIndexCache`.
         """
         if signalindex in self._reference:
             return self._idlist[self._reference[signalindex]]
@@ -109,8 +109,8 @@ class SignalIndexCache:
 
     def record(self, signalindex: np.int32) -> Tuple[UUID, str, np.uint64, bool]:
         """
-        Record returns the key Measurement values, signalID Guid, source string, and integer ID and a
-        final boolean value representing find success for the specified signalindex in the SignalIndexCache.
+        Record returns the key `Measurement` values, signal ID Guid, source string, and integer ID and a
+        final boolean value representing find success for the specified signalindex in the `SignalIndexCache`.
         """
         if signalindex in self._reference:
             index = self._reference[signalindex]
@@ -120,7 +120,7 @@ class SignalIndexCache:
 
     def signalindex(self, signalid: UUID) -> np.int32:
         """
-        Returns the signal index for the specified signalID Guid in the SignalIndexCache.
+        Returns the signal index for the specified signal ID Guid in the `SignalIndexCache`.
         """
         if signalid in self._signalidcache:
             return self._signalidcache[signalid]
@@ -130,15 +130,18 @@ class SignalIndexCache:
     @property
     def maxsignalindex(self) -> np.uint32:
         """
-        Gets the largest signal index in the SignalIndexCache.
+        Gets the largest signal index in the `SignalIndexCache`.
         """
         return self._maxsignalindex
 
     @property
     def count(self) -> np.uint32:
         """
-        Gets the number of Measurement records that can be found in the SignalIndexCache.
+        Gets the number of `Measurement` records that can be found in the `SignalIndexCache`.
         """
         return np.uint32(len(self._signalidcache))
 
-    #def decode(ds: DataSubcriber, buffer: bytearray, subscriberID: UUID) -> Optional[Exception]
+    def decode(datasubscriber: DataSubscriber, buffer: bytearray, subscriberid: UUID) -> Optional[Exception]:
+        """
+        Parses a `SignalIndexCache` from the specified byte buffer received from a `DataPublisher`.
+        """

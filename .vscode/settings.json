@@ -23,6 +23,7 @@
         "pointid",
         "RECEIVEDASBAD",
         "Ritchie",
+        "rwlock",
         "signalid",
         "signalidcache",
         "signalidlist",
