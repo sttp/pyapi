@@ -21,7 +21,7 @@
 #
 #******************************************************************************************************
 
-from ..src.sttp.metadata_cache import MetadataCache
+from sttp.metadata.cache import MetadataCache
 from gsf.streamencoder import StreamEncoder
 from gsf.binarystream import BinaryStream
 from gsf import override

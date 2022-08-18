@@ -21,11 +21,11 @@
 #
 # ******************************************************************************************************
 
-from measurementrecord import MeasurementRecord, SignalType
-from devicerecord import DeviceRecord
-from phasorrecord import PhasorRecord
+from record.measurement import MeasurementRecord, SignalType
+from record.device import DeviceRecord
+from record.phasor import PhasorRecord
 from gsf import Empty
-import xml.etree.ElementTree as xmlParser
+import xml.etree.ElementTree as XMLParser
 from typing import Optional, List, Dict, Set, Tuple
 from datetime import datetime
 from uuid import UUID, uuid1
@@ -40,7 +40,7 @@ class MetadataCache:
 
     def __init__(self, metadata_xml: str):
         # Parse metadata
-        metadata = xmlParser.fromstring(metadata_xml)
+        metadata = XMLParser.fromstring(metadata_xml)
 
         # Extract measurement records from MeasurementDetail table rows
         measurement_records: List[MeasurementRecord] = list()

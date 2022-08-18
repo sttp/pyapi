@@ -37,5 +37,8 @@
         "VPHM",
         "Δfreq",
         "Δtime"
+    ],
+    "python.analysis.extraPaths": [
+        "./src/sttp"
     ]
 }

@@ -26,8 +26,8 @@ from time import time, sleep
 from datetime import datetime, timedelta
 from typing import Optional, List
 from gsf import Ticks
-from sttp.metadata_cache import MetadataCache
-from sttp.measurement_record import SignalType
+from sttp.metadata.cache import MetadataCache
+from sttp.metadata.record.measurement import SignalType
 from tests.connection import Connection
 import sys
 import os
