@@ -22,7 +22,7 @@
 # ******************************************************************************************************
 
 from typing import Sequence
-from datetime import datetime, timedelta
+from datetime import datetime
 from uuid import UUID
 from decimal import Decimal
 from enum import IntEnum
@@ -75,6 +75,9 @@ class ByteSize(IntEnum):
     UINT32 = 4
     INT64 = 8
     UINT64 = 8
+    FLOAT16 = 2
+    FLOAT32 = 4
+    FLOAT64 = 8
 
 
 class Validate:

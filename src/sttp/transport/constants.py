@@ -38,7 +38,7 @@ DEFAULT_PUBLISHINTERVAL = 1.0
 
 class StateFlags(IntFlag):
     """
-    Enumeration of the possible quality states of a Measurement value.
+    Enumeration of the possible quality states of a `Measurement` value.
     """
 
     NORMAL = 0x0
@@ -240,156 +240,146 @@ class DataPacketFlags(IntFlag):
 
 class ServerCommand(IntEnum):
     """
-    Enumeration of the possible server commands received by a DataPublisher and sent by a DataSubscriber during an STTP session.
+    Enumeration of the possible server commands received by a `DataPublisher` and sent by a `DataSubscriber` during an STTP session.
     """
 
     # Although the server commands and responses will be on two different paths, the response enumeration values
     # are defined as distinct from the command values to make it easier to identify codes from a wire analysis.
 
-    SUCCEEDED = 0x80
+    CONNECT = 0x00
     """
-    Command code for indicating a succeeded response. Informs client that its solicited server command succeeded, original command and success message follow.
-    """
-
-    FAILED = 0x81
-    """
-    Command code for indicating a failed response. Informs client that its solicited server command failed, original command and failure message follow.
+    Command code for handling connect operations. Only used as part of connection refused response.
     """
 
-    DATAPACKET = 0x82
+    METADATAREFRESH = 0x01
     """
-    Command code for indicating a data packet. Unsolicited response informs client that a data packet follows.
+    Command code for requesting an updated set of metadata.
     """
-
-    UPDATESIGNALINDEXCACHE = 0x83
+    
+    SUBSCRIBE = 0x02
     """
-    Command code for indicating a signal index cache update. Unsolicited response requests that client update its runtime signal index cache with the one that follows.
+    Command code for requesting a subscription of streaming data from server based on connection string that follows.
     """
-
-    UPDATEBASETIMES = 0x84
+    
+    UNSUBSCRIBE = 0x03
     """
-    Command code for indicating a runtime base-timestamp offsets have been updated. Unsolicited response requests that client update its runtime base-timestamp offsets with those that follow.
+    Command code for requesting that server stop sending streaming data to the client and cancel the current subscription.
     """
-
-    UPDATECIPHERKEYS = 0x85
+    
+    ROTATECIPHERKEYS = 0x04
     """
-    Command code for indicating a runtime cipher keys have been updated. Response, solicited or unsolicited, requests that client update its runtime data cipher keys with those that follow.
+    Command code for manually requesting that server send a new set of cipher keys for data packet encryption (UDP only).
     """
-
-    DATASTARTTIME = 0x86
+    
+    UPDATEPROCESSINGINTERVAL = 0x05
     """
-    Command code for indicating the start time of data being published. Unsolicited response provides the start time of data being processed from the first measurement.
+    Command code for manually requesting that server to update the processing interval with the following specified value.
     """
-
-    PROCESSINGCOMPLETE = 0x87
+    
+    DEFINEOPERATIONALMODES = 0x06
     """
-    Command code for indicating that processing has completed. Unsolicited response provides notification that input processing has completed, typically via temporal constraint.
+    Command code for establishing operational modes. As soon as connection is established, requests that server set operational modes that affect how the subscriber and publisher will communicate.
     """
-
-    BUFFERBLOCK = 0x88
+    
+    CONFIRMNOTIFICATION = 0x07
     """
-    Command code for indicating a buffer block. Unsolicited response informs client that a raw buffer block follows.
+    Command code for receipt of a notification. This message is sent in response to ServerResponse.Notify.
     """
-
-    NOTIFICATION = 0x89
+    
+    CONFIRMBUFFERBLOCK = 0x08
     """
-    Command code for indicating a notification. Unsolicited response provides a notification message to the client.
+    Command code for receipt of a buffer block measurement. This message is sent in response to ServerResponse.BufferBlock.
     """
-
-    CONFIGURATIONCHANGED = 0x8A
+    
+    CONFIRMSIGNALINDEXCACHE = 0x0A
     """
-    Command code for indicating a that the publisher configuration metadata has changed. Unsolicited response provides a notification that the publisher's source configuration has changed and that client may want to request a meta-data refresh.
+    Command code for confirming the receipt of a signal index cache. This allows publisher to safely transition to next signal index cache.
     """
-
-    USERRESPONSE00 = 0xE0
+    
+    USERCOMMAND00 = 0xD0
     """
-    Command code for handling user-defined responses.
+    Command code for handling user-defined commands.
     """
-
-    USERRESPONSE01 = 0xE1
+    
+    USERCOMMAND01 = 0xD1
     """
-    Command code for handling user-defined responses.
+    Command code for handling user-defined commands.
     """
-
-    USERRESPONSE02 = 0xE2
+    
+    USERCOMMAND02 = 0xD2
     """
-    Command code for handling user-defined responses.
+    Command code for handling user-defined commands.
     """
-
-    USERRESPONSE03 = 0xE3
+    
+    USERCOMMAND03 = 0xD3
     """
-    Command code for handling user-defined responses.
+    Command code for handling user-defined commands.
     """
-
-    USERRESPONSE04 = 0xE4
+    
+    USERCOMMAND04 = 0xD4
     """
-    Command code for handling user-defined responses.
+    Command code for handling user-defined commands.
     """
-
-    USERRESPONSE05 = 0xE5
+    
+    USERCOMMAND05 = 0xD5
     """
-    Command code for handling user-defined responses.
+    Command code for handling user-defined commands.
     """
-
-    USERRESPONSE06 = 0xE6
+    
+    USERCOMMAND06 = 0xD6
     """
-    Command code for handling user-defined responses.
+    Command code for handling user-defined commands.
     """
-
-    USERRESPONSE07 = 0xE7
+    
+    USERCOMMAND07 = 0xD7
     """
-    Command code for handling user-defined responses.
+    Command code for handling user-defined commands.
     """
-
-    USERRESPONSE08 = 0xE8
+    
+    USERCOMMAND08 = 0xD8
     """
-    Command code for handling user-defined responses.
+    Command code for handling user-defined commands.
     """
-
-    USERRESPONSE09 = 0xE9
+    
+    USERCOMMAND09 = 0xD9
     """
-    Command code for handling user-defined responses.
+    Command code for handling user-defined commands.
     """
-
-    USERRESPONSE10 = 0xEA
+    
+    USERCOMMAND10 = 0xDA
     """
-    Command code for handling user-defined responses.
+    Command code for handling user-defined commands.
     """
-
-    USERRESPONSE11 = 0xEB
+    
+    USERCOMMAND11 = 0xDB
     """
-    Command code for handling user-defined responses.
+    Command code for handling user-defined commands.
     """
-
-    USERRESPONSE12 = 0xEC
+    
+    USERCOMMAND12 = 0xDC
     """
-    Command code for handling user-defined responses.
+    Command code for handling user-defined commands.
     """
-
-    USERRESPONSE13 = 0xED
+    
+    USERCOMMAND13 = 0xDD
     """
-    Command code for handling user-defined responses.
+    Command code for handling user-defined commands.
     """
-
-    USERRESPONSE14 = 0xEE
+    
+    USERCOMMAND14 = 0xDE
     """
-    Command code for handling user-defined responses.
+    Command code for handling user-defined commands.
     """
-
-    USERRESPONSE15 = 0xEF
+    
+    USERCOMMAND15 = 0xDF
     """
-    Command code for handling user-defined responses.
+    Command code for handling user-defined commands.
     """
-
-    NOOP = 0xFF
-    """
-    Command code for indicating a nil-operation keep-alive ping. The command channel can remain quiet for some time, this command allows a period test of client connectivity.
-    """
-
+    
 
 class ServerResponse(IntEnum):
     """
-    Enumeration of the possible server responses received sent by a DataPublisher and received by a DataSubscriber during an STTP session.
+    Enumeration of the possible server responses received sent by a `DataPublisher` and received by a `DataSubscriber` during an STTP session.
     """
 
     # Although the server commands and responses will be on two different paths, the response enumeration values
@@ -538,7 +528,7 @@ class ServerResponse(IntEnum):
 
 class OperationalModes(IntFlag):
     """
-    Enumeration of the possible modes that affect how DataPublisher and DataSubscriber communicate during an STTP session.
+    Enumeration of the possible modes that affect how `DataPublisher` and `DataSubscriber` communicate during an STTP session.
     """
 
     # Operational modes are sent from a subscriber to a publisher to request operational behaviors for the

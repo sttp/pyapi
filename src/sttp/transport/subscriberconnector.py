@@ -23,10 +23,12 @@
 
 from gsf import Empty
 from datasubscriber import DataSubscriber
-from typing import Callable
+from typing import Callable, Optional
 from threading import Lock, Thread, Event
-from readerwriterlock import rwlock
+from readerwriterlock.rwlock import RWLockRead
 import numpy as np
+
+from transport.constants import ConnectStatus
 
 
 class SubscriberConnector:
@@ -34,11 +36,8 @@ class SubscriberConnector:
     Represents a connector that will establish or automatically reestablish a connection from a `DataSubscriber` to a `DataPublisher`.
     """
 
-    ERRORMESSAGE_FUNC = Callable[[str], None]
-    RECONNECT_FUNC = Callable[[DataSubscriber], None]
-
-    DEFAULT_ERRORMESSAGE_CALLBACK: ERRORMESSAGE_FUNC = lambda msg: print(msg)
-    DEFAULT_RECONNECT_CALLBACK: RECONNECT_FUNC = lambda _: ...
+    DEFAULT_ERRORMESSAGE_CALLBACK: Callable[[str], None] = lambda msg: print(msg)
+    DEFAULT_RECONNECT_CALLBACK: Callable[[DataSubscriber], None] = lambda _: ...
     DEFAULT_HOSTNAME = Empty.STRING
     DEFAULT_PORT = np.uint16(0)
     DEFAULT_MAXRETRIES = np.int32(-1)
@@ -47,8 +46,8 @@ class SubscriberConnector:
     DEFAULT_AUTORECONNECT = True
 
     def __init__(self,
-                 errormessage_callback: ERRORMESSAGE_FUNC = ...,
-                 reconnect_callback: RECONNECT_FUNC = ...,
+                 errormessage_callback: Callable[[str], None] = ...,
+                 reconnect_callback: Callable[[DataSubscriber], None] = ...,
                  hostname: str = ...,
                  port: np.uint16 = ...,
                  maxretries: np.int32 = ...,
@@ -94,14 +93,39 @@ class SubscriberConnector:
 
         self.autoreconnect = SubscriberConnector.DEFAULT_AUTORECONNECT if autoreconnect is ... else autoreconnect
         """
-        AutoReconnect defines flag that determines if connections should be automatically reattempted.
+        Defines flag that determines if connections should be automatically reattempted.
         """
 
         self._connectattempt = np.int32(0)
         self._connectionrefused = False
         self._cancel = False
-        #self._reconnectthread = Thread()
+        self._reconnectthread: Optional[Thread] = None
         self._reconnectthread_mutex = Lock()
         self._waittimer = Event()
         self._waittimer_mutex = Lock()
-        self._assigninghandler_mutex = rwlock()
+        self._assigninghandler_mutex = RWLockRead()
+        self._assigninghandler_readmutex = self._assigninghandler_mutex.gen_rlock()
+        self._assigninghandler_writemutex = self._assigninghandler_mutex.gen_wlock()
+
+    def connect(self, datasubscriber: DataSubscriber) -> ConnectStatus:
+        """
+        Initiates a connection sequence for a `DataSubscriber`
+        """
+
+        pass
+
+    def cancel(self):
+        """
+        Stops all current and future connection sequences.
+        """
+
+        pass
+
+
+    def resetconnection(self):
+        """
+        Resets `SubscriberConnector` for a new connection.
+        """
+
+        self._connectattempt = np.int32(0)
+        self._cancel = False

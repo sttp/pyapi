@@ -22,6 +22,7 @@
 #******************************************************************************************************
 
 from gsf import Empty, Limits
+from gsf.endianorder import BigEndian
 from datasubscriber import DataSubscriber
 from typing import Dict, List, Set, Tuple, Optional
 from uuid import UUID
@@ -30,7 +31,7 @@ import numpy as np
 
 class SignalIndexCache:
     """
-    Represents a mapping of 32-bit runtime IDs to 128-bit globally unique Measurement IDs. The class
+    Represents a mapping of 32-bit runtime IDs to 128-bit globally unique measurement IDs. The class
     additionally provides reverse lookup and an extra mapping to human-readable measurement keys.
     """
 
@@ -44,7 +45,7 @@ class SignalIndexCache:
         self._maxsignalindex = np.uint32(0)
         #self.tsscDecoder = tssc.Decoder()
 
-    def _addRecord(self, datasubscriber: DataSubscriber, signalindex: np.int32, signalid: UUID, source: str, id: np.uint64, charsizeestimate: np.uint32 = 1):
+    def _addrecord(self, datasubscriber: DataSubscriber, signalindex: np.int32, signalid: UUID, source: str, id: np.uint64, charsizeestimate: np.uint32 = 1):
         index = np.uint32(len(self._signalidlist))
         self._reference[signalindex] = index
         self._signalidlist.append(signalid)
@@ -65,7 +66,7 @@ class SignalIndexCache:
 
         # Char size here helps provide a rough-estimate on binary length used to reserve
         # bytes for a vector, if exact size is needed call RecalculateBinaryLength first
-        self._binarylength += np.uint32(32 + len(source)*charsizeestimate)
+        self._binarylength += np.uint32(32 + len(source) * charsizeestimate)
 
     def contains(self, signalindex: np.int32) -> bool:
         """
@@ -141,7 +142,53 @@ class SignalIndexCache:
         """
         return np.uint32(len(self._signalidcache))
 
-    def decode(datasubscriber: DataSubscriber, buffer: bytearray, subscriberid: UUID) -> Optional[Exception]:
+    def decode(self, datasubscriber: DataSubscriber, buffer: bytes) -> Tuple[UUID, Optional[Exception]]:
         """
         Parses a `SignalIndexCache` from the specified byte buffer received from a `DataPublisher`.
         """
+
+        length = len(buffer)
+
+        if length < 4:
+            return Empty.GUID, ValueError("not enough buffer provided to parse")
+
+        offset = 0
+
+        # Byte size of cache
+        binarylength = BigEndian.uint32(buffer)
+        offset += 4
+
+        if length < binarylength:
+            return Empty.GUID, ValueError("not enough buffer provided to parse")
+
+        subscriberid = UUID(bytes=buffer[offset:offset + 16])
+        offset += 16
+
+        # Number of references
+        referencecount = BigEndian.uint32(buffer[offset:])
+        offset += 4
+
+        for i in range(referencecount):
+            # Signal index
+            signalindex = np.int32(BigEndian.uint32(buffer[offset:]))
+            offset += 4
+
+            # Signal ID
+            signalid = UUID(bytes=buffer[offset:offset + 16])
+
+            offset += 16
+
+            # Source
+            sourceSize = BigEndian.uint32(buffer[offset:])
+            offset += 4
+
+            source = datasubscriber.decodestr(buffer[offset: offset + sourceSize])
+            offset += sourceSize
+
+            # ID
+            id = BigEndian.uint64(buffer[offset:])
+            offset += 8
+
+            self._addrecord(datasubscriber, signalindex, signalid, source, id)
+
+        return subscriberid, None

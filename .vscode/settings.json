@@ -4,8 +4,10 @@
         "ALOG",
         "ALRM",
         "basekv",
+        "decompressor",
         "deviceid",
         "DFDT",
+        "DGRAM",
         "DIGI",
         "dtype",
         "fracsecpart",
@@ -14,7 +16,11 @@
         "idlist",
         "IPHA",
         "IPHM",
+        "IPPROTO",
+        "isconnected",
+        "issubscribed",
         "IVINDEX",
+        "lastoosreport",
         "nodeid",
         "NOFLAGS",
         "Phasor",
@@ -22,8 +28,10 @@
         "phasors",
         "phasortype",
         "pointid",
+        "readmutex",
         "RECEIVEDASBAD",
         "Ritchie",
+        "runtimeid",
         "rwlock",
         "signalid",
         "signalidcache",
@@ -32,13 +40,18 @@
         "TSSC",
         "tzparts",
         "udpdatachannel",
+        "udpport",
         "unsynchronized",
         "VPHA",
         "VPHM",
+        "wlock",
         "Δfreq",
         "Δtime"
     ],
     "python.analysis.extraPaths": [
         "./src/sttp"
+    ],
+    "python.formatting.autopep8Args": [
+        "--max-line-length=120"
     ]
 }

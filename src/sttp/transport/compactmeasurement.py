@@ -23,10 +23,12 @@
 
 from enum import IntFlags
 from gsf import Limits
+from gsf.endianorder import BigEndian
 from ticks import Ticks
 from measurement import Measurement
 from constants import StateFlags
 from signalindexcache import SignalIndexCache
+from typing import Tuple, Optional
 from uuid import UUID
 import numpy as np
 
@@ -56,7 +58,7 @@ DISCARDEDVALUEMASK: StateFlags = 0x00400000
 FIXEDLENGTH: np.uint32 = 9
 
 
-def _map_to_full_flags(compactflags: CompactStateFlags) -> StateFlags:
+def _map_to_fullflags(compactflags: CompactStateFlags) -> StateFlags:
     fullflags: StateFlags = StateFlags.NORMAL
 
     if (compactflags & CompactStateFlags.DATARANGE) > 0:
@@ -80,7 +82,7 @@ def _map_to_full_flags(compactflags: CompactStateFlags) -> StateFlags:
     return fullflags
 
 
-def _map_to_compact_flags(fullflags: StateFlags) -> CompactStateFlags:
+def _map_to_compactflags(fullflags: StateFlags) -> CompactStateFlags:
     compactflags: CompactStateFlags = 0
 
     if (fullflags & DATARANGEMASK) > 0:
@@ -111,7 +113,7 @@ class CompactMeasurement(Measurement):
 
     def __init__(self,
                  signalindexcache: SignalIndexCache,
-                 includerime: bool,
+                 includetime: bool,
                  usemillisecondresolution: bool,
                  basetimeoffsets: np.int64[2],
                  signalid: UUID = ...,
@@ -123,15 +125,15 @@ class CompactMeasurement(Measurement):
         super().__init__(signalid, value, timestamp, flags)
 
         self._signalindexcache = signalindexcache
-        self._includetime = includerime
+        self._includetime = includetime
         self._usemillisecondresolution = usemillisecondresolution
         self._basetimeoffsets = basetimeoffsets
         self._timeindex = 0
         self._usingbasetimeoffset = False
 
-    def get_binary_length(self) -> np.uint32:
+    def get_binarylength(self) -> np.uint32:
         """
-        Gets the binary byte length of a CompactMeasurement
+        Gets the binary byte length of a `CompactMeasurement`
         """
 
         length: np.uint32 = FIXEDLENGTH
@@ -144,7 +146,7 @@ class CompactMeasurement(Measurement):
         if basetimeoffset > 0:
             # See if timestamp will fit within space allowed for active base offset. We cache result so that post call
             # to GetBinaryLength, result will speed other subsequent parsing operations by not having to reevaluate.
-            difference = self.TicksValue() - basetimeoffset
+            difference = self.ticksvalue() - basetimeoffset
 
             if difference > 0:
                 if self._usemillisecondresolution:
@@ -172,21 +174,23 @@ class CompactMeasurement(Measurement):
         """
         Gets offset compressed millisecond-resolution 2-byte timestamp.
         """
+
         return np.uint16((self.ticksvalue() - self._basetimeoffsets[self._timeindex]) / Ticks.PERMILLISECOND)
 
     def get_timestamp_c4(self) -> np.uint32:
         """
         Gets offset compressed tick-resolution 4-byte timestamp.
         """
+
         return np.uint32(self.ticksvalue() - self._basetimeoffsets[self._timeindex])
 
-    def get_compact_state_flags(self) -> np.byte:
+    def get_compact_stateflags(self) -> np.byte:
         """
         Gets byte level compact state flags with encoded time index and base time offset bits.
         """
 
         # Encode compact state flags
-        flags: CompactStateFlags = _map_to_compact_flags(self.flags)
+        flags: CompactStateFlags = _map_to_compactflags(self.flags)
 
         if self._timeindex != 0:
             flags |= CompactStateFlags.TIMEINDEX
@@ -196,7 +200,7 @@ class CompactMeasurement(Measurement):
 
         return np.byte(flags)
 
-    def set_compact_state_flags(self, value: np.byte):
+    def set_compact_stateflags(self, value: np.byte):
         """
         Sets byte level compact state flags with encoded time index and base time offset bits.
         """
@@ -204,7 +208,7 @@ class CompactMeasurement(Measurement):
         # Decode compact state flags
         flags = CompactStateFlags(value)
 
-        self.flags = _map_to_full_flags(flags)
+        self.flags = _map_to_fullflags(flags)
 
         if (flags & CompactStateFlags.TIMEINDEX) > 0:
             self._timeindex = 1
@@ -213,3 +217,79 @@ class CompactMeasurement(Measurement):
 
         self._usingbasetimeoffset = (
             flags & CompactStateFlags.BASETIMEOFFSET) > 0
+
+    @property
+    def runtimeid(self) -> np.int32:
+        """
+        Gets the 4-byte run-time signal index for this measurement.
+        """
+
+        return self._signalindexcache.signalindex(self.signalid)
+
+    @runtimeid.setter
+    def runtimeid(self, value: np.int32):
+        """
+        Sets the 4-byte run-time signal index for this measurement.
+
+        Notes
+        -----
+        This assigns `CompactMeasurement` signal ID from the specified signal index
+        based on lookup in the active `SignalIndexCache`.
+        """
+
+        self.signalid = self._signalindexcache.signalid(value)
+
+    def decode(self, buffer: bytes) -> Tuple[int, Optional[Exception]]:
+        """
+        Parses a `CompactMeasurement` from the specified byte buffer.
+        """
+
+        if len(buffer) < 1:
+            return 0, ValueError("not enough buffer available to deserialize compact measurement")
+
+        # Basic Compact Measurement Format:
+        # 		Field:     Bytes:
+        # 		--------   -------
+        #		 Flags        1
+        #		  ID          4
+        #		 Value        4
+        #		 [Time]    0/2/4/8
+        index = int(0)
+
+        # Decode state flags
+        self.set_compact_stateflags(buffer[0])
+        index += 1
+
+        # Decode runtime ID
+        self.runtimeid = np.int32(BigEndian.uint32(buffer[index:]))
+        index += 4
+
+        # Decode value
+        self.value = np.float64(BigEndian.float32(buffer[index:]))
+        index += 4
+
+        if not self._includetime:
+            return index, None
+
+        if self._usingbasetimeoffset:
+            basetimeoffset = np.uint64(self._basetimeoffsets[self._timeindex])
+
+            if self._usemillisecondresolution:
+                # Decode 2-byte millisecond offset timestamp
+                if basetimeoffset > 0:
+                    self.timestamp = basetimeoffset + np.uint64(BigEndian.uint16(buffer[index:])) * Ticks.PERMILLISECOND
+
+                index += 2
+            else:
+                # Decode 4-byte tick offset timestamp
+                if basetimeoffset > 0:
+                    self.timestamp = basetimeoffset + np.uint64(BigEndian.uint32(buffer[index:]))
+
+                index += 4
+        else:
+            # Decode 8-byte full fidelity timestamp
+            # Note that only a full fidelity timestamp can carry leap second flags
+            self.timestamp = BigEndian.uint64(buffer[index:])
+            index += 8
+
+        return index, None
