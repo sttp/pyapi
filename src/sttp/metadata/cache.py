@@ -47,8 +47,7 @@ class MetadataCache:
 
         for measurement in metadata.findall("MeasurementDetail"):
             # Get element text or empty string when value is None
-            def get_elementtext(elementname): return MetadataCache._get_elementtext(
-                measurement, elementname)
+            def get_elementtext(elementname): return MetadataCache._get_elementtext(measurement, elementname)
 
             # Parse STTP instance name and point ID from measurement key
             (instancename, pointid) = MetadataCache._get_measurementkey(measurement)
@@ -105,8 +104,7 @@ class MetadataCache:
 
         for device in metadata.findall("DeviceDetail"):
             # Get element text or empty string when value is None
-            def get_elementtext(elementname): return MetadataCache._get_elementtext(
-                device, elementname)
+            def get_elementtext(elementname): return MetadataCache._get_elementtext(device, elementname)
 
             device_records.append(DeviceRecord(
                 # `nodeID`: Extract node ID guid for the device
@@ -164,8 +162,7 @@ class MetadataCache:
 
         for phasor in metadata.findall("PhasorDetail"):
             # Get element text or empty string when value is None
-            def get_elementtext(elementname): return MetadataCache._get_elementtext(
-                phasor, elementname)
+            def get_elementtext(elementname): return MetadataCache._get_elementtext(phasor, elementname)
 
             phasor_records.append(PhasorRecord(
                 # `id`: unique integer identifier for phasor
@@ -194,10 +191,8 @@ class MetadataCache:
                 phasor.Device = device
                 device.phasors.add(phasor)
 
-                angle = self.find_measurement_signalreference(
-                    f"{device.acronym}-PA{phasor.sourceindex}")
-                magnitude = self.find_measurement_signalreference(
-                    f"{device.acronym}-PM{phasor.sourceindex}")
+                angle = self.find_measurement_signalreference(f"{device.acronym}-PA{phasor.sourceindex}")
+                magnitude = self.find_measurement_signalreference(f"{device.acronym}-PM{phasor.sourceindex}")
 
                 if angle is not None and magnitude is not None:
                     phasor.measurements.clear()

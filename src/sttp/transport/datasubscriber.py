@@ -25,8 +25,10 @@ from gsf import Empty
 from gsf.endianorder import BigEndian
 from gsf.binarystream import BinaryStream
 from gsf.streamencoder import StreamEncoder
+from ticks import Ticks
 from measurement import Measurement
 from measurementmetadata import MeasurementMetadata
+from compactmeasurement import CompactMeasurement
 from bufferblock import BufferBlock
 from constants import *
 from subscriptioninfo import SubscriptionInfo
@@ -40,6 +42,7 @@ from uuid import UUID
 from threading import Lock, Thread, Event
 from concurrent.futures import ThreadPoolExecutor
 from readerwriterlock.rwlock import RWLockRead
+from Crypto.Cipher import AES
 import gzip
 import socket
 import numpy as np
@@ -200,17 +203,17 @@ class DataSubscriber:
         """
 
         # Measurement parsing
-        self._metadatarequested: float = 0.0
+        self._metadatarequested = 0.0
         self._measurementregistry: Dict[UUID, MeasurementMetadata] = dict()
-        self._signalindexcache: List[SignalIndexCache] = list()
+        self._signalindexcache = [SignalIndexCache(), SignalIndexCache()]
         self._signalindexcache_mutex = Lock()
-        self._cacheindex = np.int32(0)
-        self._timeindex = np.int32(0)
-        self._basetimeoffsets = np.empty(2, dtype=np.int64)
-        self._key_ivs: Optional[List[List[bytes]]] = None  # np.empty((2, 2), dtype=bytes)
-        self._last_missingcachewarning: float = 0.0
-        self._tssc_resetrequested = bool
-        self._tssc_lastoosreport: float = 0.0
+        self._cacheindex = 0
+        self._timeindex = 0
+        self._basetimeoffsets = np.zeros(2, dtype=np.int64)
+        self._key_ivs: Optional[List[List[bytes]]] = None
+        self._last_missingcachewarning = 0.0
+        self._tssc_resetrequested = False
+        self._tssc_lastoosreport = 0.0
         self._tssc_lastoosreport_mutex = Lock()
 
         self._bufferblock_expectedsequencenumber = np.uint32(0)
@@ -334,9 +337,7 @@ class DataSubscriber:
 
     def _connect(self, hostname: str, port: np.uint16, autoreconnecting: bool) -> Optional[Exception]:
         if self._connected:
-            # Note: this is raised as an exception instead of returning as an error
-            # since connect without disconnect is considered an error in API usage
-            raise RuntimeError("subscriber is already connected; disconnect first")
+            return RuntimeError("subscriber is already connected; disconnect first")
 
         # Make sure any pending disconnect has completed to make sure socket is closed
         self._disconnectthread_mutex.acquire()
@@ -392,7 +393,7 @@ class DataSubscriber:
             self._commandchannel_responsethread.run()
 
             self._connected = True
-            self._last_missingcachewarning = Empty.DATETIME
+            self._last_missingcachewarning = 0.0
             self._send_operationalmodes()
 
         return err
@@ -492,7 +493,7 @@ class DataSubscriber:
 
     def disconnect(self):
         """
-        Initiates a DataSubscriber disconnect sequence.
+        Initiates a `DataSubscriber` disconnect sequence.
         """
 
         if self._disconnecting:
@@ -722,8 +723,7 @@ class DataSubscriber:
             # If we don't know what the message is, we can't interpret
             # the data sent with the packet. Deliver an error message
             # to the user via the error message callback.
-            self._dispatch_errormessage(
-                f"Received success code in response to unknown server command: {commandcode} ({hex(commandcode)})")
+            self._dispatch_errormessage(f"Received success code in response to unknown server command: {commandcode} ({hex(commandcode)})")
 
         if not has_response_message:
             return
@@ -733,7 +733,7 @@ class DataSubscriber:
         message = []
         message.append(f"Received success code in response to server command: {commandcode}")
 
-        if data is not None and len(data) > 0:
+        if len(data) > 0:
             message.append("\n")
             message.append(self.decodestr(data))
 
@@ -747,7 +747,7 @@ class DataSubscriber:
         else:
             message.append(f"Received failure code in response to server command: {commandcode}")
 
-        if data is not None and len(data) > 0:
+        if len(data) > 0:
             if len(message) > 0:
                 message.append("\n")
 
@@ -761,8 +761,7 @@ class DataSubscriber:
 
         if self.metadatareceived_callback is not None:
             if self.compress_metadata:
-                self._dispatch_statusmessage(
-                    f"Received {len(data):,} bytes of metadata in {(time() - self._metadatarequested):.3f} seconds. Decompressing...")
+                self._dispatch_statusmessage(f"Received {len(data):,} bytes of metadata in {(time() - self._metadatarequested):.3f} seconds. Decompressing...")
 
                 decompress_started = time()
 
@@ -772,48 +771,302 @@ class DataSubscriber:
                     self._dispatch_errormessage(f"Failed to decompress received metadata: {ex}")
                     return
 
-                self._dispatch_statusmessage(
-                    f"Decompressed {len(data):,} bytes of metadata in {(time() - decompress_started):.3f} seconds. Parsing...")
+                self._dispatch_statusmessage(f"Decompressed {len(data):,} bytes of metadata in {(time() - decompress_started):.3f} seconds. Parsing...")
             else:
-                self._dispatch_statusmessage(
-                    f"Received {len(data):,} bytes of metadata in {(time() - self._metadatarequested):.3f} seconds. Parsing...")
+                self._dispatch_statusmessage(f"Received {len(data):,} bytes of metadata in {(time() - self._metadatarequested):.3f} seconds. Parsing...")
 
             self._threadpool.submit(self.metadatareceived_callback, data)
 
         self.end_callbacksync()
 
     def _handle_datastarttime(self, data: bytes):
-        pass
+        self.begin_callbacksync()
+
+        if self.data_starttime_callback is not None:
+            self.data_starttime_callback(BigEndian.uint64(data))
+
+        self.end_callbacksync()
 
     def _handle_processingcomplete(self, data: bytes):
-        pass
+        self.begin_callbacksync()
+
+        if self.processingcomplete_callback is not None:
+            self.processingcomplete_callback(self.decodestr(data))
+
+        self.end_callbacksync()
 
     def _handle_update_signalindexcache(self, data: bytes):
-        pass
+        if len(data) == 0:
+            return
+
+        version = self.version
+        cacheindex = 0
+
+        # Get active cache index
+        if version > 1:
+            if data[0] > 0:
+                cacheindex = 1
+
+            data = data[1:]
+
+        if self.compress_signalindexcache:
+            try:
+                data = gzip.decompress(data)
+            except BaseException as ex:
+                self._dispatch_errormessage(f"Failed to decompress received signal index cache: {ex}")
+                return
+
+        signalindexcache = SignalIndexCache()
+        (self.subscriberid, err) = signalindexcache.decode(self, data)
+
+        if err is not None:
+            self._dispatch_errormessage(f"Failed to parse signal index cache: {err}")
+            return
+
+        self._signalindexcache_mutex.acquire()
+        self._signalindexcache[cacheindex] = signalindexcache
+        self._cacheindex = cacheindex
+        self._signalindexcache_mutex.release()
+
+        if version > 1:
+            self.send_servercommand(ServerCommand.CONFIRMSIGNALINDEXCACHE)
+
+        self.begin_callbacksync()
+
+        if self.subscriptionupdated_callback is not None:
+            self.subscriptionupdated_callback(signalindexcache)
+
+        self.end_callbacksync()
 
     def _handle_update_basetimes(self, data: bytes):
-        pass
+        if len(data) == 0:
+            return
+
+        self._timeindex = 0 if BigEndian.uint32(data) == 0 else 1
+        self._basetimeoffsets = [BigEndian.uint64(data[4:]), BigEndian.uint64(data[12:])]
+
+        self._dispatch_statusmessage(f"Received new base time offset from publisher: {Ticks.tostring(self._basetimeoffsets[self._timeindex ^ 1])}")
 
     def _handle_update_cipherkeys(self, data: bytes):
-        pass
+        # Deserialize new cipher keys
+        key_ivs = [[bytes(), bytes()], [bytes(), bytes()]]
 
-    def _handle_configurationchanged(self, data: bytes):
-        pass
+        # Move past active cipher index (not currently used anywhere else)
+        index = 1
+
+        # Read even key size
+        bufferlen = int(BigEndian.int32(data[index:]))
+        index += 4
+
+        # Read even key
+        key_ivs[EVEN_KEY][KEY_INDEX] = data[index:bufferlen]
+        index += bufferlen
+
+        # Read even initialization vector size
+        bufferlen = int(BigEndian.uint32(data[index:]))
+        index += 4
+
+        # Read even initialization vector
+        key_ivs[EVEN_KEY][IV_INDEX] = data[index:bufferlen]
+        index += bufferlen
+
+        # Read odd key size
+        bufferlen = int(BigEndian.int32(data[index:]))
+        index += 4
+
+        # Read odd key
+        key_ivs[ODD_KEY][KEY_INDEX] = data[index:bufferlen]
+        index += bufferlen
+
+        # Read odd initialization vector size
+        bufferlen = int(BigEndian.int32(data[index:]))
+        index += 4
+
+        # Read odd initialization vector
+        key_ivs[ODD_KEY][IV_INDEX] = data[index:bufferlen]
+        #index += bufferLen
+
+        # Exchange keys
+        self._key_ivs = key_ivs
+
+        self._dispatch_statusmessage("Successfully established new cipher keys for UDP data packet transmissions.")
+
+    def _handle_configurationchanged(self):
+        self._dispatch_statusmessage("Received notification from publisher that configuration has changed.")
+
+        self.begin_callbacksync()
+
+        if self.configurationchanged_callback is not None:
+            self.configurationchanged_callback()
+
+        self.end_callbacksync()
 
     def _handle_datapacket(self, data: bytes):
-        pass
+        datapacketflags = DataPacketFlags(data[0])
+        compressed = datapacketflags & DataPacketFlags.COMPRESSED > 0
+        compact = datapacketflags & DataPacketFlags.COMPACT > 0
+
+        if not compressed and not compact:
+            self._dispatch_errormessage("Python implementation of STTP only supports compact or compressed data packet encoding - disconnecting.")
+            self._dispatch_connectionterminated()
+            return
+
+        data = data[1:]
+
+        if self._key_ivs is not None:
+            # Get a local copy keyIVs - these can change at any time
+            key_ivs = self._key_ivs
+            cipherindex = 0
+
+            if datapacketflags & DataPacketFlags.CIPHERINDEX > 0:
+                cipherindex = 1
+
+            try:
+                cipher = AES.new(key_ivs[cipherindex][KEY_INDEX], AES.MODE_CBC, key_ivs[cipherindex][IV_INDEX])
+                data = cipher.decrypt(data)
+            except BaseException as ex:
+                self._dispatch_errormessage(f"Failed to decrypt data packet - disconnecting: {ex}")
+                self._dispatch_connectionterminated()
+                return
+
+        count = BigEndian.uint32(data)
+        measurements = np.empty(count, dtype=Measurement)
+        cacheindex = 0
+
+        if datapacketflags & DataPacketFlags.CACHEINDEX > 0:
+            cacheindex = 1
+
+        self._signalindexcache_mutex.acquire()
+        signalindexcache = self._signalindexcache[cacheindex]
+        self._signalindexcache_mutex.release()
+
+        if compressed:
+            self._parse_tssc_measurements(signalindexcache, data[4:], measurements)
+        else:
+            self._parse_compact_measurements(signalindexcache, data[4:], measurements)
+
+        self.begin_callbacksync()
+
+        if self.newmeasurements_callback is not None:
+            # Do not use thread pool here, processing sequence may be important.
+            # Execute callback directly from socket processing thread:
+            self.newmeasurements_callback(measurements)
+
+        self.end_callbacksync()
+
+        self.total_measurementsreceived += count
 
     def _parse_tssc_measurements(self, signalindexcache: SignalIndexCache, data: bytes, measurements: List[Measurement]):
-        pass
+        self._dispatch_errormessage("Python TSSC not implemented yet - disconnecting.")
+        self._dispatch_connectionterminated()
 
-    def _parse_compact_measurements(self, signalindexcache: SignalIndexCache, datapacketflags: DataPacketFlags, data: bytes, measurements: List[Measurement]):
-        pass
+    def _parse_compact_measurements(self, signalindexcache: SignalIndexCache, data: bytes, measurements: List[Measurement]):
+        if signalindexcache.count == 0:
+            if self._last_missingcachewarning + MISSINGCACHEWARNING_INTERVAL < time():
+                # Warning message for missing signal index cache
+                if self._last_missingcachewarning > 0.0:
+                    self._dispatch_statusmessage("Signal index cache has not arrived. No compact measurements can be parsed.")
+
+                self._last_missingcachewarning = time()
+
+            return
+
+        usemillisecondresolution = self.subscription.usemillisecondresolution
+        includetime = self.subscription.includetime
+        index = 0
+
+        for i in range(len(measurements)):
+            # Deserialize compact measurement format
+            compactMeasurement = CompactMeasurement(signalindexcache, includetime, usemillisecondresolution, self._basetimeoffsets)
+            (bytesDecoded, err) = compactMeasurement.decode(data[index:])
+
+            if err is not None:
+                self._dispatch_errormessage(f"Failed to parse compact measurements - disconnecting: {err}")
+                self._dispatch_connectionterminated()
+                return
+
+            index += bytesDecoded
+            measurements[i] = compactMeasurement
 
     def _handle_bufferblock(self, data: bytes):
-        pass
+        # Buffer block received - wrap as a BufferBlockMeasurement and expose back to consumer
+        sequencenumber = BigEndian.uint32(data)
+        buffercacheindex = int(sequencenumber - self._bufferblock_expectedsequencenumber)
+        signalindexcacheindex = 0
+
+        if self.version > 1 and data[4:][0] > 0:
+            signalindexcacheindex = 1
+
+        # Check if this buffer block has already been processed (e.g., mistaken retransmission due to timeout)
+        if buffercacheindex >= 0 and (buffercacheindex >= len(self._bufferblock_cache) and self._bufferblock_cache[buffercacheindex].buffer is None):
+            # Send confirmation that buffer block is received
+            self.send_servercommand(ServerCommand.CONFIRMBUFFERBLOCK, data[:4])
+
+            if self.version > 1:
+                data = data[5:]
+            else:
+                data = data[4:]
+
+            # Get measurement key from signal index cache
+            signalindex = BigEndian.uint32(data)
+
+            self._signalindexcache_mutex.acquire()
+            signalIndexCache = self._signalindexcache[signalindexcacheindex]
+            self._signalindexcache_mutex.release()
+
+            signalid = signalIndexCache.signalid(signalindex)
+            bufferblockmeasurement = BufferBlock(signalid)
+
+            # Determine if this is the next buffer block in the sequence
+            if sequencenumber == self._bufferblock_expectedsequencenumber:
+                bufferblockmeasurements = np.empty(1 + len(self._bufferblock_cache), BufferBlock)
+
+                # Add the buffer block measurement to the list of measurements to be published
+                bufferblockmeasurements[0] = bufferblockmeasurement
+                self._bufferblock_expectedsequencenumber += 1
+
+                # Add cached buffer block measurements to the list of measurements to be published
+                for i in range(len(self._bufferblock_cache)):
+                    if self._bufferblock_cache[i].buffer is None:
+                        break
+
+                    bufferblockmeasurements[i] = self._bufferblock_cache[i]
+                    self._bufferblock_expectedsequencenumber += 1
+
+                # Remove published buffer block measurements from the buffer block queue
+                if len(self._bufferblock_cache) > 0:
+                    self._bufferblock_cache = self._bufferblock_cache[i:]
+
+                # Publish buffer block measurements
+                self.begin_callbacksync()
+
+                if self.newbufferblocks_callback is not None:
+                    # Do not use thread pool here, processing sequence may be important.
+                    # Execute callback directly from socket processing thread:
+                    self.newbufferblocks_callback(bufferblockmeasurements)
+
+                self.end_callbacksync()
+            else:
+                # Ensure that the list has at least as many elements as it needs to cache this measurement.
+                # This edge case handles possible dropouts and/or out of order packet deliver when data
+                # transport is UDP - this use case is not expected when using a TCP only connection.
+                for i in range(len(self._bufferblock_cache), buffercacheindex + 1):
+                    self._bufferblock_cache.append(BufferBlock())
+
+                # Insert this buffer block into the proper location in the list
+                self._bufferblock_cache[buffercacheindex] = bufferblockmeasurement
 
     def _handle_notification(self, data: bytes):
-        pass
+        message = self.decodestr(data)
+
+        self._dispatch_statusmessage(f"NOTIFICATION: {message}")
+
+        self.begin_callbacksync()
+
+        if self.notificationreceived_callback is not None:
+            self.notificationreceived_callback()
+
+        self.end_callbacksync()
 
     def send_servercommand_withmessage(self, commandcode: ServerCommand, message: str):
         """
@@ -830,8 +1083,51 @@ class DataSubscriber:
         if not self._connected:
             return
 
+        packetsize = np.uint32(len(data)) + 1
+        commandbuffersize = np.uint32(packetsize + PAYLOADHEADER_SIZE)
+
+        if commandbuffersize > len(self._writebuffer):
+            self._writebuffer = bytearray(commandbuffersize)
+
+        # Insert packet size
+        BigEndian.putuint32(self._writebuffer, packetsize)
+
+        # Insert command code
+        self._writebuffer[4] = commandcode
+
+        if data is not None and len(data) > 0:
+            self._writebuffer[5:commandbuffersize] = data
+
+        if commandcode == ServerCommand.METADATAREFRESH:
+            # Track start time of metadata request to calculate round-trip receive time
+            self._metadata_requested = time()
+
+        try:
+            self._commandchannel_socket.send(self._writebuffer[:commandbuffersize])
+        except BaseException as ex:
+            # Write error, connection may have been closed by peer; terminate connection
+            self._dispatch_errormessage(f"Failed to send server command - disconnecting: {ex}")
+            self._dispatch_connectionterminated()
+
     def _send_operationalmodes(self):
-        pass
+        operationalModes = CompressionModes.GZIP
+        operationalModes |= OperationalModes.VERSIONMASK & self.version
+        operationalModes |= self._encoding
+
+        # TSSC compression only works with stateful connections
+        if self.compress_payloaddata and not self.subscription.udpdatachannel:
+            operationalModes |= OperationalModes.COMPRESSPAYLOADDATA | CompressionModes.TSSC
+
+        if self.compress_metadata:
+            operationalModes |= OperationalModes.COMPRESSMETADATA
+
+        if self.compress_signalindexcache:
+            operationalModes |= OperationalModes.COMPRESSSIGNALINDEXCACHE
+
+        buffer = bytearray(4)
+        BigEndian.putuint32(buffer, np.uint32(operationalModes))
+
+        self.send_servercommand(ServerCommand.DEFINEOPERATIONALMODES, buffer)
 
     @property
     def subscription(self) -> SubscriptionInfo:

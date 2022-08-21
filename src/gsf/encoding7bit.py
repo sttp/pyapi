@@ -183,14 +183,11 @@ class Encoding7Bit:
         np_stream_writer(
             (value >> (np7 + np7 + np7 + np7 + np7 + np7)) | np128)  # 7
         if value < np128 * np128 * np128 * np128 * np128 * np128 * np128 * np128:
-            np_stream_writer(value >> (np7 + np7 + np7 +
-                                       np7 + np7 + np7 + np7))  # 8
+            np_stream_writer(value >> (np7 + np7 + np7 + np7 + np7 + np7 + np7))  # 8
             return 8
 
-        np_stream_writer(value >> (np7 + np7 + np7 + np7 +
-                                   np7 + np7 + np7) | np128)  # 8
-        np_stream_writer(value >> (np7 + np7 + np7 +
-                                   np7 + np7 + np7 + np7 + np7))  # 9
+        np_stream_writer(value >> (np7 + np7 + np7 + np7 + np7 + np7 + np7) | np128)  # 8
+        np_stream_writer(value >> (np7 + np7 + np7 + np7 + np7 + np7 + np7 + np7))  # 9
         return 9
 
     @staticmethod
@@ -354,11 +351,9 @@ class Encoding7Bit:
         if value < np128 * np128 * np128 * np128 * np128 * np128 * np128:
             return value ^ np.uint64(0x40810204080)
 
-        value ^= (np_stream_reader() << (
-            np7 + np7 + np7 + np7 + np7 + np7 + np7))
+        value ^= (np_stream_reader() << (np7 + np7 + np7 + np7 + np7 + np7 + np7))
         if value < np128 * np128 * np128 * np128 * np128 * np128 * np128 * np128:
             return value ^ np.uint64(0x2040810204080)
 
-        value ^= (np_stream_reader() << (
-            np7 + np7 + np7 + np7 + np7 + np7 + np7 + np7))
+        value ^= (np_stream_reader() << (np7 + np7 + np7 + np7 + np7 + np7 + np7 + np7))
         return value ^ np.uint64(0x102040810204080)

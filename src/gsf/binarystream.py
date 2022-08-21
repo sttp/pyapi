@@ -97,8 +97,7 @@ class BinaryStream:
         if count > 100:
             # Loop since socket reads can return partial results
             while count > 0:
-                receive_buffer_length = self._stream.read(
-                    buffer, offset, count)
+                receive_buffer_length = self._stream.read(buffer, offset, count)
 
                 if receive_buffer_length == 0:
                     raise RuntimeError("End of stream")
@@ -112,8 +111,7 @@ class BinaryStream:
             self._receive_length = 0
 
             while self._receive_length < count:
-                receive_buffer_length = self._stream.read(
-                    self._receive_buffer, self._receive_length, pre_buffer_length)
+                receive_buffer_length = self._stream.read(self._receive_buffer, self._receive_length, pre_buffer_length)
 
                 if receive_buffer_length == 0:
                     raise RuntimeError("End of stream")
@@ -160,8 +158,7 @@ class BinaryStream:
             position += bytes_read
 
     def read_bytes(self, count: int) -> bytes:
-        buffer = self._buffer if count <= BinaryStream.VALUE_BUFFERSIZE else bytearray(
-            count)
+        buffer = self._buffer if count <= BinaryStream.VALUE_BUFFERSIZE else bytearray(count)
         self.read_all(buffer, 0, count)
         return bytes(buffer[0:count])
 
@@ -185,8 +182,7 @@ class BinaryStream:
 
     def read7bit_uint64(self) -> np.uint64:
         if self._receive_position <= self._receive_length - 9:
-            stream = StreamEncoder(self._send_buffer_read,
-                                   self._send_buffer_write)
+            stream = StreamEncoder(self._send_buffer_read, self._send_buffer_write)
             return stream.read7bit_uint64()
 
         return Encoding7Bit.read_uint64(self.read_byte)
@@ -223,8 +219,7 @@ class BinaryStream:
 
     def write7bit_uint64(self, value: np.uint64) -> int:
         if self._send_length <= BinaryStream.IO_BUFFERSIZE - 9:
-            stream = StreamEncoder(self._send_buffer_read,
-                                   self._send_buffer_write)
+            stream = StreamEncoder(self._send_buffer_read, self._send_buffer_write)
             return stream.write7bit_uint64(value)
 
         return Encoding7Bit.write_uint64(self.write_byte, value)
@@ -256,8 +251,7 @@ class BinaryStream:
             dtype = dtype.newbyteorder()
 
         if self._receive_position <= self._receive_length - size:
-            value = np.frombuffer(
-                self._receive_buffer[self._receive_position:self._receive_position + size], dtype)[0]
+            value = np.frombuffer(self._receive_buffer[self._receive_position:self._receive_position + size], dtype)[0]
             self._receive_position += size
             return value
 
@@ -265,8 +259,7 @@ class BinaryStream:
         return np.frombuffer(self._buffer[0:size], dtype)[0]
 
     def _write_int(self, size: int, value: int, signed: bool, byteorder: Optional[str]) -> int:
-        buffer = int(value).to_bytes(
-            size, self._default_byteorder if byteorder is None else byteorder, signed=signed)
+        buffer = int(value).to_bytes(size, self._default_byteorder if byteorder is None else byteorder, signed=signed)
 
         if self._send_length <= BinaryStream.IO_BUFFERSIZE - size:
             for i in range(size):
@@ -317,8 +310,7 @@ class BinaryStream:
         return self._write_int(ByteSize.UINT64, value, False, byteorder)
 
     def _send_buffer_read(self, length: int) -> bytes:
-        buffer = self._buffer if length <= BinaryStream.VALUE_BUFFERSIZE else bytearray(
-            length)
+        buffer = self._buffer if length <= BinaryStream.VALUE_BUFFERSIZE else bytearray(length)
 
         for i in range(length):
             buffer[i] = self._receive_buffer[self._receive_position + i]

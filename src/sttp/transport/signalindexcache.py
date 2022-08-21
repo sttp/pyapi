@@ -1,4 +1,4 @@
-#******************************************************************************************************
+# ******************************************************************************************************
 #  signalindexcache.py - Gbtc
 #
 #  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.
@@ -19,7 +19,7 @@
 #  08/15/2022 - J. Ritchie Carroll
 #       Generated original version of source code.
 #
-#******************************************************************************************************
+# ******************************************************************************************************
 
 from gsf import Empty, Limits
 from gsf.endianorder import BigEndian
@@ -56,13 +56,12 @@ class SignalIndexCache:
         if index > self._maxsignalindex:
             self._maxsignalindex = index
 
-        metadata = datasubscriber.lookup_metadata(signalid)
+        metadata = datasubscriber.lookupmetadata(signalid)
 
         # Register measurement metadata if not defined already
-        if len(metadata.source) == 0 {
+        if len(metadata.source) == 0:
             metadata.source = source
             metadata.id = id
-        }
 
         # Char size here helps provide a rough-estimate on binary length used to reserve
         # bytes for a vector, if exact size is needed call RecalculateBinaryLength first
@@ -72,12 +71,14 @@ class SignalIndexCache:
         """
         Determines if the specified signalindex exists with the `SignalIndexCache`.
         """
+
         return signalindex in self._reference
 
     def signalid(self, signalindex: np.uint32) -> UUID:
         """
         Returns the signal ID Guid for the specified signalindex in the `SignalIndexCache`.
         """
+
         if signalindex in self._reference:
             return self._signalidlist[self._reference[signalindex]]
 
@@ -88,12 +89,14 @@ class SignalIndexCache:
         """
         Gets a set for all the Guid values found in the `SignalIndexCache`.
         """
+
         return set(self._signalidlist)
 
     def source(self, signalindex: np.int32) -> str:
         """
         Returns the `Measurement` source string for the specified signalindex in the `SignalIndexCache`.
         """
+
         if signalindex in self._reference:
             return self._sourcelist[self._reference[signalindex]]
 
@@ -103,6 +106,7 @@ class SignalIndexCache:
         """
         Returns the `Measurement` integer ID for the specified signalindex in the `SignalIndexCache`.
         """
+
         if signalindex in self._reference:
             return self._idlist[self._reference[signalindex]]
 
@@ -113,6 +117,7 @@ class SignalIndexCache:
         Record returns the key `Measurement` values, signal ID Guid, source string, and integer ID and a
         final boolean value representing find success for the specified signalindex in the `SignalIndexCache`.
         """
+
         if signalindex in self._reference:
             index = self._reference[signalindex]
             return (self._signalidlist[index], self._sourcelist[index], self._idlist[index], True)
@@ -123,6 +128,7 @@ class SignalIndexCache:
         """
         Returns the signal index for the specified signal ID Guid in the `SignalIndexCache`.
         """
+
         if signalid in self._signalidcache:
             return self._signalidcache[signalid]
 
@@ -133,6 +139,7 @@ class SignalIndexCache:
         """
         Gets the largest signal index in the `SignalIndexCache`.
         """
+
         return self._maxsignalindex
 
     @property
@@ -140,6 +147,7 @@ class SignalIndexCache:
         """
         Gets the number of `Measurement` records that can be found in the `SignalIndexCache`.
         """
+
         return np.uint32(len(self._signalidcache))
 
     def decode(self, datasubscriber: DataSubscriber, buffer: bytes) -> Tuple[UUID, Optional[Exception]]:
@@ -191,4 +199,4 @@ class SignalIndexCache:
 
             self._addrecord(datasubscriber, signalindex, signalid, source, id)
 
-        return subscriberid, None
+        return (subscriberid, None)

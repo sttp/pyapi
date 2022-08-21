@@ -61,8 +61,7 @@ class NativeEndian:
         if len(buffer) < bytesize:
             raise ValueError(f"Buffer size too small, {bytesize} bytes required to write {bytesize * 8}-bit type")
 
-        buffer[:bytesize] = struct.pack(
-            f"{'>' if cls.target_byteorder == 'big' else '<'}{'e' if bytesize == 2 else 'f' if bytesize == 4 else 'd'}", value)
+        buffer[:bytesize] = struct.pack(f"{'>' if cls.target_byteorder == 'big' else '<'}{'e' if bytesize == 2 else 'f' if bytesize == 4 else 'd'}", value)
 
     @classmethod
     def int16(cls, buffer: bytes) -> np.int16:
