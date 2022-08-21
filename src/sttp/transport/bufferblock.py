@@ -21,9 +21,9 @@
 #
 # ******************************************************************************************************
 
-from uuid import UUID
 from gsf import Empty
-
+from uuid import UUID
+from typing import Optional
 
 class BufferBlock:
     """
@@ -31,7 +31,7 @@ class BufferBlock:
     """
 
     DEFAULT_SIGNALID = Empty.GUID
-    DEFAULT_BUFFER = bytearray()
+    DEFAULT_BUFFER:  Optional[bytearray] = None
 
     def __init__(self,
                  signalid: UUID = ...,
@@ -46,7 +46,7 @@ class BufferBlock:
         self._buffer = BufferBlock.DEFAULT_BUFFER if buffer is ... else buffer
 
     @property
-    def buffer(self) -> bytearray:
+    def buffer(self) -> Optional[bytearray]:
         """
         Gets measurement buffer as an atomic unit of data, i.e., a binary buffer.
         This buffer typically represents a partial image of a larger whole.
