@@ -261,19 +261,29 @@ class DataSubscriber:
 
         self._assigninghandler_writemutex.release()
 
-    def isconnected(self) -> bool:
+    @property
+    def connected(self) -> bool:
         """
         Determines if a `DataSubscriber` is currently connected to a `DataPublisher`.
         """
 
         return self._connected
 
-    def issubscribed(self) -> bool:
+    @property
+    def subscribed(self) -> bool:
         """
         Determines if a `DataSubscriber` is currently subscribed to a data stream.
         """
 
         return self._subscribed
+
+    @property
+    def disposing(self) -> bool:
+        """
+        Determines if DataSubscriber is being disposed.
+        """
+
+        return self._disposing
 
     def encodestr(self, data: str) -> bytes:
         """
@@ -863,7 +873,7 @@ class DataSubscriber:
         index += bufferlen
 
         # Read even initialization vector size
-        bufferlen = int(BigEndian.uint32(data[index:]))
+        bufferlen = int(BigEndian.int32(data[index:]))
         index += 4
 
         # Read even initialization vector
