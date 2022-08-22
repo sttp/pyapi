@@ -182,7 +182,7 @@ class SubscriberConnector:
 
         message.append(f" to \"{self.hostname}:{self.port}\" was terminated. ")
 
-        if retryinterval > 0:
+        if retryinterval > 0.0:
             message.append(f"Attempting to reconnect in {retryinterval:.2f} seconds...")
         else:
             message.append("Attempting to reconnect...")

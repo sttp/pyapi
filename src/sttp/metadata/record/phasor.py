@@ -1,5 +1,5 @@
-#******************************************************************************************************
-#  phasor_record.py - Gbtc
+# ******************************************************************************************************
+#  metadata/record/phasor.py - Gbtc
 #
 #  Copyright © 2021, Grid Protection Alliance.  All Rights Reserved.
 #
@@ -19,7 +19,7 @@
 #  02/09/2021 - J. Ritchie Carroll
 #       Generated original version of source code.
 #
-#******************************************************************************************************
+# ******************************************************************************************************
 
 from measurement import MeasurementRecord
 from device import DeviceRecord
@@ -39,6 +39,9 @@ class PhasorRecord:
     Represents a record of phasor metadata in the STTP.
     """
 
+    DEFAULT_BASEKV = 500
+    DEFAULT_UPDATEDON = Empty.DATETIME
+
     def __init__(self,
                  id: int,
                  deviceacronym: str,
@@ -46,20 +49,21 @@ class PhasorRecord:
                  type: str,
                  phase: str,
                  sourceindex: int,
-                 basekv: int = 500,
-                 updatedon: datetime = Empty.DATETIME
+                 basekv: int = ...,
+                 updatedon: datetime = ...
                  ):
         """
         Constructs a new `PhasorRecord`.
         """
+
         self._id = id
         self._deviceacronym = deviceacronym
         self._label = label
         self._type = type
         self._phase = phase
         self._sourceindex = sourceindex
-        self._basekv = basekv
-        self._updatedon = updatedon
+        self._basekv = PhasorRecord.DEFAULT_BASEKV if basekv is ... else basekv
+        self._updatedon = PhasorRecord.DEFAULT_UPDATEDON if updatedon is ... else updatedon
 
         self.device: Optional[DeviceRecord] = None
         """
@@ -76,6 +80,7 @@ class PhasorRecord:
         """
         Gets the unique integer identifier for this `PhasorRecord`.
         """
+
         return self._id
 
     @property
@@ -83,6 +88,7 @@ class PhasorRecord:
         """
         Gets the alpha-numeric identifier of the associated device for this `PhasorRecord`.
         """
+
         return self._deviceacronym
 
     @property
@@ -90,6 +96,7 @@ class PhasorRecord:
         """
         Gets the free form label for this `PhasorRecord`.
         """
+
         return self._label
 
     @property
@@ -97,6 +104,7 @@ class PhasorRecord:
         """
         Gets the phasor type, i.e., "I" or "V", for current or voltage, respectively, for this `PhasorRecord`. 
         """
+
         return self._type
 
     @property
@@ -104,6 +112,7 @@ class PhasorRecord:
         """
         Gets the phase of this `PhasorRecord`, e.g., "A", "B", "C", "+", "-", "0", etc.
         """
+
         return self._phase
 
     @property
@@ -111,6 +120,7 @@ class PhasorRecord:
         """
         Gets the base, i.e., nominal, kV level for this `PhasorRecord`.
         """
+
         return self._sourceindex
 
     @property
@@ -118,6 +128,7 @@ class PhasorRecord:
         """
         Gets the source index, i.e., the 1-based ordering index of the phasor in its original context, for this `PhasorRecord`.
         """
+
         return self._sourceindex
 
     @property
@@ -125,6 +136,7 @@ class PhasorRecord:
         """
         Gets the `datetime` of when this `PhasorRecord` was last updated.
         """
+
         return self._updatedon
 
     @property
@@ -132,6 +144,7 @@ class PhasorRecord:
         """
         Gets the associated angle `MeasurementRecord`, or `None` if not available.
         """
+
         return None if len(self.measurements) <= CompositePhasorMeasurement.ANGLE else \
             self.measurements[CompositePhasorMeasurement.ANGLE]
 
@@ -140,5 +153,6 @@ class PhasorRecord:
         """
         Gets the associated magnitude `MeasurementRecord`, or `None` if not available.
         """
+
         return None if len(self.measurements) <= CompositePhasorMeasurement.MAGNITUDE else \
             self.measurements[CompositePhasorMeasurement.MAGNITUDE]

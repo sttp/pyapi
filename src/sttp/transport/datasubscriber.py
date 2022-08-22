@@ -27,8 +27,8 @@ from gsf.binarystream import BinaryStream
 from gsf.streamencoder import StreamEncoder
 from ticks import Ticks
 from measurement import Measurement
-from measurementmetadata import MeasurementMetadata
 from compactmeasurement import CompactMeasurement
+from metadata.record.measurement import MeasurementRecord
 from bufferblock import BufferBlock
 from constants import *
 from subscriptioninfo import SubscriptionInfo
@@ -204,7 +204,7 @@ class DataSubscriber:
 
         # Measurement parsing
         self._metadatarequested = 0.0
-        self._measurementregistry: Dict[UUID, MeasurementMetadata] = dict()
+        self._measurementregistry: Dict[UUID, MeasurementRecord] = dict()
         self._signalindexcache = [SignalIndexCache(), SignalIndexCache()]
         self._signalindexcache_mutex = Lock()
         self._cacheindex = 0
@@ -307,21 +307,21 @@ class DataSubscriber:
 
         return data.decode("utf-8")
 
-    def lookupmetadata(self, signalid: UUID) -> MeasurementMetadata:
+    def lookupmetadata(self, signalid: UUID) -> MeasurementRecord:
         """
-        Gets the `MeasurementMetadata` for the specified signal ID from the local registry. If the metadata does not exist, a new record is created and returned.
+        Gets the `MeasurementRecord` for the specified signal ID from the local registry. If the metadata does not exist, a new record is created and returned.
         """
 
         if signalid in self._measurementregistry:
             return self._measurementregistry[signalid]
 
-        metadata = MeasurementMetadata(signalid)
+        metadata = MeasurementRecord(signalid)
         self._measurementregistry[signalid] = metadata
         return metadata
 
-    def metadata(self, measurement: Measurement) -> MeasurementMetadata:
+    def metadata(self, measurement: Measurement) -> MeasurementRecord:
         """
-        Gets the `MeasurementMetadata` associated with a measurement from the local registry. If the metadata does not exist, a new record is created and returned.
+        Gets the `MeasurementRecord` associated with a measurement from the local registry. If the metadata does not exist, a new record is created and returned.
         """
 
         return self.lookupmetadata(measurement.signalid)

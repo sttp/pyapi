@@ -1,5 +1,5 @@
 #******************************************************************************************************
-#  device_record.py - Gbtc
+#  metadata/record/device.py - Gbtc
 #
 #  Copyright © 2021, Grid Protection Alliance.  All Rights Reserved.
 #
@@ -35,39 +35,50 @@ class DeviceRecord:
     Represents a record of device metadata in the STTP.
     """
 
+    DEFAULT_PARENTACRONYM = Empty.STRING
+    DEFAULT_PROTOCOLNAME = Empty.STRING
+    DEFAULT_FRAMESPERSECOND = 30
+    DEFAULT_COMPANYNAME = Empty.STRING
+    DEFAULT_VENDORACRONYM = Empty.STRING
+    DEFAULT_VENDORDEVICENAME = Empty.STRING
+    DEFAULT_LONGITUDE = Empty.DECIMAL
+    DEFAULT_LATITUDE = Empty.DECIMAL
+    DEFAULT_UPDATEDON = Empty.DATETIME
+
     def __init__(self,
                  nodeid: UUID,
                  deviceid: UUID,
                  acronym: str,
                  name: str,
                  accessid: int,
-                 parentacronym: str = Empty.STRING,
-                 protocolname: str = Empty.STRING,
-                 framespersecond: int = 30,
-                 companyacronym: str = Empty.STRING,
-                 vendoracronym: str = Empty.STRING,
-                 vendordeviceName: str = Empty.STRING,
-                 longitude: Decimal = Empty.DECIMAL,
-                 latitude: Decimal = Empty.DECIMAL,
-                 updatedon: datetime = Empty.DATETIME
+                 parentacronym: str = ...,
+                 protocolname: str = ...,
+                 framespersecond: int = ...,
+                 companyacronym: str = ...,
+                 vendoracronym: str = ...,
+                 vendordevicename: str = ...,
+                 longitude: Decimal = ...,
+                 latitude: Decimal = ...,
+                 updatedon: datetime = ...
                  ):
         """
         Constructs a new `DeviceRecord`.
         """
+
         self._nodeid = nodeid
         self._deviceid = deviceid
         self._acronym = acronym
         self._name = name
         self._accessid = accessid
-        self._parentacronym = parentacronym
-        self._protocolname = protocolname
-        self._framespersecond = framespersecond
-        self._companyacronym = companyacronym
-        self._vendoracronym = vendoracronym
-        self._vendordevicename = vendordeviceName
-        self._longitude = longitude
-        self._latitude = latitude
-        self._updatedon = updatedon
+        self._parentacronym = DeviceRecord.DEFAULT_PARENTACRONYM if parentacronym is ... else parentacronym
+        self._protocolname = DeviceRecord.DEFAULT_PROTOCOLNAME if protocolname is ... else protocolname
+        self._framespersecond = DeviceRecord.DEFAULT_FRAMESPERSECOND if framespersecond is ... else framespersecond
+        self._companyacronym = DeviceRecord.DEFAULT_COMPANYNAME if companyacronym is ... else companyacronym
+        self._vendoracronym = DeviceRecord.DEFAULT_VENDORACRONYM if vendoracronym is ... else vendoracronym
+        self._vendordevicename = DeviceRecord.DEFAULT_VENDORDEVICENAME if vendordevicename is ... else vendordevicename
+        self._longitude = DeviceRecord.DEFAULT_LONGITUDE if longitude is ... else longitude
+        self._latitude = DeviceRecord.DEFAULT_LATITUDE if latitude is ... else latitude
+        self._updatedon = DeviceRecord.DEFAULT_UPDATEDON if updatedon is ... else updatedon
 
         self.measurements: Set[MeasurementRecord] = set()
         """
@@ -84,6 +95,7 @@ class DeviceRecord:
         """
         Gets the guid-based STTP node identifier for this `DeviceRecord`.
         """
+
         return self._nodeid
 
     @property
@@ -91,6 +103,7 @@ class DeviceRecord:
         """
         Gets the unique guid-based identifier for this `DeviceRecord`.
         """
+
         return self._deviceid
 
     @property
@@ -98,6 +111,7 @@ class DeviceRecord:
         """
         Gets the unique alpha-numeric identifier for this `DeviceRecord`.
         """
+
         return self._acronym
 
     @property
@@ -105,6 +119,7 @@ class DeviceRecord:
         """
         Gets the free form name of this `DeviceRecord`.
         """
+
         return self._name
 
     @property
@@ -112,6 +127,7 @@ class DeviceRecord:
         """
         Gets the access ID (a.k.a. ID code) for this `DeviceRecord`.
         """
+
         return self._accessid
 
     @property
@@ -119,6 +135,7 @@ class DeviceRecord:
         """
         Gets the parent device alpha-numeric identifier for this `DeviceRecord`, if any.
         """
+
         return self._parentacronym
 
     @property
@@ -126,6 +143,7 @@ class DeviceRecord:
         """
         Gets the name of the source protocol for this `DeviceRecord`.
         """
+
         return self._protocolname
 
     @property
@@ -133,6 +151,7 @@ class DeviceRecord:
         """
         Gets the data reporting rate, in data frames per second, for this `DeviceRecord`.
         """
+
         return self._framespersecond
 
     @property
@@ -140,6 +159,7 @@ class DeviceRecord:
         """
         Gets the acronym of the company associated with this `DeviceRecord`.
         """
+
         return self._companyacronym
 
     @property
@@ -147,6 +167,7 @@ class DeviceRecord:
         """
         Gets the acronym of the vendor associated with this `DeviceRecord`.
         """
+
         return self._vendoracronym
 
     @property
@@ -154,6 +175,7 @@ class DeviceRecord:
         """
         Gets the acronym of the vendor device name associated with this `DeviceRecord`.
         """
+
         return self._vendordevicename
 
     @property
@@ -161,6 +183,7 @@ class DeviceRecord:
         """
         Gets the longitude of this `DeviceRecord`.
         """
+
         return self._longitude
 
     @property
@@ -168,6 +191,7 @@ class DeviceRecord:
         """
         Gets the latitude of this `DeviceRecord`.
         """
+
         return self._latitude
 
     @property
@@ -175,4 +199,5 @@ class DeviceRecord:
         """
         Gets the `datetime` of when this `DeviceRecord` was last updated.
         """
+        
         return self._updatedon

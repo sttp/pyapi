@@ -1,5 +1,5 @@
 #******************************************************************************************************
-#  measurement_record.py - Gbtc
+#  metadata/record/measurement.py - Gbtc
 #
 #  Copyright © 2021, Grid Protection Alliance.  All Rights Reserved.
 #
@@ -37,6 +37,7 @@ class SignalType(IntEnum):
     not be exhaustive for some STTP deployments. If value is set to
     `UNKN`, check the string based `SignalTypeName` in the `MeasurementRecord`.
     """
+
     IPHM = 1    # Current phase magnitude
     IPHA = 2    # Current phase angle
     VPHM = 3    # Voltage phase magnitude
@@ -60,37 +61,59 @@ class SignalType(IntEnum):
 class MeasurementRecord:
     """
     Represents a record of measurement metadata in the STTP.
+    
+    Note
+    ----
+    The `MeasurementRecord` defines  ancillary information associated with a `Measurement`.
+    Metadata gets cached in a registry associated with a `DataSubscriber`.
     """
 
+    DEFAULT_SIGNALID = Empty.GUID
+    DEFAULT_ADDER = np.float64(0.0)
+    DEFAULT_MULTIPLIER = np.float64(1.0)
+    DEFAULT_ID = np.uint64(0)
+    DEFAULT_SOURCE = Empty.STRING
+    DEFAULT_SIGNALTYPENAME = "UNKN"
+    DEFAULT_SIGNALREFERENCE = Empty.STRING
+    DEFAULT_POINTTAG = Empty.STRING
+    DEFAULT_DEVICEACRONYM = Empty.STRING
+    DEFAULT_DESCRIPTION = Empty.STRING
+    DEFAULT_UPDATEDON = Empty.DATETIME
+
     def __init__(self,
-                 instancename: str,
-                 pointid: np.uint64,
                  signalid: UUID,
-                 pointtag: str,
-                 signalreference: str = "",
-                 signaltypename: str = "UNKN",
-                 deviceacronym: str = "",
-                 description: str = "",
-                 updatedon: datetime = Empty.DATETIME
+                 adder: np.float64 = ...,
+                 multiplier: np.float64 = ...,
+                 id: np.uint64 = ...,
+                 source: str = ...,
+                 signaltypename: str = ...,
+                 signalreference: str = ...,
+                 pointtag: str = ...,
+                 deviceacronym: str = ...,
+                 description: str = ...,
+                 updatedon: datetime = ...
                  ):
         """
         Constructs a new `MeasurementRecord`.
         """
-        self._instancename = instancename
-        self._pointid = pointid
-        self._signalid = signalid
-        self._pointtag = pointtag
-        self._signalreference = signalreference
-        self._signaltypename = signaltypename
+
+        self._signalid = MeasurementRecord.DEFAULT_SIGNALID if signalid is ... else signalid
+        self._adder = MeasurementRecord.DEFAULT_ADDER if adder is ... else adder
+        self._multiplier = MeasurementRecord.DEFAULT_MULTIPLIER if multiplier is ... else multiplier
+        self._id = MeasurementRecord.DEFAULT_ID if id is ... else id
+        self._source = MeasurementRecord.DEFAULT_SOURCE if source is ... else source
+        self._signaltypename = MeasurementRecord.DEFAULT_SIGNALTYPENAME if signaltypename is ... else signaltypename
 
         try:
             self._signaltype = SignalType.parse(self._signaltypename)
         except:
             self._signaltype = SignalType.UNKN
 
-        self._deviceAcronym = deviceacronym
-        self._description = description
-        self._updatedOn = updatedon
+        self._signalreference = MeasurementRecord.DEFAULT_SIGNALREFERENCE if signalreference is ... else signalreference
+        self._pointtag = MeasurementRecord.DEFAULT_POINTTAG if pointtag is ... else pointtag
+        self._deviceacronym = MeasurementRecord.DEFAULT_DEVICEACRONYM if deviceacronym is ... else deviceacronym
+        self._description = MeasurementRecord.DEFAULT_DESCRIPTION if description is ... else description
+        self._updatedOn = MeasurementRecord.DEFAULT_UPDATEDON if updatedon is ... else updatedon
 
         self.device: Optional[DeviceRecord] = None
         """
@@ -105,60 +128,84 @@ class MeasurementRecord:
         """
 
     @property
-    def instancename(self) -> str:  # <MeasurementDetail>/<ID> (left part of measurement key)
-        """
-        Gets the STTP client database instance for this `MeasurementRecord`.
-        """
-        return self._instancename
-
-    @property
-    def pointid(self) -> np.uint64:  # <MeasurementDetail>/<ID> (right part of measurement key)
-        """
-        Gets the STTP point ID for this `MeasurementRecord`.
-        """
-        return self._pointid
-
-    @property
     def signalid(self) -> UUID:  # <MeasurementDetail>/<SignalID>
         """
         Gets the unique guid-based signal identifier for this `MeasurementRecord`.
         """
+
         return self._signalid
 
     @property
-    def pointtag(self) -> str:  # <MeasurementDetail>/<PointTag>
+    def adder(self) -> np.float64:  # <MeasurementDetail>/<Adder>
         """
-        Gets the unique point tag for this `MeasurementRecord`.
+        Gets the additive value modifier. Allows for linear value adjustment. Defaults to zero.
         """
-        return self._pointtag
+
+        return self._adder
+
+    @property
+    def multiplier(self) -> np.float64:  # <MeasurementDetail>/<Multiplier>
+        """
+        Gets the multiplicative value modifier. Allows for linear value adjustment. Defaults to one.
+        """
+
+        return self._multiplier
+
+    @property
+    def id(self) -> np.uint64:  # <MeasurementDetail>/<ID> (right part of measurement key)
+        """
+        Gets the STTP numeric ID number (from measurement key) for this `MeasurementRecord`.
+        """
+
+        return self._id
+
+    @property
+    def source(self) -> str:  # <MeasurementDetail>/<ID> (left part of measurement key)
+        """
+        Gets the STTP source instance (from measurement key) for this `MeasurementRecord`.
+        """
+
+        return self._source
+
+    @property
+    def signaltypename(self) -> str:  # <MeasurementDetail>/<SignalAcronym>
+        """
+        Gets the signal type name for this `MeasurementRecord`, e.g., "FREQ".
+        """
+
+        return self._signaltypename
+
+    @property
+    def signaltype(self) -> SignalType:
+        """
+        Gets the `SignalType` enumeration for this `MeasurementRecord`, if it can
+        be parsed from `signaltypename`; otherwise, returns `SignalType.UNKN`.
+        """
+
+        return self._signaltype
 
     @property
     def signalreference(self) -> str:  # <MeasurementDetail>/<SignalReference>
         """
         Gets the unique signal reference for this `MeasurementRecord`.
         """
+
         return self._signalreference
 
     @property
-    def signaltypename(self) -> str:  # <MeasurementDetail>/<SignalAcronym>
+    def pointtag(self) -> str:  # <MeasurementDetail>/<PointTag>
         """
-        Gets the signal type name for this `MeasurementRecord`.
+        Gets the unique point tag for this `MeasurementRecord`.
         """
-        return self._signaltypename
 
-    @property
-    def signaltype(self) -> SignalType:
-        """
-        Gets the `SignalType` enumeration for this `MeasurementRecord`, if it can be mapped
-        to `SignalTypeName`; otherwise, returns `SignalType.UNKN`.
-        """
-        return self._signaltype
+        return self._pointtag
 
     @property
     def deviceacronym(self) -> str:  # <MeasurementDetail>/<DeviceAcronym>
         """
         Gets the alpha-numeric identifier of the associated device for this `MeasurementRecord`.
         """
+
         return self._deviceAcronym
 
     @property
@@ -166,6 +213,7 @@ class MeasurementRecord:
         """
         Gets the description for this `MeasurementRecord`.
         """
+
         return self._description
 
     @property
@@ -173,4 +221,5 @@ class MeasurementRecord:
         """
         Gets the `datetime` of when this `MeasurementRecord` was last updated.
         """
+
         return self._updatedOn

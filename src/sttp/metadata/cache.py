@@ -1,5 +1,5 @@
 # ******************************************************************************************************
-#  metadata_cache.py - Gbtc
+#  metadata/cache.py - Gbtc
 #
 #  Copyright © 2021, Grid Protection Alliance.  All Rights Reserved.
 #
@@ -26,7 +26,7 @@ from record.device import DeviceRecord
 from record.phasor import PhasorRecord
 from gsf import Empty
 import xml.etree.ElementTree as XMLParser
-from typing import Optional, List, Dict, Set, Tuple
+from typing import Optional, List, Dict, Tuple
 from datetime import datetime
 from uuid import UUID, uuid1
 from decimal import Decimal
@@ -35,7 +35,7 @@ import numpy as np
 
 class MetadataCache:
     """
-    Represents a collection of STTP metadata.
+    Represents a collection of parsed STTP metadata records.
     """
 
     def __init__(self, metadata_xml: str):
@@ -49,35 +49,35 @@ class MetadataCache:
             # Get element text or empty string when value is None
             def get_elementtext(elementname): return MetadataCache._get_elementtext(measurement, elementname)
 
-            # Parse STTP instance name and point ID from measurement key
-            (instancename, pointid) = MetadataCache._get_measurementkey(measurement)
-
-            if pointid == 0:
-                continue
+            # Parse STTP source name and numeric point ID from measurement key
+            (source, id) = MetadataCache._get_measurementkey(measurement)
 
             measurement_records.append(MeasurementRecord(
-                # `instanceName`: Source instance name of measurement
-                instancename,
-                # `pointID`: STTP point ID of measurement
-                pointid,
-                # `signalID`: Extract signal ID, the unique measurement guid
+                # `signalid`: Extract signal ID, the unique measurement guid
                 MetadataCache._get_guid(measurement, "SignalID"),
-                # `pointTag`: Extract the measurement point tag
-                get_elementtext("PointTag"),
-                # `signalReference`: Extract the measurement signal reference
-                get_elementtext("SignalReference"),
-                # `signalTypeName`: Extract the measurement signal type name
+                # 'adder': Extract the measurement adder
+                MetadataCache._get_float(measurement, "Adder"),
+                # 'multiplier': Extract the measurement multiplier
+                MetadataCache._get_float(measurement, "Multiplier"),
+                # `id`: STTP numeric point ID of measurement (from measurement key)
+                id,
+                # `source`: Source instance name of measurement (from measurement key)
+                source,
+                # `signaltypename`: Extract the measurement signal type name
                 get_elementtext("SignalAcronym"),
-                # `deviceAcronym`: Extract the measurement's parent device acronym
+                # `signalreference`: Extract the measurement signal reference
+                get_elementtext("SignalReference"),
+                # `pointtag`: Extract the measurement point tag
+                get_elementtext("PointTag"),
+                # `deviceacronym`: Extract the measurement's parent device acronym
                 get_elementtext("DeviceAcronym"),
                 # `description`: Extract the measurement description name
                 get_elementtext("Description"),
-                # `updatedOn`: Extract the last update time for measurement metadata
+                # `updatedon`: Extract the last update time for measurement metadata
                 MetadataCache._get_updatedon(measurement)
             ))
 
-        self.pointid_measurement_map: Dict[np.uint64,
-                                           MeasurementRecord] = dict()
+        self.pointid_measurement_map: Dict[np.uint64, MeasurementRecord] = dict()
 
         for measurement in measurement_records:
             self.pointid_measurement_map[measurement.pointid] = measurement
@@ -107,33 +107,33 @@ class MetadataCache:
             def get_elementtext(elementname): return MetadataCache._get_elementtext(device, elementname)
 
             device_records.append(DeviceRecord(
-                # `nodeID`: Extract node ID guid for the device
+                # `nodeid`: Extract node ID guid for the device
                 MetadataCache._get_guid(device, "NodeID"),
-                # `deviceID`: Extract device ID, the unique device guid
+                # `deviceid`: Extract device ID, the unique device guid
                 MetadataCache._get_guid(device, "UniqueID"),
                 # `acronym`: Alpha-numeric identifier of the device
                 get_elementtext("Acronym"),
                 # `name`: Free form name for the device
                 get_elementtext("Name"),
-                # `accessID`: Access ID for the device
+                # `accessid`: Access ID for the device
                 MetadataCache._get_int(device, "AccessID"),
-                # `parentAcronym`: Alpha-numeric parent identifier of the device
+                # `parentacronym`: Alpha-numeric parent identifier of the device
                 get_elementtext("ParentAcronym"),
-                # `protocolName`: Protocol name of the device
+                # `protocolname`: Protocol name of the device
                 get_elementtext("ProtocolName"),
-                # `framesPerSecond`: Data rate for the device
+                # `framespersecond`: Data rate for the device
                 MetadataCache._get_int(device, "FramesPerSecond"),
-                # `companyAcronym`: Company acronym of the device
+                # `companyacronym`: Company acronym of the device
                 get_elementtext("CompanyAcronym"),
-                # `vendorAcronym`: Vendor acronym of the device
+                # `vendoracronym`: Vendor acronym of the device
                 get_elementtext("VendorAcronym"),
-                # `vendorDeviceName`: Vendor device name of the device
+                # `vendordevicename`: Vendor device name of the device
                 get_elementtext("VendorDeviceName"),
                 # `longitude`: Longitude of the device
                 MetadataCache._get_decimal(device, "Longitude"),
                 # `latitude`: Latitude of the device
                 MetadataCache._get_decimal(device, "Latitude"),
-                # `updatedOn`: Extract the last update time for device metadata
+                # `updatedon`: Extract the last update time for device metadata
                 MetadataCache._get_updatedon(device)
             ))
 
@@ -167,7 +167,7 @@ class MetadataCache:
             phasor_records.append(PhasorRecord(
                 # `id`: unique integer identifier for phasor
                 MetadataCache._get_int(phasor, "ID"),
-                # `deviceAcronym`: Alpha-numeric identifier of the associated device
+                # `deviceacronym`: Alpha-numeric identifier of the associated device
                 get_elementtext("DeviceAcronym"),
                 # `label`: Free form label for the phasor
                 get_elementtext("Label"),
@@ -175,11 +175,11 @@ class MetadataCache:
                 MetadataCache._get_char(phasor, "Type"),
                 # `phase`: Phasor phase for the phasor
                 MetadataCache._get_char(phasor, "Phase"),
-                # `sourceIndex`: Source index for the phasor
+                # `sourceindex`: Source index for the phasor
                 MetadataCache._get_int(phasor, "SourceIndex"),
-                # `baseKV`: BaseKV level for the phasor
+                # `basekv`: BaseKV level for the phasor
                 MetadataCache._get_int(phasor, "BaseKV"),
-                # `updatedOn`: Extract the last update time for phasor metadata
+                # `updatedon`: Extract the last update time for phasor metadata
                 MetadataCache._get_updatedon(phasor)
             ))
 
@@ -248,6 +248,19 @@ class MetadataCache:
 
         try:
             return int(elementtext)
+        except:
+            return defaultvalue
+
+    @staticmethod
+    def _get_float(elementroot, elementname: str) -> float:
+        elementtext = MetadataCache._get_elementtext(elementroot, elementname)
+        defaultvalue = 0.0
+
+        if elementtext == Empty.STRING:
+            return defaultvalue
+
+        try:
+            return float(elementtext)
         except:
             return defaultvalue
 
