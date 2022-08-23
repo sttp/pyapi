@@ -2,4 +2,4 @@
 
 # STTP Implementation in Python
 
-This Python based STTP implementation can acquire metadata and expose it as a cache (see [metadataCache.py](metadataCache.py)).
+This Python based STTP implementation currently supports subscription operations (see [transport/datasubscriber.py](datasubscriber.py)).
