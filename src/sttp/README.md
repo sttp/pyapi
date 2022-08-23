@@ -2,4 +2,4 @@
 
 # STTP Implementation in Python
 
-This Python based STTP implementation currently supports subscription operations (see [transport/datasubscriber.py](datasubscriber.py)).
+This Python based STTP implementation currently supports subscription operations (see [datasubscriber.py](transport/datasubscriber.py)).
