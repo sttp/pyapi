@@ -42,7 +42,7 @@ class SubscriptionInfo:
     DEFAULT_STOPTIME = Empty.STRING
     DEFAULT_CONSTRAINTPARAMETERS = Empty.STRING
     DEFAULT_PROCESSINGINTERVAL = np.int32(-1)
-    DEFAULT_EXTRA_CONNECTIONSTRING_PARAMETERS = Empty.STRING
+    DEFAULT_EXTRA_CONNECTIONSTRINGPARAMETERS = Empty.STRING
 
     def __init__(self,
                  filterexpression: str = ...,
@@ -139,7 +139,7 @@ class SubscriptionInfo:
         interval while a value of 0 means to process data as fast as possible.
         """
 
-        self.extra_connectionstring_parameters = SubscriptionInfo.DEFAULT_EXTRA_CONNECTIONSTRING_PARAMETERS if extra_connectionstring_parameters is ... else extra_connectionstring_parameters
+        self.extra_connectionstringparameters = SubscriptionInfo.DEFAULT_EXTRA_CONNECTIONSTRINGPARAMETERS if extra_connectionstring_parameters is ... else extra_connectionstring_parameters
         """
         Defines any extra or custom connection string parameters that may be needed for a subscription.
         """

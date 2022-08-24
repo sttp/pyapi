@@ -38,7 +38,19 @@ class MetadataCache:
     Represents a collection of parsed STTP metadata records.
     """
 
-    def __init__(self, metadata_xml: str):
+    def __init__(self, metadata_xml: bytes = ...):
+
+        self.signalid_measurement_map: Dict[UUID, MeasurementRecord] = dict()
+        self.pointid_measurement_map: Dict[np.uint64, MeasurementRecord] = dict()
+        self.pointtag_measurement_map: Dict[str, MeasurementRecord] = dict()
+        self.signalref_measurement_map: Dict[str, MeasurementRecord] = dict()
+        self.deviceacronym_device_map: Dict[str, DeviceRecord] = dict()
+        self.deviceid_device_map: Dict[UUID, DeviceRecord] = dict()
+
+        if metadata_xml is ...:
+            self.measurement_records: List[MeasurementRecord] = list()
+            return
+
         # Parse metadata
         metadata = XMLParser.fromstring(metadata_xml)
 
@@ -77,22 +89,14 @@ class MetadataCache:
                 MetadataCache._get_updatedon(measurement)
             ))
 
-        self.pointid_measurement_map: Dict[np.uint64, MeasurementRecord] = dict()
-
         for measurement in measurement_records:
             self.pointid_measurement_map[measurement.pointid] = measurement
-
-        self.signalid_measurement_map: Dict[UUID, MeasurementRecord] = dict()
 
         for measurement in measurement_records:
             self.signalid_measurement_map[measurement.signalid] = measurement
 
-        self.pointtag_measurement_map: Dict[str, MeasurementRecord] = dict()
-
         for measurement in measurement_records:
             self.pointtag_measurement_map[measurement.pointtag] = measurement
-
-        self.signalref_measurement_map: Dict[str, MeasurementRecord] = dict()
 
         for measurement in measurement_records:
             self.signalref_measurement_map[measurement.signalreference] = measurement
@@ -137,12 +141,8 @@ class MetadataCache:
                 MetadataCache._get_updatedon(device)
             ))
 
-        self.deviceacronym_device_map: Dict[str, DeviceRecord] = dict()
-
         for device in device_records:
             self.deviceacronym_device_map[device.acronym] = device
-
-        self.deviceid_device_map: Dict[UUID, DeviceRecord] = dict()
 
         for device in device_records:
             self.deviceid_device_map[device.deviceid] = device
@@ -332,15 +332,29 @@ class MetadataCache:
         except:
             return defaultvalue
 
-    def find_measurement_pointid(self, pointid: np.uint64) -> Optional[MeasurementRecord]:
-        if pointid in self.pointid_measurement_map:
-            return self.pointid_measurement_map[pointid]
+    def add_measurement(self, measurement: MeasurementRecord):
+        self.signalid_measurement_map[measurement.signalid] = measurement
 
-        return None
+        if measurement.id > 0:
+            self.pointid_measurement_map[measurement.pointid] = measurement
+
+        if len(measurement.pointtag) > 0:
+            self.pointtag_measurement_map[measurement.pointtag] = measurement
+
+        if len(measurement.signalreference) > 0:
+            self.signalref_measurement_map[measurement.signalreference] = measurement
+
+        self.measurement_records.append(measurement)
 
     def find_measurement_signalid(self, signalid: UUID) -> Optional[MeasurementRecord]:
         if signalid in self.signalid_measurement_map:
             return self.signalid_measurement_map[signalid]
+
+        return None
+
+    def find_measurement_pointid(self, pointid: np.uint64) -> Optional[MeasurementRecord]:
+        if pointid in self.pointid_measurement_map:
+            return self.pointid_measurement_map[pointid]
 
         return None
 

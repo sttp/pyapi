@@ -150,7 +150,7 @@ class SignalIndexCache:
 
         return np.uint32(len(self._signalidcache))
 
-    def decode(self, datasubscriber: DataSubscriber, buffer: bytes) -> Tuple[UUID, Optional[Exception]]:
+    def decode(self, datasubscriber: DataSubscriber, buffer: bytes) -> Tuple[UUID, Optional[BaseException]]:
         """
         Parses a `SignalIndexCache` from the specified byte buffer received from a `DataPublisher`.
         """

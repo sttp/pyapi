@@ -118,7 +118,7 @@ class Connection():
                     try:
                         # Decompress full metadata response XML
                         buffer = gzip.decompress(buffer)
-                    except Exception as ex:
+                    except BaseException as ex:
                         raise RuntimeError(
                             f"Failed to decompress metadata: {ex}")
 
@@ -129,7 +129,7 @@ class Connection():
                     try:
                         # Parse and cache received metadata XML
                         self.metadata = MetadataCache(buffer.decode("utf-8"))
-                    except Exception as ex:
+                    except BaseException as ex:
                         raise RuntimeError(f"Failed to parse metadata: {ex}")
 
                     measurementRecordCount = len(

@@ -112,7 +112,7 @@ class SubscriberConnector:
 
         self._threadpool = ThreadPoolExecutor()
 
-    def autoreconnect(self, subscriber: DataSubscriber):
+    def _autoreconnect(self, subscriber: DataSubscriber):
         if self._cancel or subscriber.disposing:
             return
 
@@ -141,7 +141,7 @@ class SubscriberConnector:
             self._dispatch_errormessage("Maximum connection retries attempted. Auto-reconnect canceled.")
             return
 
-        self.waitforretry()
+        self._waitforretry()
 
         if self._cancel or subscriber.disposing:
             return
@@ -157,7 +157,7 @@ class SubscriberConnector:
 
         self.end_callbacksync()
 
-    def waitforretry(self):
+    def _waitforretry(self):
         # Apply exponential back-off algorithm for retry attempt delays
         if self._connectattempt > 13:
             exponent = 12
@@ -210,7 +210,7 @@ class SubscriberConnector:
     def _connect(self, subscriber: DataSubscriber, autoreconnecting: bool) -> ConnectStatus:
         if autoreconnecting:
             subscriber.begin_callbackassignment()
-            subscriber.autoreconnect_callback = lambda: self.autoreconnect(subscriber)
+            subscriber.autoreconnect_callback = lambda: self._autoreconnect(subscriber)
             subscriber.end_callbackassignment()
 
         self._cancel = False
@@ -230,7 +230,7 @@ class SubscriberConnector:
 
             if not subscriber.disposing and self.retryinterval > 0:
                 autoreconnecting = True
-                self.waitforretry()
+                self._waitforretry()
 
                 if self._cancel:
                     return ConnectStatus.CANCELED

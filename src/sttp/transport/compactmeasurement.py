@@ -239,7 +239,7 @@ class CompactMeasurement(Measurement):
 
         self.signalid = self._signalindexcache.signalid(value)
 
-    def decode(self, buffer: bytes) -> Tuple[int, Optional[Exception]]:
+    def decode(self, buffer: bytes) -> Tuple[int, Optional[BaseException]]:
         """
         Parses a `CompactMeasurement` from the specified byte buffer.
         """

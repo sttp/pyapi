@@ -69,7 +69,7 @@ def main():
             print(f"Queried {recordCount:,} metadata records.")
         else:
             print("Not connected? Unexpected.")
-    except Exception as ex:
+    except BaseException as ex:
         print(f"Failed to connect: {ex}")
     finally:
         if sttpapi.IsConnected:

@@ -29,6 +29,7 @@ from ticks import Ticks
 from measurement import Measurement
 from compactmeasurement import CompactMeasurement
 from metadata.record.measurement import MeasurementRecord
+from metadata.cache import MetadataCache
 from bufferblock import BufferBlock
 from constants import *
 from subscriptioninfo import SubscriptionInfo
@@ -204,7 +205,7 @@ class DataSubscriber:
 
         # Measurement parsing
         self._metadatarequested = 0.0
-        self._measurementregistry: Dict[UUID, MeasurementRecord] = dict()
+        self._metadatacache = MetadataCache()
         self._signalindexcache = [SignalIndexCache(), SignalIndexCache()]
         self._signalindexcache_mutex = Lock()
         self._cacheindex = 0
@@ -309,19 +310,23 @@ class DataSubscriber:
 
     def lookupmetadata(self, signalid: UUID) -> MeasurementRecord:
         """
-        Gets the `MeasurementRecord` for the specified signal ID from the local registry. If the metadata does not exist, a new record is created and returned.
+        Gets the `MeasurementRecord` for the specified signal ID from the local registry.
+        If the metadata does not exist, a new record is created and returned.
         """
 
-        if signalid in self._measurementregistry:
-            return self._measurementregistry[signalid]
+        record = self._metadatacache.find_measurement_signalid(signalid)
 
-        metadata = MeasurementRecord(signalid)
-        self._measurementregistry[signalid] = metadata
-        return metadata
+        if record is not None:
+            return record
+
+        record = MeasurementRecord(signalid)
+        self._metadatacache.add_measurement(record)
+        return record
 
     def metadata(self, measurement: Measurement) -> MeasurementRecord:
         """
-        Gets the `MeasurementRecord` associated with a measurement from the local registry. If the metadata does not exist, a new record is created and returned.
+        Gets the `MeasurementRecord` associated with a measurement from the local registry.
+        If the metadata does not exist, a new record is created and returned.
         """
 
         return self.lookupmetadata(measurement.signalid)
@@ -331,13 +336,14 @@ class DataSubscriber:
         Gets the Value of a `Measurement` with any linear adjustments applied from the measurement's Adder and Multiplier metadata, if found.
         """
 
-        if measurement.signalid in self._measurementregistry:
-            metadata = self._measurementregistry[measurement.signalid]
-            return measurement.value * metadata.multiplier + metadata.adder
+        record = self._metadatacache.find_measurement_signalid(measurement.signalid)
+
+        if record is not None:
+            return measurement.value * record.multiplier + record.adder
 
         return measurement.value
 
-    def connect(self, hostname: str, port: np.uint16) -> Optional[Exception]:
+    def connect(self, hostname: str, port: np.uint16) -> Optional[BaseException]:
         """
         Requests the the `DataSubscriber` initiate a connection to the `DataPublisher`.
         """
@@ -345,7 +351,7 @@ class DataSubscriber:
         #  User requests to connection are not an auto-reconnect attempt
         return self._connect(hostname, port, False)
 
-    def _connect(self, hostname: str, port: np.uint16, autoreconnecting: bool) -> Optional[Exception]:
+    def _connect(self, hostname: str, port: np.uint16, autoreconnecting: bool) -> Optional[BaseException]:
         if self._connected:
             return RuntimeError("subscriber is already connected; disconnect first")
 
@@ -357,7 +363,7 @@ class DataSubscriber:
         if disconnectthread is not None:
             disconnectthread.join()
 
-        err: Optional[Exception] = None
+        err: Optional[BaseException] = None
 
         # Let any pending connect or disconnect operation complete before new connect,
         # this prevents destruction disconnect before connection is completed
@@ -373,7 +379,7 @@ class DataSubscriber:
 
             self._key_ivs = None
             self._bufferblock_expectedsequencenumber = np.uint32(0)
-            self._measurementregistry = dict()
+            self._metadatacache = dict()
 
             if not autoreconnecting:
                 self._connector.resetconnection()
@@ -408,7 +414,7 @@ class DataSubscriber:
 
         return err
 
-    def subscribe(self) -> Optional[Exception]:
+    def subscribe(self) -> Optional[BaseException]:
         """
         Notifies the `DataPublisher` that a `DataSubscriber` would like to start receiving streaming data.
         """
@@ -457,8 +463,8 @@ class DataSubscriber:
         if len(subscription.constraintparameters) > 0:
             connectionbuilder.append(f";timeConstraintParameters={subscription.constraintparameters}")
 
-        if len(subscription.extra_connectionstring_parameters) > 0:
-            connectionbuilder.append(f";{subscription.extra_connectionstring_parameters}")
+        if len(subscription.extra_connectionstringparameters) > 0:
+            connectionbuilder.append(f";{subscription.extra_connectionstringparameters}")
 
         connectionstring = "".join(connectionbuilder)
         length = np.uint32(len(connectionstring))

@@ -39,7 +39,7 @@ class Settings:
     DEFAULT_STOPTIME = Empty.STRING
     DEFAULT_CONSTRAINTPARAMETERS = Empty.STRING
     DEFAULT_PROCESSINGINTERVAL = -1
-    DEFAULT_EXTRACONNECTIONSTRINGPARAMETERS = Empty.STRING
+    DEFAULT_EXTRA_CONNECTIONSTRINGPARAMETERS = Empty.STRING
 
     def __init__(self,
                  throttled: bool = ...,
@@ -117,7 +117,7 @@ class Settings:
         interval while a value of 0 means to process data as fast as possible.
         """
 
-        self.extraconnectionstringparameters = Settings.DEFAULT_EXTRACONNECTIONSTRINGPARAMETERS if extraconnectionstringparameters is ... else extraconnectionstringparameters
+        self.extra_connectionstringparameters = Settings.DEFAULT_EXTRA_CONNECTIONSTRINGPARAMETERS if extraconnectionstringparameters is ... else extraconnectionstringparameters
         """
         Defines any extra custom connection string parameters that may be needed for a subscription.
         """

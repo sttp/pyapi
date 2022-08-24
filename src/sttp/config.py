@@ -21,6 +21,7 @@
 #
 # ******************************************************************************************************
 
+from gsf import Empty
 import numpy as np
 
 class Config:
@@ -37,6 +38,7 @@ class Config:
     DEFAULT_COMPRESS_PAYLOADDATA = True
     DEFAULT_COMPRESS_METADATA = True
     DEFAULT_COMPRESS_SIGNALINDEXCACHE = True
+    DEFAULT_METADATAFILTERS = Empty.STRING
     DEFAULT_VERSION = np.byte(2)
 
     def __init__(self,
@@ -49,6 +51,7 @@ class Config:
                  compress_payloaddata: bool = ...,
                  compress_metadata: bool = ...,
                  compress_signalindexcache: bool = ...,
+                 metadatafilters: str = ...,
                  version: np.byte = ...
                 ):
         """
@@ -107,6 +110,12 @@ class Config:
         self.compress_signalindexcache = Config.DEFAULT_COMPRESS_SIGNALINDEXCACHE if compress_signalindexcache is ... else compress_signalindexcache
         """
         Determines whether the signal index cache is compressed.
+        """
+
+        self.metadatafilters = Config.DEFAULT_METADATAFILTERS if metadatafilters is ... else metadatafilters
+        """
+        Defines any filters to be applied to incoming metadata to reduce total received metadata.
+        Each filter expression should be separated by semi-colon.
         """
 
         self.version = Config.DEFAULT_VERSION if version is ... else version
