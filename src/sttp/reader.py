@@ -78,9 +78,7 @@ class MeasurementReader:
         Blocks current thread until a new measurement arrived.
         """
 
-        if self._disposed:
-            return None, False
-
         current = self._queue.get()
         self._task_done()
-        return current, True
+
+        return (None, False) if self._disposed else (current, True)
