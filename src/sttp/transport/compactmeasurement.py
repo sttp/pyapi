@@ -21,19 +21,19 @@
 #
 #******************************************************************************************************
 
-from enum import IntFlags
+from enum import IntFlag
 from gsf import Limits
 from gsf.endianorder import BigEndian
-from ticks import Ticks
-from measurement import Measurement
-from constants import StateFlags
-from signalindexcache import SignalIndexCache
-from typing import Tuple, Optional
+from ..ticks import Ticks
+from .measurement import Measurement
+from .constants import StateFlags
+from .signalindexcache import SignalIndexCache
+from typing import List, Tuple, Optional
 from uuid import UUID
 import numpy as np
 
 
-class CompactStateFlags(IntFlags):
+class CompactStateFlags(IntFlag):
     """
     Enumeration constants represent each flag in the 8-bit compact measurement state flags.
     """
@@ -115,7 +115,7 @@ class CompactMeasurement(Measurement):
                  signalindexcache: SignalIndexCache,
                  includetime: bool,
                  usemillisecondresolution: bool,
-                 basetimeoffsets: np.int64[2],
+                 basetimeoffsets: List[np.int64],
                  signalid: UUID = ...,
                  value: np.float64 = ...,
                  timestamp: np.uint64 = ...,

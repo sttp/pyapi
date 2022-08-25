@@ -21,12 +21,19 @@
 #
 # ******************************************************************************************************
 
-from gsf import Empty 
+from gsf import Empty
 import numpy as np
+
 
 class Settings:
     """
     Defines the STTP subscription related settings.
+
+    Notes
+    -----
+    The `Settings` class exists as a simplified implementation of the `SubscriptionInfo`
+    class found in the `transport` namespace. Internally, the `Subscriber` class maps
+    `Settings` values to a `SubscriptionInfo` instance for use with a `DataSubscriber`.
     """
 
     DEFAULT_THROTTLED = False
@@ -39,7 +46,7 @@ class Settings:
     DEFAULT_STOPTIME = Empty.STRING
     DEFAULT_CONSTRAINTPARAMETERS = Empty.STRING
     DEFAULT_PROCESSINGINTERVAL = -1
-    DEFAULT_EXTRA_CONNECTIONSTRINGPARAMETERS = Empty.STRING
+    DEFAULT_EXTRA_CONNECTIONSTRING_PARAMETERS = Empty.STRING
 
     def __init__(self,
                  throttled: bool = ...,
@@ -52,8 +59,8 @@ class Settings:
                  stoptime: str = ...,
                  constraintparameters: str = ...,
                  processinginterval: int = ...,
-                 extraconnectionstringparameters: str = ...
-                ):
+                 extra_connectionstring_parameters: str = ...
+                 ):
         """
         Creates a new `Settings` instance.
         """
@@ -117,7 +124,7 @@ class Settings:
         interval while a value of 0 means to process data as fast as possible.
         """
 
-        self.extra_connectionstringparameters = Settings.DEFAULT_EXTRA_CONNECTIONSTRINGPARAMETERS if extraconnectionstringparameters is ... else extraconnectionstringparameters
+        self.extra_connectionstring_parameters = Settings.DEFAULT_EXTRA_CONNECTIONSTRING_PARAMETERS if extra_connectionstring_parameters is ... else extra_connectionstring_parameters
         """
         Defines any extra custom connection string parameters that may be needed for a subscription.
         """

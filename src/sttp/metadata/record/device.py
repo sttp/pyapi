@@ -1,4 +1,4 @@
-#******************************************************************************************************
+# ******************************************************************************************************
 #  metadata/record/device.py - Gbtc
 #
 #  Copyright © 2021, Grid Protection Alliance.  All Rights Reserved.
@@ -19,10 +19,8 @@
 #  02/09/2021 - J. Ritchie Carroll
 #       Generated original version of source code.
 #
-#******************************************************************************************************
+# ******************************************************************************************************
 
-from measurement import MeasurementRecord
-from phasor import PhasorRecord
 from gsf import Empty
 from typing import Set
 from datetime import datetime
@@ -80,12 +78,12 @@ class DeviceRecord:
         self._latitude = DeviceRecord.DEFAULT_LATITUDE if latitude is ... else latitude
         self._updatedon = DeviceRecord.DEFAULT_UPDATEDON if updatedon is ... else updatedon
 
-        self.measurements: Set[MeasurementRecord] = set()
+        self.measurements: Set["MeasurementRecord"] = set()
         """
         Gets `MeasurementRecord` values associated with this `DeviceRecord`.
         """
 
-        self.phasors: Set[PhasorRecord] = set()
+        self.phasors: Set["PhasorRecord"] = set()
         """
         Gets `PhasorRecord` values associated with this `DeviceRecord`.
         """
@@ -199,5 +197,5 @@ class DeviceRecord:
         """
         Gets the `datetime` of when this `DeviceRecord` was last updated.
         """
-        
+
         return self._updatedon

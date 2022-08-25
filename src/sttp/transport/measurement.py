@@ -22,8 +22,8 @@
 #******************************************************************************************************
 
 from gsf import Empty
-from ticks import Ticks
-from constants import StateFlags
+from ..ticks import Ticks
+from .constants import StateFlags
 from uuid import UUID
 from datetime import datetime
 import numpy as np

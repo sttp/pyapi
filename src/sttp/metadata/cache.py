@@ -21,9 +21,9 @@
 #
 # ******************************************************************************************************
 
-from record.measurement import MeasurementRecord, SignalType
-from record.device import DeviceRecord
-from record.phasor import PhasorRecord
+from .record.measurement import MeasurementRecord, SignalType
+from .record.device import DeviceRecord
+from .record.phasor import PhasorRecord
 from gsf import Empty
 import xml.etree.ElementTree as XMLParser
 from typing import Optional, List, Dict, Tuple
@@ -38,6 +38,7 @@ class MetadataCache:
     Represents a collection of parsed STTP metadata records.
     """
 
+    # TODO: Change source to a DataSet instead of raw XML
     def __init__(self, metadata_xml: bytes = ...):
 
         self.signalid_measurement_map: Dict[UUID, MeasurementRecord] = dict()
@@ -52,12 +53,12 @@ class MetadataCache:
             return
 
         # Parse metadata
-        metadata = XMLParser.fromstring(metadata_xml)
+        self.metadata = XMLParser.fromstring(metadata_xml)
 
         # Extract measurement records from MeasurementDetail table rows
         measurement_records: List[MeasurementRecord] = list()
 
-        for measurement in metadata.findall("MeasurementDetail"):
+        for measurement in self.metadata.findall("MeasurementDetail"):
             # Get element text or empty string when value is None
             def get_elementtext(elementname): return MetadataCache._get_elementtext(measurement, elementname)
 
@@ -90,7 +91,7 @@ class MetadataCache:
             ))
 
         for measurement in measurement_records:
-            self.pointid_measurement_map[measurement.pointid] = measurement
+            self.pointid_measurement_map[measurement.id] = measurement
 
         for measurement in measurement_records:
             self.signalid_measurement_map[measurement.signalid] = measurement
@@ -106,7 +107,7 @@ class MetadataCache:
         # Extract device records from DeviceDetail table rows
         device_records: List[DeviceRecord] = list()
 
-        for device in metadata.findall("DeviceDetail"):
+        for device in self.metadata.findall("DeviceDetail"):
             # Get element text or empty string when value is None
             def get_elementtext(elementname): return MetadataCache._get_elementtext(device, elementname)
 
@@ -160,7 +161,7 @@ class MetadataCache:
         # Extract phasor records from PhasorDetail table rows
         phasor_records: List[PhasorRecord] = list()
 
-        for phasor in metadata.findall("PhasorDetail"):
+        for phasor in self.metadata.findall("PhasorDetail"):
             # Get element text or empty string when value is None
             def get_elementtext(elementname): return MetadataCache._get_elementtext(phasor, elementname)
 
@@ -188,7 +189,7 @@ class MetadataCache:
             device = self.find_device_acronym(phasor.deviceacronym)
 
             if device is not None:
-                phasor.Device = device
+                phasor.device = device
                 device.phasors.add(phasor)
 
                 angle = self.find_measurement_signalreference(f"{device.acronym}-PA{phasor.sourceindex}")

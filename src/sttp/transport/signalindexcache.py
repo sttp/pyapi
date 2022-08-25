@@ -23,7 +23,6 @@
 
 from gsf import Empty, Limits
 from gsf.endianorder import BigEndian
-from datasubscriber import DataSubscriber
 from typing import Dict, List, Set, Tuple, Optional
 from uuid import UUID
 import numpy as np
@@ -45,7 +44,7 @@ class SignalIndexCache:
         self._maxsignalindex = np.uint32(0)
         #self.tsscDecoder = tssc.Decoder()
 
-    def _addrecord(self, datasubscriber: DataSubscriber, signalindex: np.int32, signalid: UUID, source: str, id: np.uint64, charsizeestimate: np.uint32 = 1):
+    def _addrecord(self, datasubscriber: "DataSubscriber", signalindex: np.int32, signalid: UUID, source: str, id: np.uint64, charsizeestimate: np.uint32 = 1):
         index = np.uint32(len(self._signalidlist))
         self._reference[signalindex] = index
         self._signalidlist.append(signalid)
@@ -150,7 +149,7 @@ class SignalIndexCache:
 
         return np.uint32(len(self._signalidcache))
 
-    def decode(self, datasubscriber: DataSubscriber, buffer: bytes) -> Tuple[UUID, Optional[BaseException]]:
+    def decode(self, datasubscriber: "DataSubscriber", buffer: bytes) -> Tuple[UUID, Optional[BaseException]]:
         """
         Parses a `SignalIndexCache` from the specified byte buffer received from a `DataPublisher`.
         """

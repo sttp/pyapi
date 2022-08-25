@@ -21,7 +21,7 @@
 #
 #******************************************************************************************************
 
-from encoding7bit import Encoding7Bit
+from .encoding7bit import Encoding7Bit
 from . import ByteSize
 from typing import Callable, Optional
 import sys

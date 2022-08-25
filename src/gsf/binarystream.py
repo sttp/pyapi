@@ -21,8 +21,8 @@
 #
 #******************************************************************************************************
 
-from streamencoder import StreamEncoder
-from encoding7bit import Encoding7Bit
+from .streamencoder import StreamEncoder
+from .encoding7bit import Encoding7Bit
 from . import ByteSize, Validate
 from typing import Optional
 from uuid import UUID

@@ -1,4 +1,4 @@
-#******************************************************************************************************
+# ******************************************************************************************************
 #  metadata/record/measurement.py - Gbtc
 #
 #  Copyright © 2021, Grid Protection Alliance.  All Rights Reserved.
@@ -19,10 +19,8 @@
 #  02/07/2021 - J. Ritchie Carroll
 #       Generated original version of source code.
 #
-#******************************************************************************************************
+# ******************************************************************************************************
 
-from device import DeviceRecord
-from phasor import PhasorRecord
 from gsf import Empty
 from typing import Optional
 from enum import IntEnum
@@ -61,7 +59,7 @@ class SignalType(IntEnum):
 class MeasurementRecord:
     """
     Represents a record of measurement metadata in the STTP.
-    
+
     Note
     ----
     The `MeasurementRecord` defines  ancillary information associated with a `Measurement`.
@@ -115,13 +113,13 @@ class MeasurementRecord:
         self._description = MeasurementRecord.DEFAULT_DESCRIPTION if description is ... else description
         self._updatedOn = MeasurementRecord.DEFAULT_UPDATEDON if updatedon is ... else updatedon
 
-        self.device: Optional[DeviceRecord] = None
+        self.device: Optional["DeviceRecord"] = None
         """
         Defines the associated `DeviceRecord` for this `MeasurementRecord`.
         Set to `None` if not applicable.
         """
 
-        self.phasor: Optional[PhasorRecord] = None
+        self.phasor: Optional["PhasorRecord"] = None
         """
         Defines the associated `PhasorRecord` for this `MeasurementRecord`.
         Set to `None` if not applicable.
@@ -206,7 +204,7 @@ class MeasurementRecord:
         Gets the alpha-numeric identifier of the associated device for this `MeasurementRecord`.
         """
 
-        return self._deviceAcronym
+        return self._deviceacronym
 
     @property
     def description(self) -> str:  # <MeasurementDetail>/<Description>

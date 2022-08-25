@@ -1,3 +1,2 @@
 numpy>=1.22
 pycryptodome>=3.15.0
-readerwriterlock>=1.0.9

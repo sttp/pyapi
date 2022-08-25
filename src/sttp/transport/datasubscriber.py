@@ -25,24 +25,23 @@ from gsf import Empty
 from gsf.endianorder import BigEndian
 from gsf.binarystream import BinaryStream
 from gsf.streamencoder import StreamEncoder
-from ticks import Ticks
-from measurement import Measurement
-from compactmeasurement import CompactMeasurement
-from metadata.record.measurement import MeasurementRecord
-from metadata.cache import MetadataCache
-from bufferblock import BufferBlock
-from constants import *
-from subscriptioninfo import SubscriptionInfo
-from subscriberconnector import SubscriberConnector
-from signalindexcache import SignalIndexCache
-from version import Version
-from typing import List, Dict, Callable, Optional
+from .measurement import Measurement
+from .compactmeasurement import CompactMeasurement
+from ..metadata.record.measurement import MeasurementRecord
+from ..metadata.cache import MetadataCache
+from .bufferblock import BufferBlock
+from .constants import *
+from .subscriptioninfo import SubscriptionInfo
+from .subscriberconnector import SubscriberConnector
+from .signalindexcache import SignalIndexCache
+from ..ticks import Ticks
+from ..version import Version
+from typing import List, Callable, Optional
 from datetime import datetime
 from time import time
 from uuid import UUID
 from threading import Lock, Thread, Event
 from concurrent.futures import ThreadPoolExecutor
-from readerwriterlock.rwlock import RWLockRead
 from Crypto.Cipher import AES
 import gzip
 import socket
@@ -90,12 +89,10 @@ class DataSubscriber:
         self._datachannel_socket: Optional[socket.socket] = None
         self._datachannel_responsethread: Optional[Thread] = None
 
-        self._assigninghandler_mutex = RWLockRead()
-        self._assigninghandler_readmutex = self._assigninghandler_mutex.gen_rlock()
-        self._assigninghandler_writemutex = self._assigninghandler_mutex.gen_wlock()
+        # self._assigninghandler_mutex = RWLock()
 
         self._connect_action_mutex = Lock()
-        self._connection_terminationthread: Thread(target=lambda: self._disconnect(False, True))
+        self._connection_terminationthread = Thread(target=lambda: self._disconnect(False, True))
 
         self._disconnectthread: Optional[Thread] = None
         self._disconnectthread_mutex = Lock()
@@ -203,9 +200,13 @@ class DataSubscriber:
         Defines when the STTP library API was last updated as identification information of `DataSubscriber` to a `DataPublisher`.
         """
 
+        self.metadatacache = MetadataCache()
+        """
+        Defines the metadata cache associated with this `DataSubscriber`.
+        """
+
         # Measurement parsing
         self._metadatarequested = 0.0
-        self._metadatacache = MetadataCache()
         self._signalindexcache = [SignalIndexCache(), SignalIndexCache()]
         self._signalindexcache_mutex = Lock()
         self._cacheindex = 0
@@ -234,33 +235,33 @@ class DataSubscriber:
         # Allow a moment for connection terminated event to complete
         Event().wait(0.01)  # 10ms
 
-    def begin_callbackassignment(self):
-        """
-        Informs `DataSubscriber` that a callback change has been initiated.
-        """
+    # def begin_callbackassignment(self):
+    #     """
+    #     Informs `DataSubscriber` that a callback change has been initiated.
+    #     """
 
-        self._assigninghandler_writemutex.acquire()
+    #     self._assigninghandler_mutex.w_acquire()
 
-    def begin_callbacksync(self):
-        """
-        Begins a callback synchronization operation.
-        """
+    # def begin_callbacksync(self):
+    #     """
+    #     Begins a callback synchronization operation.
+    #     """
 
-        self._assigninghandler_readmutex.acquire()
+    #     self._assigninghandler_mutex.r_acquire()
 
-    def end_callbacksync(self):
-        """
-        Ends a callback synchronization operation.
-        """
+    # def end_callbacksync(self):
+    #     """
+    #     Ends a callback synchronization operation.
+    #     """
 
-        self._assigninghandler_readmutex.release()
+    #     self._assigninghandler_mutex.r_release()
 
-    def end_callbackassignment(self):
-        """
-        Informs `DataSubscriber` that a callback change has been completed.
-        """
+    # def end_callbackassignment(self):
+    #     """
+    #     Informs `DataSubscriber` that a callback change has been completed.
+    #     """
 
-        self._assigninghandler_writemutex.release()
+    #     self._assigninghandler_mutex.w_release()
 
     @property
     def connected(self) -> bool:
@@ -314,29 +315,21 @@ class DataSubscriber:
         If the metadata does not exist, a new record is created and returned.
         """
 
-        record = self._metadatacache.find_measurement_signalid(signalid)
+        record = self.metadatacache.find_measurement_signalid(signalid)
 
         if record is not None:
             return record
 
         record = MeasurementRecord(signalid)
-        self._metadatacache.add_measurement(record)
+        self.metadatacache.add_measurement(record)
         return record
-
-    def metadata(self, measurement: Measurement) -> MeasurementRecord:
-        """
-        Gets the `MeasurementRecord` associated with a measurement from the local registry.
-        If the metadata does not exist, a new record is created and returned.
-        """
-
-        return self.lookupmetadata(measurement.signalid)
 
     def adjustedvalue(self, measurement: Measurement) -> np.float64:
         """
         Gets the Value of a `Measurement` with any linear adjustments applied from the measurement's Adder and Multiplier metadata, if found.
         """
 
-        record = self._metadatacache.find_measurement_signalid(measurement.signalid)
+        record = self.metadatacache.find_measurement_signalid(measurement.signalid)
 
         if record is not None:
             return measurement.value * record.multiplier + record.adder
@@ -379,7 +372,7 @@ class DataSubscriber:
 
             self._key_ivs = None
             self._bufferblock_expectedsequencenumber = np.uint32(0)
-            self._metadatacache = dict()
+            self.metadatacache = MetadataCache()
 
             if not autoreconnecting:
                 self._connector.resetconnection()
@@ -394,9 +387,9 @@ class DataSubscriber:
             self._commandchannel_socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
 
             try:
-                hostendpoint = socket.getaddrinfo(hostname, port, family=socket.AF_INET, proto=socket.IPPROTO_TCP)[0][4]
+                hostendpoint = socket.getaddrinfo(hostname, int(port), family=socket.AF_INET, proto=socket.IPPROTO_TCP)[0][4]
             except:
-                hostendpoint = (self.hostAddress, self.port)
+                hostendpoint = (hostname, int(port))
 
             self._commandchannel_socket.connect(hostendpoint)
         except BaseException as ex:
@@ -406,10 +399,11 @@ class DataSubscriber:
 
         if err is None:
             self._commandchannel_responsethread = Thread(target=self._run_commandchannel_responsethread)
-            self._commandchannel_responsethread.run()
 
             self._connected = True
             self._last_missingcachewarning = 0.0
+
+            self._commandchannel_responsethread.start()
             self._send_operationalmodes()
 
         return err
@@ -450,7 +444,7 @@ class DataSubscriber:
                 return RuntimeError(f"failed to open UDP socket for port {udpport}:{ex}")
 
             self._datachannel_responsethread = Thread(target=self._run_datachannel_responsethread)
-            self._datachannel_responsethread.run()
+            self._datachannel_responsethread.start()
 
             connectionbuilder.append(f";dataChannel={{localport={udpport}}}")
 
@@ -463,8 +457,8 @@ class DataSubscriber:
         if len(subscription.constraintparameters) > 0:
             connectionbuilder.append(f";timeConstraintParameters={subscription.constraintparameters}")
 
-        if len(subscription.extra_connectionstringparameters) > 0:
-            connectionbuilder.append(f";{subscription.extra_connectionstringparameters}")
+        if len(subscription.extra_connectionstring_parameters) > 0:
+            connectionbuilder.append(f";{subscription.extra_connectionstring_parameters}")
 
         connectionstring = "".join(connectionbuilder)
         length = np.uint32(len(connectionstring))
@@ -521,6 +515,9 @@ class DataSubscriber:
         self._disconnect(False, False)
 
     def _disconnect(self, jointhread: bool, autoreconnecting: bool):
+        if not self._connected:
+            return
+
         # Check if disconnect thread is running or subscriber has already disconnected
         if self._disconnecting:
             if not autoreconnecting and self._disconnecting and not self._disconnected:
@@ -546,7 +543,7 @@ class DataSubscriber:
         self._disconnectThread = disconnectthread
         self._disconnectthread_mutex.release()
 
-        disconnectthread.run()
+        disconnectthread.start()
 
         if jointhread:
             disconnectthread.join()
@@ -579,12 +576,12 @@ class DataSubscriber:
             self._datachannel_responsethread.join()
 
         # Notify consumers of disconnect
-        self.begin_callbacksync()
+        # self.begin_callbacksync()
 
         if self.connectionterminated_callback is not None:
             self.connectionterminated_callback()
 
-        self.end_callbacksync()
+        # self.end_callbacksync()
 
         # Disconnect complete
         self._disconnected.Set()
@@ -594,12 +591,12 @@ class DataSubscriber:
             # Handling auto-connect callback separately from connection terminated callback
             # since they serve two different use cases and current implementation does not
             # support multiple callback registrations
-            self.begin_callbacksync()
+            # self.begin_callbacksync()
 
             if self.autoreconnect_callback is not None and not self._disposing:
                 self.autoreconnect_callback()
 
-            self.end_callbacksync()
+            # self.end_callbacksync()
 
         else:
             self._connect_action_mutex.release()
@@ -609,23 +606,23 @@ class DataSubscriber:
     # by the peer. Additionally, this allows the user to automatically reconnect in their
     # callback function without having to spawn their own separate thread.
     def _dispatch_connectionterminated(self):
-        self._connection_terminationthread.run()
+        self._connection_terminationthread.start()
 
     def _dispatch_statusmessage(self, message: str):
-        self.begin_callbacksync()
+        # self.begin_callbacksync()
 
         if self.statusmessage_callback is not None:
             self._threadpool.submit(self.statusmessage_callback, message)
 
-        self.end_callbacksync()
+        # self.end_callbacksync()
 
     def _dispatch_errormessage(self, message: str):
-        self.begin_callbacksync()
+        # self.begin_callbacksync()
 
         if self.errormessage_callback is not None:
             self._threadpool.submit(self.errormessage_callback, message)
 
-        self.end_callbacksync()
+        # self.end_callbacksync()
 
     def _run_commandchannel_responsethread(self):
         self._reader = BinaryStream(StreamEncoder(
@@ -640,7 +637,9 @@ class DataSubscriber:
                 self._total_commandchannel_bytesreceived += PAYLOADHEADER_SIZE
 
                 self._read_payloadheader()
-            except:
+            except BaseException as ex:
+                self._dispatch_errormessage(f"Exception processing server response: {ex}")
+
                 # Read error, connection may have been closed by peer; terminate connection
                 self._dispatch_connectionterminated()
                 return
@@ -701,25 +700,25 @@ class DataSubscriber:
             self._handle_succeeded(commandcode, data)
         elif responsecode == ServerResponse.FAILED:
             self._handle_failed(commandcode, data)
-        elif responsecode == ServerResponse.DataPacket:
+        elif responsecode == ServerResponse.DATAPACKET:
             self._handle_datapacket(data)
-        elif responsecode == ServerResponse.DataStartTime:
+        elif responsecode == ServerResponse.DATASTARTTIME:
             self._handle_datastarttime(data)
-        elif responsecode == ServerResponse.ProcessingComplete:
+        elif responsecode == ServerResponse.PROCESSINGCOMPLETE:
             self._handle_processingcomplete(data)
-        elif responsecode == ServerResponse.UpdateSignalIndexCache:
+        elif responsecode == ServerResponse.UPDATESIGNALINDEXCACHE:
             self._handle_update_signalindexcache(data)
-        elif responsecode == ServerResponse.UpdateBaseTimes:
+        elif responsecode == ServerResponse.UPDATEBASETIMES:
             self._handle_update_basetimes(data)
-        elif responsecode == ServerResponse.UpdateCipherKeys:
+        elif responsecode == ServerResponse.UPDATECIPHERKEYS:
             self._handle_update_cipherkeys(data)
-        elif responsecode == ServerResponse.ConfigurationChanged:
+        elif responsecode == ServerResponse.CONFIGURATIONCHANGED:
             self._handle_configurationchanged()
-        elif responsecode == ServerResponse.BufferBlock:
+        elif responsecode == ServerResponse.BUFFERBLOCK:
             self._handle_bufferblock(data)
-        elif responsecode == ServerResponse.Notification:
+        elif responsecode == ServerResponse.NOTIFICATION:
             self._handle_notification(data)
-        elif responsecode == ServerResponse.NoOP:
+        elif responsecode == ServerResponse.NOOP:
             # NoOP Handled
             pass
         else:
@@ -773,7 +772,7 @@ class DataSubscriber:
             self._dispatch_errormessage("".join(message))
 
     def _handle_metadatarefresh(self, data: bytes):
-        self.begin_callbacksync()
+        # self.begin_callbacksync()
 
         if self.metadatareceived_callback is not None:
             if self.compress_metadata:
@@ -793,23 +792,23 @@ class DataSubscriber:
 
             self._threadpool.submit(self.metadatareceived_callback, data)
 
-        self.end_callbacksync()
+        # self.end_callbacksync()
 
     def _handle_datastarttime(self, data: bytes):
-        self.begin_callbacksync()
+        # self.begin_callbacksync()
 
         if self.data_starttime_callback is not None:
             self.data_starttime_callback(BigEndian.uint64(data))
 
-        self.end_callbacksync()
+        # self.end_callbacksync()
 
     def _handle_processingcomplete(self, data: bytes):
-        self.begin_callbacksync()
+        # self.begin_callbacksync()
 
         if self.processingcomplete_callback is not None:
             self.processingcomplete_callback(self.decodestr(data))
 
-        self.end_callbacksync()
+        # self.end_callbacksync()
 
     def _handle_update_signalindexcache(self, data: bytes):
         if len(data) == 0:
@@ -847,12 +846,12 @@ class DataSubscriber:
         if version > 1:
             self.send_servercommand(ServerCommand.CONFIRMSIGNALINDEXCACHE)
 
-        self.begin_callbacksync()
+        # self.begin_callbacksync()
 
         if self.subscriptionupdated_callback is not None:
             self.subscriptionupdated_callback(signalindexcache)
 
-        self.end_callbacksync()
+        # self.end_callbacksync()
 
     def _handle_update_basetimes(self, data: bytes):
         if len(data) == 0:
@@ -910,12 +909,12 @@ class DataSubscriber:
     def _handle_configurationchanged(self):
         self._dispatch_statusmessage("Received notification from publisher that configuration has changed.")
 
-        self.begin_callbacksync()
+        # self.begin_callbacksync()
 
         if self.configurationchanged_callback is not None:
             self.configurationchanged_callback()
 
-        self.end_callbacksync()
+        # self.end_callbacksync()
 
     def _handle_datapacket(self, data: bytes):
         datapacketflags = DataPacketFlags(data[0])
@@ -961,14 +960,14 @@ class DataSubscriber:
         else:
             self._parse_compact_measurements(signalindexcache, data[4:], measurements)
 
-        self.begin_callbacksync()
+        # self.begin_callbacksync()
 
         if self.newmeasurements_callback is not None:
             # Do not use thread pool here, processing sequence may be important.
             # Execute callback directly from socket processing thread:
             self.newmeasurements_callback(measurements)
 
-        self.end_callbacksync()
+        # self.end_callbacksync()
 
         self.total_measurementsreceived += count
 
@@ -1054,14 +1053,14 @@ class DataSubscriber:
                     self._bufferblock_cache = self._bufferblock_cache[i:]
 
                 # Publish buffer block measurements
-                self.begin_callbacksync()
+                # self.begin_callbacksync()
 
                 if self.newbufferblocks_callback is not None:
                     # Do not use thread pool here, processing sequence may be important.
                     # Execute callback directly from socket processing thread:
                     self.newbufferblocks_callback(bufferblockmeasurements)
 
-                self.end_callbacksync()
+                # self.end_callbacksync()
             else:
                 # Ensure that the list has at least as many elements as it needs to cache this measurement.
                 # This edge case handles possible dropouts and/or out of order packet deliver when data
@@ -1077,12 +1076,12 @@ class DataSubscriber:
 
         self._dispatch_statusmessage(f"NOTIFICATION: {message}")
 
-        self.begin_callbacksync()
+        # self.begin_callbacksync()
 
         if self.notificationreceived_callback is not None:
             self.notificationreceived_callback()
 
-        self.end_callbacksync()
+        # self.end_callbacksync()
 
     def send_servercommand_withmessage(self, commandcode: ServerCommand, message: str):
         """
@@ -1099,7 +1098,7 @@ class DataSubscriber:
         if not self._connected:
             return
 
-        packetsize = np.uint32(len(data)) + 1
+        packetsize = np.uint32(1) if data is None else np.uint32(len(data)) + 1
         commandbuffersize = np.uint32(packetsize + PAYLOADHEADER_SIZE)
 
         if commandbuffersize > len(self._writebuffer):

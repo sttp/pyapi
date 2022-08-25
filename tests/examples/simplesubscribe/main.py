@@ -1,0 +1,86 @@
+# ******************************************************************************************************
+#  main.py - Gbtc
+#
+#  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.
+#
+#  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See
+#  the NOTICE file distributed with this work for additional information regarding copyright ownership.
+#  The GPA licenses this file to you under the MIT License (MIT), the "License"; you may not use this
+#  file except in compliance with the License. You may obtain a copy of the License at:
+#
+#      http://opensource.org/licenses/MIT
+#
+#  Unless agreed to in writing, the subject software distributed under the License is distributed on an
+#  "AS-IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. Refer to the
+#  License for the specific language governing permissions and limitations.
+#
+#  Code Modification History:
+#  ----------------------------------------------------------------------------------------------------
+#  08/24/2022 - J. Ritchie Carroll
+#       Generated original version of source code.
+#
+# ******************************************************************************************************
+
+import os  # nopep8
+import sys  # nopep8
+sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../../../src")  # nopep8
+
+from gsf import Limits
+from sttp.subscriber import Subscriber
+from sttp.reader import MeasurementReader
+from time import time
+from threading import Thread
+import argparse
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("hostname", type=str)
+    parser.add_argument("port", type=int)
+    args = parser.parse_args()
+
+    if args.port < 1 or args.port > Limits.MAXUINT16:
+        print(f"Port number \"{args.port}\" is out of range: must be 1 to {Limits.MAXUINT16}")
+        exit(2)
+
+    subscriber = Subscriber()
+
+    # Start new data read at each connection
+    subscriber.set_connectionestablished_receiver(
+        lambda: Thread(target=lambda: read_data(subscriber)).start())
+
+    subscriber.subscribe("FILTER TOP 20 ActiveMeasurements WHERE True")
+    subscriber.connect(f"{args.hostname}:{args.port}")
+
+    # Exit when any key is pressed
+    input()
+
+    subscriber.dispose()
+
+
+def read_data(subscriber: Subscriber):
+    reader = subscriber.readmeasurements()
+    lastmessage = 0.0
+
+    while subscriber.connected:
+        measurement = reader.next_measurement()
+
+        if time() - lastmessage < 5.0:
+            continue
+        elif lastmessage == 0.0:
+            subscriber.statusmessage("Receiving measurements...")
+            lastmessage = time()
+            continue
+
+        message = []
+
+        message.append(f"{subscriber.total_measurementsreceived:,}")
+        message.append(" measurements received so far. Current measurement:\n    ")
+        message.append(str(measurement))
+
+        subscriber.statusmessage("".join(message))
+        lastmessage = time()
+
+
+if __name__ == "__main__":
+    main()
