@@ -261,11 +261,11 @@ class CompactMeasurement(Measurement):
         index += 1
 
         # Decode runtime ID
-        self.runtimeid = np.int32(BigEndian.uint32(buffer[index:]))
+        self.runtimeid = np.int32(BigEndian.to_uint32(buffer[index:]))
         index += 4
 
         # Decode value
-        self.value = np.float64(BigEndian.float32(buffer[index:]))
+        self.value = np.float64(BigEndian.to_float32(buffer[index:]))
         index += 4
 
         if not self._includetime:
@@ -277,19 +277,19 @@ class CompactMeasurement(Measurement):
             if self._usemillisecondresolution:
                 # Decode 2-byte millisecond offset timestamp
                 if basetimeoffset > 0:
-                    self.timestamp = basetimeoffset + np.uint64(BigEndian.uint16(buffer[index:])) * Ticks.PERMILLISECOND
+                    self.timestamp = basetimeoffset + np.uint64(BigEndian.to_uint16(buffer[index:])) * Ticks.PERMILLISECOND
 
                 index += 2
             else:
                 # Decode 4-byte tick offset timestamp
                 if basetimeoffset > 0:
-                    self.timestamp = basetimeoffset + np.uint64(BigEndian.uint32(buffer[index:]))
+                    self.timestamp = basetimeoffset + np.uint64(BigEndian.to_uint32(buffer[index:]))
 
                 index += 4
         else:
             # Decode 8-byte full fidelity timestamp
             # Note that only a full fidelity timestamp can carry leap second flags
-            self.timestamp = BigEndian.uint64(buffer[index:])
+            self.timestamp = BigEndian.to_uint64(buffer[index:])
             index += 8
 
         return index, None

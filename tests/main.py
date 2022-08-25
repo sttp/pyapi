@@ -77,6 +77,5 @@ def main():
 
         sttpapi.Disconnect()
 
-
 if __name__ == "__main__":
     main()

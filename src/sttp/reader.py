@@ -23,8 +23,7 @@
 
 from .transport.measurement import Measurement
 from typing import List
-from threading import Lock, Condition
-
+from queue import Queue
 
 class MeasurementReader:
     """
@@ -36,28 +35,20 @@ class MeasurementReader:
         Creates a new `MeasurementReader`.
         """
 
-        self._readready = Condition(Lock())
-        self._readready.acquire()
-
-        self._writeready = Condition(Lock())
-        self._writeready.acquire()
-
-        self._current = Measurement()
-
+        self._queue = Queue(1)
         self._subscriber = subscriber
         self._subscriber.set_newmeasurements_receiver(self._read_measurements)
 
     def _read_measurements(self, measurements: List[Measurement]):
         for measurement in measurements:
-            self._readready.wait()
-            self._current = measurement
-            self._writeready.notify()
+            self._queue.put(measurement)
+            self._queue.join()
 
     def next_measurement(self) -> Measurement:
         """
         Blocks current thread until a new measurement arrived.
         """
 
-        self._readready.notify()
-        self._writeready.wait()
-        return self._current
+        current = self._queue.get()
+        self._queue.task_done()
+        return current

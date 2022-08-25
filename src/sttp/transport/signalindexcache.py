@@ -44,7 +44,7 @@ class SignalIndexCache:
         self._maxsignalindex = np.uint32(0)
         #self.tsscDecoder = tssc.Decoder()
 
-    def _addrecord(self, datasubscriber: "DataSubscriber", signalindex: np.int32, signalid: UUID, source: str, id: np.uint64, charsizeestimate: np.uint32 = 1):
+    def _addrecord(self, ds: "DataSubscriber", signalindex: np.int32, signalid: UUID, source: str, id: np.uint64, charsizeestimate: np.uint32 = 1):
         index = np.uint32(len(self._signalidlist))
         self._reference[signalindex] = index
         self._signalidlist.append(signalid)
@@ -55,7 +55,7 @@ class SignalIndexCache:
         if index > self._maxsignalindex:
             self._maxsignalindex = index
 
-        metadata = datasubscriber.lookupmetadata(signalid)
+        metadata = ds.lookupmetadata(signalid)
 
         # Register measurement metadata if not defined already
         if len(metadata.source) == 0:
@@ -149,7 +149,7 @@ class SignalIndexCache:
 
         return np.uint32(len(self._signalidcache))
 
-    def decode(self, datasubscriber: "DataSubscriber", buffer: bytes) -> Tuple[UUID, Optional[BaseException]]:
+    def decode(self, ds: "DataSubscriber", buffer: bytes) -> Tuple[UUID, Optional[BaseException]]:
         """
         Parses a `SignalIndexCache` from the specified byte buffer received from a `DataPublisher`.
         """
@@ -162,7 +162,7 @@ class SignalIndexCache:
         offset = 0
 
         # Byte size of cache
-        binarylength = BigEndian.uint32(buffer)
+        binarylength = BigEndian.to_uint32(buffer)
         offset += 4
 
         if length < binarylength:
@@ -172,12 +172,12 @@ class SignalIndexCache:
         offset += 16
 
         # Number of references
-        referencecount = BigEndian.uint32(buffer[offset:])
+        referencecount = BigEndian.to_uint32(buffer[offset:])
         offset += 4
 
         for i in range(referencecount):
             # Signal index
-            signalindex = np.int32(BigEndian.uint32(buffer[offset:]))
+            signalindex = np.int32(BigEndian.to_uint32(buffer[offset:]))
             offset += 4
 
             # Signal ID
@@ -186,16 +186,16 @@ class SignalIndexCache:
             offset += 16
 
             # Source
-            sourceSize = BigEndian.uint32(buffer[offset:])
+            sourceSize = BigEndian.to_uint32(buffer[offset:])
             offset += 4
 
-            source = datasubscriber.decodestr(buffer[offset: offset + sourceSize])
+            source = ds.decodestr(buffer[offset: offset + sourceSize])
             offset += sourceSize
 
             # ID
-            id = BigEndian.uint64(buffer[offset:])
+            id = BigEndian.to_uint64(buffer[offset:])
             offset += 8
 
-            self._addrecord(datasubscriber, signalindex, signalid, source, id)
+            self._addrecord(ds, signalindex, signalid, source, id)
 
         return (subscriberid, None)

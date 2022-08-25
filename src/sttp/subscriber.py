@@ -282,11 +282,12 @@ class Subscriber:
 
         if len(self._config.metadatafilters) == 0:
             ds.send_servercommand(ServerCommand.METADATAREFRESH)
+            return
 
         filters = ds.encodestr(self._config.metadatafilters)
         buffer = bytearray(4 + len(filters))
 
-        BigEndian.putuint32(buffer, np.uint32(len(filters)))
+        buffer[0:4] = BigEndian.from_uint32(np.uint32(len(filters)))
         buffer[4:] = filters
         
         ds.send_servercommand(ServerCommand.METADATAREFRESH, buffer)
@@ -518,7 +519,7 @@ class Subscriber:
         """
 
         con = self._datasubscriber.connector
-        self.statusmessage(f"Connection to {con.Hostname}:{con.Port} established.")
+        self.statusmessage(f"Connection to {con.hostname}:{con.port} established.")
 
     def default_connectionterminated_receiver(self):
         """
@@ -527,7 +528,7 @@ class Subscriber:
         """
 
         con = self._datasubscriber.connector
-        self.errormessage(f"Connection to {con.Hostname}:{con.Port} terminated.")  
+        self.errormessage(f"Connection to {con.hostname}:{con.port} terminated.")
 
     def set_statusmessage_logger(self, callback: Optional[Callable[[str], None]]):
         """

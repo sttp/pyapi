@@ -103,7 +103,7 @@ class DataSubscriber:
         # Statistics counters
         self._total_commandchannel_bytesreceived = np.uint64(0)
         self._total_datachannel_bytesreceived = np.uint64(0)
-        self._total_measurements_received = np.uint64(0)
+        self._total_measurementsreceived = np.uint64(0)
 
         self.statusmessage_callback: Optional[Callable[[str], None]] = None
         """
@@ -416,7 +416,7 @@ class DataSubscriber:
         if not self._connected:
             return RuntimeError("subscriber is not connected; cannot subscribe")
 
-        self._total_measurements_received = np.uint64(0)
+        self._total_measurementsreceived = np.uint64(0)
 
         subscription = self._subscription
         connectionbuilder = []
@@ -465,7 +465,7 @@ class DataSubscriber:
         buffer = bytearray(5 + length)
 
         buffer[0] = DataPacketFlags.COMPACT
-        BigEndian.putuint32(buffer[1:], length)
+        buffer[1:5] = BigEndian.from_uint32(length)
         buffer[5:] = self.encodestr(connectionstring)
 
         self.send_servercommand(ServerCommand.SUBSCRIBE, buffer)
@@ -584,8 +584,8 @@ class DataSubscriber:
         # self.end_callbacksync()
 
         # Disconnect complete
-        self._disconnected.Set()
-        self._disconnecting.UnSet()
+        self._disconnected = True
+        self._disconnecting = False
 
         if autoreconnecting:
             # Handling auto-connect callback separately from connection terminated callback
@@ -648,7 +648,7 @@ class DataSubscriber:
         if self._disconnecting:
             return
 
-        packetsize = BigEndian.uint32(self._readbuffer)
+        packetsize = BigEndian.to_uint32(self._readbuffer)
 
         if packetsize > len(self._readbuffer):
             self._readbuffer = bytearray(packetsize)
@@ -798,7 +798,7 @@ class DataSubscriber:
         # self.begin_callbacksync()
 
         if self.data_starttime_callback is not None:
-            self.data_starttime_callback(BigEndian.uint64(data))
+            self.data_starttime_callback(BigEndian.to_uint64(data))
 
         # self.end_callbacksync()
 
@@ -832,7 +832,7 @@ class DataSubscriber:
                 return
 
         signalindexcache = SignalIndexCache()
-        (self.subscriberid, err) = signalindexcache.decode(self, data)
+        (self._subscriberid, err) = signalindexcache.decode(self, data)
 
         if err is not None:
             self._dispatch_errormessage(f"Failed to parse signal index cache: {err}")
@@ -857,8 +857,8 @@ class DataSubscriber:
         if len(data) == 0:
             return
 
-        self._timeindex = 0 if BigEndian.uint32(data) == 0 else 1
-        self._basetimeoffsets = [BigEndian.uint64(data[4:]), BigEndian.uint64(data[12:])]
+        self._timeindex = 0 if BigEndian.to_uint32(data) == 0 else 1
+        self._basetimeoffsets = [BigEndian.to_uint64(data[4:]), BigEndian.to_uint64(data[12:])]
 
         self._dispatch_statusmessage(f"Received new base time offset from publisher: {Ticks.tostring(self._basetimeoffsets[self._timeindex ^ 1])}")
 
@@ -870,7 +870,7 @@ class DataSubscriber:
         index = 1
 
         # Read even key size
-        bufferlen = int(BigEndian.int32(data[index:]))
+        bufferlen = int(BigEndian.to_int32(data[index:]))
         index += 4
 
         # Read even key
@@ -878,7 +878,7 @@ class DataSubscriber:
         index += bufferlen
 
         # Read even initialization vector size
-        bufferlen = int(BigEndian.int32(data[index:]))
+        bufferlen = int(BigEndian.to_int32(data[index:]))
         index += 4
 
         # Read even initialization vector
@@ -886,7 +886,7 @@ class DataSubscriber:
         index += bufferlen
 
         # Read odd key size
-        bufferlen = int(BigEndian.int32(data[index:]))
+        bufferlen = int(BigEndian.to_int32(data[index:]))
         index += 4
 
         # Read odd key
@@ -894,7 +894,7 @@ class DataSubscriber:
         index += bufferlen
 
         # Read odd initialization vector size
-        bufferlen = int(BigEndian.int32(data[index:]))
+        bufferlen = int(BigEndian.to_int32(data[index:]))
         index += 4
 
         # Read odd initialization vector
@@ -944,8 +944,7 @@ class DataSubscriber:
                 self._dispatch_connectionterminated()
                 return
 
-        count = BigEndian.uint32(data)
-        measurements = np.empty(count, dtype=Measurement)
+        count = BigEndian.to_uint32(data)
         cacheindex = 0
 
         if datapacketflags & DataPacketFlags.CACHEINDEX > 0:
@@ -956,26 +955,27 @@ class DataSubscriber:
         self._signalindexcache_mutex.release()
 
         if compressed:
-            self._parse_tssc_measurements(signalindexcache, data[4:], measurements)
+            measurements = self._parse_tssc_measurements(signalindexcache, data[4:], count)
         else:
-            self._parse_compact_measurements(signalindexcache, data[4:], measurements)
+            measurements = self._parse_compact_measurements(signalindexcache, data[4:], count)
 
         # self.begin_callbacksync()
 
-        if self.newmeasurements_callback is not None:
+        if self.newmeasurements_callback is not None and len(measurements) > 0:
             # Do not use thread pool here, processing sequence may be important.
             # Execute callback directly from socket processing thread:
             self.newmeasurements_callback(measurements)
 
         # self.end_callbacksync()
 
-        self.total_measurementsreceived += count
+        self._total_measurementsreceived += count
 
-    def _parse_tssc_measurements(self, signalindexcache: SignalIndexCache, data: bytes, measurements: List[Measurement]):
+    def _parse_tssc_measurements(self, signalindexcache: SignalIndexCache, data: bytes, count: np.uint32) -> List[Measurement]:
         self._dispatch_errormessage("Python TSSC not implemented yet - disconnecting.")
         self._dispatch_connectionterminated()
+        return list()
 
-    def _parse_compact_measurements(self, signalindexcache: SignalIndexCache, data: bytes, measurements: List[Measurement]):
+    def _parse_compact_measurements(self, signalindexcache: SignalIndexCache, data: bytes, count: np.uint32) -> List[Measurement]:
         if signalindexcache.count == 0:
             if self._last_missingcachewarning + MISSINGCACHEWARNING_INTERVAL < time():
                 # Warning message for missing signal index cache
@@ -984,28 +984,31 @@ class DataSubscriber:
 
                 self._last_missingcachewarning = time()
 
-            return
+            return list()
 
+        measurements = []
         usemillisecondresolution = self.subscription.usemillisecondresolution
         includetime = self.subscription.includetime
         index = 0
 
-        for i in range(len(measurements)):
+        for i in range(count):
             # Deserialize compact measurement format
-            compactMeasurement = CompactMeasurement(signalindexcache, includetime, usemillisecondresolution, self._basetimeoffsets)
-            (bytesDecoded, err) = compactMeasurement.decode(data[index:])
+            measurement = CompactMeasurement(signalindexcache, includetime, usemillisecondresolution, self._basetimeoffsets)
+            (bytesdecoded, err) = measurement.decode(data[index:])
 
             if err is not None:
                 self._dispatch_errormessage(f"Failed to parse compact measurements - disconnecting: {err}")
                 self._dispatch_connectionterminated()
                 return
 
-            index += bytesDecoded
-            measurements[i] = compactMeasurement
+            index += bytesdecoded
+            measurements.append(measurement)
+
+        return measurements
 
     def _handle_bufferblock(self, data: bytes):
         # Buffer block received - wrap as a BufferBlockMeasurement and expose back to consumer
-        sequencenumber = BigEndian.uint32(data)
+        sequencenumber = BigEndian.to_uint32(data)
         buffercacheindex = int(sequencenumber - self._bufferblock_expectedsequencenumber)
         signalindexcacheindex = 0
 
@@ -1023,7 +1026,7 @@ class DataSubscriber:
                 data = data[4:]
 
             # Get measurement key from signal index cache
-            signalindex = BigEndian.uint32(data)
+            signalindex = BigEndian.to_uint32(data)
 
             self._signalindexcache_mutex.acquire()
             signalIndexCache = self._signalindexcache[signalindexcacheindex]
@@ -1105,7 +1108,7 @@ class DataSubscriber:
             self._writebuffer = bytearray(commandbuffersize)
 
         # Insert packet size
-        BigEndian.putuint32(self._writebuffer, packetsize)
+        self._writebuffer[0:4] = BigEndian.from_uint32(packetsize)
 
         # Insert command code
         self._writebuffer[4] = commandcode
@@ -1139,10 +1142,7 @@ class DataSubscriber:
         if self.compress_signalindexcache:
             operationalModes |= OperationalModes.COMPRESSSIGNALINDEXCACHE
 
-        buffer = bytearray(4)
-        BigEndian.putuint32(buffer, np.uint32(operationalModes))
-
-        self.send_servercommand(ServerCommand.DEFINEOPERATIONALMODES, buffer)
+        self.send_servercommand(ServerCommand.DEFINEOPERATIONALMODES, BigEndian.from_uint32(np.uint32(operationalModes)))
 
     @property
     def subscription(self) -> SubscriptionInfo:
@@ -1202,4 +1202,4 @@ class DataSubscriber:
         Gets the total number of measurements received since last subscription.
         """
 
-        return self._total_measurements_received
+        return self._total_measurementsreceived

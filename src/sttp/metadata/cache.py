@@ -42,7 +42,7 @@ class MetadataCache:
     def __init__(self, metadata_xml: bytes = ...):
 
         self.signalid_measurement_map: Dict[UUID, MeasurementRecord] = dict()
-        self.pointid_measurement_map: Dict[np.uint64, MeasurementRecord] = dict()
+        self.id_measurement_map: Dict[np.uint64, MeasurementRecord] = dict()
         self.pointtag_measurement_map: Dict[str, MeasurementRecord] = dict()
         self.signalref_measurement_map: Dict[str, MeasurementRecord] = dict()
         self.deviceacronym_device_map: Dict[str, DeviceRecord] = dict()
@@ -91,7 +91,7 @@ class MetadataCache:
             ))
 
         for measurement in measurement_records:
-            self.pointid_measurement_map[measurement.id] = measurement
+            self.id_measurement_map[measurement.id] = measurement
 
         for measurement in measurement_records:
             self.signalid_measurement_map[measurement.signalid] = measurement
@@ -337,7 +337,7 @@ class MetadataCache:
         self.signalid_measurement_map[measurement.signalid] = measurement
 
         if measurement.id > 0:
-            self.pointid_measurement_map[measurement.pointid] = measurement
+            self.id_measurement_map[measurement.id] = measurement
 
         if len(measurement.pointtag) > 0:
             self.pointtag_measurement_map[measurement.pointtag] = measurement
@@ -353,9 +353,9 @@ class MetadataCache:
 
         return None
 
-    def find_measurement_pointid(self, pointid: np.uint64) -> Optional[MeasurementRecord]:
-        if pointid in self.pointid_measurement_map:
-            return self.pointid_measurement_map[pointid]
+    def find_measurement_id(self, id: np.uint64) -> Optional[MeasurementRecord]:
+        if id in self.id_measurement_map:
+            return self.id_measurement_map[id]
 
         return None
 
@@ -410,15 +410,6 @@ class MetadataCache:
                     records.add(record)
 
         return list(records)
-
-    @staticmethod
-    def get_pointids(records: List[MeasurementRecord]) -> List[np.uint64]:
-        pointids = set()
-
-        for record in records:
-            pointids.add(record.pointid)
-
-        return list(pointids)
 
     def find_device_acronym(self, deviceacronym: UUID) -> Optional[DeviceRecord]:
         if deviceacronym in self.deviceacronym_device_map:
