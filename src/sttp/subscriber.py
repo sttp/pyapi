@@ -38,6 +38,7 @@ from typing import List, Optional, Callable
 from time import time
 from uuid import UUID
 from threading import Lock
+from readerwriterlock.rwlock import RWLockRead
 import sys
 import numpy as np
 
@@ -78,7 +79,9 @@ class Subscriber:
         # Lock used to synchronize console writes
         self._consolelock = Lock()
 
-        # self._assigninghandler_mutex = RWLock()
+        self._assigninghandler_mutex = RWLockRead()
+        self._assigninghandler_readmutex = self._assigninghandler_mutex.gen_rlock()
+        self._assigninghandler_writemutex = self._assigninghandler_mutex.gen_wlock()
 
     def dispose(self):
         """
@@ -169,7 +172,7 @@ class Subscriber:
 
         return self._datasubscriber.adjustedvalue(measurement)
 
-    def connect(self, address: str, config: Config = ...) -> Optional[BaseException]:
+    def connect(self, address: str, config: Config = ...) -> Optional[Exception]:
         """
         Starts the client-based connection cycle to an STTP publisher. Config parameter controls
         connection related settings. When the config defines `AutoReconnect` as True, the connection
@@ -200,7 +203,7 @@ class Subscriber:
 
         return self._connect(hostname, np.uint16(port))
 
-    def _connect(self, hostname: str, port: np.uint16) -> Optional[BaseException]:
+    def _connect(self, hostname: str, port: np.uint16) -> Optional[Exception]:
         ds = self._datasubscriber
         con = ds.connector
 
@@ -218,9 +221,9 @@ class Subscriber:
         ds.compress_signalindexcache = self._config.compress_signalindexcache
         ds.version = self._config.version
 
-        # con.begin_callbackassignment()
-        # ds.begin_callbackassignment()
-        # self._begin_callbacksync()
+        con.begin_callbackassignment()
+        ds.begin_callbackassignment()
+        self._begin_callbacksync()
 
         # Register direct Subscriber callbacks
         con.errormessage_callback = self._errormessage_logger
@@ -234,22 +237,22 @@ class Subscriber:
         ds.configurationchanged_callback = self._handle_configurationchanged
         ds.processingcomplete_callback = self._handle_processingcomplete
 
-        # self._end_callbacksync()
-        # con.end_callbackassignment()
-        # ds.end_callbackassignment()
+        self._end_callbacksync()
+        con.end_callbackassignment()
+        ds.end_callbackassignment()
 
-        err: Optional[BaseException] = None
+        err: Optional[Exception] = None
 
         # Connect and subscribe to publisher
         status = con.connect(ds)
 
         if status == ConnectStatus.SUCCESS:
-            # self._begin_callbacksync()
+            self._begin_callbacksync()
 
             if self._connectionestablished_receiver is not None:
                 self._connectionestablished_receiver()
 
-            # self._end_callbacksync()
+            self._end_callbacksync()
 
             # If automatically parsing metadata, request metadata upon successful connection,
             # after metadata is received the SubscriberInstance will then initiate subscribe;
@@ -359,33 +362,33 @@ class Subscriber:
 
        return MeasurementReader(self)
 
-    # def _begin_callbackassignment(self):
-    #     """
-    #     Informs Subscriber that a callback change has been initiated.
-    #     """
+    def _begin_callbackassignment(self):
+        """
+        Informs Subscriber that a callback change has been initiated.
+        """
 
-    #     self._assigninghandler_mutex.w_acquire()
+        self._assigninghandler_writemutex.acquire()
 
-    # def _begin_callbacksync(self):
-    #     """
-    #     Begins a callback synchronization operation.
-    #     """
+    def _begin_callbacksync(self):
+        """
+        Begins a callback synchronization operation.
+        """
 
-    #     self._assigninghandler_mutex.r_acquire()
+        self._assigninghandler_readmutex.acquire()
 
-    # def _end_callbacksync(self):
-    #     """
-    #     Ends a callback synchronization operation.
-    #     """
+    def _end_callbacksync(self):
+        """
+        Ends a callback synchronization operation.
+        """
 
-    #     self._assigninghandler_mutex.r_release()
+        self._assigninghandler_readmutex.release()
 
-    # def _end_callbackassignment(self):
-    #     """
-    #     Informs Subscriber that a callback change has been completed.
-    #     """
+    def _end_callbackassignment(self):
+        """
+        Informs Subscriber that a callback change has been completed.
+        """
 
-    #     self._assigninghandler_mutex.w_release()
+        self._assigninghandler_writemutex.release()
 
     # Local callback handlers:
 
@@ -394,35 +397,35 @@ class Subscriber:
         Executes the defined status message logger callback.
         """
 
-        # self._begin_callbacksync()
+        self._begin_callbacksync()
 
         if self._statusmessage_logger is not None:
             self._statusmessage_logger(message)
 
-        # self._end_callbacksync()
+        self._end_callbacksync()
 
     def errormessage(self, message: str):
         """
         Executes the defined error message logger callback.
         """
 
-        # self._begin_callbacksync()
+        self._begin_callbacksync()
 
         if self._errormessage_logger is not None:
             self._errormessage_logger(message)
 
-        # self._end_callbacksync()
+        self._end_callbacksync()
 
     # Intermediate callback handlers:
 
     def _handle_reconnect(self, ds: DataSubscriber):
         if ds.connected:
-            # self._begin_callbacksync()
+            self._begin_callbacksync()
 
             if self._connectionestablished_receiver is not None:
                 self._connectionestablished_receiver()
 
-            # self._end_callbacksync()
+            self._end_callbacksync()
 
             # If automatically parsing metadata, request metadata upon successful connection,
             # after metadata is received the SubscriberInstance will then initiate subscribe;
@@ -444,12 +447,12 @@ class Subscriber:
         #self._show_metadatasummary(cache.metadata, parsestarted)
         self.statusmessage(f"Parsed metadata records in {(time() - parsestarted):.3f} seconds")
 
-        # self._begin_callbacksync()
+        self._begin_callbacksync()
 
         if self._metadatanotification_receiver is not None:
             self._metadatanotification_receiver(cache.metadata)  # TODO: Change parameter to DataSet
 
-        # self._end_callbacksync()
+        self._end_callbacksync()
 
         if self._config.autorequestmetadata and self._config.autosubscribe:
             self._datasubscriber.subscribe()
@@ -459,30 +462,30 @@ class Subscriber:
     #    pass
 
     def _handle_data_starttime(self, starttime: np.int64):
-        # self._begin_callbacksync()
+        self._begin_callbacksync()
 
         if self._data_starttime_receiver is not None:
             self._data_starttime_receiver(starttime)
 
-        # self._end_callbacksync()
+        self._end_callbacksync()
 
     def _handle_configurationchanged(self):
-        # self._begin_callbacksync()
+        self._begin_callbacksync()
 
         if self._configurationchanged_receiver is not None:
             self._configurationchanged_receiver()
 
-        # self._end_callbacksync()
+        self._end_callbacksync()
 
     def _handle_processingcomplete(self, message: str):
         self.statusmessage(message)
 
-        # self._begin_callbacksync()
+        self._begin_callbacksync()
 
         if self._historicalreadcomplete_receiver is not None:
             self._historicalreadcomplete_receiver()
 
-        # self._end_callbacksync()
+        self._end_callbacksync()
 
     def default_statusmessage_logger(self, message: str):
         """
@@ -536,9 +539,9 @@ class Subscriber:
         Assignment will take effect immediately, even while subscription is active.
         """
 
-        # self._begin_callbackassignment()
+        self._begin_callbackassignment()
         self._statusmessage_logger = callback
-        # self._end_callbackassignment()
+        self._end_callbackassignment()
 
     def set_errormessage_logger(self, callback: Optional[Callable[[str], None]]):
         """
@@ -546,9 +549,9 @@ class Subscriber:
         Assignment will take effect immediately, even while subscription is active.
         """
 
-        # self._begin_callbackassignment()
+        self._begin_callbackassignment()
         self._errormessage_logger = callback
-        # self._end_callbackassignment()
+        self._end_callbackassignment()
 
     def set_metadatanotification_receiver(self, callback: Optional[Callable[[Element], None]]):
         """
@@ -558,9 +561,9 @@ class Subscriber:
         Assignment will take effect immediately, even while subscription is active.
         """
 
-        # self._begin_callbackassignment()
+        self._begin_callbackassignment()
         self._metadatanotification_receiver = callback
-        # self._end_callbackassignment()
+        self._end_callbackassignment()
 
     def set_subscriptionupdated_receiver(self, callback: Optional[Callable[[SignalIndexCache], None]]):
         """
@@ -568,9 +571,9 @@ class Subscriber:
         Assignment will take effect immediately, even while subscription is active.
         """
         
-        # self._begin_callbackassignment()
+        self._begin_callbackassignment()
         self._datasubscriber.subscriptionupdated_callback = callback
-        # self._end_callbackassignment()
+        self._end_callbackassignment()
 
     def set_data_starttime_receiver(self, callback: Optional[Callable[[np.int64], None]]):
         """
@@ -578,9 +581,9 @@ class Subscriber:
         Assignment will take effect immediately, even while subscription is active.
         """
 
-        # self._begin_callbackassignment()
+        self._begin_callbackassignment()
         self._data_starttime_receiver = callback
-        # self._end_callbackassignment()
+        self._end_callbackassignment()
 
     def set_configurationchanged_receiver(self, callback: Optional[Callable[[None], None]]):
         """
@@ -588,9 +591,9 @@ class Subscriber:
         Assignment will take effect immediately, even while subscription is active.
         """
 
-        # self._begin_callbackassignment()
+        self._begin_callbackassignment()
         self._configurationchanged_receiver = callback
-        # self._end_callbackassignment()
+        self._end_callbackassignment()
 
     def set_newmeasurements_receiver(self, callback: Optional[Callable[[List[Measurement]], None]]):
         """
@@ -598,9 +601,9 @@ class Subscriber:
         Assignment will take effect immediately, even while subscription is active.
         """
 
-        # self._begin_callbackassignment()
+        self._begin_callbackassignment()
         self._datasubscriber.newmeasurements_callback = callback
-        # self._end_callbackassignment()
+        self._end_callbackassignment()
 
     def set_newbufferblock_receiver(self, callback: Optional[Callable[[List[BufferBlock]], None]]):
         """
@@ -608,9 +611,9 @@ class Subscriber:
         Assignment will take effect immediately, even while subscription is active.
         """
         
-        # self._begin_callbackassignment()
+        self._begin_callbackassignment()
         self._datasubscriber.newbufferblocks_callback = callback
-        # self._end_callbackassignment()
+        self._end_callbackassignment()
 
     def set_notification_receiver(self, callback: Optional[Callable[[str], None]]):
         """
@@ -618,9 +621,9 @@ class Subscriber:
         Assignment will take effect immediately, even while subscription is active.
         """
         
-        # self._begin_callbackassignment()
+        self._begin_callbackassignment()
         self._datasubscriber.notificationreceived_callback = callback
-        # self._end_callbackassignment()
+        self._end_callbackassignment()
 
     def set_historicalreadcomplete_receiver(self, callback: Optional[Callable[[None], None]]):
         """
@@ -629,9 +632,9 @@ class Subscriber:
         Assignment will take effect immediately, even while subscription is active.
         """
         
-        # self._begin_callbackassignment()
+        self._begin_callbackassignment()
         self._historicalreadcomplete_receiver = callback
-        # self._end_callbackassignment()
+        self._end_callbackassignment()
 
     def set_connectionestablished_receiver(self, callback: Optional[Callable[[None], None]]):
         """
@@ -640,9 +643,9 @@ class Subscriber:
         Assignment will take effect immediately, even while subscription is active.
         """
         
-        # self._begin_callbackassignment()
+        self._begin_callbackassignment()
         self._connectionestablished_receiver = callback
-        # self._end_callbackassignment()
+        self._end_callbackassignment()
 
     def set_connectionterminated_receiver(self, callback: Optional[Callable[[None], None]]):
         """
@@ -651,6 +654,6 @@ class Subscriber:
         Assignment will take effect immediately, even while subscription is active.
         """
         
-        # self._begin_callbackassignment()
+        self._begin_callbackassignment()
         self._datasubscriber.connectionterminated_callback = callback
-        # self._end_callbackassignment()
+        self._end_callbackassignment()

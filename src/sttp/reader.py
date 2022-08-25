@@ -21,16 +21,20 @@
 #
 # ******************************************************************************************************
 
+from __future__ import annotations
 from .transport.measurement import Measurement
-from typing import List
+from typing import List, TYPE_CHECKING
 from queue import Queue
+
+if TYPE_CHECKING:
+    from subscriber import Subscriber
 
 class MeasurementReader:
     """
     Defines an STTP measurement reader.
     """
 
-    def __init__(self, subscriber: "Subscriber"):
+    def __init__(self, subscriber: Subscriber):
         """
         Creates a new `MeasurementReader`.
         """

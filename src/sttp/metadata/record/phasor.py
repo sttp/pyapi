@@ -21,11 +21,15 @@
 #
 # ******************************************************************************************************
 
+from __future__ import annotations
 from gsf import Empty
-from typing import Optional, List
+from typing import Optional, List, TYPE_CHECKING
 from enum import IntEnum
 from datetime import datetime
 
+if TYPE_CHECKING:
+    from .measurement import MeasurementRecord
+    from .device import DeviceRecord
 
 class CompositePhasorMeasurement(IntEnum):
     ANGLE = 0
@@ -63,12 +67,12 @@ class PhasorRecord:
         self._basekv = PhasorRecord.DEFAULT_BASEKV if basekv is ... else basekv
         self._updatedon = PhasorRecord.DEFAULT_UPDATEDON if updatedon is ... else updatedon
 
-        self.device: Optional["DeviceRecord"] = None
+        self.device: Optional[DeviceRecord] = None
         """
         Defines the associated `DeviceRecord` for this `PhasorRecord`.
         """
 
-        self.measurements: List["MeasurementRecord"] = list()
+        self.measurements: List[MeasurementRecord] = list()
         """
         Defines the two `MeasurementRecord` values, i.e., the angle and magnitude, associated with this `PhasorRecord`.
         """
@@ -138,7 +142,7 @@ class PhasorRecord:
         return self._updatedon
 
     @property
-    def angle_measurement(self) -> Optional["MeasurementRecord"]:
+    def angle_measurement(self) -> Optional[MeasurementRecord]:
         """
         Gets the associated angle `MeasurementRecord`, or `None` if not available.
         """
@@ -147,7 +151,7 @@ class PhasorRecord:
             self.measurements[CompositePhasorMeasurement.ANGLE]
 
     @property
-    def magnitude_measurement(self) -> Optional["MeasurementRecord"]:
+    def magnitude_measurement(self) -> Optional[MeasurementRecord]:
         """
         Gets the associated magnitude `MeasurementRecord`, or `None` if not available.
         """

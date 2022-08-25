@@ -21,12 +21,16 @@
 #
 # ******************************************************************************************************
 
+from __future__ import annotations
 from gsf import Empty
-from typing import Set
+from typing import Set, TYPE_CHECKING
 from datetime import datetime
 from uuid import UUID
 from decimal import Decimal
 
+if TYPE_CHECKING:
+    from .measurement import MeasurementRecord
+    from .phasor import PhasorRecord
 
 class DeviceRecord:
     """
@@ -78,12 +82,12 @@ class DeviceRecord:
         self._latitude = DeviceRecord.DEFAULT_LATITUDE if latitude is ... else latitude
         self._updatedon = DeviceRecord.DEFAULT_UPDATEDON if updatedon is ... else updatedon
 
-        self.measurements: Set["MeasurementRecord"] = set()
+        self.measurements: Set[MeasurementRecord] = set()
         """
         Gets `MeasurementRecord` values associated with this `DeviceRecord`.
         """
 
-        self.phasors: Set["PhasorRecord"] = set()
+        self.phasors: Set[PhasorRecord] = set()
         """
         Gets `PhasorRecord` values associated with this `DeviceRecord`.
         """

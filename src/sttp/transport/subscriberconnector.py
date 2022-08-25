@@ -21,22 +21,27 @@
 #
 #******************************************************************************************************
 
+from __future__ import annotations
 from gsf import Empty
 from .constants import ConnectStatus
-from typing import Callable, Optional
+from typing import List, Callable, Optional, TYPE_CHECKING
 from threading import Lock, Thread, Event
 from concurrent.futures import ThreadPoolExecutor
+from readerwriterlock.rwlock import RWLockRead
+from sys import stderr
 import math
 import numpy as np
 
+if TYPE_CHECKING:
+    from datasubscriber import DataSubscriber
 
 class SubscriberConnector:
     """
     Represents a connector that will establish or automatically reestablish a connection from a `DataSubscriber` to a `DataPublisher`.
     """
 
-    DEFAULT_ERRORMESSAGE_CALLBACK: Callable[[str], None] = lambda msg: print(msg)
-    DEFAULT_RECONNECT_CALLBACK: Callable[["DataSubscriber"], None] = lambda _: ...
+    DEFAULT_ERRORMESSAGE_CALLBACK: Callable[[str], None] = lambda msg: print(msg, file=stderr)
+    DEFAULT_RECONNECT_CALLBACK: Callable[[DataSubscriber], None] = lambda _: ...
     DEFAULT_HOSTNAME = Empty.STRING
     DEFAULT_PORT = np.uint16(0)
     DEFAULT_MAXRETRIES = np.int32(-1)
@@ -46,7 +51,7 @@ class SubscriberConnector:
 
     def __init__(self,
                  errormessage_callback: Callable[[str], None] = ...,
-                 reconnect_callback: Callable[["DataSubscriber"], None] = ...,
+                 reconnect_callback: Callable[[DataSubscriber], None] = ...,
                  hostname: str = ...,
                  port: np.uint16 = ...,
                  maxretries: np.int32 = ...,
@@ -103,11 +108,14 @@ class SubscriberConnector:
         self._waittimer = Event()
         self._waittimer_mutex = Lock()
 
-        # self._assigninghandler_mutex = RWLock()
+        self._assigninghandler_mutex = RWLockRead()
+        self._assigninghandler_readmutex = self._assigninghandler_mutex.gen_rlock()
+        self._assigninghandler_writemutex = self._assigninghandler_mutex.gen_wlock()
+
         self._threadpool = ThreadPoolExecutor()
 
-    def _autoreconnect(self, subscriber: "DataSubscriber"):
-        if self._cancel or subscriber.disposing:
+    def _autoreconnect(self, ds: DataSubscriber):
+        if self._cancel or ds.disposing:
             return
 
         # Make sure to wait on any running reconnect to complete...
@@ -116,9 +124,12 @@ class SubscriberConnector:
         self._reconnectthread_mutex.release()
 
         if reconnectthread is not None:
-            reconnectthread.join()
+            try:
+                reconnectthread.join()
+            except RuntimeError:
+                pass
 
-        reconnectthread = Thread(target=lambda: self._run_reconnectthread(subscriber))
+        reconnectthread = Thread(target=lambda: self._run_reconnectthread(ds))
 
         self._reconnectthread_mutex.acquire()
         self._reconnectthread = reconnectthread
@@ -126,7 +137,7 @@ class SubscriberConnector:
 
         reconnectthread.start()
 
-    def _run_reconnectthread(self, subscriber: "DataSubscriber"):
+    def _run_reconnectthread(self, ds: DataSubscriber):
         # Reset connection attempt counter if last attempt was not refused
         if not self._connectionrefused:
             self.resetconnection()
@@ -137,19 +148,19 @@ class SubscriberConnector:
 
         self._waitforretry()
 
-        if self._cancel or subscriber.disposing:
+        if self._cancel or ds.disposing:
             return
 
-        if self._connect(subscriber, True) == ConnectStatus.CANCELED:
+        if self._connect(ds, True) == ConnectStatus.CANCELED:
             return
 
         # Notify the user that reconnect attempt was completed.
-        # self.begin_callbacksync()
+        self.begin_callbacksync()
 
         if not self._cancel and self.reconnect_callback is not None:
-            self.reconnect_callback(subscriber)
+            self.reconnect_callback(ds)
 
-        # self.end_callbacksync()
+        self.end_callbacksync()
 
     def _waitforretry(self):
         # Apply exponential back-off algorithm for retry attempt delays
@@ -167,7 +178,7 @@ class SubscriberConnector:
             retryinterval = self.maxretryinterval
 
         # Notify the user that we are attempting to reconnect.
-        message = []
+        message: List[str] = []
 
         message.append("Connection")
 
@@ -191,7 +202,7 @@ class SubscriberConnector:
 
         waittimer.wait(retryinterval)
 
-    def connect(self, subscriber: "DataSubscriber") -> ConnectStatus:
+    def connect(self, ds: DataSubscriber) -> ConnectStatus:
         """
         Initiates a connection sequence for a `DataSubscriber`
         """
@@ -199,40 +210,40 @@ class SubscriberConnector:
         if self._cancel:
             return ConnectStatus.CANCELED
 
-        return self._connect(subscriber, False)
+        return self._connect(ds, False)
 
-    def _connect(self, subscriber: "DataSubscriber", autoreconnecting: bool) -> ConnectStatus:
+    def _connect(self, ds: DataSubscriber, autoreconnecting: bool) -> ConnectStatus:
         if autoreconnecting:
-            # subscriber.begin_callbackassignment()
-            subscriber.autoreconnect_callback = lambda: self._autoreconnect(subscriber)
-            # subscriber.end_callbackassignment()
+            ds.begin_callbackassignment()
+            ds.autoreconnect_callback = lambda: self._autoreconnect(ds)
+            ds.end_callbackassignment()
 
         self._cancel = False
 
-        while not subscriber.disposing:
+        while not ds.disposing:
             if self.maxretries != -1 and self._connectattempt >= self.maxretries:
                 self._dispatch_errormessage("Maximum connection retries attempted. Auto-reconnect canceled.")
                 break
 
             self._connectattempt += 1
 
-            if subscriber.disposing:
+            if ds.disposing:
                 return ConnectStatus.CANCELED
 
-            if subscriber._connect(self.hostname, self.port, autoreconnecting) is None:
+            if ds._connect(self.hostname, self.port, autoreconnecting) is None:
                 break
 
-            if not subscriber.disposing and self.retryinterval > 0:
+            if not ds.disposing and self.retryinterval > 0:
                 autoreconnecting = True
                 self._waitforretry()
 
                 if self._cancel:
                     return ConnectStatus.CANCELED
 
-        if subscriber.disposing:
+        if ds.disposing:
             return ConnectStatus.CANCELED
 
-        if subscriber.connected:
+        if ds.connected:
             return ConnectStatus.SUCCESS
 
         return ConnectStatus.FAILED
@@ -256,7 +267,10 @@ class SubscriberConnector:
         self._reconnectthread_mutex.release()
 
         if reconnectthread is not None:
-            reconnectthread.join()
+            try:
+                reconnectthread.join()
+            except RuntimeError:
+                pass
 
     def resetconnection(self):
         """
@@ -267,37 +281,37 @@ class SubscriberConnector:
         self._cancel = False
 
     def _dispatch_errormessage(self, message: str):
-        # self.begin_callbacksync()
+        self.begin_callbacksync()
 
         if self.errormessage_callback is not None:
             self._threadpool.submit(self.errormessage_callback, message)
 
-        # self.end_callbacksync()
+        self.end_callbacksync()
 
-    # def begin_callbackassignment(self):
-    #     """
-    #     Informs `DataSubscriber` that a callback change has been initiated.
-    #     """
+    def begin_callbackassignment(self):
+        """
+        Informs `DataSubscriber` that a callback change has been initiated.
+        """
 
-    #     self._assigninghandler_mutex.w_acquire()
+        self._assigninghandler_writemutex.acquire()
 
-    # def begin_callbacksync(self):
-    #     """
-    #     Begins a callback synchronization operation.
-    #     """
+    def begin_callbacksync(self):
+        """
+        Begins a callback synchronization operation.
+        """
 
-    #     self._assigninghandler_mutex.r_acquire()
+        self._assigninghandler_readmutex.acquire()
 
-    # def end_callbacksync(self):
-    #     """
-    #     Ends a callback synchronization operation.
-    #     """
+    def end_callbacksync(self):
+        """
+        Ends a callback synchronization operation.
+        """
 
-    #     self._assigninghandler_mutex.r_release()
+        self._assigninghandler_readmutex.release()
 
-    # def end_callbackassignment(self):
-    #     """
-    #     Informs `DataSubscriber` that a callback change has been completed.
-    #     """
+    def end_callbackassignment(self):
+        """
+        Informs `DataSubscriber` that a callback change has been completed.
+        """
 
-    #     self._assigninghandler_mutex.w_release()
+        self._assigninghandler_writemutex.release()

@@ -21,12 +21,15 @@
 #
 # ******************************************************************************************************
 
+from __future__ import annotations
 from gsf import Empty, Limits
 from gsf.endianorder import BigEndian
-from typing import Dict, List, Set, Tuple, Optional
+from typing import Dict, List, Set, Tuple, Optional, TYPE_CHECKING
 from uuid import UUID
 import numpy as np
 
+if TYPE_CHECKING:
+    from datasubscriber import DataSubscriber
 
 class SignalIndexCache:
     """
@@ -36,15 +39,15 @@ class SignalIndexCache:
 
     def __init__(self):
         self._reference: Dict[np.int32, np.uint32] = dict()
-        self._signalidlist: List[UUID] = []
-        self._sourcelist: List[str] = []
-        self._idlist: List[np.uint64] = []
+        self._signalidlist: List[UUID] = list()
+        self._sourcelist: List[str] = list()
+        self._idlist: List[np.uint64] = list()
         self._signalidcache: Dict[UUID, np.int32] = dict()
         self._binarylength = np.uint32(0)
         self._maxsignalindex = np.uint32(0)
         #self.tsscDecoder = tssc.Decoder()
 
-    def _addrecord(self, ds: "DataSubscriber", signalindex: np.int32, signalid: UUID, source: str, id: np.uint64, charsizeestimate: np.uint32 = 1):
+    def _addrecord(self, ds: DataSubscriber, signalindex: np.int32, signalid: UUID, source: str, id: np.uint64, charsizeestimate: np.uint32 = 1):
         index = np.uint32(len(self._signalidlist))
         self._reference[signalindex] = index
         self._signalidlist.append(signalid)
@@ -149,7 +152,7 @@ class SignalIndexCache:
 
         return np.uint32(len(self._signalidcache))
 
-    def decode(self, ds: "DataSubscriber", buffer: bytes) -> Tuple[UUID, Optional[BaseException]]:
+    def decode(self, ds: DataSubscriber, buffer: bytes) -> Tuple[UUID, Optional[Exception]]:
         """
         Parses a `SignalIndexCache` from the specified byte buffer received from a `DataPublisher`.
         """
@@ -186,11 +189,11 @@ class SignalIndexCache:
             offset += 16
 
             # Source
-            sourceSize = BigEndian.to_uint32(buffer[offset:])
+            sourcesize = BigEndian.to_uint32(buffer[offset:])
             offset += 4
 
-            source = ds.decodestr(buffer[offset: offset + sourceSize])
-            offset += sourceSize
+            source = ds.decodestr(buffer[offset: offset + sourcesize])
+            offset += sourcesize
 
             # ID
             id = BigEndian.to_uint64(buffer[offset:])

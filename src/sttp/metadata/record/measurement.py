@@ -21,13 +21,17 @@
 #
 # ******************************************************************************************************
 
+from __future__ import annotations
 from gsf import Empty
-from typing import Optional
+from typing import Optional, TYPE_CHECKING
 from enum import IntEnum
 from datetime import datetime
 from uuid import UUID
 import numpy as np
 
+if TYPE_CHECKING:
+    from .device import DeviceRecord
+    from .phasor import PhasorRecord
 
 class SignalType(IntEnum):
     """
@@ -113,13 +117,13 @@ class MeasurementRecord:
         self._description = MeasurementRecord.DEFAULT_DESCRIPTION if description is ... else description
         self._updatedOn = MeasurementRecord.DEFAULT_UPDATEDON if updatedon is ... else updatedon
 
-        self.device: Optional["DeviceRecord"] = None
+        self.device: Optional[DeviceRecord] = None
         """
         Defines the associated `DeviceRecord` for this `MeasurementRecord`.
         Set to `None` if not applicable.
         """
 
-        self.phasor: Optional["PhasorRecord"] = None
+        self.phasor: Optional[PhasorRecord] = None
         """
         Defines the associated `PhasorRecord` for this `MeasurementRecord`.
         Set to `None` if not applicable.

@@ -25,13 +25,12 @@ import os  # nopep8
 import sys  # nopep8
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../../../src")  # nopep8
 
-from gsf import Limits
 from sttp.subscriber import Subscriber
-from sttp.reader import MeasurementReader
 from time import time
 from threading import Thread
 import argparse
 
+MAXPORT = 65535
 
 def main():
     parser = argparse.ArgumentParser()
@@ -39,23 +38,24 @@ def main():
     parser.add_argument("port", type=int)
     args = parser.parse_args()
 
-    if args.port < 1 or args.port > Limits.MAXUINT16:
-        print(f"Port number \"{args.port}\" is out of range: must be 1 to {Limits.MAXUINT16}")
+    if args.port < 1 or args.port > MAXPORT:
+        print(f"Port number \"{args.port}\" is out of range: must be 1 to {MAXPORT}")
         exit(2)
 
     subscriber = Subscriber()
 
-    # Start new data read at each connection
-    subscriber.set_connectionestablished_receiver(
-        lambda: Thread(target=lambda: read_data(subscriber)).start())
+    try:
+        # Start new data read at each connection
+        subscriber.set_connectionestablished_receiver(
+            lambda: Thread(target=lambda: read_data(subscriber)).start())
 
-    subscriber.subscribe("FILTER TOP 20 ActiveMeasurements WHERE True")
-    subscriber.connect(f"{args.hostname}:{args.port}")
+        subscriber.subscribe("FILTER TOP 20 ActiveMeasurements WHERE True")
+        subscriber.connect(f"{args.hostname}:{args.port}")
 
-    # Exit when any key is pressed
-    input()
-
-    subscriber.dispose()
+        # Exit when enter key is pressed
+        input()
+    finally:
+        subscriber.dispose()
 
 
 def read_data(subscriber: Subscriber):
