@@ -23,8 +23,8 @@
 
 from __future__ import annotations
 from .transport.measurement import Measurement
-from typing import List, TYPE_CHECKING
-from queue import Queue
+from typing import List, Optional, Tuple, TYPE_CHECKING
+from queue import Full, Queue
 
 if TYPE_CHECKING:
     from subscriber import Subscriber
@@ -42,17 +42,45 @@ class MeasurementReader:
         self._queue = Queue(1)
         self._subscriber = subscriber
         self._subscriber.set_newmeasurements_receiver(self._read_measurements)
+        self._disposed = False
+
+    def dispose(self):
+        """
+        Cleanly shuts down a `MeasurmentReader` that is no longer being used.
+        This method will release any waiting threads.
+        """
+
+        self._disposed = True
+
+        try:
+            self._queue.put_nowait(Measurement())
+        except Full:
+            pass
+
+        self._task_done()
+
+    def _task_done(self):
+        try:
+            self._queue.task_done()
+        except ValueError:
+            pass
 
     def _read_measurements(self, measurements: List[Measurement]):
         for measurement in measurements:
+            if self._disposed:
+                break
+
             self._queue.put(measurement)
             self._queue.join()
 
-    def next_measurement(self) -> Measurement:
+    def next_measurement(self) -> Tuple[Optional[Measurement], bool]:
         """
         Blocks current thread until a new measurement arrived.
         """
 
+        if self._disposed:
+            return None, False
+
         current = self._queue.get()
-        self._queue.task_done()
-        return current
+        self._task_done()
+        return current, True

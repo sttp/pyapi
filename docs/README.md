@@ -34,7 +34,10 @@ def read_data(subscriber: Subscriber):
     lastmessage = 0.0
 
     while subscriber.connected:
-        measurement = reader.next_measurement()
+        (measurement, success) = reader.next_measurement()
+
+        if not success:
+            break
 
         if time() - lastmessage < 5.0:
             continue
@@ -51,6 +54,27 @@ def read_data(subscriber: Subscriber):
 
         subscriber.statusmessage("".join(message))
         lastmessage = time()
+```
+
+Example Output:
+```cmd
+Connection to 127.0.0.1:7175 established.
+Received 10,742 bytes of metadata in 1661456628.506 seconds. Decompressing...
+Decompressed 89,963 bytes of metadata in 0.004 seconds. Parsing...
+Parsed metadata records in 0.069 seconds
+Received success code in response to server command: ServerCommand.SUBSCRIBE
+Client subscribed as compact with 20 signals.
+Receiving measurements...
+1,470 measurements received so far. Current measurement:
+    28bbb1fc-3434-48d3-87a8-bf5024c089d5 @ 19:43:53.600 = 516.545 (NORMAL)
+2,970 measurements received so far. Current measurement:
+    ed6def67-54c4-4e74-af95-c95fa6915fbc @ 19:43:58.600 = 218.070 (NORMAL)
+4,460 measurements received so far. Current measurement:
+    7aaf0a8f-3a4f-4c43-ab43-ed9d1e64a255 @ 19:44:03.633 = -0.230 (NORMAL)
+5,930 measurements received so far. Current measurement:
+    7aaf0a8f-3a4f-4c43-ab43-ed9d1e64a255 @ 19:44:08.633 = 8228.000 (NORMAL)
+
+Connection to 127.0.0.1:7175 terminated.
 ```
 
 ## Links

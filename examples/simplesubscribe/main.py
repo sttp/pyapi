@@ -60,11 +60,17 @@ def main():
 
 
 def read_data(subscriber: Subscriber):
+    subscriber.default_connectionestablished_receiver()
+    subscriber.statusmessage("Measurement reader established")
+
     reader = subscriber.readmeasurements()
     lastmessage = 0.0
 
     while subscriber.connected:
-        measurement = reader.next_measurement()
+        (measurement, success) = reader.next_measurement()
+
+        if not success:
+            break
 
         if time() - lastmessage < 5.0:
             continue
@@ -81,6 +87,8 @@ def read_data(subscriber: Subscriber):
 
         subscriber.statusmessage("".join(message))
         lastmessage = time()
+
+    subscriber.statusmessage("Measurement reader terminated")
 
 
 if __name__ == "__main__":

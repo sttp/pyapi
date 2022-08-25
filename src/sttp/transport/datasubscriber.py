@@ -42,7 +42,6 @@ from time import time
 from uuid import UUID
 from threading import Lock, Thread, Event
 from concurrent.futures import ThreadPoolExecutor
-from readerwriterlock.rwlock import RWLockRead
 from Crypto.Cipher import AES
 import gzip
 import socket
@@ -90,12 +89,9 @@ class DataSubscriber:
         self._datachannel_socket: Optional[socket.socket] = None
         self._datachannel_responsethread: Optional[Thread] = None
 
-        self._assigninghandler_mutex = RWLockRead()
-        self._assigninghandler_readmutex = self._assigninghandler_mutex.gen_rlock()
-        self._assigninghandler_writemutex = self._assigninghandler_mutex.gen_wlock()
-
         self._connect_action_mutex = Lock()
-        self._connection_terminationthread = Thread(target=lambda: self._disconnect(False, True))
+        self._connection_terminationthread_mutex = Lock()
+        self._connection_terminationthread: Optional[Thread] = None
 
         self._disconnectthread: Optional[Thread] = None
         self._disconnectthread_mutex = Lock()
@@ -238,34 +234,6 @@ class DataSubscriber:
         # Allow a moment for connection terminated event to complete
         Event().wait(0.01)  # 10ms
 
-    def begin_callbackassignment(self):
-        """
-        Informs `DataSubscriber` that a callback change has been initiated.
-        """
-
-        self._assigninghandler_writemutex.acquire()
-
-    def begin_callbacksync(self):
-        """
-        Begins a callback synchronization operation.
-        """
-
-        self._assigninghandler_readmutex.acquire()
-
-    def end_callbacksync(self):
-        """
-        Ends a callback synchronization operation.
-        """
-
-        self._assigninghandler_readmutex.release()
-
-    def end_callbackassignment(self):
-        """
-        Informs `DataSubscriber` that a callback change has been completed.
-        """
-
-        self._assigninghandler_writemutex.release()
-
     @property
     def connected(self) -> bool:
         """
@@ -356,11 +324,8 @@ class DataSubscriber:
         disconnectthread = self._disconnectthread
         self._disconnectthread_mutex.release()
 
-        if disconnectthread is not None:
-            try:
-                disconnectthread.join()
-            except RuntimeError:
-                pass
+        if disconnectthread is not None and disconnectthread.is_alive():
+            disconnectthread.join()
 
         err: Optional[Exception] = None
 
@@ -502,11 +467,8 @@ class DataSubscriber:
             except Exception as ex:
                 self._dispatch_errormessage(f"Exception while disconnecting data subscriber UDP data channel: {ex}")
 
-        if self._datachannel_responsethread is not None:
-            try:
-                self._datachannel_responsethread.join()
-            except RuntimeError:
-                pass
+        if self._datachannel_responsethread is not None and self._datachannel_responsethread.is_alive():
+            self._datachannel_responsethread.join()
 
         self._disconnecting = False
 
@@ -524,9 +486,6 @@ class DataSubscriber:
         self._disconnect(False, False)
 
     def _disconnect(self, jointhread: bool, autoreconnecting: bool):
-        if not self._connected:
-            return
-
         # Check if disconnect thread is running or subscriber has already disconnected
         if self._disconnecting:
             if not autoreconnecting and self._disconnecting and not self._disconnected:
@@ -536,11 +495,8 @@ class DataSubscriber:
             disconnectthread = self._disconnectthread
             self._disconnectthread_mutex.release()
 
-            if jointhread and not self._disconnected and disconnectthread is not None:
-                try:
-                    disconnectthread.join()
-                except RuntimeError:
-                    pass
+            if jointhread and not self._disconnected and disconnectthread is not None and disconnectthread.is_alive():
+                disconnectthread.join()
 
             return
 
@@ -557,21 +513,20 @@ class DataSubscriber:
 
         disconnectthread.start()
 
-        if jointhread:
-            try:
-                disconnectthread.join()
-            except RuntimeError:
-                pass
+        if jointhread and disconnectthread.is_alive():
+            disconnectthread.join()
 
     def _run_disconnectthread(self, autoreconnecting: bool):
         # Let any pending connect operation complete before disconnect - prevents destruction disconnect before connection is completed
         if not autoreconnecting:
             self._connector.cancel()
 
-            try:
+            self._connection_terminationthread_mutex.acquire()
+
+            if self._connection_terminationthread is not None and self._connection_terminationthread.is_alive():
                 self._connection_terminationthread.join()
-            except RuntimeError:
-                pass
+
+            self._connection_terminationthread_mutex.release()
 
             self._connect_action_mutex.acquire()
 
@@ -589,26 +544,15 @@ class DataSubscriber:
                 self._dispatch_errormessage(f"Exception while disconnecting data subscriber UDP data channel: {ex}")
 
         # Join with all threads to guarantee their completion before returning control to the caller
-        if self._commandchannel_responsethread is not None:
-            try:
-                self._commandchannel_responsethread.join()
-            except RuntimeError:
-                pass
+        if self._commandchannel_responsethread is not None and self._commandchannel_responsethread.is_alive():
+            self._commandchannel_responsethread.join()
 
-
-        if self._datachannel_responsethread is not None:
-            try:
-                self._datachannel_responsethread.join()
-            except RuntimeError:
-                pass
+        if self._datachannel_responsethread is not None and self._datachannel_responsethread.is_alive():
+            self._datachannel_responsethread.join()
 
         # Notify consumers of disconnect
-        self.begin_callbacksync()
-
         if self.connectionterminated_callback is not None:
             self.connectionterminated_callback()
-
-        self.end_callbacksync()
 
         # Disconnect complete
         self._disconnected = True
@@ -618,13 +562,8 @@ class DataSubscriber:
             # Handling auto-connect callback separately from connection terminated callback
             # since they serve two different use cases and current implementation does not
             # support multiple callback registrations
-            self.begin_callbacksync()
-
             if self.autoreconnect_callback is not None and not self._disposing:
                 self.autoreconnect_callback()
-
-            self.end_callbacksync()
-
         else:
             self._connect_action_mutex.release()
 
@@ -633,23 +572,30 @@ class DataSubscriber:
     # by the peer. Additionally, this allows the user to automatically reconnect in their
     # callback function without having to spawn their own separate thread.
     def _dispatch_connectionterminated(self):
+        self._connection_terminationthread_mutex.acquire()
+
+        if self._connection_terminationthread is not None:
+            return
+
+        self._connection_terminationthread = Thread(target=self._handle_connectionterminated)
         self._connection_terminationthread.start()
 
-    def _dispatch_statusmessage(self, message: str):
-        self.begin_callbacksync()
+        self._connection_terminationthread_mutex.release()
 
+    def _handle_connectionterminated(self):
+        self._disconnect(False, True)
+
+        self._connection_terminationthread_mutex.acquire()
+        self._connection_terminationthread = None
+        self._connection_terminationthread_mutex.release()
+
+    def _dispatch_statusmessage(self, message: str):
         if self.statusmessage_callback is not None:
             self._threadpool.submit(self.statusmessage_callback, message)
 
-        self.end_callbacksync()
-
     def _dispatch_errormessage(self, message: str):
-        self.begin_callbacksync()
-
         if self.errormessage_callback is not None:
             self._threadpool.submit(self.errormessage_callback, message)
-
-        self.end_callbacksync()
 
     def _run_commandchannel_responsethread(self):
         self._reader = BinaryStream(StreamEncoder(
@@ -665,7 +611,8 @@ class DataSubscriber:
 
                 self._read_payloadheader()
             except Exception as ex:
-                self._dispatch_errormessage(f"Exception processing server response: {ex}")
+                # DEBUG:
+                #self._dispatch_errormessage(f"Exception processing server response: {ex}")
 
                 # Read error, connection may have been closed by peer; terminate connection
                 self._dispatch_connectionterminated()
@@ -765,7 +712,7 @@ class DataSubscriber:
             # If we don't know what the message is, we can't interpret
             # the data sent with the packet. Deliver an error message
             # to the user via the error message callback.
-            self._dispatch_errormessage(f"Received success code in response to unknown server command: {commandcode} ({hex(commandcode)})")
+            self._dispatch_errormessage(f"Received success code in response to unknown server command: {str(commandcode)} ({hex(commandcode)})")
 
         if not has_response_message:
             return
@@ -773,7 +720,7 @@ class DataSubscriber:
         # Each of these responses come with a message that will
         # be delivered to the user via the status message callback.
         message: List[str] = []
-        message.append(f"Received success code in response to server command: {commandcode}")
+        message.append(f"Received success code in response to server command: {str(commandcode)}")
 
         if len(data) > 0:
             message.append("\n")
@@ -787,7 +734,7 @@ class DataSubscriber:
         if commandcode == ServerCommand.CONNECT:
             self._connector._connectionrefused = True
         else:
-            message.append(f"Received failure code in response to server command: {commandcode}")
+            message.append(f"Received failure code in response to server command: {str(commandcode)}")
 
         if len(data) > 0:
             if len(message) > 0:
@@ -799,11 +746,7 @@ class DataSubscriber:
             self._dispatch_errormessage("".join(message))
 
     def _handle_metadatarefresh(self, data: bytes):
-        self.begin_callbacksync()
-        metadatareceived_callback = self.metadatareceived_callback
-        self.end_callbacksync()
-
-        if metadatareceived_callback is not None:
+        if self.metadatareceived_callback is not None:
             if self.compress_metadata:
                 self._dispatch_statusmessage(f"Received {len(data):,} bytes of metadata in {(time() - self._metadatarequested):.3f} seconds. Decompressing...")
 
@@ -819,24 +762,15 @@ class DataSubscriber:
             else:
                 self._dispatch_statusmessage(f"Received {len(data):,} bytes of metadata in {(time() - self._metadatarequested):.3f} seconds. Parsing...")
 
-            self._threadpool.submit(metadatareceived_callback, data)
-
+            self._threadpool.submit(self.metadatareceived_callback, data)
 
     def _handle_datastarttime(self, data: bytes):
-        self.begin_callbacksync()
-
         if self.data_starttime_callback is not None:
             self.data_starttime_callback(BigEndian.to_uint64(data))
 
-        self.end_callbacksync()
-
     def _handle_processingcomplete(self, data: bytes):
-        self.begin_callbacksync()
-
         if self.processingcomplete_callback is not None:
             self.processingcomplete_callback(self.decodestr(data))
-
-        self.end_callbacksync()
 
     def _handle_update_signalindexcache(self, data: bytes):
         if len(data) == 0:
@@ -874,12 +808,8 @@ class DataSubscriber:
         if version > 1:
             self.send_servercommand(ServerCommand.CONFIRMSIGNALINDEXCACHE)
 
-        self.begin_callbacksync()
-
         if self.subscriptionupdated_callback is not None:
             self.subscriptionupdated_callback(signalindexcache)
-
-        self.end_callbacksync()
 
     def _handle_update_basetimes(self, data: bytes):
         if len(data) == 0:
@@ -937,12 +867,8 @@ class DataSubscriber:
     def _handle_configurationchanged(self):
         self._dispatch_statusmessage("Received notification from publisher that configuration has changed.")
 
-        self.begin_callbacksync()
-
         if self.configurationchanged_callback is not None:
             self.configurationchanged_callback()
-
-        self.end_callbacksync()
 
     def _handle_datapacket(self, data: bytes):
         datapacketflags = DataPacketFlags(data[0])
@@ -987,14 +913,10 @@ class DataSubscriber:
         else:
             measurements = self._parse_compact_measurements(signalindexcache, data[4:], count)
 
-        self.begin_callbacksync()
-
         if self.newmeasurements_callback is not None and len(measurements) > 0:
             # Do not use thread pool here, processing sequence may be important.
             # Execute callback directly from socket processing thread:
             self.newmeasurements_callback(measurements)
-
-        self.end_callbacksync()
 
         self._total_measurementsreceived += count
 
@@ -1084,14 +1006,10 @@ class DataSubscriber:
                     self._bufferblock_cache = self._bufferblock_cache[i:]
 
                 # Publish buffer block measurements
-                self.begin_callbacksync()
-
                 if self.newbufferblocks_callback is not None:
                     # Do not use thread pool here, processing sequence may be important.
                     # Execute callback directly from socket processing thread:
                     self.newbufferblocks_callback(bufferblockmeasurements)
-
-                self.end_callbacksync()
             else:
                 # Ensure that the list has at least as many elements as it needs to cache this measurement.
                 # This edge case handles possible dropouts and/or out of order packet deliver when data
@@ -1107,12 +1025,8 @@ class DataSubscriber:
 
         self._dispatch_statusmessage(f"NOTIFICATION: {message}")
 
-        self.begin_callbacksync()
-
         if self.notificationreceived_callback is not None:
             self.notificationreceived_callback()
-
-        self.end_callbacksync()
 
     def send_servercommand_withmessage(self, commandcode: ServerCommand, message: str):
         """
