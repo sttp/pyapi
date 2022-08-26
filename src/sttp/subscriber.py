@@ -245,7 +245,7 @@ class Subscriber:
             # after metadata is received the SubscriberInstance will then initiate subscribe;
             # otherwise, subscribe is initiated immediately (when auto subscribe requested)
             if self._config.autorequestmetadata:
-                self.requestmetadata()
+                self.request_metadata()
             elif self._config.autosubscribe:
                 ds.subscribe()
         elif status == ConnectStatus.FAILED:
@@ -262,7 +262,7 @@ class Subscriber:
 
         self._datasubscriber.disconnect()
 
-    def requestmetadata(self):
+    def request_metadata(self):
         """
         Sends a request to the data publisher indicating that the `Subscriber` would
         like new metadata. Any defined MetadataFilters will be included in request.
@@ -323,8 +323,8 @@ class Subscriber:
             sub.datachannel_localport = np.uint16(0)
 
         sub.includetime = settings.includetime
-        sub.usemillisecondresolution = settings.usemillisecondresolution
-        sub.requestnanvaluefilter = settings.requestnanvaluefilter
+        sub.use_millisecondresolution = settings.use_millisecondresolution
+        sub.request_nanvaluefilter = settings.request_nanvaluefilter
         sub.starttime = settings.starttime
         sub.stoptime = settings.stoptime
         sub.constraintparameters = settings.constraintparameters
@@ -342,7 +342,7 @@ class Subscriber:
 
         self._datasubscriber.unsubscribe()
 
-    def readmeasurements(self) -> MeasurementReader:
+    def read_measurements(self) -> MeasurementReader:
        """
        Sets up a new `MeasurementReader` to start reading measurements.
        """
@@ -381,7 +381,7 @@ class Subscriber:
             # after metadata is received the SubscriberInstance will then initiate subscribe;
             # otherwise, subscribe is initiated immediately (when auto subscribe requested)
             if self._config.autorequestmetadata:
-                self.requestmetadata()
+                self.request_metadata()
             elif self._config.autosubscribe:
                 ds.subscribe()
         else:

@@ -40,8 +40,8 @@ class Settings:
     DEFAULT_PUBLISHINTERVAL = 1.0
     DEFAULT_UDPPORT = np.uint16(0)
     DEFAULT_INCLUDETIME = True
-    DEFAULT_USEMILLISECONDRESOLUTION = False
-    DEFAULT_REQUESTNANVALUEFILTER = False
+    DEFAULT_USE_MILLISECONDRESOLUTION = False
+    DEFAULT_REQUEST_NANVALUEFILTER = False
     DEFAULT_STARTTIME = Empty.STRING
     DEFAULT_STOPTIME = Empty.STRING
     DEFAULT_CONSTRAINTPARAMETERS = Empty.STRING
@@ -86,12 +86,12 @@ class Settings:
         Determines if time should be included in non-compressed, compact measurements.
         """
 
-        self.usemillisecondresolution = Settings.DEFAULT_USEMILLISECONDRESOLUTION if usemillisecondresolution is ... else usemillisecondresolution
+        self.use_millisecondresolution = Settings.DEFAULT_USE_MILLISECONDRESOLUTION if usemillisecondresolution is ... else usemillisecondresolution
         """
         Determines if time should be restricted to milliseconds in non-compressed, compact measurements.
         """
 
-        self.requestnanvaluefilter = Settings.DEFAULT_REQUESTNANVALUEFILTER if requestnanvaluefilter is ... else requestnanvaluefilter
+        self.request_nanvaluefilter = Settings.DEFAULT_REQUEST_NANVALUEFILTER if requestnanvaluefilter is ... else requestnanvaluefilter
         """
         Requests that the publisher filter, i.e., does not send, any NaN values.
         """

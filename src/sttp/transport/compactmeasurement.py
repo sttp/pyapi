@@ -136,17 +136,17 @@ class CompactMeasurement(Measurement):
         Gets the binary byte length of a `CompactMeasurement`
         """
 
-        length: np.uint32 = FIXEDLENGTH
+        length = FIXEDLENGTH
 
         if not self._includetime:
             return length
 
-        basetimeoffset: np.int64 = self._basetimeoffsets[self._timeindex]
+        basetimeoffset = self._basetimeoffsets[self._timeindex]
 
         if basetimeoffset > 0:
             # See if timestamp will fit within space allowed for active base offset. We cache result so that post call
             # to GetBinaryLength, result will speed other subsequent parsing operations by not having to reevaluate.
-            difference = self.ticksvalue() - basetimeoffset
+            difference = self.ticksvalue - basetimeoffset
 
             if difference > 0:
                 if self._usemillisecondresolution:
@@ -175,14 +175,14 @@ class CompactMeasurement(Measurement):
         Gets offset compressed millisecond-resolution 2-byte timestamp.
         """
 
-        return np.uint16((self.ticksvalue() - self._basetimeoffsets[self._timeindex]) / Ticks.PERMILLISECOND)
+        return np.uint16((self.ticksvalue - self._basetimeoffsets[self._timeindex]) / Ticks.PERMILLISECOND)
 
     def get_timestamp_c4(self) -> np.uint32:
         """
         Gets offset compressed tick-resolution 4-byte timestamp.
         """
 
-        return np.uint32(self.ticksvalue() - self._basetimeoffsets[self._timeindex])
+        return np.uint32(self.ticksvalue - self._basetimeoffsets[self._timeindex])
 
     def get_compact_stateflags(self) -> np.byte:
         """

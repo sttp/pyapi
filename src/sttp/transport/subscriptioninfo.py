@@ -36,8 +36,8 @@ class SubscriptionInfo:
     DEFAULT_UDPDATACHANNEL = False
     DEFAULT_DATACHANNEL_LOCALPORT = np.uint16(0)
     DEFAULT_INCLUDETIME = True
-    DEFAULT_USEMILLISECONDRESOLUTION = False
-    DEFAULT_REQUESTNANVALUEFILTER = False
+    DEFAULT_USE_MILLISECONDRESOLUTION = False
+    DEFAULT_REQUEST_NANVALUEFILTER = False
     DEFAULT_STARTTIME = Empty.STRING
     DEFAULT_STOPTIME = Empty.STRING
     DEFAULT_CONSTRAINTPARAMETERS = Empty.STRING
@@ -101,12 +101,12 @@ class SubscriptionInfo:
         Determines if time should be included in non-compressed, compact measurements.
         """
 
-        self.usemillisecondresolution = SubscriptionInfo.DEFAULT_USEMILLISECONDRESOLUTION if usemillisecondresolution is ... else usemillisecondresolution
+        self.use_millisecondresolution = SubscriptionInfo.DEFAULT_USE_MILLISECONDRESOLUTION if usemillisecondresolution is ... else usemillisecondresolution
         """
         Determines if time should be restricted to milliseconds in non-compressed, compact measurements.
         """
 
-        self.requestnanvaluefilter = SubscriptionInfo.DEFAULT_REQUESTNANVALUEFILTER if requestnanvaluefilter is ... else requestnanvaluefilter
+        self.request_nanvaluefilter = SubscriptionInfo.DEFAULT_REQUEST_NANVALUEFILTER if requestnanvaluefilter is ... else requestnanvaluefilter
         """
         Requests that the publisher filter, i.e., does not send, any NaN values.
         """

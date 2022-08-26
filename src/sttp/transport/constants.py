@@ -36,6 +36,14 @@ DEFAULT_LEADTIME = 5.0
 DEFAULT_PUBLISHINTERVAL = 1.0
 
 
+def normalize_enumname(value) -> str:
+    parts = str(value).split(".")
+
+    if len(parts) == 2:
+        return parts[1].capitalize()
+
+    return str(value).capitalize()
+
 class StateFlags(IntFlag):
     """
     Enumeration of the possible quality states of a `Measurement` value.

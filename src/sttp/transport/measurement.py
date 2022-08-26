@@ -23,7 +23,7 @@
 
 from gsf import Empty
 from ..ticks import Ticks
-from .constants import StateFlags
+from .constants import *
 from uuid import UUID
 from datetime import datetime
 import numpy as np
@@ -66,6 +66,7 @@ class Measurement:
         Defines flags indicating the state of the measurement as reported by the device that took it.
         """
 
+    @property
     def ticksvalue(self) -> np.int64:
         """
         Gets the integer-based time from a Measurement Ticks based timestamp, i.e.,
@@ -73,11 +74,12 @@ class Measurement:
         """
         return self.timestamp & Ticks.VALUEMASK
 
+    @property
     def datetime(self) -> datetime:
         """
         Gets a Measurement Ticks based timestamp as a standard Python datetime value.
         """
-        return Ticks.todatetime(self.timestamp)
+        return Ticks.to_datetime(self.timestamp)
 
     def __repr__(self):
-        return f"{self.signalid} @ {Ticks.toshortstring(self.timestamp)} = {self.value:.3f} ({str(self.flags).split('.')[1]})"
+        return f"{self.signalid} @ {Ticks.to_shortstring(self.timestamp)} = {self.value:.3f} ({normalize_enumname(self.flags)})"
