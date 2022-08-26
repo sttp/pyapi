@@ -25,13 +25,13 @@ import os  # nopep8
 import sys  # nopep8
 sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../../src")  # nopep8
 
+from gsf import Limits
 from sttp.subscriber import Subscriber
 from time import time
 from threading import Thread
 import argparse
 
-MAXPORT = 65535
-
+MAXPORT = Limits.MAXUINT16
 
 def main():
     parser = argparse.ArgumentParser()
