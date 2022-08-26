@@ -348,26 +348,26 @@ class MetadataCache:
         self.measurement_records.append(measurement)
 
     def find_measurement_signalid(self, signalid: UUID) -> Optional[MeasurementRecord]:
-        if signalid in self.signalid_measurement_map:
-            return self.signalid_measurement_map[signalid]
+        if record := self.signalid_measurement_map.get(signalid):
+            return record
 
         return None
 
     def find_measurement_id(self, id: np.uint64) -> Optional[MeasurementRecord]:
-        if id in self.id_measurement_map:
-            return self.id_measurement_map[id]
+        if record := self.id_measurement_map.get(id):
+            return record
 
         return None
 
     def find_measurement_pointtag(self, pointtag: str) -> Optional[MeasurementRecord]:
-        if pointtag in self.pointtag_measurement_map:
-            return self.pointtag_measurement_map[pointtag]
+        if record := self.pointtag_measurement_map.get(pointtag):
+            return record
 
         return None
 
     def find_measurement_signalreference(self, signalreference: str) -> Optional[MeasurementRecord]:
-        if signalreference in self.signalref_measurement_map:
-            return self.signalref_measurement_map[signalreference]
+        if record := self.signalref_measurement_map.get(signalreference):
+            return record
 
         return None
 
@@ -398,9 +398,7 @@ class MetadataCache:
             if instancename is None or record.instancename == instancename:
                 records.add(record)
 
-        if searchval in self.signalref_measurement_map:
-            record = self.signalref_measurement_map[searchval]
-
+        if record := self.signalref_measurement_map.get(searchval):
             if instancename is None or record.instancename == instancename:
                 records.add(record)
 
@@ -411,15 +409,15 @@ class MetadataCache:
 
         return list(records)
 
-    def find_device_acronym(self, deviceacronym: UUID) -> Optional[DeviceRecord]:
-        if deviceacronym in self.deviceacronym_device_map:
-            return self.deviceacronym_device_map[deviceacronym]
+    def find_device_acronym(self, deviceacronym: str) -> Optional[DeviceRecord]:
+        if record := self.deviceacronym_device_map.get(deviceacronym):
+            return record
 
         return None
 
     def find_device_id(self, deviceid: UUID) -> Optional[DeviceRecord]:
-        if deviceid in self.deviceid_device_map:
-            return self.deviceid_device_map[deviceid]
+        if record := self.deviceid_device_map.get(deviceid):
+            return record
 
         return None
 
