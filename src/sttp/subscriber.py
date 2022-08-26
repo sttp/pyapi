@@ -249,9 +249,9 @@ class Subscriber:
             elif self._config.autosubscribe:
                 ds.subscribe()
         elif status == ConnectStatus.FAILED:
-            err = RuntimeError("All connection attempts failed")
+            err = RuntimeError("all connection attempts failed")
         elif status == ConnectStatus.CANCELED:
-            err = RuntimeError("Connection canceled")
+            err = RuntimeError("connection canceled")
 
         return err
 
