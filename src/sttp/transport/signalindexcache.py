@@ -81,6 +81,7 @@ class SignalIndexCache:
         Returns the signal ID Guid for the specified signalindex in the `SignalIndexCache`.
         """
 
+        # Assignment expression based lookup on dict.get() fails here when result is 0, results in false negative
         if signalindex in self._reference:
             return self._signalidlist[self._reference[signalindex]]
 
@@ -99,6 +100,7 @@ class SignalIndexCache:
         Returns the `Measurement` source string for the specified signalindex in the `SignalIndexCache`.
         """
 
+        # Assignment expression based lookup on dict.get() fails here when result is 0, results in false negative
         if signalindex in self._reference:
             return self._sourcelist[self._reference[signalindex]]
 
@@ -109,6 +111,7 @@ class SignalIndexCache:
         Returns the `Measurement` integer ID for the specified signalindex in the `SignalIndexCache`.
         """
 
+        # Assignment expression based lookup on dict.get() fails here when result is 0, results in false negative
         if signalindex in self._reference:
             return self._idlist[self._reference[signalindex]]
 
@@ -120,6 +123,7 @@ class SignalIndexCache:
         final boolean value representing find success for the specified signalindex in the `SignalIndexCache`.
         """
 
+        # Assignment expression based lookup on dict.get() fails here when result is 0, results in false negative
         if signalindex in self._reference:
             index = self._reference[signalindex]
             return (self._signalidlist[index], self._sourcelist[index], self._idlist[index], True)
@@ -131,6 +135,7 @@ class SignalIndexCache:
         Returns the signal index for the specified signal ID Guid in the `SignalIndexCache`.
         """
 
+        # Assignment expression based lookup on dict.get() fails here when result is 0, results in false negative
         if signalid in self._signalidcache:
             return self._signalidcache[signalid]
 

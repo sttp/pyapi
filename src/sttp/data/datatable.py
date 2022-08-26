@@ -22,7 +22,7 @@
 # ******************************************************************************************************
 
 from __future__ import annotations
-from typing import Dict, List, TYPE_CHECKING
+from typing import Dict, List, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .dataset import DataSet
@@ -80,10 +80,26 @@ class DataTable:
         self._columnindexes[column.name.upper()] = column.index
         self._columns.append(column)
 
-    def column(self, columnindex: int) -> DataColumn:
+    def column(self, columnindex: int) -> Optional[DataColumn]:
         """
         Gets the `DataColumn` at the specified column index if the index is in range;
         otherwise, None is returned.
         """
 
-        if columnindex < 0 or columnindex
+        if columnindex < 0 or columnindex > len(self._columns):
+            return None
+
+        return self._columns[columnindex]
+
+    def columnbyname(self, columnname: str) -> Optional[DataColumn]:
+        """
+        Gets the `DataColumn` for the specified column name if the name exists;
+        otherwise, None is returned. Lookup is case-insensitive.
+        """
+
+        columnname = columnname.upper()
+
+        if column := self._columnindexes.get(columnname):
+            return column
+
+        return None
