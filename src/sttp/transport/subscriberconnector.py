@@ -108,7 +108,7 @@ class SubscriberConnector:
         self._waittimer = Event()
         self._waittimer_mutex = Lock()
 
-        self._threadpool = ThreadPoolExecutor()
+        self._threadpool = ThreadPoolExecutor(thread_name_prefix="SC-PoolThread")
 
     def _autoreconnect(self, ds: DataSubscriber):
         if self._cancel or ds.disposing:
@@ -122,7 +122,7 @@ class SubscriberConnector:
         if reconnectthread is not None and reconnectthread.is_alive():
             reconnectthread.join()
 
-        reconnectthread = Thread(target=lambda: self._run_reconnectthread(ds))
+        reconnectthread = Thread(target=lambda: self._run_reconnectthread(ds), name="ReconnectThread")
 
         self._reconnectthread_mutex.acquire()
         self._reconnectthread = reconnectthread
@@ -133,13 +133,13 @@ class SubscriberConnector:
     def _run_reconnectthread(self, ds: DataSubscriber):
         # Reset connection attempt counter if last attempt was not refused
         if not self._connectionrefused:
-            self.resetconnection()
+            self.reset_connection()
 
         if self.maxretries != -1 and self._connectattempt >= self.maxretries:
             self._dispatch_errormessage("Maximum connection retries attempted. Auto-reconnect canceled.")
             return
 
-        self._waitforretry()
+        self._wait_for_retry()
 
         if self._cancel or ds.disposing:
             return
@@ -151,7 +151,7 @@ class SubscriberConnector:
         if not self._cancel and self.reconnect_callback is not None:
             self.reconnect_callback(ds)
 
-    def _waitforretry(self):
+    def _wait_for_retry(self):
         # Apply exponential back-off algorithm for retry attempt delays
         if self._connectattempt > 13:
             exponent = 12
@@ -222,7 +222,7 @@ class SubscriberConnector:
 
             if not ds.disposing and self.retryinterval > 0:
                 autoreconnecting = True
-                self._waitforretry()
+                self._wait_for_retry()
 
                 if self._cancel:
                     return ConnectStatus.CANCELED
@@ -239,6 +239,8 @@ class SubscriberConnector:
         """
         Stops all current and future connection sequences.
         """
+        if self._cancel:
+            return
 
         self._cancel = True
 
@@ -256,7 +258,7 @@ class SubscriberConnector:
         if reconnectthread is not None and reconnectthread.is_alive():
             reconnectthread.join()
 
-    def resetconnection(self):
+    def reset_connection(self):
         """
         Resets `SubscriberConnector` for a new connection.
         """

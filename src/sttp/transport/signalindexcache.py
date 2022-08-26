@@ -47,7 +47,7 @@ class SignalIndexCache:
         self._maxsignalindex = np.uint32(0)
         #self.tsscDecoder = tssc.Decoder()
 
-    def _addrecord(self, ds: DataSubscriber, signalindex: np.int32, signalid: UUID, source: str, id: np.uint64, charsizeestimate: np.uint32 = 1):
+    def _add_record(self, ds: DataSubscriber, signalindex: np.int32, signalid: UUID, source: str, id: np.uint64, charsizeestimate: np.uint32 = 1):
         index = np.uint32(len(self._signalidlist))
         self._reference[signalindex] = index
         self._signalidlist.append(signalid)
@@ -58,7 +58,7 @@ class SignalIndexCache:
         if index > self._maxsignalindex:
             self._maxsignalindex = index
 
-        metadata = ds.lookupmetadata(signalid)
+        metadata = ds.lookup_metadata(signalid)
 
         # Register measurement metadata if not defined already
         if len(metadata.source) == 0:
@@ -199,6 +199,6 @@ class SignalIndexCache:
             id = BigEndian.to_uint64(buffer[offset:])
             offset += 8
 
-            self._addrecord(ds, signalindex, signalid, source, id)
+            self._add_record(ds, signalindex, signalid, source, id)
 
         return (subscriberid, None)

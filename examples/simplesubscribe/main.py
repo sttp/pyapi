@@ -48,7 +48,7 @@ def main():
     try:
         # Start new data read at each connection
         subscriber.set_connectionestablished_receiver(
-            lambda: Thread(target=lambda: read_data(subscriber)).start())
+            lambda: Thread(target=read_data, args=(subscriber,), name="ReadDataThread").start())
 
         subscriber.subscribe("FILTER TOP 20 ActiveMeasurements WHERE True")
         subscriber.connect(f"{args.hostname}:{args.port}")
@@ -63,7 +63,7 @@ def read_data(subscriber: Subscriber):
     subscriber.default_connectionestablished_receiver()
     subscriber.statusmessage("Measurement reader established")
 
-    reader = subscriber.readmeasurements()
+    reader = subscriber.read_measurements()
     lastmessage = 0.0
 
     while subscriber.connected:

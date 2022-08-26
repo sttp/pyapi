@@ -220,7 +220,7 @@ class DataSubscriber:
         self._bufferblock_expectedsequencenumber = np.uint32(0)
         self._bufferblock_cache: List[BufferBlock] = list()
 
-        self._threadpool = ThreadPoolExecutor()
+        self._threadpool = ThreadPoolExecutor(thread_name_prefix="DS-PoolThread")
 
     def dispose(self):
         """
@@ -280,7 +280,7 @@ class DataSubscriber:
 
         return data.decode("utf-8")
 
-    def lookupmetadata(self, signalid: UUID) -> MeasurementRecord:
+    def lookup_metadata(self, signalid: UUID) -> MeasurementRecord:
         """
         Gets the `MeasurementRecord` for the specified signal ID from the local registry.
         If the metadata does not exist, a new record is created and returned.
@@ -337,16 +337,16 @@ class DataSubscriber:
             self._disconnected = False
             self._subscribed = False
 
-            self._totalcommandchannel_bytesreceived = np.int64(0)
-            self._totaldatachannel_bytesreceived = np.int64(0)
-            self._totalmeasurements_received = np.int64(0)
+            self._total_commandchannel_bytesreceived = np.int64(0)
+            self._total_datachannel_bytesreceived = np.int64(0)
+            self._total_measurementsreceived = np.int64(0)
 
             self._key_ivs = None
             self._bufferblock_expectedsequencenumber = np.uint32(0)
             self.metadatacache = MetadataCache()
 
             if not autoreconnecting:
-                self._connector.resetconnection()
+                self._connector.reset_connection()
 
             self._connector._connectionrefused = False
 
@@ -369,7 +369,7 @@ class DataSubscriber:
             self._connect_action_mutex.release()
 
         if err is None:
-            self._commandchannel_responsethread = Thread(target=self._run_commandchannel_responsethread)
+            self._commandchannel_responsethread = Thread(target=self._run_commandchannel_responsethread, name="CmdChannelThread")
 
             self._connected = True
             self._last_missingcachewarning = 0.0
@@ -396,8 +396,8 @@ class DataSubscriber:
         connectionbuilder.append(f";publishInterval={subscription.publishinterval:.6f}")
         connectionbuilder.append(f";includeTime={subscription.includetime}")
         connectionbuilder.append(f";processingInterval={subscription.processinginterval}")
-        connectionbuilder.append(f";useMillisecondResolution={subscription.usemillisecondresolution}")
-        connectionbuilder.append(f";requestNaNValueFilter={subscription.requestnanvaluefilter}")
+        connectionbuilder.append(f";useMillisecondResolution={subscription.use_millisecondresolution}")
+        connectionbuilder.append(f";requestNaNValueFilter={subscription.request_nanvaluefilter}")
         connectionbuilder.append(f";assemblyInfo={{source={self.sttp_sourceinfo}")
         connectionbuilder.append(f";version={self.sttp_versioninfo}")
         connectionbuilder.append(f";updatedOn={self.sttp_updatedoninfo}}}")
@@ -414,7 +414,7 @@ class DataSubscriber:
             except Exception as ex:
                 return RuntimeError(f"failed to open UDP socket for port {udpport}:{ex}")
 
-            self._datachannel_responsethread = Thread(target=self._run_datachannel_responsethread)
+            self._datachannel_responsethread = Thread(target=self._run_datachannel_responsethread, name="DataChannelThread")
             self._datachannel_responsethread.start()
 
             connectionbuilder.append(f";dataChannel={{localport={udpport}}}")
@@ -505,10 +505,10 @@ class DataSubscriber:
         self._connected = False
         self._subscribed = False
 
-        disconnectthread = Thread(target=lambda: self._run_disconnectthread(autoreconnecting))
+        disconnectthread = Thread(target=lambda: self._run_disconnectthread(autoreconnecting), name="DisconnectThread")
 
         self._disconnectthread_mutex.acquire()
-        self._disconnectThread = disconnectthread
+        self._disconnectthread = disconnectthread
         self._disconnectthread_mutex.release()
 
         disconnectthread.start()
@@ -522,23 +522,25 @@ class DataSubscriber:
             self._connector.cancel()
 
             self._connection_terminationthread_mutex.acquire()
-
-            if self._connection_terminationthread is not None and self._connection_terminationthread.is_alive():
-                self._connection_terminationthread.join()
-
+            connection_terminationthread = self._connection_terminationthread
             self._connection_terminationthread_mutex.release()
+
+            if connection_terminationthread is not None and connection_terminationthread.is_alive():
+                connection_terminationthread.join()
 
             self._connect_action_mutex.acquire()
 
         # Release queues and close sockets so that threads can shut down gracefully
         if self._commandchannel_socket is not None:
             try:
+                self._commandchannel_socket.shutdown(socket.SHUT_RDWR)  # Important for _commandchannel_responsethread termination
                 self._commandchannel_socket.close()
             except Exception as ex:
                 self._dispatch_errormessage(f"Exception while disconnecting data subscriber TCP command channel: {ex}")
 
         if self._datachannel_socket is not None:
             try:
+                self._datachannel_socket.shutdown(socket.SHUT_RDWR)  # Important for _datachannel_responsethread termination
                 self._datachannel_socket.close()
             except Exception as ex:
                 self._dispatch_errormessage(f"Exception while disconnecting data subscriber UDP data channel: {ex}")
@@ -577,7 +579,7 @@ class DataSubscriber:
         if self._connection_terminationthread is not None:
             return
 
-        self._connection_terminationthread = Thread(target=self._handle_connectionterminated)
+        self._connection_terminationthread = Thread(target=self._handle_connectionterminated, name="ConnectionTerminationThread")
         self._connection_terminationthread.start()
 
         self._connection_terminationthread_mutex.release()
@@ -720,7 +722,7 @@ class DataSubscriber:
         # Each of these responses come with a message that will
         # be delivered to the user via the status message callback.
         message: List[str] = []
-        message.append(f"Received success code in response to server command: {str(commandcode)}")
+        message.append(f"Received success code in response to server command: {normalize_enumname(commandcode)}")
 
         if len(data) > 0:
             message.append("\n")
@@ -734,7 +736,7 @@ class DataSubscriber:
         if commandcode == ServerCommand.CONNECT:
             self._connector._connectionrefused = True
         else:
-            message.append(f"Received failure code in response to server command: {str(commandcode)}")
+            message.append(f"Received failure code in response to server command: {normalize_enumname(commandcode)}")
 
         if len(data) > 0:
             if len(message) > 0:
@@ -818,7 +820,7 @@ class DataSubscriber:
         self._timeindex = 0 if BigEndian.to_uint32(data) == 0 else 1
         self._basetimeoffsets = [BigEndian.to_uint64(data[4:]), BigEndian.to_uint64(data[12:])]
 
-        self._dispatch_statusmessage(f"Received new base time offset from publisher: {Ticks.tostring(self._basetimeoffsets[self._timeindex ^ 1])}")
+        self._dispatch_statusmessage(f"Received new base time offset from publisher: {Ticks.to_string(self._basetimeoffsets[self._timeindex ^ 1])}")
 
     def _handle_update_cipherkeys(self, data: bytes):
         # Deserialize new cipher keys
@@ -937,7 +939,7 @@ class DataSubscriber:
             return list()
 
         measurements: List[Measurement] = []
-        usemillisecondresolution = self.subscription.usemillisecondresolution
+        usemillisecondresolution = self.subscription.use_millisecondresolution
         includetime = self.subscription.includetime
         index = 0
 
@@ -1060,7 +1062,7 @@ class DataSubscriber:
 
         if commandcode == ServerCommand.METADATAREFRESH:
             # Track start time of metadata request to calculate round-trip receive time
-            self._metadata_requested = time()
+            self._metadatarequested = time()
 
         try:
             self._commandchannel_socket.send(self._writebuffer[:commandbuffersize])

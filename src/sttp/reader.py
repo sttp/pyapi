@@ -81,4 +81,4 @@ class MeasurementReader:
         current = self._queue.get()
         self._task_done()
 
-        return None, False if self._disposed else current, True
+        return (None, False) if self._disposed else (current, True)
