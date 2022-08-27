@@ -21,7 +21,7 @@
 #
 # ******************************************************************************************************
 
-from gsf import Empty
+from gsf import Empty, normalize_enumname
 from gsf.endianorder import BigEndian
 from gsf.binarystream import BinaryStream
 from gsf.streamencoder import StreamEncoder

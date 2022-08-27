@@ -22,7 +22,11 @@
 # ******************************************************************************************************
 
 from __future__ import annotations
-from typing import Dict, List, Optional, TYPE_CHECKING
+from gsf import Empty
+from .datacolumn import DataColumn
+from .datarow import DataRow
+from .datatype import DataType
+from typing import Callable, Dict, Iterator, List, Optional, Tuple, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .dataset import DataSet
@@ -39,17 +43,40 @@ class DataTable:
     def __init__(self,
                  parent: DataSet,
                  name: str
-                ):        
+                 ):
+        """
+        Creates a new `DataTable`.
+        """
+
         self._parent = parent
         self._name = name
         self._columnindexes: Dict[str, int] = dict()
         self._columns: List[DataColumn] = list()
         self._rows: List[DataRow] = list()
 
+    # Container methods for DataTable map to rows, not columns
+    def __getitem__(self, key: int) -> DataRow:
+        return self._rows[key]
+
+    def __setitem__(self, key: int, value: DataRow):
+        self._rows[key] = value
+
+    def __delitem__(self, key: int):
+        del self._rows[key]
+
+    def __len__(self) -> int:
+        return len(self._rows)
+
+    def __contains__(self, item: DataRow) -> bool:
+        return item in self._rows
+
+    def __iter__(self) -> Iterator[DataRow]:
+        return iter(self._rows)
+
     @property
     def parent(self) -> DataSet:
         """
-        Gets the parent DataSet of the `DataTable`.
+        Gets the parent `DataSet` of the `DataTable`.
         """
 
         return self._parent
@@ -62,21 +89,21 @@ class DataTable:
 
         return self._name
 
-    # def initcolumns(self):
-    #     """
-    #     Initializes the internal column collections.
-    #     Any existing columns will be deleted.
-    #     """
+    def clear_columns(self):
+        """
+        Clears the internal column collections.
+        Any existing columns will be deleted.
+        """
 
-    #     self._columnindexes = dict()
-    #     self._columns = list()
+        self._columnindexes = dict()
+        self._columns = list()
 
-    def addcolumn(self, column: DataColumn):
+    def add_column(self, column: DataColumn):
         """
         Adds the specified column to the `DataTable`.
         """
 
-        column.index = len(self._columns)
+        column._index = len(self._columns)
         self._columnindexes[column.name.upper()] = column.index
         self._columns.append(column)
 
@@ -91,15 +118,194 @@ class DataTable:
 
         return self._columns[columnindex]
 
-    def columnbyname(self, columnname: str) -> Optional[DataColumn]:
+    def column_byname(self, columnname: str) -> Optional[DataColumn]:
         """
         Gets the `DataColumn` for the specified column name if the name exists;
         otherwise, None is returned. Lookup is case-insensitive.
         """
 
-        columnname = columnname.upper()
-
-        if column := self._columnindexes.get(columnname):
-            return column
+        if columnindex := self._columnindexes.get(columnname.upper()):
+            return self.column(columnindex)
 
         return None
+
+    def columnindex(self, columnname: str) -> int:
+        """
+        Gets the index for the specified column name if the name exists;
+        otherwise, -1 is returned. Lookup is case-insensitive.
+        """
+
+        if column := self.column_byname(columnname):
+            return column.index
+
+        return -1
+
+    def create_column(self, name: str, datatype: DataType, expression: str = Empty.STRING):
+        """
+        Creates a new `DataColumn` associated with the `DataTable`.
+        Use `add_column` to add the new column to the `DataTable`.
+        """
+
+        return DataColumn(self, name, datatype, expression)
+
+    def clone_column(self, source: DataColumn) -> DataColumn:
+        """
+        Creates a copy of the specified source `DataColumn` associated with the `DataTable`.
+        """
+
+        return self.create_column(source.name, source.type, source.expression)
+
+    @property
+    def columncount(self) -> int:
+        """
+        Gets the total number columns defined in the `DataTable`.
+        """
+
+        return len(self._columns)
+
+    def clear_rows(self):
+        """
+        Clears the internal row collection.
+        Any existing rows will be deleted.
+        """
+
+        self._rows = list()
+
+    def add_row(self, row: DataRow):
+        """
+        Adds the specified row to the `DataTable`.
+        """
+
+        self._rows.append(row)
+
+    def row(self, rowindex: int) -> Optional[DataRow]:
+        """
+        Gets the `DataRow` at the specified row index if the index is in range;
+        otherwise, None is returned.
+        """
+
+        if rowindex < 0 or rowindex > len(self._rows):
+            return None
+
+        return self._rows[rowindex]
+
+    def rowswhere(self, predicate: Callable[[DataRow], bool], limit: int = -1) -> List[DataRow]:
+        """
+        Returns the rows matching the predicate expression. Set limit parameter
+        to -1 for all matching rows.
+        """
+
+        matchingrows = []
+        count = 0
+
+        for datarow in self._rows:
+            if datarow is None:
+                continue
+
+            if predicate(datarow):
+                matchingrows.append(datarow)
+                count += 1
+
+                if limit > -1 and count >= limit:
+                    break
+
+        return matchingrows
+
+    def create_row(self) -> DataRow:
+        """
+        Creates a new `DataRow` associated with the `DataTable`.
+        Use `add_row` to add the new row to the `DataTable`.
+        """
+
+        return DataRow(self)
+
+    def clone_row(self, source: DataRow) -> DataRow:
+        """
+        Creates a copy of the specified source `DataRow` associated with the `DataTable`.
+        """
+
+        row = self.create_row()
+
+        for i in range(len(self._columns)):
+            value, _ = source.value[i]
+            row.value[i] = value
+
+        return row
+
+    @property
+    def rowcount(self) -> int:
+        """
+        Gets the total number of rows defined in the `DataTable`.
+        """
+
+        return len(self._rows)
+
+    def rowvalueas_string(self, rowindex: int, columnindex: int) -> str:
+        """
+        Reads the row record value at the specified column index converted to a string.
+        For column index out of range or any other errors, an empty string will be returned.
+        """
+
+        row = self.row(rowindex)
+
+        if row is None:
+            return Empty.STRING
+
+        return row.valueas_string(columnindex)
+
+    def rowvalueas_string_byname(self, rowindex: int, columnname: str) -> str:
+        """
+        Reads the row record value for the specified column name converted to a string.
+        For column name not found or any other errors, an empty string will be returned.
+        """
+
+        row = self.row(rowindex)
+
+        if row is None:
+            return Empty.STRING
+
+        return row.valueas_string_byname(columnname)
+
+    def __repr__(self):
+        image: List[str] = []
+
+        image.append(f"{self.name} [")
+
+        for i in range(self._columns):
+            if i > 0:
+                image.append(", ")
+
+            image.append(str(self._columns[i]))
+
+        image.append(f"] x {len(self._rows,)} rows")
+
+        return "".join(image)
+
+    def select(self, filterexpression: str, sortorder: str, limit: int) -> Tuple[Optional[List[DataRow]], Exception]:
+        """
+        Returns the rows matching the filter expression criteria in the specified sort order. The `filterexpression`
+        parameter should be in the syntax of a SQL WHERE expression but should not include the WHERE keyword.
+        The `sortorder` parameter defines field names, separated by commas, that exist in the `DataTable` used to
+        order the results. Each field specified in the `sortorder` can have an `ASC` or `DESC` suffix; defaults to
+        `ASC` when no suffix is provided. When `sortorder` is an empty string, records will be returned in natural
+        order. Set limit parameter to -1 for all matching rows. When `filterexpression` is an empty string, all
+        records will be returned; any specified sort order and limit will still be respected.
+        """
+
+        return None, NotImplementedError()
+
+        # TODO: Uncomment when filter expression engine is implemented
+        # if len(filterexpression) == 0:
+        #     filterexpression = "True" # Return all records
+
+        # if limit > 0:
+        #     filterexpression = f"FILTER TOP {limit} {self.name} WHERE {filterexpression}"
+        # else:
+        #     filterexpression = f"FILTER {self.name} WHERE {filterexpression}"
+
+        # (expressiontree, err) = generate_expressiontree(self, filterexpression, True)
+
+        # if err is not None:
+        #     return None, err
+
+        # return expressiontree.select(self)

@@ -21,7 +21,7 @@
 #
 #******************************************************************************************************
 
-from gsf import Empty
+from gsf import Empty, normalize_enumname
 from ..ticks import Ticks
 from .constants import *
 from uuid import UUID

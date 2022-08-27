@@ -36,14 +36,6 @@ DEFAULT_LEADTIME = 5.0
 DEFAULT_PUBLISHINTERVAL = 1.0
 
 
-def normalize_enumname(value) -> str:
-    parts = str(value).split(".")
-
-    if len(parts) == 2:
-        return parts[1].capitalize()
-
-    return str(value).capitalize()
-
 class StateFlags(IntFlag):
     """
     Enumeration of the possible quality states of a `Measurement` value.
@@ -263,127 +255,127 @@ class ServerCommand(IntEnum):
     """
     Command code for requesting an updated set of metadata.
     """
-    
+
     SUBSCRIBE = 0x02
     """
     Command code for requesting a subscription of streaming data from server based on connection string that follows.
     """
-    
+
     UNSUBSCRIBE = 0x03
     """
     Command code for requesting that server stop sending streaming data to the client and cancel the current subscription.
     """
-    
+
     ROTATECIPHERKEYS = 0x04
     """
     Command code for manually requesting that server send a new set of cipher keys for data packet encryption (UDP only).
     """
-    
+
     UPDATEPROCESSINGINTERVAL = 0x05
     """
     Command code for manually requesting that server to update the processing interval with the following specified value.
     """
-    
+
     DEFINEOPERATIONALMODES = 0x06
     """
     Command code for establishing operational modes. As soon as connection is established, requests that server set operational modes that affect how the subscriber and publisher will communicate.
     """
-    
+
     CONFIRMNOTIFICATION = 0x07
     """
     Command code for receipt of a notification. This message is sent in response to ServerResponse.Notify.
     """
-    
+
     CONFIRMBUFFERBLOCK = 0x08
     """
     Command code for receipt of a buffer block measurement. This message is sent in response to ServerResponse.BufferBlock.
     """
-    
+
     CONFIRMSIGNALINDEXCACHE = 0x0A
     """
     Command code for confirming the receipt of a signal index cache. This allows publisher to safely transition to next signal index cache.
     """
-    
+
     USERCOMMAND00 = 0xD0
     """
     Command code for handling user-defined commands.
     """
-    
+
     USERCOMMAND01 = 0xD1
     """
     Command code for handling user-defined commands.
     """
-    
+
     USERCOMMAND02 = 0xD2
     """
     Command code for handling user-defined commands.
     """
-    
+
     USERCOMMAND03 = 0xD3
     """
     Command code for handling user-defined commands.
     """
-    
+
     USERCOMMAND04 = 0xD4
     """
     Command code for handling user-defined commands.
     """
-    
+
     USERCOMMAND05 = 0xD5
     """
     Command code for handling user-defined commands.
     """
-    
+
     USERCOMMAND06 = 0xD6
     """
     Command code for handling user-defined commands.
     """
-    
+
     USERCOMMAND07 = 0xD7
     """
     Command code for handling user-defined commands.
     """
-    
+
     USERCOMMAND08 = 0xD8
     """
     Command code for handling user-defined commands.
     """
-    
+
     USERCOMMAND09 = 0xD9
     """
     Command code for handling user-defined commands.
     """
-    
+
     USERCOMMAND10 = 0xDA
     """
     Command code for handling user-defined commands.
     """
-    
+
     USERCOMMAND11 = 0xDB
     """
     Command code for handling user-defined commands.
     """
-    
+
     USERCOMMAND12 = 0xDC
     """
     Command code for handling user-defined commands.
     """
-    
+
     USERCOMMAND13 = 0xDD
     """
     Command code for handling user-defined commands.
     """
-    
+
     USERCOMMAND14 = 0xDE
     """
     Command code for handling user-defined commands.
     """
-    
+
     USERCOMMAND15 = 0xDF
     """
     Command code for handling user-defined commands.
     """
-    
+
 
 class ServerResponse(IntEnum):
     """

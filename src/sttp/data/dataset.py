@@ -22,8 +22,9 @@
 # ******************************************************************************************************
 
 from io import StringIO
-from dataset import DataSet
-from typing import Dict, List, Tuple, Union, Optional
+from .dataset import DataSet
+from .datatable import DataTable
+from typing import Dict, Iterator, List, Tuple, Union, Optional
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 
@@ -62,7 +63,36 @@ class DataSet:
         Defines the name of the `DataSet`.
         """
 
-    def addtable(self, table: DataTable):
+    # Case-insensitive get table by name; None returned when value does not exist
+    def __getitem__(self, key: str) -> DataTable:
+        return self.table(key)
+
+    # Case-insensitive set table by name
+    def __setitem__(self, key: str, value: DataTable):
+        self._tables[key.upper()] = value
+
+    def __delitem__(self, key: str):
+        del self._tables[key]
+
+    def __len__(self) -> int:
+        return len(self._tables)
+
+    # Case-insensitive table search
+    def __contains__(self, item: str) -> bool:
+        return self[item] is not None
+
+    def __iter__(self) -> Iterator[DataTable]:
+        return iter(self._tables.values())
+
+    def clear_tables(self):
+        """
+        Clears the internal table collection.
+        Any existing tables will be deleted.
+        """
+
+        self._tables = dict()
+
+    def add_table(self, table: DataTable):
         """
         Adds the specified table to the `DataSet`.
         """
@@ -75,10 +105,8 @@ class DataSet:
         otherwise, None is returned. Lookup is case-insensitive.
         """
 
-        tablename = tablename.upper()
-
-        if tablename in self._tables:
-            return self._tables[tablename]
+        if table := self._tables.get(tablename.upper()):
+            return table
 
         return None
 
@@ -89,7 +117,7 @@ class DataSet:
 
         tablenames: List[str] = []
 
-        for table in self._tables:
+        for table in self._tables.values():
             tablenames.append(table.name)
 
         return tablenames
@@ -101,10 +129,10 @@ class DataSet:
 
         return self._tables.values()
 
-    def createtable(self, name: str) -> DataTable:
+    def create_table(self, name: str) -> DataTable:
         """
         Creates a new `DataTable` associated with the `DataSet`.
-        Use `addtable` to add the new table to the `DataSet`.
+        Use `add_table` to add the new table to the `DataSet`.
         """
 
         return DataTable(self, name)
@@ -117,7 +145,7 @@ class DataSet:
 
         return len(self._tables)
 
-    def removetable(self, tablename: str) -> bool:
+    def remove_table(self, tablename: str) -> bool:
         """
         Removes the specified table name from the `DataSet`. Returns
         True if table was removed; otherwise, False if it did not exist.
@@ -144,15 +172,15 @@ class DataSet:
         return "".join(image)
 
     @staticmethod
-    def fromxml(buffer: Union[str, bytes]) -> Tuple[DataSet, Optional[Exception]]:
+    def from_xml(buffer: Union[str, bytes]) -> Tuple[DataSet, Optional[Exception]]:
         """
         Creates a new `DataSet` as read from the XML in the specified buffer.
         """
         dataset = DataSet()
-        err = dataset.parsexml(buffer)
+        err = dataset.parse_xml(buffer)
         return dataset, err
 
-    def parsexml(self, buffer: Union[str, bytes]) -> Optional[Exception]:
+    def parse_xml(self, buffer: Union[str, bytes]) -> Optional[Exception]:
         """
         Loads the `DataSet` from the XML in the specified buffer.
         """
@@ -170,9 +198,9 @@ class DataSet:
         namespaces: Dict[str, str] = dict(
            [node for _, node in ElementTree.iterparse(StringIO(buffer), events=["start-ns"])])
 
-        return self.parsexmldoc(doc, namespaces)
+        return self.parse_xmldoc(doc, namespaces)
 
-    def parsexmldoc(self, root: Element, namespaces: Dict[str, str]) -> Optional[Exception]:
+    def parse_xmldoc(self, root: Element, namespaces: Dict[str, str]) -> Optional[Exception]:
         """
         Loads the `DataSet` from an existing root XML document element.
         """
@@ -193,15 +221,15 @@ class DataSet:
             return RuntimeError(f"failed to parse DataSet XML: cannot find schema namespace \"{XMLSCHEMA_NAMESPACE}\"")
 
         # Populate DataSet schema
-        self._loadschema(schema)
+        self._load_schema(schema)
 
         # Populate DataSet records
-        self._loadrecords(root)
+        self._load_records(root)
 
         return None
 
-    def _loadschema(self, schema: Element):
+    def _load_schema(self, schema: Element):
         pass
 
-    def _loadrecords(self, root: Element):
+    def _load_records(self, root: Element):
         pass
