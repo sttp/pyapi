@@ -30,77 +30,77 @@ class DataType(IntEnum):
     Enumeration of the possible data types for a `DataColumn`.
     """
 
-    String = 0,
+    STRING = 0,
     """
     Represents a Python `str` data type.
     """
 
-    Boolean = 1,
+    BOOLEAN = 1,
     """
     Represents a Python `bool` data type.
     """
 
-    DateTime = 2,
+    DATETIME = 2,
     """
     Represents a Python `datetime` data type.
     """
 
-    Single = 3,
+    SINGLE = 3,
     """
     Represents a Python `numpy.float32` data type.
     """
 
-    Double = 4,
+    DOUBLE = 4,
     """
     Represents a Python `numpy.float64` data type.
     """
 
-    Decimal = 5,
+    DECIMAL = 5,
     """
     Represents a Python `decimal.Decimal` data type.
     """
 
-    Guid = 6,
+    GUID = 6,
     """
     Represents a Python `uuid.UUID` data type.
     """
 
-    Int8 = 7,
+    INT8 = 7,
     """
     Represents a Python `numpy.int8` data type.
     """
 
-    Int16 = 8,
+    INT16 = 8,
     """
     Represents a Python `numpy.int16` data type.
     """
 
-    Int32 = 9,
+    INT32 = 9,
     """
     Represents a Python `numpy.int32` data type.
     """
 
-    Int64 = 10,
+    INT64 = 10,
     """
     Represents a Python `numpy.int64` data type.
     """
 
-    UInt8 = 11,
+    UINT8 = 11,
     """
     Represents a Python `numpy.uint8` data type.
     """
 
-    UInt16 = 12,
+    UINT16 = 12,
     """
     Represents a Python `numpy.uint16` data type.
     """
 
-    UInt32 = 13,
+    UINT32 = 13,
     """
     Represents a Python `numpy.uint32` data type.
     """
 
-    UInt64 = 14,
+    UINT64 = 14,
     """
     Represents a Python `numpy.uint64` data type.
     """
@@ -115,47 +115,47 @@ def parse_xsddatatype(xsdtypename: str, extdatatype: str) -> Tuple[DataType, boo
 
     if xsdtypename == "string":
         if extdatatype.startswith("System.Guid"):
-            return DataType.Guid, True
+            return DataType.GUID, True
 
-        return DataType.String, True
+        return DataType.STRING, True
 
     if xsdtypename == "boolean":
-        return DataType.Boolean, True
+        return DataType.BOOLEAN, True
 
     if xsdtypename == "dateTime":
-        return DataType.DateTime, True
+        return DataType.DATETIME, True
 
     if xsdtypename == "float":
-        return DataType.Single, True
+        return DataType.SINGLE, True
 
     if xsdtypename == "double":
-        return DataType.Double, True
+        return DataType.DOUBLE, True
 
     if xsdtypename == "decimal":
-        return DataType.Decimal, True
+        return DataType.DECIMAL, True
 
     if xsdtypename == "byte":  # XSD defines byte as signed 8-bit int
-        return DataType.Int8, True
+        return DataType.INT8, True
 
     if xsdtypename == "short":
-        return DataType.Int16, True
+        return DataType.INT16, True
 
     if xsdtypename == "int":
-        return DataType.Int32, True
+        return DataType.INT32, True
 
     if xsdtypename == "long":
-        return DataType.Int64, True
+        return DataType.INT64, True
 
     if xsdtypename == "unsignedByte":
-        return DataType.UInt8, True
+        return DataType.UINT8, True
 
     if xsdtypename == "unsignedShort":
-        return DataType.UInt16, True
+        return DataType.UINT16, True
 
     if xsdtypename == "unsignedInt":
-        return DataType.UInt32, True
+        return DataType.UINT32, True
 
     if xsdtypename == "unsignedLong":
-        return DataType.UInt64, True
+        return DataType.UINT64, True
 
-    return DataType.String, False
+    return DataType.STRING, False

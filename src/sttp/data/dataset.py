@@ -44,7 +44,7 @@ def xsdformat(value: datetime) -> str:
     Converts date/time value to a string in XSD XML schema format.
     """
     
-    return value.isoformat(sep=' ', timespec="milliseconds")[:-1]
+    return value.isoformat(sep=' ', timespec="milliseconds")[:-1] # 2 digit fractional second
 
 class DataSet:
     """

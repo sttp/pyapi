@@ -53,6 +53,16 @@ class Empty:
     DECIMAL = Decimal(0)
     TICKS = np.uint64(0)
     STRING = ""
+    SINGLE = np.float32(0.0)
+    DOUBLE = np.float64(0.0)
+    INT8 = np.int8(0)
+    INT16 = np.int16(0)
+    INT32 = np.int32(0)
+    INT64 = np.int64(0)
+    UINT8 = np.uint8(0)
+    UINT16 = np.uint16(0)
+    UINT32 = np.uint32(0)
+    UINT64 = np.uint64(0)
 
 
 class Limits(IntEnum):
