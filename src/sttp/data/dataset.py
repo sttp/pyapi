@@ -21,6 +21,7 @@
 #
 # ******************************************************************************************************
 
+from datetime import datetime
 from io import StringIO
 from .dataset import DataSet
 from .datatable import DataTable
@@ -37,6 +38,13 @@ EXT_XMLSCHEMADATA_NAMESPACE = "urn:schemas-microsoft-com:xml-msdata"
 """
 Defines extended types for XSD elements, e.g., Guid and expression data types.
 """
+
+def xsdformat(value: datetime) -> str:
+    """
+    Converts date/time value to a string in XSD XML schema format.
+    """
+    
+    return value.isoformat(sep=' ', timespec="milliseconds")[:-1]
 
 class DataSet:
     """
