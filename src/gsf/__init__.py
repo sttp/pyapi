@@ -21,11 +21,11 @@
 #
 # ******************************************************************************************************
 
-from typing import Sequence
+from enum import Enum, IntEnum
+from decimal import Decimal
 from datetime import datetime
 from uuid import UUID
-from decimal import Decimal
-from enum import IntEnum
+from typing import Sequence
 import numpy as np
 
 
@@ -79,6 +79,14 @@ class ByteSize(IntEnum):
     FLOAT32 = 4
     FLOAT64 = 8
 
+
+def normalize_enumname(value: Enum) -> str:
+    parts = str(value).split(".")
+
+    if len(parts) == 2:
+        return parts[1].capitalize()
+
+    return str(value).capitalize()
 
 class Validate:
     @staticmethod
