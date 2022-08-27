@@ -92,7 +92,6 @@ class DataTable:
     def clear_columns(self):
         """
         Clears the internal column collections.
-        Any existing columns will be deleted.
         """
 
         self._columnindexes = dict()
@@ -166,7 +165,6 @@ class DataTable:
     def clear_rows(self):
         """
         Clears the internal row collection.
-        Any existing rows will be deleted.
         """
 
         self._rows = list()
@@ -240,7 +238,7 @@ class DataTable:
 
         return len(self._rows)
 
-    def rowvalueas_string(self, rowindex: int, columnindex: int) -> str:
+    def rowvalue_as_string(self, rowindex: int, columnindex: int) -> str:
         """
         Reads the row record value at the specified column index converted to a string.
         For column index out of range or any other errors, an empty string will be returned.
@@ -251,9 +249,9 @@ class DataTable:
         if row is None:
             return Empty.STRING
 
-        return row.valueas_string(columnindex)
+        return row.value_as_string(columnindex)
 
-    def rowvalueas_string_byname(self, rowindex: int, columnname: str) -> str:
+    def rowvalue_as_string_byname(self, rowindex: int, columnname: str) -> str:
         """
         Reads the row record value for the specified column name converted to a string.
         For column name not found or any other errors, an empty string will be returned.
@@ -264,7 +262,7 @@ class DataTable:
         if row is None:
             return Empty.STRING
 
-        return row.valueas_string_byname(columnname)
+        return row.value_as_string_byname(columnname)
 
     def __repr__(self):
         image: List[str] = []
