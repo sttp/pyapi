@@ -5,9 +5,6 @@ github:
   repository_name: pyapi
   owner_url: https://www.gridprotectionalliance.org
   owner_name: Grid Protection Alliance
+include: ["html/_modules", "html/_sources", "html/_static"]
 plugins:
   - jemoji
-include:
-  - html/_modules
-  - html/_sources
-  - html/_static
