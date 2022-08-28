@@ -90,6 +90,7 @@ Connection to 127.0.0.1:7175 terminated.
 
 ## Links
 
+* [STTP PyPi Package: sttpapi](https://pypi.org/project/sttpapi/)
 * [STTP Python Documentation](https://sttp.github.io/pyapi/)
 * [STTP General Documentation](https://sttp.github.io/documentation/)
 * [STTP (IEEE 2664) Standard](https://standards.ieee.org/project/2664.html)
