@@ -23,6 +23,7 @@
 
 from gsf import Limits
 from gsf.endianorder import BigEndian
+from .data.dataset import DataSet
 from .transport.bufferblock import BufferBlock
 from .transport.constants import ConnectStatus, ServerCommand
 from .transport.datasubscriber import DataSubscriber
@@ -68,7 +69,7 @@ class Subscriber:
         # Callback references
         self._statusmessage_logger: Optional[Callable[[str], None]] = self.default_statusmessage_logger
         self._errormessage_logger: Optional[Callable[[str], None]] = self.default_errormessage_logger
-        self._metadatanotification_receiver: Optional[Callable[[Element], None]] = None
+        self._metadatanotification_receiver: Optional[Callable[[DataSet], None]] = None
         self._data_starttime_receiver: Optional[Callable[[np.int64], None]] = None
         self._configurationchanged_receiver: Optional[Callable[[], None]] = None
         self._historicalreadcomplete_receiver: Optional[Callable[[], None]] = None
@@ -390,22 +391,47 @@ class Subscriber:
 
     def _handle_metadatareceived(self, metadata: bytes):
         parsestarted = time()
+        dataset, err = DataSet.from_xml(metadata)
+
+        if err is not None:
+            self.errormessage(f"Failed to parse metadata: {err}")
+            return
+
         cache = MetadataCache(metadata)
 
         self._datasubscriber.metadatacache = cache
-
-        #self._show_metadatasummary(cache.metadata, parsestarted)
-        self.statusmessage(f"Parsed metadata records in {(time() - parsestarted):.3f} seconds")
+        self._show_metadatasummary(dataset, parsestarted)
 
         if self._metadatanotification_receiver is not None:
-            self._metadatanotification_receiver(cache.metadata)  # TODO: Change parameter to DataSet
+            self._metadatanotification_receiver(dataset)
 
         if self._config.autorequestmetadata and self._config.autosubscribe:
             self._datasubscriber.subscribe()
 
-    # TODO: Add metadata summary after parsing full DataSet
-    #def _show_metadatasummary(self, dataset: DataSet, parsestarted: float):
-    #    pass
+    def _show_metadatasummary(self, dataset: DataSet, parsestarted: float):
+        tabledetails = []
+        totalrows = 0
+
+        tabledetails.append("    Discovered:\n")
+
+        for table in dataset:
+            tablename = table.name
+            tablerows = table.rowcount
+            totalrows += tablerows
+            tabledetails.append(f"        {tablerows:,} {tablename} records\n")
+
+        message = []
+        message.append(f"Parsed {totalrows:,} metadata records in {(time() - parsestarted):.3f} seconds\n")
+        message.append("".join(tabledetails))
+
+        schemaversion = dataset["SchemaVersion"]
+
+        if schemaversion is not None:
+            message.append(f"Metadata schema version: {schemaversion.rowvalue_as_string_byname(0, 'VersionNumber')}")
+        else:
+            message.append("No SchemaVersion table found in metadata")
+
+        self.statusmessage("".join(message))
 
     def _handle_connectionterminated(self):
         # Release any blocking reader

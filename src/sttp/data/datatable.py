@@ -55,22 +55,22 @@ class DataTable:
         self._rows: List[DataRow] = list()
 
     # Container methods for DataTable map to rows, not columns
-    def __getitem__(self, key: int) -> DataRow:
+    def __getitem__(self, key):
         return self._rows[key]
 
-    def __setitem__(self, key: int, value: DataRow):
+    def __setitem__(self, key, value):
         self._rows[key] = value
 
-    def __delitem__(self, key: int):
+    def __delitem__(self, key):
         del self._rows[key]
 
-    def __len__(self) -> int:
+    def __len__(self):
         return len(self._rows)
 
-    def __contains__(self, item: DataRow) -> bool:
+    def __contains__(self, item):
         return item in self._rows
 
-    def __iter__(self) -> Iterator[DataRow]:
+    def __iter__(self):
         return iter(self._rows)
 
     @property

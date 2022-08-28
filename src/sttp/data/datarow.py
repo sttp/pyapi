@@ -22,8 +22,7 @@
 # ******************************************************************************************************
 
 from __future__ import annotations
-from gsf import Empty, normalize_enumname
-from .dataset import xsdformat
+from gsf import Convert, Empty, normalize_enumname
 from .datatype import DataType
 from .datacolumn import DataColumn
 from decimal import Decimal
@@ -34,6 +33,7 @@ from typing import Any, Callable, Iterator, List, Optional, Tuple, Union, TYPE_C
 import numpy as np
 
 if TYPE_CHECKING:
+    from .dataset import xsdformat
     from .datatable import DataTable
 
 
@@ -53,33 +53,27 @@ class DataRow:
         self._parent = parent
         self._values: List[Any] = list()
 
-    def __getitem__(self, key: Union[int, str]) -> Any:        
-        if isinstance(key, int):
-            value, err = self.value(key)
-        else:
-            value, err = self.value_byname(str(key))
+    def __getitem__(self, key):
+        value, err = self.value(key)
 
         if err is not None:
             raise err
         
         return value
 
-    def __setitem__(self, key: Union[int, str], value: Any):
-        if isinstance(key, int):
-            err = self.set_value(key, value)
-        else:
-            err = self.set_value_byname(str(key), value)
+    def __setitem__(self, key, value):
+        err = self.set_value(key, value)
 
         if err is not None:
             raise err
 
-    def __len__(self) -> int:
+    def __len__(self):
         return len(self._values)
 
-    def __contains__(self, item: Any) -> bool:
+    def __contains__(self, item):
         return item in self._values
 
-    def __iter__(self) -> Iterator[Any]:
+    def __iter__(self):
         return iter(self._values)
 
     @property
@@ -159,31 +153,28 @@ class DataRow:
                 return parser.parse(value)
             if targettype == DataType.GUID:
                 return UUID(value), None
-
-            def fromstring(dtype): return np.array([value]).astype(dtype)[0]
-
             if targettype == DataType.SINGLE:
-                return fromstring(np.float32), None
+                return Convert.from_str(np.float32), None
             if targettype == DataType.DOUBLE:
-                return fromstring(np.float64), None
+                return Convert.from_str(np.float64), None
             if targettype == DataType.DECIMAL:
-                return fromstring(Decimal), None
+                return Convert.from_str(Decimal), None
             if targettype == DataType.INT8:
-                return fromstring(np.int8), None
+                return Convert.from_str(np.int8), None
             if targettype == DataType.INT16:
-                return fromstring(np.int16), None
+                return Convert.from_str(np.int16), None
             if targettype == DataType.INT32:
-                return fromstring(np.int32), None
+                return Convert.from_str(np.int32), None
             if targettype == DataType.INT64:
-                return fromstring(np.int64), None
+                return Convert.from_str(np.int64), None
             if targettype == DataType.UINT8:
-                return fromstring(np.uint8), None
+                return Convert.from_str(np.uint8), None
             if targettype == DataType.UINT16:
-                return fromstring(np.uint16), None
+                return Convert.from_str(np.uint16), None
             if targettype == DataType.UINT32:
-                return fromstring(np.uint32), None
+                return Convert.from_str(np.uint32), None
             if targettype == DataType.UINT64:
-                return fromstring(np.uint64), None
+                return Convert.from_str(np.uint64), None
 
             return None, ValueError("unexpected column data type encountered")
         except Exception as ex:

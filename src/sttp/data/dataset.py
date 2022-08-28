@@ -21,13 +21,22 @@
 #
 # ******************************************************************************************************
 
-from datetime import datetime
-from io import StringIO
-from .dataset import DataSet
+from __future__ import annotations
+from gsf import Convert, Empty
 from .datatable import DataTable
-from typing import Dict, Iterator, List, Tuple, Union, Optional
+from .datatype import DataType, parse_xsddatatype
+from typing import Dict, Iterator, List, Tuple, Union, Optional, TYPE_CHECKING
+from decimal import Decimal
+from datetime import datetime
+from dateutil import parser
+from uuid import UUID
+from io import BytesIO
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
+import numpy as np
+
+if TYPE_CHECKING:
+    from .dataset import DataSet
 
 XMLSCHEMA_NAMESPACE = "http://www.w3.org/2001/XMLSchema"
 """
@@ -39,27 +48,29 @@ EXT_XMLSCHEMADATA_NAMESPACE = "urn:schemas-microsoft-com:xml-msdata"
 Defines extended types for XSD elements, e.g., Guid and expression data types.
 """
 
+
 def xsdformat(value: datetime) -> str:
     """
     Converts date/time value to a string in XSD XML schema format.
     """
-    
-    return value.isoformat(sep=' ', timespec="milliseconds")[:-1] # 2 digit fractional second
+
+    return value.isoformat(sep=' ', timespec="milliseconds")[:-1]  # 2 digit fractional second
+
 
 class DataSet:
     """
     Represents an in-memory cache of records that is structured similarly to information
     defined in a database. The data set object consists of a collection of data table objects.
     See https://sttp.github.io/documentation/data-sets/ for more information.
-    Note that this implementation uses a case-insensitive map for `DataTable` name lookups.
-    Internally, case-insensitive lookups are accomplished using `str.upper()`.    
+    Note that this implementation uses a if columntype ==-insensitive map for `DataTable` name lookups.
+    Internally, if columntype ==-insensitive lookups are accomplished using `str.upper()`.    
     """
 
     DEFAULT_NAME = "DataSet"
 
     def __init__(self,
                  name: str = ...
-                ):
+                 ):
         """
         Creates a new `DataSet`.
         """
@@ -71,22 +82,11 @@ class DataSet:
         Defines the name of the `DataSet`.
         """
 
-    # Case-insensitive get table by name; None returned when value does not exist
-    def __getitem__(self, key: str) -> DataTable:
-        return self.table(key)
-
-    # Case-insensitive set table by name
-    def __setitem__(self, key: str, value: DataTable):
-        self._tables[key.upper()] = value
-
-    def __delitem__(self, key: str):
-        del self._tables[key]
-
-    def __len__(self) -> int:
+    def __len__(self):
         return len(self._tables)
 
-    # Case-insensitive table search
-    def __contains__(self, item: str) -> bool:
+    # if columntype insensitive table search
+    def __contains__(self, item: str):
         return self[item] is not None
 
     def __iter__(self) -> Iterator[DataTable]:
@@ -107,10 +107,10 @@ class DataSet:
 
         self._tables[table.name.upper()] = table
 
-    def table(self, tablename: str) -> DataTable:
+    def table(self, tablename: str) -> Optional[DataTable]:
         """
         Gets the `DataTable` for the specified table name if it exists;
-        otherwise, None is returned. Lookup is case-insensitive.
+        otherwise, None is returned. Lookup is if columntype ==-insensitive.
         """
 
         if table := self._tables.get(tablename.upper()):
@@ -157,7 +157,7 @@ class DataSet:
         """
         Removes the specified table name from the `DataSet`. Returns
         True if table was removed; otherwise, False if it did not exist.
-        Lookup is case-insensitive.
+        Lookup is if columntype ==-insensitive.
         """
 
         return self._tables.pop(tablename.upper()) is not None
@@ -204,7 +204,7 @@ class DataSet:
             return err
 
         namespaces: Dict[str, str] = dict(
-           [node for _, node in ElementTree.iterparse(StringIO(buffer), events=["start-ns"])])
+            [node for _, node in ElementTree.iterparse(BytesIO(buffer), events=["start-ns"])])
 
         return self.parse_xmldoc(doc, namespaces)
 
@@ -213,31 +213,139 @@ class DataSet:
         Loads the `DataSet` from an existing root XML document element.
         """
 
+        def get_schemaprefix(target_namespace: str):
+            prefix = ""
+
+            for prefix in namespaces:
+                if namespaces[prefix] == target_namespace:
+                    prefix = prefix
+                    break
+
+            if len(prefix) > 0:
+                prefix += ":"
+
+            return prefix
+
+        xs = get_schemaprefix(XMLSCHEMA_NAMESPACE)
+
         # Find schema node
-        schema = root.find("schema")
+        schema = root.find(f"{xs}schema", namespaces)
 
         if schema is None:
             return RuntimeError("failed to parse DataSet XML: Cannot find schema node")
 
-        id = schema.attrib["id"]
+        id = schema.attrib.get("id")
 
         if id is None or id != root.tag:
             return RuntimeError(f"failed to parse DataSet XML: Cannot find schema node matching \"{root.tag}\"")
 
-        # TODO: Validate schema namespace - check against schema namespace prefix
-        if not XMLSCHEMA_NAMESPACE in namespaces.values():
-            return RuntimeError(f"failed to parse DataSet XML: cannot find schema namespace \"{XMLSCHEMA_NAMESPACE}\"")
-
         # Populate DataSet schema
-        self._load_schema(schema)
+        self._load_schema(schema, namespaces, xs)
 
         # Populate DataSet records
         self._load_records(root)
 
         return None
 
-    def _load_schema(self, schema: Element):
-        pass
+    def _load_schema(self, schema: Element, namespaces: Dict[str, str], xs: str):
+        EXT_PREFIX = f"{{{EXT_XMLSCHEMADATA_NAMESPACE}}}"
+
+        # Find choice elements representing schema table definitions
+        tablenodes = schema.findall(f"{xs}element/{xs}complexType/{xs}choice/{xs}element", namespaces)
+
+        for tablenode in tablenodes:
+            tablename = tablenode.attrib.get("name")
+
+            if tablename is None:
+                continue
+
+            datatable = self.create_table(tablename)
+
+            # Find sequence elements representing schema table field definitions
+            fieldnodes = tablenode.findall(f"{xs}complexType/{xs}sequence/{xs}element", namespaces)
+
+            for fieldnode in fieldnodes:
+                fieldname = fieldnode.attrib.get("name")
+
+                if fieldname is None:
+                    continue
+
+                typename = fieldnode.attrib.get("type")
+
+                if typename is None:
+                    continue
+
+                if typename.startswith(xs):
+                    typename = typename[len(xs):]
+
+                # Check for extended data type (allows XSD Guid field definitions)
+                extdatatype = fieldnode.attrib.get(f"{EXT_PREFIX}DataType")
+
+                datatype, found = parse_xsddatatype(typename, extdatatype)
+
+                # Columns with unsupported XSD data types are skipped
+                if not found:
+                    continue
+
+                # Check for computed expression
+                expression = fieldnode.attrib.get(f"{EXT_PREFIX}Expression")
+
+                datacolumn = datatable.create_column(fieldname, datatype, expression)
+
+                datatable.add_column(datacolumn)
+
+            self.add_table(datatable)
 
     def _load_records(self, root: Element):
-        pass
+        # Each root node child that matches a table name represents a record
+        for record in root:
+            table = self.table(record.tag)
+
+            if table is None:
+                continue
+
+            datarow = table.create_row()
+
+            # Each child node of a record represents a field value
+            for field in record:
+                column = table.column_byname(field.tag)
+
+                if column is None:
+                    continue
+
+                index = column.index
+                type = column.type
+                value = field.text
+
+                if type == DataType.STRING:
+                    datarow[index] = Empty.STRING if value is None else value
+                if type == DataType.BOOLEAN:
+                    datarow[index] = False if value is None else bool(value)
+                if type == DataType.DATETIME:
+                    datarow[index] = Empty.DATETIME if value is None else parser.parse(value)
+                if type == DataType.SINGLE:
+                    datarow[index] = Empty.SINGLE if value is None else Convert.from_str(value, np.float32)
+                if type == DataType.DOUBLE:
+                    datarow[index] = Empty.DOUBLE if value is None else Convert.from_str(value, np.float64)
+                if type == DataType.DECIMAL:
+                    datarow[index] = Empty.DECIMAL if value is None else Decimal(value)
+                if type == DataType.GUID:
+                    datarow[index] = Empty.GUID if value is None else UUID(value)
+                if type == DataType.INT8:
+                    datarow[index] = Empty.INT8 if value is None else Convert.from_str(value, np.int8)
+                if type == DataType.INT16:
+                    datarow[index] = Empty.INT16 if value is None else Convert.from_str(value, np.int16)
+                if type == DataType.INT32:
+                    datarow[index] = Empty.INT32 if value is None else Convert.from_str(value, np.int32)
+                if type == DataType.INT64:
+                    datarow[index] = Empty.INT64 if value is None else Convert.from_str(value, np.int64)
+                if type == DataType.UINT8:
+                    datarow[index] = Empty.UINT8 if value is None else Convert.from_str(value, np.uint8)
+                if type == DataType.UINT16:
+                    datarow[index] = Empty.UINT16 if value is None else Convert.from_str(value, np.uint16)
+                if type == DataType.UINT32:
+                    datarow[index] = Empty.UINT32 if value is None else Convert.from_str(value, np.uint32)
+                if type == DataType.UINT64:
+                    datarow[index] = Empty.UINT64 if value is None else Convert.from_str(value, np.uint64)
+
+            table.add_row(datarow)
