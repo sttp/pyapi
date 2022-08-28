@@ -15,6 +15,5 @@ call ./make html
 cd ..
 echo Ready to deploy new HTML
 pause
-rmdir /s /q docs\html
-xcopy /e /i docs\_build\html docs\html
+xcopy /e /i docs\_build\html docs
 
