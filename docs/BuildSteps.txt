@@ -10,6 +10,8 @@ Make sure root-level README.md exists, if not:
 
 For updates, always increment version number in:
     setup.cfg
+    src/sttp/version.py
+    docs/conf.py
 
 If docs/README.md is updated:
     delete README.md in the root and re-run CreateReadMeSymLink.cmd
@@ -26,3 +28,7 @@ Validate Distribution:
 
 Upload to PiPy:
     twine upload dist/*
+
+Update Sphinx Documentation:
+    ./BuildDocs.cmd
+    Push updates to GitHub
