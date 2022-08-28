@@ -51,7 +51,7 @@ class DataColumn:
         self._name = name
         self._datatype = datatype
         self._expression = Empty.STRING if expression is ... or expression is None else expression
-        self._computed = len(expression) > 0
+        self._computed = len(self._expression) > 0
         self._index = -1
 
     @property

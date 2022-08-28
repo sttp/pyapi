@@ -59,6 +59,7 @@
         "wlock",
         "xsddatatype",
         "xsdformat",
+        "xsdprefix",
         "xsdtypename",
         "Δfreq",
         "Δtime"

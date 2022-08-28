@@ -117,3 +117,13 @@ class Validate:
         if startIndex + length > len(array):
             raise ValueError(
                 f"startIndex of {startIndex:,} and length of {length:,} will exceed array size of {len(array):,}")
+
+
+class Convert:
+    @staticmethod
+    def from_str(value, dtype):
+        """
+        Converts a string value to the specified type.
+        """
+
+        return np.array([value]).astype(dtype)[0]

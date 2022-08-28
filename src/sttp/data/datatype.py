@@ -22,7 +22,7 @@
 # ******************************************************************************************************
 
 from enum import IntEnum
-from typing import Tuple
+from typing import Optional, Tuple
 
 
 class DataType(IntEnum):
@@ -106,7 +106,7 @@ class DataType(IntEnum):
     """
 
 
-def parse_xsddatatype(xsdtypename: str, extdatatype: str) -> Tuple[DataType, bool]:
+def parse_xsddatatype(xsdtypename: str, extdatatype: Optional[str]) -> Tuple[DataType, bool]:
     """
     Gets the `DataType` from the provided XSD data type. Return tuple includes boolean
     value that determines if parse was successful. See XML Schema Language Datatypes
@@ -114,7 +114,7 @@ def parse_xsddatatype(xsdtypename: str, extdatatype: str) -> Tuple[DataType, boo
     """
 
     if xsdtypename == "string":
-        if extdatatype.startswith("System.Guid"):
+        if extdatatype is not None and extdatatype.startswith("System.Guid"):
             return DataType.GUID, True
 
         return DataType.STRING, True
