@@ -8,6 +8,6 @@ github:
 plugins:
   - jemoji
 include:
-  html/_modules
-  html/_sources
-  html/_static
+  - html/_modules
+  - html/_sources
+  - html/_static
