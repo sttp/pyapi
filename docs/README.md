@@ -4,7 +4,7 @@
 <!--- Do not make this image location relative, README.md in root is a symbolic reference to one in docs. See CreateReadMeSymLink.cmd for more information. --->
 <img align="right" src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png">
 
-[![CodeQL](https://github.com/sttp/pyapi/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/sttp/pyapi/actions/workflows/codeql-analysis.yml) [![docs](https://badgen.net/badge/sttpapi/python-reference/blue?icon=pypi)]( https://sttp.github.io/pyapi/html)
+[![CodeQL](https://github.com/sttp/pyapi/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/sttp/pyapi/actions/workflows/codeql-analysis.yml) [![docs](https://badgen.net/badge/sttpapi/python-reference/blue?icon=pypi)]( https://sttp.github.io/pyapi)
 
 The Streaming Telemetry Transport Protocol (STTP) protocol is optimized for the demands of transporting high volume streaming data. The protocol allows for the transmission of any information that can be represented longitudinally, e.g., time-series data.
 
@@ -91,7 +91,6 @@ Connection to 127.0.0.1:7175 terminated.
 ## Links
 
 * [STTP Python Documentation](https://sttp.github.io/pyapi/)
-* [STTP Python API Reference](https://sttp.github.io/pyapi/html)
 * [STTP General Documentation](https://sttp.github.io/documentation/)
 * [STTP (IEEE 2664) Standard](https://standards.ieee.org/project/2664.html)
 
