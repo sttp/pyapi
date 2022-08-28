@@ -30,6 +30,7 @@ def main():
 
 
 def read_data(subscriber: Subscriber):
+    subscriber.default_connectionestablished_receiver()
     reader = subscriber.read_measurements()
     lastmessage = 0.0
 
