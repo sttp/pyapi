@@ -82,11 +82,22 @@ class DataSet:
         Defines the name of the `DataSet`.
         """
 
-    def __len__(self):
+    # Case-insensitive get table by name; None returned when value does not exist
+    def __getitem__(self, key: str) -> DataTable:
+        return self.table(key)
+
+    # Case-insensitive set table by name
+    def __setitem__(self, key: str, value: DataTable):
+        self._tables[key.upper()] = value
+
+    def __delitem__(self, key: str):
+        del self._tables[key]
+
+    def __len__(self) -> int:
         return len(self._tables)
 
-    # if columntype insensitive table search
-    def __contains__(self, item: str):
+    # Case-insensitive table name search
+    def __contains__(self, item: str) -> bool:
         return self[item] is not None
 
     def __iter__(self) -> Iterator[DataTable]:
@@ -113,10 +124,7 @@ class DataSet:
         otherwise, None is returned. Lookup is if columntype ==-insensitive.
         """
 
-        if table := self._tables.get(tablename.upper()):
-            return table
-
-        return None
+        return self._tables.get(tablename.upper())
 
     def tablenames(self) -> List[str]:
         """
@@ -206,6 +214,8 @@ class DataSet:
         namespaces: Dict[str, str] = dict(
             [node for _, node in ElementTree.iterparse(BytesIO(buffer), events=["start-ns"])])
 
+        del namespaces[Empty.STRING]
+
         return self.parse_xmldoc(doc, namespaces)
 
     def parse_xmldoc(self, root: Element, namespaces: Dict[str, str]) -> Optional[Exception]:
@@ -234,9 +244,7 @@ class DataSet:
         if schema is None:
             return RuntimeError("failed to parse DataSet XML: Cannot find schema node")
 
-        id = schema.attrib.get("id")
-
-        if id is None or id != root.tag:
+        if (id := schema.attrib.get("id")) is None or id != root.tag:
             return RuntimeError(f"failed to parse DataSet XML: Cannot find schema node matching \"{root.tag}\"")
 
         # Populate DataSet schema
@@ -254,9 +262,7 @@ class DataSet:
         tablenodes = schema.findall(f"{xs}element/{xs}complexType/{xs}choice/{xs}element", namespaces)
 
         for tablenode in tablenodes:
-            tablename = tablenode.attrib.get("name")
-
-            if tablename is None:
+            if (tablename := tablenode.attrib.get("name")) is None:
                 continue
 
             datatable = self.create_table(tablename)
@@ -265,14 +271,10 @@ class DataSet:
             fieldnodes = tablenode.findall(f"{xs}complexType/{xs}sequence/{xs}element", namespaces)
 
             for fieldnode in fieldnodes:
-                fieldname = fieldnode.attrib.get("name")
-
-                if fieldname is None:
+                if (fieldname := fieldnode.attrib.get("name")) is None:
                     continue
 
-                typename = fieldnode.attrib.get("type")
-
-                if typename is None:
+                if (typename := fieldnode.attrib.get("type")) is None:
                     continue
 
                 if typename.startswith(xs):
@@ -319,33 +321,35 @@ class DataSet:
 
                 if type == DataType.STRING:
                     datarow[index] = Empty.STRING if value is None else value
-                if type == DataType.BOOLEAN:
-                    datarow[index] = False if value is None else bool(value)
-                if type == DataType.DATETIME:
-                    datarow[index] = Empty.DATETIME if value is None else parser.parse(value)
-                if type == DataType.SINGLE:
-                    datarow[index] = Empty.SINGLE if value is None else Convert.from_str(value, np.float32)
-                if type == DataType.DOUBLE:
-                    datarow[index] = Empty.DOUBLE if value is None else Convert.from_str(value, np.float64)
-                if type == DataType.DECIMAL:
-                    datarow[index] = Empty.DECIMAL if value is None else Decimal(value)
-                if type == DataType.GUID:
+                elif type == DataType.GUID:
                     datarow[index] = Empty.GUID if value is None else UUID(value)
-                if type == DataType.INT8:
+                elif type == DataType.DATETIME:
+                    datarow[index] = Empty.DATETIME if value is None else parser.parse(value)
+                elif type == DataType.BOOLEAN:
+                    datarow[index] = False if value is None else bool(value)
+                elif type == DataType.SINGLE:
+                    datarow[index] = Empty.SINGLE if value is None else Convert.from_str(value, np.float32)
+                elif type == DataType.DOUBLE:
+                    datarow[index] = Empty.DOUBLE if value is None else Convert.from_str(value, np.float64)
+                elif type == DataType.DECIMAL:
+                    datarow[index] = Empty.DECIMAL if value is None else Decimal(value)
+                elif type == DataType.INT8:
                     datarow[index] = Empty.INT8 if value is None else Convert.from_str(value, np.int8)
-                if type == DataType.INT16:
+                elif type == DataType.INT16:
                     datarow[index] = Empty.INT16 if value is None else Convert.from_str(value, np.int16)
-                if type == DataType.INT32:
+                elif type == DataType.INT32:
                     datarow[index] = Empty.INT32 if value is None else Convert.from_str(value, np.int32)
-                if type == DataType.INT64:
+                elif type == DataType.INT64:
                     datarow[index] = Empty.INT64 if value is None else Convert.from_str(value, np.int64)
-                if type == DataType.UINT8:
+                elif type == DataType.UINT8:
                     datarow[index] = Empty.UINT8 if value is None else Convert.from_str(value, np.uint8)
-                if type == DataType.UINT16:
+                elif type == DataType.UINT16:
                     datarow[index] = Empty.UINT16 if value is None else Convert.from_str(value, np.uint16)
-                if type == DataType.UINT32:
+                elif type == DataType.UINT32:
                     datarow[index] = Empty.UINT32 if value is None else Convert.from_str(value, np.uint32)
-                if type == DataType.UINT64:
+                elif type == DataType.UINT64:
                     datarow[index] = Empty.UINT64 if value is None else Convert.from_str(value, np.uint64)
+                else:
+                    datarow[index] = None
 
             table.add_row(datarow)

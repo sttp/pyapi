@@ -41,6 +41,8 @@ class PhasorRecord:
     Represents a record of phasor metadata in the STTP.
     """
 
+    DEFAULT_TYPE = "V"
+    DEFAULT_PHASE = "+"
     DEFAULT_BASEKV = 500
     DEFAULT_UPDATEDON = Empty.DATETIME
 
@@ -61,10 +63,10 @@ class PhasorRecord:
         self._id = id
         self._deviceacronym = deviceacronym
         self._label = label
-        self._type = type
-        self._phase = phase
+        self._type = PhasorRecord.DEFAULT_TYPE if type is None or type == Empty.STRING else type
+        self._phase = PhasorRecord.DEFAULT_PHASE if phase is None or phase == Empty.STRING else phase
         self._sourceindex = sourceindex
-        self._basekv = PhasorRecord.DEFAULT_BASEKV if basekv is ... else basekv
+        self._basekv = PhasorRecord.DEFAULT_BASEKV if basekv is ... or basekv == 0 else basekv
         self._updatedon = PhasorRecord.DEFAULT_UPDATEDON if updatedon is ... else updatedon
 
         self.device: Optional[DeviceRecord] = None

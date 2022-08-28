@@ -21,8 +21,9 @@
 #
 # ******************************************************************************************************
 
+from gsf import Empty
 from enum import IntEnum
-from typing import Optional, Tuple
+from typing import Any, Optional, Tuple
 
 
 class DataType(IntEnum):
@@ -105,6 +106,40 @@ class DataType(IntEnum):
     Represents a Python `numpy.uint64` data type.
     """
 
+
+def default_datatype(datatype: DataType) -> Any:
+    if datatype == DataType.STRING:
+        return Empty.STRING
+    if datatype == DataType.BOOLEAN:
+        return False
+    if datatype == DataType.DATETIME:
+        return Empty.DATETIME
+    if datatype == DataType.SINGLE:
+        return Empty.SINGLE
+    if datatype == DataType.DOUBLE:
+        return Empty.DOUBLE
+    if datatype == DataType.DECIMAL:
+        return Empty.DECIMAL
+    if datatype == DataType.GUID:
+        return Empty.GUID
+    if datatype == DataType.INT8:
+        return Empty.INT8
+    if datatype == DataType.INT16:
+        return Empty.INT16
+    if datatype == DataType.INT32:
+        return Empty.INT32
+    if datatype == DataType.INT64:
+        return Empty.INT64
+    if datatype == DataType.UINT8:
+        return Empty.UINT8
+    if datatype == DataType.UINT16:
+        return Empty.UINT16
+    if datatype == DataType.UINT32:
+        return Empty.UINT32
+    if datatype == DataType.UINT64:
+        return Empty.UINT64
+
+    return None
 
 def parse_xsddatatype(xsdtypename: str, extdatatype: Optional[str]) -> Tuple[DataType, bool]:
     """

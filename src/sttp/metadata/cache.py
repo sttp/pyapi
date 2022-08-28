@@ -21,15 +21,15 @@
 #
 # ******************************************************************************************************
 
+from gsf import Empty
+from ..data.dataset import DataSet
+from ..data.datarow import DataRow
+from ..data.datatype import default_datatype
 from .record.measurement import MeasurementRecord, SignalType
 from .record.device import DeviceRecord
 from .record.phasor import PhasorRecord
-from gsf import Empty
-import xml.etree.ElementTree as XMLParser
-from typing import Optional, List, Dict, Tuple
-from datetime import datetime
+from typing import Any, List, Dict, Tuple, Optional
 from uuid import UUID, uuid1
-from decimal import Decimal
 import numpy as np
 
 
@@ -38,56 +38,93 @@ class MetadataCache:
     Represents a collection of parsed STTP metadata records.
     """
 
-    # TODO: Change source to a DataSet instead of raw XML
-    def __init__(self, metadata_xml: bytes = ...):
+    def __init__(self, dataset: DataSet = ...):
 
         self.signalid_measurement_map: Dict[UUID, MeasurementRecord] = dict()
+        """
+        Defines map of unique measurement signal IDs to measurement records.
+        Measurement signal IDs (a UUID) are typically unique across disparate systems.
+        """
+
         self.id_measurement_map: Dict[np.uint64, MeasurementRecord] = dict()
+        """
+        Defines map of measurement key IDs to measurement records.
+        Measurement key IDs are typically unique for a given publisher.
+        """
+
         self.pointtag_measurement_map: Dict[str, MeasurementRecord] = dict()
+        """
+        Defines map of measurement point tags to measurement records.
+        Measurement point tags are typically unique for a given publisher.
+        """
+
         self.signalref_measurement_map: Dict[str, MeasurementRecord] = dict()
+        """
+        Defines map of measurement signal references to measurement records.
+        Measurement signal references are typically unique for a given publisher.
+        """
+
         self.deviceacronym_device_map: Dict[str, DeviceRecord] = dict()
+        """
+        Defines map of device acronym to device records.
+        Device acronyms are typically unique for a given publisher.
+        """
+
         self.deviceid_device_map: Dict[UUID, DeviceRecord] = dict()
+        """
+        Defines map of unique device IDs to device records.
+        Device IDs (a UUID) are typically unique across disparate systems.
+        """
 
-        if metadata_xml is ...:
-            self.measurement_records: List[MeasurementRecord] = list()
+        self.measurement_records: List[MeasurementRecord] = list()
+        """
+        Defines list of measurement records in the cache.
+        """
+
+        self.device_records: List[DeviceRecord] = list()
+        """
+        Defines list of device records in the cache.
+        """
+
+        self.phasorRecords: List[PhasorRecord] = list()
+        """
+        Defines list of phasor records in the cache.
+        """
+
+        if dataset is ...:
             return
-
-        # Parse metadata
-        self.metadata = XMLParser.fromstring(metadata_xml)
 
         # Extract measurement records from MeasurementDetail table rows
         measurement_records: List[MeasurementRecord] = list()
 
-        for measurement in self.metadata.findall("MeasurementDetail"):
-            # Get element text or empty string when value is None
-            def get_elementtext(elementname): return MetadataCache._get_elementtext(measurement, elementname)
+        for measurement in dataset["MeasurementDetail"]:
+            get_rowvalue = lambda columnname, default = None: self._get_rowvalue(measurement, columnname, default)
 
-            # Parse STTP source name and numeric point ID from measurement key
-            (source, id) = MetadataCache._get_measurementkey(measurement)
+            (source, id) = self._parse_measurementkey(get_rowvalue("ID", Empty.STRING))
 
             measurement_records.append(MeasurementRecord(
                 # `signalid`: Extract signal ID, the unique measurement guid
-                MetadataCache._get_guid(measurement, "SignalID"),
+                get_rowvalue("SignalID", uuid1()),
                 # 'adder': Extract the measurement adder
-                MetadataCache._get_float(measurement, "Adder"),
+                get_rowvalue("Adder", np.float64(0.0)),
                 # 'multiplier': Extract the measurement multiplier
-                MetadataCache._get_float(measurement, "Multiplier"),
+                get_rowvalue("Multiplier", np.float64(1.0)),
                 # `id`: STTP numeric point ID of measurement (from measurement key)
                 id,
                 # `source`: Source instance name of measurement (from measurement key)
                 source,
                 # `signaltypename`: Extract the measurement signal type name
-                get_elementtext("SignalAcronym"),
+                get_rowvalue("SignalAcronym", "UNKN"),
                 # `signalreference`: Extract the measurement signal reference
-                get_elementtext("SignalReference"),
+                get_rowvalue("SignalReference"),
                 # `pointtag`: Extract the measurement point tag
-                get_elementtext("PointTag"),
+                get_rowvalue("PointTag"),
                 # `deviceacronym`: Extract the measurement's parent device acronym
-                get_elementtext("DeviceAcronym"),
+                get_rowvalue("DeviceAcronym"),
                 # `description`: Extract the measurement description name
-                get_elementtext("Description"),
+                get_rowvalue("Description"),
                 # `updatedon`: Extract the last update time for measurement metadata
-                MetadataCache._get_updatedon(measurement)
+                get_rowvalue("UpdatedOn")
             ))
 
         for measurement in measurement_records:
@@ -102,44 +139,44 @@ class MetadataCache:
         for measurement in measurement_records:
             self.signalref_measurement_map[measurement.signalreference] = measurement
 
-        self.measurement_records: List[MeasurementRecord] = measurement_records
+        self.measurement_records = measurement_records
 
         # Extract device records from DeviceDetail table rows
         device_records: List[DeviceRecord] = list()
+        default_nodeid = uuid1()
 
-        for device in self.metadata.findall("DeviceDetail"):
-            # Get element text or empty string when value is None
-            def get_elementtext(elementname): return MetadataCache._get_elementtext(device, elementname)
+        for device in dataset["DeviceDetail"]:
+            get_rowvalue = lambda columnname, default = None: self._get_rowvalue(device, columnname, default)
 
             device_records.append(DeviceRecord(
                 # `nodeid`: Extract node ID guid for the device
-                MetadataCache._get_guid(device, "NodeID"),
+                get_rowvalue("NodeID", default_nodeid),
                 # `deviceid`: Extract device ID, the unique device guid
-                MetadataCache._get_guid(device, "UniqueID"),
+                get_rowvalue("UniqueID", uuid1()),
                 # `acronym`: Alpha-numeric identifier of the device
-                get_elementtext("Acronym"),
+                get_rowvalue("Acronym"),
                 # `name`: Free form name for the device
-                get_elementtext("Name"),
+                get_rowvalue("Name"),
                 # `accessid`: Access ID for the device
-                MetadataCache._get_int(device, "AccessID"),
+                get_rowvalue("AccessID"),
                 # `parentacronym`: Alpha-numeric parent identifier of the device
-                get_elementtext("ParentAcronym"),
+                get_rowvalue("ParentAcronym"),
                 # `protocolname`: Protocol name of the device
-                get_elementtext("ProtocolName"),
+                get_rowvalue("ProtocolName"),
                 # `framespersecond`: Data rate for the device
-                MetadataCache._get_int(device, "FramesPerSecond"),
+                get_rowvalue("FramesPerSecond", DeviceRecord.DEFAULT_FRAMESPERSECOND),
                 # `companyacronym`: Company acronym of the device
-                get_elementtext("CompanyAcronym"),
+                get_rowvalue("CompanyAcronym"),
                 # `vendoracronym`: Vendor acronym of the device
-                get_elementtext("VendorAcronym"),
+                get_rowvalue("VendorAcronym"),
                 # `vendordevicename`: Vendor device name of the device
-                get_elementtext("VendorDeviceName"),
+                get_rowvalue("VendorDeviceName"),
                 # `longitude`: Longitude of the device
-                MetadataCache._get_decimal(device, "Longitude"),
+                get_rowvalue("Longitude"),
                 # `latitude`: Latitude of the device
-                MetadataCache._get_decimal(device, "Latitude"),
+                get_rowvalue("Latitude"),
                 # `updatedon`: Extract the last update time for device metadata
-                MetadataCache._get_updatedon(device)
+                get_rowvalue("UpdatedOn")
             ))
 
         for device in device_records:
@@ -148,7 +185,7 @@ class MetadataCache:
         for device in device_records:
             self.deviceid_device_map[device.deviceid] = device
 
-        self.device_records: List[DeviceRecord] = device_records
+        self.device_records = device_records
 
         # Associate measurements with parent devices
         for measurement in measurement_records:
@@ -161,27 +198,26 @@ class MetadataCache:
         # Extract phasor records from PhasorDetail table rows
         phasor_records: List[PhasorRecord] = list()
 
-        for phasor in self.metadata.findall("PhasorDetail"):
-            # Get element text or empty string when value is None
-            def get_elementtext(elementname): return MetadataCache._get_elementtext(phasor, elementname)
+        for phasor in dataset["PhasorDetail"]:
+            get_rowvalue = lambda columnname, default = None: self._get_rowvalue(phasor, columnname, default)
 
             phasor_records.append(PhasorRecord(
                 # `id`: unique integer identifier for phasor
-                MetadataCache._get_int(phasor, "ID"),
+                get_rowvalue("ID"),
                 # `deviceacronym`: Alpha-numeric identifier of the associated device
-                get_elementtext("DeviceAcronym"),
+                get_rowvalue("DeviceAcronym"),
                 # `label`: Free form label for the phasor
-                get_elementtext("Label"),
+                get_rowvalue("Label"),
                 # `type`: Phasor type for the phasor
-                MetadataCache._get_char(phasor, "Type"),
+                get_rowvalue("Type", PhasorRecord.DEFAULT_TYPE),
                 # `phase`: Phasor phase for the phasor
-                MetadataCache._get_char(phasor, "Phase"),
+                get_rowvalue("Phase", PhasorRecord.DEFAULT_PHASE),
                 # `sourceindex`: Source index for the phasor
-                MetadataCache._get_int(phasor, "SourceIndex"),
+                get_rowvalue("SourceIndex"),
                 # `basekv`: BaseKV level for the phasor
-                MetadataCache._get_int(phasor, "BaseKV"),
+                get_rowvalue("BaseKV"),
                 # `updatedon`: Extract the last update time for phasor metadata
-                MetadataCache._get_updatedon(phasor)
+                get_rowvalue("UpdatedOn")
             ))
 
         # Associate phasors with parent device and associated angle/magnitude measurements
@@ -204,132 +240,32 @@ class MetadataCache:
                     magnitude.phasor = phasor
                     phasor.measurements.append(magnitude)  # Must be index 1
 
-        self.phasorRecords: List[PhasorRecord] = phasor_records
+        self.phasorRecords = phasor_records
 
-    @staticmethod
-    def _get_elementtext(elementroot, elementname: str):
-        element = elementroot.find(elementname)
-        return Empty.STRING if element is None else Empty.STRING if element.text is None else element.text.strip()
+    def _get_rowvalue(self, row: DataRow, columnname: str, default: Any = None):
+        value, err = row.value_byname(columnname)
 
-    @staticmethod
-    def _get_measurementkey(elementroot) -> Tuple[str, np.uint64]:
-        elementtext = MetadataCache._get_elementtext(elementroot, "ID")
+        if value is None or err is not None:
+            if default is not None:
+                return default
+            
+            if (column := row.parent.column_byname(columnname)) is None:
+                return default
+            
+            return default_datatype(column.type)
+        
+        return value
+
+    def _parse_measurementkey(self, value: str) -> Tuple[str, np.uint64]:
         defaultvalue = ("_", np.uint64(0))
 
         try:
-            parts = elementtext.split(":")
+            parts = value.split(":")
 
             if len(parts) != 2:
                 return defaultvalue
 
             return (parts[0], np.uint64(parts[1]))
-        except:
-            return defaultvalue
-
-    @staticmethod
-    def _get_guid(elementroot, elementname: str) -> UUID:
-        elementtext = MetadataCache._get_elementtext(elementroot, elementname)
-        defaultvalue = uuid1()
-
-        if elementtext == Empty.STRING:
-            return defaultvalue
-
-        try:
-            return UUID(elementtext)
-        except:
-            return defaultvalue
-
-    @staticmethod
-    def _get_int(elementroot, elementname: str) -> int:
-        elementtext = MetadataCache._get_elementtext(elementroot, elementname)
-        defaultvalue = 0
-
-        if elementtext == Empty.STRING:
-            return defaultvalue
-
-        try:
-            return int(elementtext)
-        except:
-            return defaultvalue
-
-    @staticmethod
-    def _get_float(elementroot, elementname: str) -> float:
-        elementtext = MetadataCache._get_elementtext(elementroot, elementname)
-        defaultvalue = 0.0
-
-        if elementtext == Empty.STRING:
-            return defaultvalue
-
-        try:
-            return float(elementtext)
-        except:
-            return defaultvalue
-
-    @staticmethod
-    def _get_decimal(elementroot, elementname: str) -> Decimal:
-        elementtext = MetadataCache._get_elementtext(elementroot, elementname)
-        defaultvalue = Empty.DECIMAL
-
-        if elementtext == Empty.STRING:
-            return defaultvalue
-
-        try:
-            return Decimal(elementtext)
-        except:
-            return defaultvalue
-
-    @staticmethod
-    def _get_char(elementroot, elementname: str) -> str:
-        elementtext = MetadataCache._get_elementtext(elementroot, elementname)
-        defaultvalue = " "
-
-        if elementtext == Empty.STRING:
-            return defaultvalue
-
-        try:
-            return elementtext[0]
-        except:
-            return defaultvalue
-
-    @staticmethod
-    def _get_updatedon(elementroot) -> datetime:
-        elementtext = MetadataCache._get_elementtext(elementroot, "UpdatedOn")
-        defaultvalue = datetime.utcnow()
-
-        if elementtext == Empty.STRING:
-            return defaultvalue
-
-        try:
-            # Interestingly the Python `datetime.fromisoformat` will only
-            # parse fractional seconds with 3 or 6 digits. Since in STTP
-            # metadata fractional seconds often just have 2 digits, we
-            # have to work much harder to make this parse properly.
-            timezone = None
-
-            if ":" in elementtext:
-                tzparts = elementtext.split("-")
-                count = len(tzparts)
-
-                elementtext = "-".join(tzparts[:count - 1])
-                timezone = tzparts[count - 1]
-
-            fsparts = elementtext.split(".")
-
-            if len(fsparts) == 1:
-                return datetime.fromisoformat(elementtext)
-
-            datetimepart = fsparts[0]
-            fracsecpart = fsparts[1]
-
-            if len(fracsecpart) == 3 or len(fracsecpart) == 6:
-                return datetime.fromisoformat(elementtext)
-
-            elementtext = f"{datetimepart}.{fracsecpart.ljust(3, '0')}"
-
-            if timezone is not None:
-                elementtext = f"{elementtext}-{timezone}"
-
-            return datetime.fromisoformat(elementtext)
         except:
             return defaultvalue
 
@@ -348,28 +284,16 @@ class MetadataCache:
         self.measurement_records.append(measurement)
 
     def find_measurement_signalid(self, signalid: UUID) -> Optional[MeasurementRecord]:
-        if record := self.signalid_measurement_map.get(signalid):
-            return record
-
-        return None
+        return self.signalid_measurement_map.get(signalid)
 
     def find_measurement_id(self, id: np.uint64) -> Optional[MeasurementRecord]:
-        if record := self.id_measurement_map.get(id):
-            return record
-
-        return None
+        return self.id_measurement_map.get(id)
 
     def find_measurement_pointtag(self, pointtag: str) -> Optional[MeasurementRecord]:
-        if record := self.pointtag_measurement_map.get(pointtag):
-            return record
-
-        return None
+        return self.pointtag_measurement_map.get(pointtag)
 
     def find_measurement_signalreference(self, signalreference: str) -> Optional[MeasurementRecord]:
-        if record := self.signalref_measurement_map.get(signalreference):
-            return record
-
-        return None
+        return self.signalref_measurement_map.get(signalreference)
 
     def find_measurements_signaltype(self, signaltype: SignalType, instancename: Optional[str] = None) -> List[MeasurementRecord]:
         return self.find_measurements_signaltypename(str(signaltype), instancename)
@@ -398,7 +322,7 @@ class MetadataCache:
             if instancename is None or record.instancename == instancename:
                 records.add(record)
 
-        if record := self.signalref_measurement_map.get(searchval):
+        if (record := self.signalref_measurement_map.get(searchval)) is not None:
             if instancename is None or record.instancename == instancename:
                 records.add(record)
 
@@ -410,16 +334,10 @@ class MetadataCache:
         return list(records)
 
     def find_device_acronym(self, deviceacronym: str) -> Optional[DeviceRecord]:
-        if record := self.deviceacronym_device_map.get(deviceacronym):
-            return record
-
-        return None
+        return self.deviceacronym_device_map.get(deviceacronym)
 
     def find_device_id(self, deviceid: UUID) -> Optional[DeviceRecord]:
-        if record := self.deviceid_device_map.get(deviceid):
-            return record
-
-        return None
+        return self.deviceid_device_map.get(deviceid)
 
     def find_devices(self, searchval: str) -> List[DeviceRecord]:
         records = set()

@@ -55,22 +55,22 @@ class DataTable:
         self._rows: List[DataRow] = list()
 
     # Container methods for DataTable map to rows, not columns
-    def __getitem__(self, key):
+    def __getitem__(self, key: int) -> DataRow:
         return self._rows[key]
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: int, value: DataRow):
         self._rows[key] = value
 
-    def __delitem__(self, key):
+    def __delitem__(self, key: int):
         del self._rows[key]
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._rows)
 
-    def __contains__(self, item):
+    def __contains__(self, item: DataRow) -> bool:
         return item in self._rows
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[DataRow]:
         return iter(self._rows)
 
     @property
@@ -123,7 +123,7 @@ class DataTable:
         otherwise, None is returned. Lookup is case-insensitive.
         """
 
-        if columnindex := self._columnindexes.get(columnname.upper()):
+        if (columnindex := self._columnindexes.get(columnname.upper())) is not None:
             return self.column(columnindex)
 
         return None
@@ -134,7 +134,7 @@ class DataTable:
         otherwise, -1 is returned. Lookup is case-insensitive.
         """
 
-        if column := self.column_byname(columnname):
+        if (column := self.column_byname(columnname)) is not None:
             return column.index
 
         return -1

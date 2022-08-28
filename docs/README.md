@@ -61,7 +61,13 @@ Example Output:
 Connection to 127.0.0.1:7175 established.
 Received 10,742 bytes of metadata in 0.045 seconds. Decompressing...
 Decompressed 89,963 bytes of metadata in 0.004 seconds. Parsing...
-Parsed metadata records in 0.069 seconds
+Parsed 179 metadata records in 0.215 seconds
+    Discovered:
+        1 DeviceDetail records
+        172 MeasurementDetail records
+        5 PhasorDetail records
+        1 SchemaVersion records
+Metadata schema version: 14
 Received success code in response to server command: Subscribe
 Client subscribed as compact with 20 signals.
 Receiving measurements...
