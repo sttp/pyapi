@@ -436,9 +436,10 @@ class Subscriber:
 
     def _handle_connectionterminated(self):
         # Release any blocking reader
-        self.set_newmeasurements_receiver(None)
-        self._reader.dispose()
-        self._reader = None
+        if self._reader is not None:
+            self.set_newmeasurements_receiver(None)
+            self._reader.dispose()
+            self._reader = None
 
         if self._connectionterminated_receiver is not None:
             self._connectionterminated_receiver()
