@@ -32,7 +32,7 @@ class Version:
 	Defines the STTP library API version used for data subscriber identification.
 	"""
 
-	STTP_UPDATEDON = "2022-08-25"
+	STTP_UPDATEDON = "2022-08-28"
 	"""
 	Defines when the STTP library API was last updated used for data subscriber identification.
 	"""
