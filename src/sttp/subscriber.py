@@ -268,7 +268,7 @@ class Subscriber:
         Sends a request to the data publisher indicating that the `Subscriber` would
         like new metadata. Any defined MetadataFilters will be included in request.
         """
-        
+
         ds = self._datasubscriber
 
         if len(self._config.metadatafilters) == 0:
@@ -280,7 +280,7 @@ class Subscriber:
 
         buffer[0:4] = BigEndian.from_uint32(np.uint32(len(filters)))
         buffer[4:] = filters
-        
+
         ds.send_servercommand(ServerCommand.METADATAREFRESH, buffer)
 
     def subscribe(self, filterexpression: str, settings: Settings = ...):
@@ -289,21 +289,21 @@ class Subscriber:
         streaming data from a data publisher. If the subscriber is already connected, the updated
         filter expression and subscription settings will be requested immediately; otherwise, the
         settings will be used when the connection to the data publisher is established.
-        
+
         The filterExpression defines the desired measurements for a subscription. Examples include:
-        
+
         * Directly specified signal IDs (UUID values in string format):
             38A47B0-F10B-4143-9A0A-0DBC4FFEF1E8; E4BBFE6A-35BD-4E5B-92C9-11FF913E7877
-        
+
         * Directly specified tag names:
             DOM_GPLAINS-BUS1:VH; TVA_SHELBY-BUS1:VH
-        
+
         * Directly specified identifiers in "measurement key" format:
             PPA:15; STAT:20
-        
+
         * A filter expression against a selection view:
             FILTER ActiveMeasurements WHERE Company='GPA' AND SignalType='FREQ'
-        
+
         Settings parameter controls subscription related settings.        
         """
 
@@ -344,14 +344,14 @@ class Subscriber:
         self._datasubscriber.unsubscribe()
 
     def read_measurements(self) -> MeasurementReader:
-       """
-       Sets up a new `MeasurementReader` to start reading measurements.
-       """
+        """
+        Sets up a new `MeasurementReader` to start reading measurements.
+        """
 
-       if self._reader is None:
-           self._reader = MeasurementReader(self)
+        if self._reader is None:
+            self._reader = MeasurementReader(self)
 
-       return self._reader
+        return self._reader
 
     # Local callback handlers:
 
@@ -397,9 +397,10 @@ class Subscriber:
             self.errormessage(f"Failed to parse metadata: {err}")
             return
 
-        cache = MetadataCache(metadata)
+        # Generate a record model focused implementation of parsed XML
+        # metadata with lookup maps to simplify typical metadata usages
+        self._datasubscriber.metadatacache = MetadataCache(dataset)
 
-        self._datasubscriber.metadatacache = cache
         self._show_metadatasummary(dataset, parsestarted)
 
         if self._metadatanotification_receiver is not None:
@@ -483,7 +484,7 @@ class Subscriber:
             print(message, file=sys.stderr)
         finally:
             self._consolelock.release()
-    
+
     def default_connectionestablished_receiver(self):
         """
         Implements the default handler for the connection established callback.
@@ -533,7 +534,7 @@ class Subscriber:
         Defines the callback that handles notifications that a new `SignalIndexCache` has been received.
         Assignment will take effect immediately, even while subscription is active.
         """
-        
+
         self._datasubscriber.subscriptionupdated_callback = callback
 
     def set_data_starttime_receiver(self, callback: Optional[Callable[[np.int64], None]]):
@@ -565,7 +566,7 @@ class Subscriber:
         Defines the callback that handles reception of new buffer blocks.
         Assignment will take effect immediately, even while subscription is active.
         """
-        
+
         self._datasubscriber.newbufferblocks_callback = callback
 
     def set_notification_receiver(self, callback: Optional[Callable[[str], None]]):
@@ -573,7 +574,7 @@ class Subscriber:
         Defines the callback that handles reception of a notification.
         Assignment will take effect immediately, even while subscription is active.
         """
-        
+
         self._datasubscriber.notificationreceived_callback = callback
 
     def set_historicalreadcomplete_receiver(self, callback: Optional[Callable[[], None]]):
@@ -582,7 +583,7 @@ class Subscriber:
         the end of a historical playback data stream has been reached.
         Assignment will take effect immediately, even while subscription is active.
         """
-        
+
         self._historicalreadcomplete_receiver = callback
 
     def set_connectionestablished_receiver(self, callback: Optional[Callable[[], None]]):
@@ -591,7 +592,7 @@ class Subscriber:
         Default implementation simply writes connection feedback to status message handler.
         Assignment will take effect immediately, even while subscription is active.
         """
-        
+
         self._connectionestablished_receiver = callback
 
     def set_connectionterminated_receiver(self, callback: Optional[Callable[[], None]]):
@@ -600,5 +601,5 @@ class Subscriber:
         Default implementation simply writes connection terminated feedback to error message handler.
         Assignment will take effect immediately, even while subscription is active.
         """
-        
+
         self._connectionterminated_receiver = callback

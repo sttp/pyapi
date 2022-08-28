@@ -76,7 +76,7 @@ class DataColumn:
         Gets the column `DataType` enumeration value of the `DataColumn`.
         """
 
-        return self._type
+        return self._datatype
 
     @property
     def expression(self) -> str:

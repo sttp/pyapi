@@ -81,9 +81,8 @@ class SignalIndexCache:
         Returns the signal ID Guid for the specified signalindex in the `SignalIndexCache`.
         """
 
-        # Assignment expression based lookup on dict.get() fails here when result is 0, results in false negative
-        if signalindex in self._reference:
-            return self._signalidlist[self._reference[signalindex]]
+        if (index := self._reference.get(signalindex)) is not None:
+            return self._signalidlist[index]
 
         return Empty.GUID
 
@@ -100,9 +99,8 @@ class SignalIndexCache:
         Returns the `Measurement` source string for the specified signalindex in the `SignalIndexCache`.
         """
 
-        # Assignment expression based lookup on dict.get() fails here when result is 0, results in false negative
-        if signalindex in self._reference:
-            return self._sourcelist[self._reference[signalindex]]
+        if (index := self._reference.get(signalindex)) is not None:
+            return self._sourcelist[index]
 
         return Empty.STRING
 
@@ -111,9 +109,8 @@ class SignalIndexCache:
         Returns the `Measurement` integer ID for the specified signalindex in the `SignalIndexCache`.
         """
 
-        # Assignment expression based lookup on dict.get() fails here when result is 0, results in false negative
-        if signalindex in self._reference:
-            return self._idlist[self._reference[signalindex]]
+        if (index := self._reference.get(signalindex)) is not None:
+            return self._idlist[index]
 
         return np.uint64(Limits.MAXUINT64)
 
@@ -123,9 +120,7 @@ class SignalIndexCache:
         final boolean value representing find success for the specified signalindex in the `SignalIndexCache`.
         """
 
-        # Assignment expression based lookup on dict.get() fails here when result is 0, results in false negative
-        if signalindex in self._reference:
-            index = self._reference[signalindex]
+        if (index := self._reference.get(signalindex)) is not None:
             return (self._signalidlist[index], self._sourcelist[index], self._idlist[index], True)
 
         return Empty.GUID, Empty.STRING, np.uint64(0), False
@@ -135,9 +130,8 @@ class SignalIndexCache:
         Returns the signal index for the specified signal ID Guid in the `SignalIndexCache`.
         """
 
-        # Assignment expression based lookup on dict.get() fails here when result is 0, results in false negative
-        if signalid in self._signalidcache:
-            return self._signalidcache[signalid]
+        if (signalindex := self._signalidcache.get(signalid)) is not None:
+            return signalindex
 
         return -1
 

@@ -23,7 +23,7 @@
 
 from __future__ import annotations
 from gsf import Convert, Empty, normalize_enumname
-from .datatype import DataType
+from .datatype import DataType, default_datatype
 from .datacolumn import DataColumn
 from decimal import Decimal
 from datetime import datetime
@@ -51,29 +51,35 @@ class DataRow:
         """
 
         self._parent = parent
-        self._values: List[Any] = list()
+        self._values = np.empty(parent.columncount, dtype=object)
 
-    def __getitem__(self, key):
-        value, err = self.value(key)
+    def __getitem__(self, key: Union[int, str]) -> Any:
+        if isinstance(key, str):
+            value, err = self.value_byname(key)
+        else:
+            value, err = self.value(key)
 
         if err is not None:
             raise err
         
         return value
 
-    def __setitem__(self, key, value):
-        err = self.set_value(key, value)
+    def __setitem__(self, key: Union[int, str], value: Any):
+        if isinstance(key, str):
+            err = self.set_value_byname(key, value)
+        else:
+            err = self.set_value(key, value)
 
         if err is not None:
             raise err
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self._values)
 
-    def __contains__(self, item):
+    def __contains__(self, item: Any) -> bool:
         return item in self._values
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[Any]:
         return iter(self._values)
 
     @property
@@ -85,17 +91,13 @@ class DataRow:
         return self._parent
 
     def _get_columnindex(self, columnname: str) -> Tuple[int, Optional[Exception]]:
-        column = self._parent.column_byname(columnname)
-
-        if column is not None:
+        if (column := self._parent.column_byname(columnname)) is None:
             return -1, ValueError(f"column name \"{columnname}\" was not found in table \"{self._parent.name}\"")
 
         return column.index, None
 
     def _validate_columntype(self, columnindex: int, targettype: Union[int, DataType], read: bool) -> Tuple[Optional[DataColumn], Optional[Exception]]:
-        column = self._parent.column(columnindex)
-
-        if column is None:
+        if (column := self._parent.column(columnindex)) is None:
             return None, ValueError(f"column index {columnindex} is out of range for table \"{self._parent.name}\"")
 
         if targettype > -1 and column.type != targettype:
@@ -273,7 +275,7 @@ class DataRow:
         if column.computed:
             return self._get_computedvalue(column)
 
-        return self._values[columnindex]
+        return self._values[columnindex], None
 
     def value_byname(self, columnname: str) -> Tuple[Optional[Any], Optional[Exception]]:
         """
@@ -392,8 +394,9 @@ class DataRow:
 
         return strconv(value)
 
-    def _typevalue(self, columnindex: int, default: Any, targettype: DataType) -> Tuple[Any, bool, Optional[Exception]]:
+    def _typevalue(self, columnindex: int, targettype: DataType) -> Tuple[Any, bool, Optional[Exception]]:
         column, err = self._validate_columntype(columnindex, targettype, True)
+        default = default_datatype(targettype)
 
         if err is not None:
             return default, False, err
@@ -416,13 +419,13 @@ class DataRow:
 
         return value, False, None
 
-    def _typevalue_byname(self, columnname: str, default: Any, targettype: DataType) -> Tuple[Any, bool, Optional[Exception]]:
+    def _typevalue_byname(self, columnname: str, targettype: DataType) -> Tuple[Any, bool, Optional[Exception]]:
         index, err = self._get_columnindex(columnname)
 
         if err is not None:
-            return default, False, err
+            return default_datatype(targettype), False, err
 
-        return self._typevalue(index, default, targettype)
+        return self._typevalue(index, targettype)
 
     def stringvalue(self, columnindex: int) -> Tuple[str, bool, Optional[Exception]]:
         """
@@ -431,7 +434,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.STRING`.
         """
         
-        return self._typevalue(columnindex, Empty.STRING, DataType.STRING)
+        return self._typevalue(columnindex, DataType.STRING)
 
     def stringvalue_byname(self, columnname: str) -> Tuple[str, bool, Optional[Exception]]:
         """
@@ -440,7 +443,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.STRING`.
         """
 
-        return self._typevalue_byname(columnname, Empty.STRING, DataType.STRING)
+        return self._typevalue_byname(columnname, DataType.STRING)
 
     def booleanvalue(self, columnindex: int) -> Tuple[bool, bool, Optional[Exception]]:
         """
@@ -449,7 +452,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.BOOLEAN`.
         """
         
-        return self._typevalue(columnindex, False, DataType.BOOLEAN)
+        return self._typevalue(columnindex, DataType.BOOLEAN)
 
     def booleanvalue_byname(self, columnname: str) -> Tuple[bool, bool, Optional[Exception]]:
         """
@@ -458,7 +461,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.BOOLEAN`.
         """
 
-        return self._typevalue_byname(columnname, False, DataType.BOOLEAN)
+        return self._typevalue_byname(columnname, DataType.BOOLEAN)
 
     def datetimevalue(self, columnindex: int) -> Tuple[datetime, bool, Optional[Exception]]:
         """
@@ -467,7 +470,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.DATETIME`.
         """
         
-        return self._typevalue(columnindex, Empty.DATETIME, DataType.DATETIME)
+        return self._typevalue(columnindex, DataType.DATETIME)
 
     def datetimevalue_byname(self, columnname: str) -> Tuple[datetime, bool, Optional[Exception]]:
         """
@@ -476,7 +479,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.DATETIME`.
         """
 
-        return self._typevalue_byname(columnname, Empty.DATETIME, DataType.DATETIME)
+        return self._typevalue_byname(columnname, DataType.DATETIME)
 
     def singlevalue(self, columnindex: int) -> Tuple[np.float32, bool, Optional[Exception]]:
         """
@@ -485,7 +488,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.SINGLE`.
         """
         
-        return self._typevalue(columnindex, Empty.SINGLE, DataType.SINGLE)
+        return self._typevalue(columnindex, DataType.SINGLE)
 
     def singlevalue_byname(self, columnname: str) -> Tuple[np.float32, bool, Optional[Exception]]:
         """
@@ -494,7 +497,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.SINGLE`.
         """
 
-        return self._typevalue_byname(columnname, Empty.SINGLE, DataType.SINGLE)
+        return self._typevalue_byname(columnname, DataType.SINGLE)
 
     def doublevalue(self, columnindex: int) -> Tuple[np.float64, bool, Optional[Exception]]:
         """
@@ -503,7 +506,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.DOUBLE`.
         """
         
-        return self._typevalue(columnindex, Empty.DOUBLE, DataType.DOUBLE)
+        return self._typevalue(columnindex, DataType.DOUBLE)
 
     def doublevalue_byname(self, columnname: str) -> Tuple[np.float64, bool, Optional[Exception]]:
         """
@@ -512,7 +515,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.DOUBLE`.
         """
 
-        return self._typevalue_byname(columnname, Empty.DOUBLE, DataType.DOUBLE)
+        return self._typevalue_byname(columnname, DataType.DOUBLE)
 
     def decimalvalue(self, columnindex: int) -> Tuple[Decimal, bool, Optional[Exception]]:
         """
@@ -521,7 +524,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.DECIMAL`.
         """
         
-        return self._typevalue(columnindex, Empty.DECIMAL, DataType.DECIMAL)
+        return self._typevalue(columnindex, DataType.DECIMAL)
 
     def decimalvalue_byname(self, columnname: str) -> Tuple[Decimal, bool, Optional[Exception]]:
         """
@@ -530,7 +533,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.DECIMAL`.
         """
 
-        return self._typevalue_byname(columnname, Empty.DECIMAL, DataType.DECIMAL)
+        return self._typevalue_byname(columnname, DataType.DECIMAL)
 
     def guidvalue(self, columnindex: int) -> Tuple[UUID, bool, Optional[Exception]]:
         """
@@ -539,7 +542,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.GUID`.
         """
         
-        return self._typevalue(columnindex, Empty.DECIMAL, DataType.DECIMAL)
+        return self._typevalue(columnindex, DataType.DECIMAL)
 
     def guidvalue_byname(self, columnname: str) -> Tuple[UUID, bool, Optional[Exception]]:
         """
@@ -548,7 +551,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.GUID`.
         """
 
-        return self._typevalue_byname(columnname, Empty.GUID, DataType.GUID)
+        return self._typevalue_byname(columnname, DataType.GUID)
 
     def int8value(self, columnindex: int) -> Tuple[np.int8, bool, Optional[Exception]]:
         """
@@ -557,7 +560,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.INT8`.
         """
         
-        return self._typevalue(columnindex, Empty.INT8, DataType.INT8)
+        return self._typevalue(columnindex, DataType.INT8)
 
     def int8value_byname(self, columnname: str) -> Tuple[np.int8, bool, Optional[Exception]]:
         """
@@ -566,7 +569,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.INT8`.
         """
 
-        return self._typevalue_byname(columnname, Empty.INT8, DataType.INT8)
+        return self._typevalue_byname(columnname, DataType.INT8)
 
     def int16value(self, columnindex: int) -> Tuple[np.int16, bool, Optional[Exception]]:
         """
@@ -575,7 +578,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.INT16`.
         """
         
-        return self._typevalue(columnindex, Empty.INT16, DataType.INT16)
+        return self._typevalue(columnindex, DataType.INT16)
 
     def int16value_byname(self, columnname: str) -> Tuple[np.int16, bool, Optional[Exception]]:
         """
@@ -584,7 +587,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.INT16`.
         """
 
-        return self._typevalue_byname(columnname, Empty.INT16, DataType.INT16)
+        return self._typevalue_byname(columnname, DataType.INT16)
 
     def int32value(self, columnindex: int) -> Tuple[np.int32, bool, Optional[Exception]]:
         """
@@ -593,7 +596,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.INT32`.
         """
         
-        return self._typevalue(columnindex, Empty.INT32, DataType.INT32)
+        return self._typevalue(columnindex, DataType.INT32)
 
     def int32value_byname(self, columnname: str) -> Tuple[np.int32, bool, Optional[Exception]]:
         """
@@ -602,7 +605,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.INT32`.
         """
 
-        return self._typevalue_byname(columnname, Empty.INT32, DataType.INT32)
+        return self._typevalue_byname(columnname, DataType.INT32)
 
     def int64value(self, columnindex: int) -> Tuple[np.int64, bool, Optional[Exception]]:
         """
@@ -611,7 +614,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.INT64`.
         """
         
-        return self._typevalue(columnindex, Empty.INT64, DataType.INT64)
+        return self._typevalue(columnindex, DataType.INT64)
 
     def int64value_byname(self, columnname: str) -> Tuple[np.int64, bool, Optional[Exception]]:
         """
@@ -620,7 +623,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.INT64`.
         """
 
-        return self._typevalue_byname(columnname, Empty.INT64, DataType.INT64)
+        return self._typevalue_byname(columnname, DataType.INT64)
 
     def uint8value(self, columnindex: int) -> Tuple[np.uint8, bool, Optional[Exception]]:
         """
@@ -629,7 +632,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.UINT8`.
         """
         
-        return self._typevalue(columnindex, Empty.UINT8, DataType.UINT8)
+        return self._typevalue(columnindex, DataType.UINT8)
 
     def uint8value_byname(self, columnname: str) -> Tuple[np.uint8, bool, Optional[Exception]]:
         """
@@ -638,7 +641,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.UINT8`.
         """
 
-        return self._typevalue_byname(columnname, Empty.UINT8, DataType.UINT8)
+        return self._typevalue_byname(columnname, DataType.UINT8)
 
     def uint16value(self, columnindex: int) -> Tuple[np.uint16, bool, Optional[Exception]]:
         """
@@ -647,7 +650,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.UINT16`.
         """
         
-        return self._typevalue(columnindex, Empty.UINT16, DataType.UINT16)
+        return self._typevalue(columnindex, DataType.UINT16)
 
     def uint16value_byname(self, columnname: str) -> Tuple[np.uint16, bool, Optional[Exception]]:
         """
@@ -656,7 +659,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.UINT16`.
         """
 
-        return self._typevalue_byname(columnname, Empty.UINT16, DataType.UINT16)
+        return self._typevalue_byname(columnname, DataType.UINT16)
 
     def uint32value(self, columnindex: int) -> Tuple[np.uint32, bool, Optional[Exception]]:
         """
@@ -665,7 +668,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.UINT32`.
         """
         
-        return self._typevalue(columnindex, Empty.UINT32, DataType.UINT32)
+        return self._typevalue(columnindex, DataType.UINT32)
 
     def uint32value_byname(self, columnname: str) -> Tuple[np.uint32, bool, Optional[Exception]]:
         """
@@ -674,7 +677,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.UINT32`.
         """
 
-        return self._typevalue_byname(columnname, Empty.UINT32, DataType.UINT32)
+        return self._typevalue_byname(columnname, DataType.UINT32)
 
     def uint64value(self, columnindex: int) -> Tuple[np.uint64, bool, Optional[Exception]]:
         """
@@ -683,7 +686,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.UINT64`.
         """
         
-        return self._typevalue(columnindex, Empty.UINT64, DataType.UINT64)
+        return self._typevalue(columnindex, DataType.UINT64)
 
     def uint64value_byname(self, columnname: str) -> Tuple[np.uint64, bool, Optional[Exception]]:
         """
@@ -692,7 +695,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.UINT64`.
         """
 
-        return self._typevalue_byname(columnname, Empty.UINT64, DataType.UINT64)
+        return self._typevalue_byname(columnname, DataType.UINT64)
 
     def __repr__(self):
         image = []
