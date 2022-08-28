@@ -34,7 +34,6 @@ from .settings import Settings
 from .reader import MeasurementReader
 from .metadata.cache import MetadataCache
 from .metadata.record.measurement import MeasurementRecord
-from xml.etree.ElementTree import Element
 from typing import List, Optional, Callable
 from time import time
 from uuid import UUID
@@ -520,7 +519,7 @@ class Subscriber:
 
         self._errormessage_logger = callback
 
-    def set_metadatanotification_receiver(self, callback: Optional[Callable[[Element], None]]):
+    def set_metadatanotification_receiver(self, callback: Optional[Callable[[DataSet], None]]):
         """
         Defines the callback that handles reception of the metadata received notification response.
         Receiver parameter defines full XML response received from publisher.
