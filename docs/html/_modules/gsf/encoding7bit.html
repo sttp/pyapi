@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gsf.encoding7bit &mdash; STTP 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> STTP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">STTP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+          <li><a href="../gsf.html">gsf</a> &raquo;</li>
+      <li>gsf.encoding7bit</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for gsf.encoding7bit</h1><div class="highlight"><pre>
+<span></span><span class="c1"># ******************************************************************************************************</span>
+<span class="c1">#  encoding7bit.py - Gbtc</span>
+<span class="c1">#</span>
+<span class="c1">#  Copyright © 2021, Grid Protection Alliance.  All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See</span>
+<span class="c1">#  the NOTICE file distributed with this work for additional information regarding copyright ownership.</span>
+<span class="c1">#  The GPA licenses this file to you under the MIT License (MIT), the &quot;License&quot;; you may not use this</span>
+<span class="c1">#  file except in compliance with the License. You may obtain a copy of the License at:</span>
+<span class="c1">#</span>
+<span class="c1">#      http://opensource.org/licenses/MIT</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless agreed to in writing, the subject software distributed under the License is distributed on an</span>
+<span class="c1">#  &quot;AS-IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. Refer to the</span>
+<span class="c1">#  License for the specific language governing permissions and limitations.</span>
+<span class="c1">#</span>
+<span class="c1">#  Code Modification History:</span>
+<span class="c1">#  ----------------------------------------------------------------------------------------------------</span>
+<span class="c1">#  02/01/2021 - J. Ritchie Carroll</span>
+<span class="c1">#       Generated original version of source code.</span>
+<span class="c1">#</span>
+<span class="c1"># ******************************************************************************************************</span>
+
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">ByteSize</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="Encoding7Bit"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit">[docs]</a><span class="k">class</span> <span class="nc">Encoding7Bit</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines 7-bit encoding/decoding functions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Encoding7Bit.write_int16"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.write_int16">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">write_int16</span><span class="p">(</span><span class="n">stream_writer</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="nb">int</span><span class="p">],</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Writes 16-bit signed integer value using 7-bit encoding to the provided stream writer.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        stream_writer: function to write a byte value to a stream</span>
+<span class="sd">        value: 16-bit value to write</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">write_uint16</span><span class="p">(</span><span class="n">stream_writer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">INT16</span><span class="p">,</span> <span class="s2">&quot;little&quot;</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Encoding7Bit.write_uint16"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.write_uint16">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">write_uint16</span><span class="p">(</span><span class="n">stream_writer</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="nb">int</span><span class="p">],</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Writes 16-bit unsigned integer value using 7-bit encoding to the provided stream writer.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        stream_writer: function to write a byte value to a stream</span>
+<span class="sd">        value: 16-bit value to write</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">np128</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span>
+        <span class="n">np7</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">np_stream_writer</span><span class="p">(</span><span class="n">uint16</span><span class="p">):</span> <span class="k">return</span> <span class="n">stream_writer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">uint16</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1"># 1</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">|</span> <span class="n">np128</span><span class="p">)</span>  <span class="c1"># 1</span>
+        <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="n">np7</span><span class="p">)</span>  <span class="c1"># 2</span>
+        <span class="k">return</span> <span class="mi">2</span></div>
+
+<div class="viewcode-block" id="Encoding7Bit.write_int32"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.write_int32">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">write_int32</span><span class="p">(</span><span class="n">stream_writer</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="nb">int</span><span class="p">],</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Writes 32-bit signed integer value using 7-bit encoding to the provided stream writer.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        stream_writer: function to write a byte value to a stream</span>
+<span class="sd">        value: 32-bit value to write</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">write_uint32</span><span class="p">(</span><span class="n">stream_writer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="s2">&quot;little&quot;</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Encoding7Bit.write_uint32"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.write_uint32">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">write_uint32</span><span class="p">(</span><span class="n">stream_writer</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="nb">int</span><span class="p">],</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Writes 32-bit unsigned integer value using 7-bit encoding to the provided stream writer.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        stream_writer: function to write a byte value to a stream</span>
+<span class="sd">        value: 32-bit value to write</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">np128</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span>
+        <span class="n">np7</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">np_stream_writer</span><span class="p">(</span><span class="n">uint32</span><span class="p">):</span> <span class="k">return</span> <span class="n">stream_writer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">uint32</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1"># 1</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">|</span> <span class="n">np128</span><span class="p">)</span>  <span class="c1"># 1</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="n">np7</span><span class="p">)</span>  <span class="c1"># 2</span>
+            <span class="k">return</span> <span class="mi">2</span>
+
+        <span class="n">np_stream_writer</span><span class="p">((</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="n">np7</span><span class="p">)</span> <span class="o">|</span> <span class="n">np128</span><span class="p">)</span>  <span class="c1"># 2</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>  <span class="c1"># 3</span>
+            <span class="k">return</span> <span class="mi">3</span>
+
+        <span class="n">np_stream_writer</span><span class="p">((</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span> <span class="o">|</span> <span class="n">np128</span><span class="p">)</span>  <span class="c1"># 3</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>  <span class="c1"># 4</span>
+            <span class="k">return</span> <span class="mi">4</span>
+
+        <span class="n">np_stream_writer</span><span class="p">((</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span> <span class="o">|</span> <span class="n">np128</span><span class="p">)</span>  <span class="c1"># 4</span>
+        <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>  <span class="c1"># 5</span>
+        <span class="k">return</span> <span class="mi">5</span></div>
+
+<div class="viewcode-block" id="Encoding7Bit.write_int64"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.write_int64">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">write_int64</span><span class="p">(</span><span class="n">stream_writer</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="nb">int</span><span class="p">],</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Writes 64-bit signed integer value using 7-bit encoding to the provided stream writer.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        stream_writer: function to write a byte value to a stream</span>
+<span class="sd">        value: 64-bit value to write</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">write_uint64</span><span class="p">(</span><span class="n">stream_writer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="s2">&quot;little&quot;</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="Encoding7Bit.write_uint64"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.write_uint64">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">write_uint64</span><span class="p">(</span><span class="n">stream_writer</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="nb">int</span><span class="p">],</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Writes 64-bit unsigned integer value using 7-bit encoding to the provided stream writer.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        stream_writer: function to write a byte value to a stream</span>
+<span class="sd">        value: 64-bit value to write</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">np128</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span>
+        <span class="n">np7</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">np_stream_writer</span><span class="p">(</span><span class="n">uint64</span><span class="p">):</span> <span class="k">return</span> <span class="n">stream_writer</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">uint64</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>  <span class="c1"># 1</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">|</span> <span class="n">np128</span><span class="p">)</span>  <span class="c1"># 1</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="n">np7</span><span class="p">)</span>  <span class="c1"># 2</span>
+            <span class="k">return</span> <span class="mi">2</span>
+
+        <span class="n">np_stream_writer</span><span class="p">((</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="n">np7</span><span class="p">)</span> <span class="o">|</span> <span class="n">np128</span><span class="p">)</span>  <span class="c1"># 2</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>  <span class="c1"># 3</span>
+            <span class="k">return</span> <span class="mi">3</span>
+
+        <span class="n">np_stream_writer</span><span class="p">((</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span> <span class="o">|</span> <span class="n">np128</span><span class="p">)</span>  <span class="c1"># 3</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>  <span class="c1"># 4</span>
+            <span class="k">return</span> <span class="mi">4</span>
+
+        <span class="n">np_stream_writer</span><span class="p">((</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span> <span class="o">|</span> <span class="n">np128</span><span class="p">)</span>  <span class="c1"># 4</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>  <span class="c1"># 5</span>
+            <span class="k">return</span> <span class="mi">5</span>
+
+        <span class="n">np_stream_writer</span><span class="p">((</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span> <span class="o">|</span> <span class="n">np128</span><span class="p">)</span>  <span class="c1"># 5</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>  <span class="c1"># 6</span>
+            <span class="k">return</span> <span class="mi">6</span>
+
+        <span class="n">np_stream_writer</span><span class="p">((</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span> <span class="o">|</span> <span class="n">np128</span><span class="p">)</span>  <span class="c1"># 6</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>  <span class="c1"># 7</span>
+            <span class="k">return</span> <span class="mi">7</span>
+
+        <span class="n">np_stream_writer</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span> <span class="o">|</span> <span class="n">np128</span><span class="p">)</span>  <span class="c1"># 7</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>  <span class="c1"># 8</span>
+            <span class="k">return</span> <span class="mi">8</span>
+
+        <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">)</span> <span class="o">|</span> <span class="n">np128</span><span class="p">)</span>  <span class="c1"># 8</span>
+        <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>  <span class="c1"># 9</span>
+        <span class="k">return</span> <span class="mi">9</span></div>
+
+<div class="viewcode-block" id="Encoding7Bit.read_int16"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.read_int16">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">read_int16</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reads 16-bit signed integer value using 7-bit encoding from the provided stream reader.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        stream_reader: function to read a byte value from a stream</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Call expects one to two bytes to be available in base stream.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">read_uint16</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">))</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT16</span><span class="p">,</span> <span class="s2">&quot;little&quot;</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Encoding7Bit.read_uint16"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.read_uint16">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">read_uint16</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reads 16-bit unsigned integer value using 7-bit encoding from the provided stream reader.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        stream_reader: function to read a byte value from a stream</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Call expects one to two bytes to be available in base stream.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">np128</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span>
+        <span class="n">np7</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">np_stream_reader</span><span class="p">():</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">())</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="n">np_stream_reader</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+        <span class="n">value</span> <span class="o">^=</span> <span class="p">(</span><span class="n">np_stream_reader</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">np7</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">value</span> <span class="o">^</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">(</span><span class="mh">0x80</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Encoding7Bit.read_int32"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.read_int32">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">read_int32</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reads 32-bit signed integer value using 7-bit encoding from the provided stream reader.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        stream_reader: function to read a byte value from a stream</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Call expects one to five bytes to be available in base stream.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">read_uint32</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">))</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT32</span><span class="p">,</span> <span class="s2">&quot;little&quot;</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Encoding7Bit.read_uint32"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.read_uint32">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">read_uint32</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reads 32-bit unsigned integer value using 7-bit encoding from the provided stream reader.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        stream_reader: function to read a byte value from a stream</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Call expects one to five bytes to be available in base stream.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">np128</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span>
+        <span class="n">np7</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">np_stream_reader</span><span class="p">():</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">())</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="n">np_stream_reader</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+        <span class="n">value</span> <span class="o">^=</span> <span class="p">(</span><span class="n">np_stream_reader</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">np7</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span> <span class="o">^</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0x80</span><span class="p">)</span>
+
+        <span class="n">value</span> <span class="o">^=</span> <span class="p">(</span><span class="n">np_stream_reader</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span> <span class="o">^</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0x4080</span><span class="p">)</span>
+
+        <span class="n">value</span> <span class="o">^=</span> <span class="p">(</span><span class="n">np_stream_reader</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span> <span class="o">^</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0x204080</span><span class="p">)</span>
+
+        <span class="n">value</span> <span class="o">^=</span> <span class="p">(</span><span class="n">np_stream_reader</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">value</span> <span class="o">^</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0x10204080</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Encoding7Bit.read_int64"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.read_int64">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">read_int64</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reads 64-bit signed integer value using 7-bit encoding from the provided stream reader.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        stream_writer: function to write a byte value to a stream</span>
+<span class="sd">        value: 64-bit value to write</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Call expects one to nine bytes to be available in base stream.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">read_uint64</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">))</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT64</span><span class="p">,</span> <span class="s2">&quot;little&quot;</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Encoding7Bit.read_uint64"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.read_uint64">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">read_uint64</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reads 64-bit unsigned integer value using 7-bit encoding from the provided stream reader.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        stream_writer: function to write a byte value to a stream</span>
+<span class="sd">        value: 64-bit value to write</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        Call expects one to nine bytes to be available in base stream.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">np128</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">128</span><span class="p">)</span>
+        <span class="n">np7</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">np_stream_reader</span><span class="p">():</span> <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">())</span>
+
+        <span class="n">value</span> <span class="o">=</span> <span class="n">np_stream_reader</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+        <span class="n">value</span> <span class="o">^=</span> <span class="p">(</span><span class="n">np_stream_reader</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">np7</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span> <span class="o">^</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x80</span><span class="p">)</span>
+
+        <span class="n">value</span> <span class="o">^=</span> <span class="p">(</span><span class="n">np_stream_reader</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span> <span class="o">^</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x4080</span><span class="p">)</span>
+
+        <span class="n">value</span> <span class="o">^=</span> <span class="p">(</span><span class="n">np_stream_reader</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span> <span class="o">^</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x204080</span><span class="p">)</span>
+
+        <span class="n">value</span> <span class="o">^=</span> <span class="p">(</span><span class="n">np_stream_reader</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span> <span class="o">^</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x10204080</span><span class="p">)</span>
+
+        <span class="n">value</span> <span class="o">^=</span> <span class="p">(</span><span class="n">np_stream_reader</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span> <span class="o">^</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x810204080</span><span class="p">)</span>
+
+        <span class="n">value</span> <span class="o">^=</span> <span class="p">(</span><span class="n">np_stream_reader</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span> <span class="o">^</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x40810204080</span><span class="p">)</span>
+
+        <span class="n">value</span> <span class="o">^=</span> <span class="p">(</span><span class="n">np_stream_reader</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span> <span class="o">*</span> <span class="n">np128</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span> <span class="o">^</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x2040810204080</span><span class="p">)</span>
+
+        <span class="n">value</span> <span class="o">^=</span> <span class="p">(</span><span class="n">np_stream_reader</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">value</span> <span class="o">^</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x102040810204080</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

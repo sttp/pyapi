@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sttp.metadata.cache &mdash; STTP 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> STTP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">STTP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>sttp.metadata.cache</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sttp.metadata.cache</h1><div class="highlight"><pre>
+<span></span><span class="c1"># ******************************************************************************************************</span>
+<span class="c1">#  metadata/cache.py - Gbtc</span>
+<span class="c1">#</span>
+<span class="c1">#  Copyright © 2021, Grid Protection Alliance.  All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See</span>
+<span class="c1">#  the NOTICE file distributed with this work for additional information regarding copyright ownership.</span>
+<span class="c1">#  The GPA licenses this file to you under the MIT License (MIT), the &quot;License&quot;; you may not use this</span>
+<span class="c1">#  file except in compliance with the License. You may obtain a copy of the License at:</span>
+<span class="c1">#</span>
+<span class="c1">#      http://opensource.org/licenses/MIT</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless agreed to in writing, the subject software distributed under the License is distributed on an</span>
+<span class="c1">#  &quot;AS-IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. Refer to the</span>
+<span class="c1">#  License for the specific language governing permissions and limitations.</span>
+<span class="c1">#</span>
+<span class="c1">#  Code Modification History:</span>
+<span class="c1">#  ----------------------------------------------------------------------------------------------------</span>
+<span class="c1">#  02/07/2021 - J. Ritchie Carroll</span>
+<span class="c1">#       Generated original version of source code.</span>
+<span class="c1">#</span>
+<span class="c1"># ******************************************************************************************************</span>
+
+<span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">Empty</span>
+<span class="kn">from</span> <span class="nn">..data.dataset</span> <span class="kn">import</span> <span class="n">DataSet</span>
+<span class="kn">from</span> <span class="nn">..data.datarow</span> <span class="kn">import</span> <span class="n">DataRow</span>
+<span class="kn">from</span> <span class="nn">..data.datatype</span> <span class="kn">import</span> <span class="n">default_datatype</span>
+<span class="kn">from</span> <span class="nn">.record.measurement</span> <span class="kn">import</span> <span class="n">MeasurementRecord</span><span class="p">,</span> <span class="n">SignalType</span>
+<span class="kn">from</span> <span class="nn">.record.device</span> <span class="kn">import</span> <span class="n">DeviceRecord</span>
+<span class="kn">from</span> <span class="nn">.record.phasor</span> <span class="kn">import</span> <span class="n">PhasorRecord</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span><span class="p">,</span> <span class="n">uuid1</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="MetadataCache"><a class="viewcode-back" href="../../../sttp.metadata.html#sttp.metadata.cache.MetadataCache">[docs]</a><span class="k">class</span> <span class="nc">MetadataCache</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents a collection of parsed STTP metadata records.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">:</span> <span class="n">DataSet</span> <span class="o">=</span> <span class="o">...</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">signalid_measurement_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">MeasurementRecord</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines map of unique measurement signal IDs to measurement records.</span>
+<span class="sd">        Measurement signal IDs (a UUID) are typically unique across disparate systems.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">id_measurement_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">,</span> <span class="n">MeasurementRecord</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines map of measurement key IDs to measurement records.</span>
+<span class="sd">        Measurement key IDs are typically unique for a given publisher.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pointtag_measurement_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MeasurementRecord</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines map of measurement point tags to measurement records.</span>
+<span class="sd">        Measurement point tags are typically unique for a given publisher.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">signalref_measurement_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">MeasurementRecord</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines map of measurement signal references to measurement records.</span>
+<span class="sd">        Measurement signal references are typically unique for a given publisher.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">deviceacronym_device_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DeviceRecord</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines map of device acronym to device records.</span>
+<span class="sd">        Device acronyms are typically unique for a given publisher.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">deviceid_device_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">DeviceRecord</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines map of unique device IDs to device records.</span>
+<span class="sd">        Device IDs (a UUID) are typically unique across disparate systems.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">measurement_records</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">MeasurementRecord</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines list of measurement records in the cache.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">device_records</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DeviceRecord</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines list of device records in the cache.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phasorRecords</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PhasorRecord</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines list of phasor records in the cache.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">dataset</span> <span class="ow">is</span> <span class="o">...</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Extract measurement records from MeasurementDetail table rows</span>
+        <span class="n">measurement_records</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">MeasurementRecord</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">measurement</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;MeasurementDetail&quot;</span><span class="p">]:</span>
+            <span class="n">get_rowvalue</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">columnname</span><span class="p">,</span> <span class="n">default</span> <span class="o">=</span> <span class="kc">None</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_rowvalue</span><span class="p">(</span><span class="n">measurement</span><span class="p">,</span> <span class="n">columnname</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+
+            <span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="nb">id</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_measurementkey</span><span class="p">(</span><span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">,</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span><span class="p">))</span>
+
+            <span class="n">measurement_records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MeasurementRecord</span><span class="p">(</span>
+                <span class="c1"># `signalid`: Extract signal ID, the unique measurement guid</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;SignalID&quot;</span><span class="p">,</span> <span class="n">uuid1</span><span class="p">()),</span>
+                <span class="c1"># &#39;adder&#39;: Extract the measurement adder</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;Adder&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)),</span>
+                <span class="c1"># &#39;multiplier&#39;: Extract the measurement multiplier</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;Multiplier&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)),</span>
+                <span class="c1"># `id`: STTP numeric point ID of measurement (from measurement key)</span>
+                <span class="nb">id</span><span class="p">,</span>
+                <span class="c1"># `source`: Source instance name of measurement (from measurement key)</span>
+                <span class="n">source</span><span class="p">,</span>
+                <span class="c1"># `signaltypename`: Extract the measurement signal type name</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;SignalAcronym&quot;</span><span class="p">,</span> <span class="s2">&quot;UNKN&quot;</span><span class="p">),</span>
+                <span class="c1"># `signalreference`: Extract the measurement signal reference</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;SignalReference&quot;</span><span class="p">),</span>
+                <span class="c1"># `pointtag`: Extract the measurement point tag</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;PointTag&quot;</span><span class="p">),</span>
+                <span class="c1"># `deviceacronym`: Extract the measurement&#39;s parent device acronym</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;DeviceAcronym&quot;</span><span class="p">),</span>
+                <span class="c1"># `description`: Extract the measurement description name</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;Description&quot;</span><span class="p">),</span>
+                <span class="c1"># `updatedon`: Extract the last update time for measurement metadata</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;UpdatedOn&quot;</span><span class="p">)</span>
+            <span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">measurement</span> <span class="ow">in</span> <span class="n">measurement_records</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id_measurement_map</span><span class="p">[</span><span class="n">measurement</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">measurement</span>
+
+        <span class="k">for</span> <span class="n">measurement</span> <span class="ow">in</span> <span class="n">measurement_records</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">signalid_measurement_map</span><span class="p">[</span><span class="n">measurement</span><span class="o">.</span><span class="n">signalid</span><span class="p">]</span> <span class="o">=</span> <span class="n">measurement</span>
+
+        <span class="k">for</span> <span class="n">measurement</span> <span class="ow">in</span> <span class="n">measurement_records</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pointtag_measurement_map</span><span class="p">[</span><span class="n">measurement</span><span class="o">.</span><span class="n">pointtag</span><span class="p">]</span> <span class="o">=</span> <span class="n">measurement</span>
+
+        <span class="k">for</span> <span class="n">measurement</span> <span class="ow">in</span> <span class="n">measurement_records</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">signalref_measurement_map</span><span class="p">[</span><span class="n">measurement</span><span class="o">.</span><span class="n">signalreference</span><span class="p">]</span> <span class="o">=</span> <span class="n">measurement</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">measurement_records</span> <span class="o">=</span> <span class="n">measurement_records</span>
+
+        <span class="c1"># Extract device records from DeviceDetail table rows</span>
+        <span class="n">device_records</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DeviceRecord</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">default_nodeid</span> <span class="o">=</span> <span class="n">uuid1</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;DeviceDetail&quot;</span><span class="p">]:</span>
+            <span class="n">get_rowvalue</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">columnname</span><span class="p">,</span> <span class="n">default</span> <span class="o">=</span> <span class="kc">None</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_rowvalue</span><span class="p">(</span><span class="n">device</span><span class="p">,</span> <span class="n">columnname</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+
+            <span class="n">device_records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">DeviceRecord</span><span class="p">(</span>
+                <span class="c1"># `nodeid`: Extract node ID guid for the device</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;NodeID&quot;</span><span class="p">,</span> <span class="n">default_nodeid</span><span class="p">),</span>
+                <span class="c1"># `deviceid`: Extract device ID, the unique device guid</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;UniqueID&quot;</span><span class="p">,</span> <span class="n">uuid1</span><span class="p">()),</span>
+                <span class="c1"># `acronym`: Alpha-numeric identifier of the device</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;Acronym&quot;</span><span class="p">),</span>
+                <span class="c1"># `name`: Free form name for the device</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">),</span>
+                <span class="c1"># `accessid`: Access ID for the device</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;AccessID&quot;</span><span class="p">),</span>
+                <span class="c1"># `parentacronym`: Alpha-numeric parent identifier of the device</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;ParentAcronym&quot;</span><span class="p">),</span>
+                <span class="c1"># `protocolname`: Protocol name of the device</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;ProtocolName&quot;</span><span class="p">),</span>
+                <span class="c1"># `framespersecond`: Data rate for the device</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;FramesPerSecond&quot;</span><span class="p">,</span> <span class="n">DeviceRecord</span><span class="o">.</span><span class="n">DEFAULT_FRAMESPERSECOND</span><span class="p">),</span>
+                <span class="c1"># `companyacronym`: Company acronym of the device</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;CompanyAcronym&quot;</span><span class="p">),</span>
+                <span class="c1"># `vendoracronym`: Vendor acronym of the device</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;VendorAcronym&quot;</span><span class="p">),</span>
+                <span class="c1"># `vendordevicename`: Vendor device name of the device</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;VendorDeviceName&quot;</span><span class="p">),</span>
+                <span class="c1"># `longitude`: Longitude of the device</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;Longitude&quot;</span><span class="p">),</span>
+                <span class="c1"># `latitude`: Latitude of the device</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;Latitude&quot;</span><span class="p">),</span>
+                <span class="c1"># `updatedon`: Extract the last update time for device metadata</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;UpdatedOn&quot;</span><span class="p">)</span>
+            <span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">device_records</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">deviceacronym_device_map</span><span class="p">[</span><span class="n">device</span><span class="o">.</span><span class="n">acronym</span><span class="p">]</span> <span class="o">=</span> <span class="n">device</span>
+
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">device_records</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">deviceid_device_map</span><span class="p">[</span><span class="n">device</span><span class="o">.</span><span class="n">deviceid</span><span class="p">]</span> <span class="o">=</span> <span class="n">device</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">device_records</span> <span class="o">=</span> <span class="n">device_records</span>
+
+        <span class="c1"># Associate measurements with parent devices</span>
+        <span class="k">for</span> <span class="n">measurement</span> <span class="ow">in</span> <span class="n">measurement_records</span><span class="p">:</span>
+            <span class="n">device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_device_acronym</span><span class="p">(</span><span class="n">measurement</span><span class="o">.</span><span class="n">deviceacronym</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">measurement</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+                <span class="n">device</span><span class="o">.</span><span class="n">measurements</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">measurement</span><span class="p">)</span>
+
+        <span class="c1"># Extract phasor records from PhasorDetail table rows</span>
+        <span class="n">phasor_records</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PhasorRecord</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">phasor</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">[</span><span class="s2">&quot;PhasorDetail&quot;</span><span class="p">]:</span>
+            <span class="n">get_rowvalue</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">columnname</span><span class="p">,</span> <span class="n">default</span> <span class="o">=</span> <span class="kc">None</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_rowvalue</span><span class="p">(</span><span class="n">phasor</span><span class="p">,</span> <span class="n">columnname</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+
+            <span class="n">phasor_records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">PhasorRecord</span><span class="p">(</span>
+                <span class="c1"># `id`: unique integer identifier for phasor</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                <span class="c1"># `deviceacronym`: Alpha-numeric identifier of the associated device</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;DeviceAcronym&quot;</span><span class="p">),</span>
+                <span class="c1"># `label`: Free form label for the phasor</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;Label&quot;</span><span class="p">),</span>
+                <span class="c1"># `type`: Phasor type for the phasor</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">,</span> <span class="n">PhasorRecord</span><span class="o">.</span><span class="n">DEFAULT_TYPE</span><span class="p">),</span>
+                <span class="c1"># `phase`: Phasor phase for the phasor</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;Phase&quot;</span><span class="p">,</span> <span class="n">PhasorRecord</span><span class="o">.</span><span class="n">DEFAULT_PHASE</span><span class="p">),</span>
+                <span class="c1"># `sourceindex`: Source index for the phasor</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;SourceIndex&quot;</span><span class="p">),</span>
+                <span class="c1"># `basekv`: BaseKV level for the phasor</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;BaseKV&quot;</span><span class="p">),</span>
+                <span class="c1"># `updatedon`: Extract the last update time for phasor metadata</span>
+                <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;UpdatedOn&quot;</span><span class="p">)</span>
+            <span class="p">))</span>
+
+        <span class="c1"># Associate phasors with parent device and associated angle/magnitude measurements</span>
+        <span class="k">for</span> <span class="n">phasor</span> <span class="ow">in</span> <span class="n">phasor_records</span><span class="p">:</span>
+            <span class="n">device</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_device_acronym</span><span class="p">(</span><span class="n">phasor</span><span class="o">.</span><span class="n">deviceacronym</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">phasor</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+                <span class="n">device</span><span class="o">.</span><span class="n">phasors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">phasor</span><span class="p">)</span>
+
+                <span class="n">angle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_measurement_signalreference</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">device</span><span class="o">.</span><span class="n">acronym</span><span class="si">}</span><span class="s2">-PA</span><span class="si">{</span><span class="n">phasor</span><span class="o">.</span><span class="n">sourceindex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">magnitude</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_measurement_signalreference</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">device</span><span class="o">.</span><span class="n">acronym</span><span class="si">}</span><span class="s2">-PM</span><span class="si">{</span><span class="n">phasor</span><span class="o">.</span><span class="n">sourceindex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">angle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">magnitude</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">phasor</span><span class="o">.</span><span class="n">measurements</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+                    <span class="n">angle</span><span class="o">.</span><span class="n">phasor</span> <span class="o">=</span> <span class="n">phasor</span>
+                    <span class="n">phasor</span><span class="o">.</span><span class="n">measurements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>  <span class="c1"># Must be index 0</span>
+
+                    <span class="n">magnitude</span><span class="o">.</span><span class="n">phasor</span> <span class="o">=</span> <span class="n">phasor</span>
+                    <span class="n">phasor</span><span class="o">.</span><span class="n">measurements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">magnitude</span><span class="p">)</span>  <span class="c1"># Must be index 1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phasorRecords</span> <span class="o">=</span> <span class="n">phasor_records</span>
+
+    <span class="k">def</span> <span class="nf">_get_rowvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span> <span class="n">DataRow</span><span class="p">,</span> <span class="n">columnname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">value</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">value_byname</span><span class="p">(</span><span class="n">columnname</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">err</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">default</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">default</span>
+            
+            <span class="k">if</span> <span class="p">(</span><span class="n">column</span> <span class="o">:=</span> <span class="n">row</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">column_byname</span><span class="p">(</span><span class="n">columnname</span><span class="p">))</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">default</span>
+            
+            <span class="k">return</span> <span class="n">default_datatype</span><span class="p">(</span><span class="n">column</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="nf">_parse_measurementkey</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">]:</span>
+        <span class="n">defaultvalue</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">parts</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">defaultvalue</span>
+
+            <span class="k">return</span> <span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">defaultvalue</span>
+
+<div class="viewcode-block" id="MetadataCache.add_measurement"><a class="viewcode-back" href="../../../sttp.metadata.html#sttp.metadata.cache.MetadataCache.add_measurement">[docs]</a>    <span class="k">def</span> <span class="nf">add_measurement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurement</span><span class="p">:</span> <span class="n">MeasurementRecord</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">signalid_measurement_map</span><span class="p">[</span><span class="n">measurement</span><span class="o">.</span><span class="n">signalid</span><span class="p">]</span> <span class="o">=</span> <span class="n">measurement</span>
+
+        <span class="k">if</span> <span class="n">measurement</span><span class="o">.</span><span class="n">id</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">id_measurement_map</span><span class="p">[</span><span class="n">measurement</span><span class="o">.</span><span class="n">id</span><span class="p">]</span> <span class="o">=</span> <span class="n">measurement</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">measurement</span><span class="o">.</span><span class="n">pointtag</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pointtag_measurement_map</span><span class="p">[</span><span class="n">measurement</span><span class="o">.</span><span class="n">pointtag</span><span class="p">]</span> <span class="o">=</span> <span class="n">measurement</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">measurement</span><span class="o">.</span><span class="n">signalreference</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">signalref_measurement_map</span><span class="p">[</span><span class="n">measurement</span><span class="o">.</span><span class="n">signalreference</span><span class="p">]</span> <span class="o">=</span> <span class="n">measurement</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">measurement_records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">measurement</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MetadataCache.find_measurement_signalid"><a class="viewcode-back" href="../../../sttp.metadata.html#sttp.metadata.cache.MetadataCache.find_measurement_signalid">[docs]</a>    <span class="k">def</span> <span class="nf">find_measurement_signalid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signalid</span><span class="p">:</span> <span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MeasurementRecord</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">signalid_measurement_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">signalid</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MetadataCache.find_measurement_id"><a class="viewcode-back" href="../../../sttp.metadata.html#sttp.metadata.cache.MetadataCache.find_measurement_id">[docs]</a>    <span class="k">def</span> <span class="nf">find_measurement_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MeasurementRecord</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">id_measurement_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MetadataCache.find_measurement_pointtag"><a class="viewcode-back" href="../../../sttp.metadata.html#sttp.metadata.cache.MetadataCache.find_measurement_pointtag">[docs]</a>    <span class="k">def</span> <span class="nf">find_measurement_pointtag</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pointtag</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MeasurementRecord</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointtag_measurement_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">pointtag</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MetadataCache.find_measurement_signalreference"><a class="viewcode-back" href="../../../sttp.metadata.html#sttp.metadata.cache.MetadataCache.find_measurement_signalreference">[docs]</a>    <span class="k">def</span> <span class="nf">find_measurement_signalreference</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signalreference</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MeasurementRecord</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">signalref_measurement_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">signalreference</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MetadataCache.find_measurements_signaltype"><a class="viewcode-back" href="../../../sttp.metadata.html#sttp.metadata.cache.MetadataCache.find_measurements_signaltype">[docs]</a>    <span class="k">def</span> <span class="nf">find_measurements_signaltype</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signaltype</span><span class="p">:</span> <span class="n">SignalType</span><span class="p">,</span> <span class="n">instancename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MeasurementRecord</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_measurements_signaltypename</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">signaltype</span><span class="p">),</span> <span class="n">instancename</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MetadataCache.find_measurements_signaltypename"><a class="viewcode-back" href="../../../sttp.metadata.html#sttp.metadata.cache.MetadataCache.find_measurements_signaltypename">[docs]</a>    <span class="k">def</span> <span class="nf">find_measurements_signaltypename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signaltypename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">instancename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MeasurementRecord</span><span class="p">]:</span>
+        <span class="n">matched_records</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">MeasurementRecord</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="n">signaltypename</span> <span class="o">=</span> <span class="n">signaltypename</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+        <span class="c1">#                             012345678901</span>
+        <span class="k">if</span> <span class="n">signaltypename</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;SIGNALTYPE.&quot;</span><span class="p">):</span>
+            <span class="n">signaltypename</span> <span class="o">=</span> <span class="n">signaltypename</span><span class="p">[</span><span class="mi">11</span><span class="p">:]</span>
+
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">measurement_records</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">signaltypename</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="n">signaltypename</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">instancename</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">record</span><span class="o">.</span><span class="n">instancename</span> <span class="o">==</span> <span class="n">instancename</span><span class="p">:</span>
+                    <span class="n">matched_records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">matched_records</span></div>
+
+<div class="viewcode-block" id="MetadataCache.find_measurements"><a class="viewcode-back" href="../../../sttp.metadata.html#sttp.metadata.cache.MetadataCache.find_measurements">[docs]</a>    <span class="k">def</span> <span class="nf">find_measurements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">searchval</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">instancename</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MeasurementRecord</span><span class="p">]:</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">searchval</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointtag_measurement_map</span><span class="p">:</span>
+            <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pointtag_measurement_map</span><span class="p">[</span><span class="n">searchval</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">instancename</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">record</span><span class="o">.</span><span class="n">instancename</span> <span class="o">==</span> <span class="n">instancename</span><span class="p">:</span>
+                <span class="n">records</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">record</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">signalref_measurement_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">searchval</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">instancename</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">record</span><span class="o">.</span><span class="n">instancename</span> <span class="o">==</span> <span class="n">instancename</span><span class="p">:</span>
+                <span class="n">records</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">measurement_records</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">searchval</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">description</span> <span class="ow">or</span> <span class="n">searchval</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">deviceacronym</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">instancename</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">record</span><span class="o">.</span><span class="n">instancename</span> <span class="o">==</span> <span class="n">instancename</span><span class="p">:</span>
+                    <span class="n">records</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">records</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MetadataCache.find_device_acronym"><a class="viewcode-back" href="../../../sttp.metadata.html#sttp.metadata.cache.MetadataCache.find_device_acronym">[docs]</a>    <span class="k">def</span> <span class="nf">find_device_acronym</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deviceacronym</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DeviceRecord</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">deviceacronym_device_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">deviceacronym</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MetadataCache.find_device_id"><a class="viewcode-back" href="../../../sttp.metadata.html#sttp.metadata.cache.MetadataCache.find_device_id">[docs]</a>    <span class="k">def</span> <span class="nf">find_device_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deviceid</span><span class="p">:</span> <span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DeviceRecord</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">deviceid_device_map</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">deviceid</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="MetadataCache.find_devices"><a class="viewcode-back" href="../../../sttp.metadata.html#sttp.metadata.cache.MetadataCache.find_devices">[docs]</a>    <span class="k">def</span> <span class="nf">find_devices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">searchval</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">DeviceRecord</span><span class="p">]:</span>
+        <span class="n">records</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">searchval</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">deviceacronym_device_map</span><span class="p">:</span>
+            <span class="n">records</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deviceacronym_device_map</span><span class="p">[</span><span class="n">searchval</span><span class="p">])</span>
+
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">device_records</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">searchval</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">acronym</span> <span class="ow">or</span>
+                <span class="n">searchval</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span>
+                <span class="n">searchval</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">parentacronym</span> <span class="ow">or</span>
+                <span class="n">searchval</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">companyacronym</span> <span class="ow">or</span>
+                <span class="n">searchval</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">vendoracronym</span> <span class="ow">or</span>
+                    <span class="n">searchval</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">vendordevicename</span><span class="p">):</span>
+                <span class="n">records</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">records</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

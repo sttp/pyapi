@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sttp.transport.constants &mdash; STTP 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> STTP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">STTP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>sttp.transport.constants</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sttp.transport.constants</h1><div class="highlight"><pre>
+<span></span><span class="c1"># ******************************************************************************************************</span>
+<span class="c1">#  constants.py - Gbtc</span>
+<span class="c1">#</span>
+<span class="c1">#  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See</span>
+<span class="c1">#  the NOTICE file distributed with this work for additional information regarding copyright ownership.</span>
+<span class="c1">#  The GPA licenses this file to you under the MIT License (MIT), the &quot;License&quot;; you may not use this</span>
+<span class="c1">#  file except in compliance with the License. You may obtain a copy of the License at =</span>
+<span class="c1">#</span>
+<span class="c1">#      http =//opensource.org/licenses/MIT</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless agreed to in writing, the subject software distributed under the License is distributed on an</span>
+<span class="c1">#  &quot;AS-IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. Refer to the</span>
+<span class="c1">#  License for the specific language governing permissions and limitations.</span>
+<span class="c1">#</span>
+<span class="c1">#  Code Modification History =</span>
+<span class="c1">#  ----------------------------------------------------------------------------------------------------</span>
+<span class="c1">#  08/14/2022 - J. Ritchie Carroll</span>
+<span class="c1">#       Generated original version of source code.</span>
+<span class="c1">#</span>
+<span class="c1"># ******************************************************************************************************</span>
+
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">IntEnum</span><span class="p">,</span> <span class="n">IntFlag</span>
+
+<span class="n">MAXPACKET_SIZE</span> <span class="o">=</span> <span class="mi">32768</span>
+<span class="n">PAYLOADHEADER_SIZE</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">RESPONSEHEADER_SIZE</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">EVEN_KEY</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">ODD_KEY</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">KEY_INDEX</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">IV_INDEX</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">MISSINGCACHEWARNING_INTERVAL</span> <span class="o">=</span> <span class="mf">20.0</span>
+<span class="n">DEFAULT_LAGTIME</span> <span class="o">=</span> <span class="mf">5.0</span>
+<span class="n">DEFAULT_LEADTIME</span> <span class="o">=</span> <span class="mf">5.0</span>
+<span class="n">DEFAULT_PUBLISHINTERVAL</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+
+<div class="viewcode-block" id="StateFlags"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.constants.StateFlags">[docs]</a><span class="k">class</span> <span class="nc">StateFlags</span><span class="p">(</span><span class="n">IntFlag</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enumeration of the possible quality states of a `Measurement` value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NORMAL</span> <span class="o">=</span> <span class="mh">0x0</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a normal state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">BADDATA</span> <span class="o">=</span> <span class="mh">0x1</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a bad data state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SUSPECTDATA</span> <span class="o">=</span> <span class="mh">0x2</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a suspect data state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">OVERRANGEERROR</span> <span class="o">=</span> <span class="mh">0x4</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a over range error, i.e., unreasonable high value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">UNDERRANGEERROR</span> <span class="o">=</span> <span class="mh">0x8</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a under range error, i.e., unreasonable low value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ALARMHIGH</span> <span class="o">=</span> <span class="mh">0x10</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a alarm for high value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ALARMLOW</span> <span class="o">=</span> <span class="mh">0x20</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a alarm for low value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">WARNINGHIGH</span> <span class="o">=</span> <span class="mh">0x40</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a warning for high value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">WARNINGLOW</span> <span class="o">=</span> <span class="mh">0x80</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a warning for low value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">FLATLINEALARM</span> <span class="o">=</span> <span class="mh">0x100</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a alarm for flat-lined value, i.e., latched value test alarm.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">COMPARISONALARM</span> <span class="o">=</span> <span class="mh">0x200</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a comparison alarm, i.e., outside threshold of comparison with a real-time value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ROCALARM</span> <span class="o">=</span> <span class="mh">0x400</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a rate-of-change alarm.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">RECEIVEDASBAD</span> <span class="o">=</span> <span class="mh">0x800</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a bad value received.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CALCULATEDVALUE</span> <span class="o">=</span> <span class="mh">0x1000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a calculated value state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CALCULATIONERROR</span> <span class="o">=</span> <span class="mh">0x2000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a calculation error with the value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CALCULATIONWARNING</span> <span class="o">=</span> <span class="mh">0x4000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a calculation warning with the value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">RESERVEDQUALITYFLAG</span> <span class="o">=</span> <span class="mh">0x8000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a reserved quality.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">BADTIME</span> <span class="o">=</span> <span class="mh">0x10000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a bad time state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SUSPECTTIME</span> <span class="o">=</span> <span class="mh">0x20000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a suspect time state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">LATETIMEALARM</span> <span class="o">=</span> <span class="mh">0x40000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a late time alarm.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">FUTURETIMEALARM</span> <span class="o">=</span> <span class="mh">0x80000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a future time alarm.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">UPSAMPLED</span> <span class="o">=</span> <span class="mh">0x100000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a up-sampled state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DOWNSAMPLED</span> <span class="o">=</span> <span class="mh">0x200000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a down-sampled state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DISCARDEDVALUE</span> <span class="o">=</span> <span class="mh">0x400000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a discarded value state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">RESERVEDTIMEFLAG</span> <span class="o">=</span> <span class="mh">0x800000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a reserved time</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERDEFINEDFLAG1</span> <span class="o">=</span> <span class="mh">0x1000000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for user defined state 1.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERDEFINEDFLAG2</span> <span class="o">=</span> <span class="mh">0x2000000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for user defined state 2.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERDEFINEDFLAG3</span> <span class="o">=</span> <span class="mh">0x4000000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for user defined state 3.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERDEFINEDFLAG4</span> <span class="o">=</span> <span class="mh">0x8000000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for user defined state 4.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERDEFINEDFLAG5</span> <span class="o">=</span> <span class="mh">0x10000000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for user defined state 5.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SYSTEMERROR</span> <span class="o">=</span> <span class="mh">0x20000000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a system error state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SYSTEMWARNING</span> <span class="o">=</span> <span class="mh">0x40000000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for a system warning state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">MEASUREMENTERROR</span> <span class="o">=</span> <span class="mh">0x80000000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for an error state.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="DataPacketFlags"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.constants.DataPacketFlags">[docs]</a><span class="k">class</span> <span class="nc">DataPacketFlags</span><span class="p">(</span><span class="n">IntFlag</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enumeration of the possible flags for a data packet.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">COMPACT</span> <span class="o">=</span> <span class="mh">0x02</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines if serialized measurement is compact. Bit set = compact, bit clear = full fidelity.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CIPHERINDEX</span> <span class="o">=</span> <span class="mh">0x04</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines which cipher index to use when encrypting data packet. Bit set = use odd cipher index (i.e., 1), bit clear = use even cipher index (i.e., 0).    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">COMPRESSED</span> <span class="o">=</span> <span class="mh">0x08</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines if data packet payload is compressed. Bit set = payload compressed, bit clear = payload normal.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CACHEINDEX</span> <span class="o">=</span> <span class="mh">0x10</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines with signal index cache to use when decoding a data packet. Used by STTP version 2 or greater.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NOFLAGS</span> <span class="o">=</span> <span class="mh">0x0</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines state where there are no flags set. This would represent unsynchronized, full fidelity measurement data packets.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="ServerCommand"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.constants.ServerCommand">[docs]</a><span class="k">class</span> <span class="nc">ServerCommand</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enumeration of the possible server commands received by a `DataPublisher` and sent by a `DataSubscriber` during an STTP session.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Although the server commands and responses will be on two different paths, the response enumeration values</span>
+    <span class="c1"># are defined as distinct from the command values to make it easier to identify codes from a wire analysis.</span>
+
+    <span class="n">CONNECT</span> <span class="o">=</span> <span class="mh">0x00</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for handling connect operations. Only used as part of connection refused response.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">METADATAREFRESH</span> <span class="o">=</span> <span class="mh">0x01</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for requesting an updated set of metadata.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SUBSCRIBE</span> <span class="o">=</span> <span class="mh">0x02</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for requesting a subscription of streaming data from server based on connection string that follows.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">UNSUBSCRIBE</span> <span class="o">=</span> <span class="mh">0x03</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for requesting that server stop sending streaming data to the client and cancel the current subscription.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ROTATECIPHERKEYS</span> <span class="o">=</span> <span class="mh">0x04</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for manually requesting that server send a new set of cipher keys for data packet encryption (UDP only).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">UPDATEPROCESSINGINTERVAL</span> <span class="o">=</span> <span class="mh">0x05</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for manually requesting that server to update the processing interval with the following specified value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DEFINEOPERATIONALMODES</span> <span class="o">=</span> <span class="mh">0x06</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for establishing operational modes. As soon as connection is established, requests that server set operational modes that affect how the subscriber and publisher will communicate.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CONFIRMNOTIFICATION</span> <span class="o">=</span> <span class="mh">0x07</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for receipt of a notification. This message is sent in response to ServerResponse.Notify.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CONFIRMBUFFERBLOCK</span> <span class="o">=</span> <span class="mh">0x08</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for receipt of a buffer block measurement. This message is sent in response to ServerResponse.BufferBlock.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CONFIRMSIGNALINDEXCACHE</span> <span class="o">=</span> <span class="mh">0x0A</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for confirming the receipt of a signal index cache. This allows publisher to safely transition to next signal index cache.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERCOMMAND00</span> <span class="o">=</span> <span class="mh">0xD0</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for handling user-defined commands.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERCOMMAND01</span> <span class="o">=</span> <span class="mh">0xD1</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for handling user-defined commands.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERCOMMAND02</span> <span class="o">=</span> <span class="mh">0xD2</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for handling user-defined commands.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERCOMMAND03</span> <span class="o">=</span> <span class="mh">0xD3</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for handling user-defined commands.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERCOMMAND04</span> <span class="o">=</span> <span class="mh">0xD4</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for handling user-defined commands.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERCOMMAND05</span> <span class="o">=</span> <span class="mh">0xD5</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for handling user-defined commands.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERCOMMAND06</span> <span class="o">=</span> <span class="mh">0xD6</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for handling user-defined commands.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERCOMMAND07</span> <span class="o">=</span> <span class="mh">0xD7</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for handling user-defined commands.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERCOMMAND08</span> <span class="o">=</span> <span class="mh">0xD8</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for handling user-defined commands.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERCOMMAND09</span> <span class="o">=</span> <span class="mh">0xD9</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for handling user-defined commands.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERCOMMAND10</span> <span class="o">=</span> <span class="mh">0xDA</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for handling user-defined commands.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERCOMMAND11</span> <span class="o">=</span> <span class="mh">0xDB</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for handling user-defined commands.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERCOMMAND12</span> <span class="o">=</span> <span class="mh">0xDC</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for handling user-defined commands.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERCOMMAND13</span> <span class="o">=</span> <span class="mh">0xDD</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for handling user-defined commands.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERCOMMAND14</span> <span class="o">=</span> <span class="mh">0xDE</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for handling user-defined commands.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERCOMMAND15</span> <span class="o">=</span> <span class="mh">0xDF</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Command code for handling user-defined commands.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="ServerResponse"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.constants.ServerResponse">[docs]</a><span class="k">class</span> <span class="nc">ServerResponse</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enumeration of the possible server responses received sent by a `DataPublisher` and received by a `DataSubscriber` during an STTP session.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Although the server commands and responses will be on two different paths, the response enumeration values</span>
+    <span class="c1"># are defined as distinct from the command values to make it easier to identify codes from a wire analysis.</span>
+
+    <span class="n">SUCCEEDED</span> <span class="o">=</span> <span class="mh">0x80</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code indicating a succeeded response. Informs client that its solicited server command succeeded, original command and success message follow.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">FAILED</span> <span class="o">=</span> <span class="mh">0x81</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code indicating a failed response. Informs client that its solicited server command failed, original command and failure message follow.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DATAPACKET</span> <span class="o">=</span> <span class="mh">0x82</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code indicating a data packet. Unsolicited response informs client that a data packet follows.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">UPDATESIGNALINDEXCACHE</span> <span class="o">=</span> <span class="mh">0x83</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code indicating a signal index cache update. Unsolicited response requests that client update its runtime signal index cache with the one that follows.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">UPDATEBASETIMES</span> <span class="o">=</span> <span class="mh">0x84</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code indicating a runtime base-timestamp offsets have been updated. Unsolicited response requests that client update its runtime base-timestamp offsets with those that follow.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">UPDATECIPHERKEYS</span> <span class="o">=</span> <span class="mh">0x85</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code indicating a runtime cipher keys have been updated. Response, solicited or unsolicited, requests that client update its runtime data cipher keys with those that follow.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DATASTARTTIME</span> <span class="o">=</span> <span class="mh">0x86</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code indicating the start time of data being published. Unsolicited response provides the start time of data being processed from the first measurement.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">PROCESSINGCOMPLETE</span> <span class="o">=</span> <span class="mh">0x87</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code indicating that processing has completed. Unsolicited response provides notification that input processing has completed, typically via temporal constraint.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">BUFFERBLOCK</span> <span class="o">=</span> <span class="mh">0x88</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code indicating a buffer block. Unsolicited response informs client that a raw buffer block follows.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NOTIFICATION</span> <span class="o">=</span> <span class="mh">0x89</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code indicating a notification. Unsolicited response provides a notification message to the client.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CONFIGURATIONCHANGED</span> <span class="o">=</span> <span class="mh">0x8A</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code indicating a that the publisher configuration metadata has changed. Unsolicited response provides a notification that the publisher&#39;s source configuration has changed and that client may want to request a meta-data refresh.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERRESPONSE00</span> <span class="o">=</span> <span class="mh">0xE0</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code handling user-defined responses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERRESPONSE01</span> <span class="o">=</span> <span class="mh">0xE1</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code handling user-defined responses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERRESPONSE02</span> <span class="o">=</span> <span class="mh">0xE2</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code handling user-defined responses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERRESPONSE03</span> <span class="o">=</span> <span class="mh">0xE3</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code handling user-defined responses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERRESPONSE04</span> <span class="o">=</span> <span class="mh">0xE4</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code handling user-defined responses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERRESPONSE05</span> <span class="o">=</span> <span class="mh">0xE5</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code handling user-defined responses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERRESPONSE06</span> <span class="o">=</span> <span class="mh">0xE6</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code handling user-defined responses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERRESPONSE07</span> <span class="o">=</span> <span class="mh">0xE7</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code handling user-defined responses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERRESPONSE08</span> <span class="o">=</span> <span class="mh">0xE8</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code handling user-defined responses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERRESPONSE09</span> <span class="o">=</span> <span class="mh">0xE9</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code handling user-defined responses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERRESPONSE10</span> <span class="o">=</span> <span class="mh">0xEA</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code handling user-defined responses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERRESPONSE11</span> <span class="o">=</span> <span class="mh">0xEB</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code handling user-defined responses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERRESPONSE12</span> <span class="o">=</span> <span class="mh">0xEC</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code handling user-defined responses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERRESPONSE13</span> <span class="o">=</span> <span class="mh">0xED</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code handling user-defined responses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERRESPONSE14</span> <span class="o">=</span> <span class="mh">0xEE</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code handling user-defined responses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USERRESPONSE15</span> <span class="o">=</span> <span class="mh">0xEF</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code handling user-defined responses.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NOOP</span> <span class="o">=</span> <span class="mh">0xFF</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Response code indicating a nil-operation keep-alive ping. The command channel can remain quiet for some time, this command allows a period test of client connectivity.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="OperationalModes"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.constants.OperationalModes">[docs]</a><span class="k">class</span> <span class="nc">OperationalModes</span><span class="p">(</span><span class="n">IntFlag</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enumeration of the possible modes that affect how `DataPublisher` and `DataSubscriber` communicate during an STTP session.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Operational modes are sent from a subscriber to a publisher to request operational behaviors for the</span>
+    <span class="c1"># connection, as a result the operation modes must be sent before any other command. The publisher may</span>
+    <span class="c1"># silently refuse some requests (e.g., compression) based on its configuration. Operational modes only</span>
+    <span class="c1"># apply to fundamental protocol control.</span>
+
+    <span class="n">VERSIONMASK</span> <span class="o">=</span> <span class="mh">0x0000001F</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bit mask used to get version number of protocol. Version number is currently set to 2.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">COMPRESSIONMODEMASK</span> <span class="o">=</span> <span class="mh">0x000000E0</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bit mask used to get mode of compression. GZip and TSSC compression are the only modes currently supported. Remaining bits are reserved for future compression modes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ENCODINGMASK</span> <span class="o">=</span> <span class="mh">0x00000300</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bit mask used to get character encoding used when exchanging messages between publisher and subscriber.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">RECEIVEEXTERNALMETADATA</span> <span class="o">=</span> <span class="mh">0x02000000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bit flag used to determine whether external measurements are exchanged during metadata synchronization. Bit set = external measurements are exchanged, bit clear = no external measurements are exchanged.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">RECEIVEINTERNALMETADATA</span> <span class="o">=</span> <span class="mh">0x04000000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bit flag used to determine whether internal measurements are exchanged during metadata synchronization. Bit set = internal measurements are exchanged, bit clear = no internal measurements are exchanged.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">COMPRESSPAYLOADDATA</span> <span class="o">=</span> <span class="mh">0x20000000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bit flag used to determine whether payload data is compressed when exchanging between publisher and subscriber. Bit set = compress, bit clear = no compression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">COMPRESSSIGNALINDEXCACHE</span> <span class="o">=</span> <span class="mh">0x40000000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bit flag used to determine whether the signal index cache is compressed when exchanging between publisher and subscriber. Bit set = compress, bit clear = no compression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">COMPRESSMETADATA</span> <span class="o">=</span> <span class="mh">0x80000000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bit flag used to determine whether metadata is compressed when exchanging between publisher and subscriber. Bit set = compress, bit clear = no compression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NOFLAGS</span> <span class="o">=</span> <span class="mh">0x00000000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    State where there are no flags set.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="OperationalEncoding"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.constants.OperationalEncoding">[docs]</a><span class="k">class</span> <span class="nc">OperationalEncoding</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enumeration of the possible string encoding options of an STTP session.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">UTF16LE</span> <span class="o">=</span> <span class="mh">0x00000000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Targets little-endian 16-bit Unicode character encoding for strings (deprecated).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">UTF16BE</span> <span class="o">=</span> <span class="mh">0x00000100</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Targets big-endian 16-bit Unicode character encoding for strings (deprecated).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">UTF8</span> <span class="o">=</span> <span class="mh">0x00000200</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Targets 8-bit variable-width Unicode character encoding for strings.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="CompressionModes"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.constants.CompressionModes">[docs]</a><span class="k">class</span> <span class="nc">CompressionModes</span><span class="p">(</span><span class="n">IntFlag</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enumeration of the possible compression modes supported by STTP.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">GZIP</span> <span class="o">=</span> <span class="mh">0x00000020</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bit flag used determine if GZip compression will be used to metadata exchange.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">TSSC</span> <span class="o">=</span> <span class="mh">0x00000040</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Bit flag used determine if the time-series special compression algorithm will be used for data exchange.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NOFLAGS</span> <span class="o">=</span> <span class="mh">0x00000000</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines state where no compression will be used.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="SecurityMode"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.constants.SecurityMode">[docs]</a><span class="k">class</span> <span class="nc">SecurityMode</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enumeration of the possible security modes used by the DataPublisher to secure data sent over the command channel in STTP.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">OFF</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines security mode where data will be sent over the wire unencrypted.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">TLS</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines security mode where data will be sent over wire using Transport Layer Security (TLS).</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="ConnectStatus"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.constants.ConnectStatus">[docs]</a><span class="k">class</span> <span class="nc">ConnectStatus</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enumeration of the possible connection status results used by the SubscriberConnector.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SUCCESS</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Connection succeeded status.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">FAILED</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Connection failed status.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CANCELED</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Connection cancelled status.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

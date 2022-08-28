@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sttp.config &mdash; STTP 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> STTP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">STTP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>sttp.config</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sttp.config</h1><div class="highlight"><pre>
+<span></span><span class="c1"># ******************************************************************************************************</span>
+<span class="c1">#  config.py - Gbtc</span>
+<span class="c1">#</span>
+<span class="c1">#  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See</span>
+<span class="c1">#  the NOTICE file distributed with this work for additional information regarding copyright ownership.</span>
+<span class="c1">#  The GPA licenses this file to you under the MIT License (MIT), the &quot;License&quot;; you may not use this</span>
+<span class="c1">#  file except in compliance with the License. You may obtain a copy of the License at:</span>
+<span class="c1">#</span>
+<span class="c1">#      http://opensource.org/licenses/MIT</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless agreed to in writing, the subject software distributed under the License is distributed on an</span>
+<span class="c1">#  &quot;AS-IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. Refer to the</span>
+<span class="c1">#  License for the specific language governing permissions and limitations.</span>
+<span class="c1">#</span>
+<span class="c1">#  Code Modification History:</span>
+<span class="c1">#  ----------------------------------------------------------------------------------------------------</span>
+<span class="c1">#  08/23/2022 - J. Ritchie Carroll</span>
+<span class="c1">#       Generated original version of source code.</span>
+<span class="c1">#</span>
+<span class="c1"># ******************************************************************************************************</span>
+
+<span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">Empty</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<div class="viewcode-block" id="Config"><a class="viewcode-back" href="../../sttp.html#sttp.config.Config">[docs]</a><span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines the STTP connection related configuration parameters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DEFAULT_MAXRETRIES</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">DEFAULT_RETRYINTERVAL</span><span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">DEFAULT_MAXRETRYINTERVAL</span><span class="o">=</span> <span class="mf">30.0</span>
+    <span class="n">DEFAULT_AUTORECONNECT</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">DEFAULT_AUTOREQUESTMETADATA</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">DEFAULT_AUTOSUBSCRIBE</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">DEFAULT_COMPRESS_PAYLOADDATA</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">DEFAULT_COMPRESS_METADATA</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">DEFAULT_COMPRESS_SIGNALINDEXCACHE</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">DEFAULT_METADATAFILTERS</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="n">DEFAULT_VERSION</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">byte</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">maxretries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">retryinterval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">maxretryinterval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">autoreconnect</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">autorequestmetadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">autosubscribe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">compress_payloaddata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">compress_metadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">compress_signalindexcache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">metadatafilters</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">version</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">byte</span> <span class="o">=</span> <span class="o">...</span>
+                <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a new `Config` instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxretries</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">DEFAULT_MAXRETRIES</span> <span class="k">if</span> <span class="n">maxretries</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">maxretries</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the maximum number of times to retry a connection.</span>
+<span class="sd">	    Set value to -1 to retry infinitely.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">retryinterval</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">DEFAULT_RETRYINTERVAL</span> <span class="k">if</span> <span class="n">retryinterval</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">retryinterval</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the base retry interval, in seconds. Retries will exponentially back-off</span>
+<span class="sd">        starting from this interval.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxretryinterval</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">DEFAULT_MAXRETRYINTERVAL</span> <span class="k">if</span> <span class="n">maxretryinterval</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">maxretryinterval</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the maximum retry interval, in seconds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoreconnect</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">DEFAULT_AUTORECONNECT</span> <span class="k">if</span> <span class="n">autoreconnect</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">autoreconnect</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines flag that determines if connections should be automatically reattempted.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">autorequestmetadata</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">DEFAULT_AUTOREQUESTMETADATA</span> <span class="k">if</span> <span class="n">autorequestmetadata</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">autorequestmetadata</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the flag that determines if metadata should be automatically requested</span>
+<span class="sd">        upon successful connection. When True, metadata will be requested upon connection</span>
+<span class="sd">        before subscription; otherwise, any metadata operations must be handled manually.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">autosubscribe</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">DEFAULT_AUTOSUBSCRIBE</span> <span class="k">if</span> <span class="n">autosubscribe</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">autosubscribe</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the flag that determines if subscription should be handled automatically</span>
+<span class="sd">        upon successful connection. When `autorequestmetadata` is True and</span>
+<span class="sd">        `autosubscribe` is True, subscription will occur after reception of metadata.</span>
+<span class="sd">        When `autorequestmetadata` is False and `autosubscribe` is True, subscription</span>
+<span class="sd">        will occur at successful connection. When `autosubscribe` is False, any</span>
+<span class="sd">        subscribe operations must be handled manually.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">compress_payloaddata</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">DEFAULT_COMPRESS_PAYLOADDATA</span> <span class="k">if</span> <span class="n">compress_payloaddata</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">compress_payloaddata</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determines whether payload data is compressed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># TODO: Temporarily disabling TSSC until implemented</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">compress_payloaddata</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">compress_metadata</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">DEFAULT_COMPRESS_METADATA</span> <span class="k">if</span> <span class="n">compress_metadata</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">compress_metadata</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determines whether the metadata transfer is compressed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">compress_signalindexcache</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">DEFAULT_COMPRESS_SIGNALINDEXCACHE</span> <span class="k">if</span> <span class="n">compress_signalindexcache</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">compress_signalindexcache</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determines whether the signal index cache is compressed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadatafilters</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">DEFAULT_METADATAFILTERS</span> <span class="k">if</span> <span class="n">metadatafilters</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">metadatafilters</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines any filters to be applied to incoming metadata to reduce total received metadata.</span>
+<span class="sd">        Each filter expression should be separated by semi-colon.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">Config</span><span class="o">.</span><span class="n">DEFAULT_VERSION</span> <span class="k">if</span> <span class="n">version</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">version</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the target STTP protocol version. This currently defaults to 2.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

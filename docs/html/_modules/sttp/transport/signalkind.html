@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sttp.transport.signalkind &mdash; STTP 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> STTP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">STTP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>sttp.transport.signalkind</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sttp.transport.signalkind</h1><div class="highlight"><pre>
+<span></span><span class="c1">#******************************************************************************************************</span>
+<span class="c1">#  signalkind.py - Gbtc</span>
+<span class="c1">#</span>
+<span class="c1">#  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See</span>
+<span class="c1">#  the NOTICE file distributed with this work for additional information regarding copyright ownership.</span>
+<span class="c1">#  The GPA licenses this file to you under the MIT License (MIT), the &quot;License&quot;; you may not use this</span>
+<span class="c1">#  file except in compliance with the License. You may obtain a copy of the License at:</span>
+<span class="c1">#</span>
+<span class="c1">#      http://opensource.org/licenses/MIT</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless agreed to in writing, the subject software distributed under the License is distributed on an</span>
+<span class="c1">#  &quot;AS-IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. Refer to the</span>
+<span class="c1">#  License for the specific language governing permissions and limitations.</span>
+<span class="c1">#</span>
+<span class="c1">#  Code Modification History:</span>
+<span class="c1">#  ----------------------------------------------------------------------------------------------------</span>
+<span class="c1">#  08/17/2022 - J. Ritchie Carroll</span>
+<span class="c1">#       Generated original version of source code.</span>
+<span class="c1">#</span>
+<span class="c1">#******************************************************************************************************</span>
+
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">IntEnum</span>
+
+
+<div class="viewcode-block" id="SignalKind"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.signalkind.SignalKind">[docs]</a><span class="k">class</span> <span class="nc">SignalKind</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enumeration of the possible kinds of signals a Measurement can represent.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ANGLE</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Angle defines a phase angle signal kind (could be a voltage or a current).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">MAGNITUDE</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Magnitude defines a phase magnitude signal kind (could be a voltage or a current).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">FREQUENCY</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Frequency defines a line frequency signal kind.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DFDT</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    DfDt defines a frequency delta over time(dF/dt) signal kind.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">STATUS</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Status defines a status flags signal kind.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DIGITAL</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Digital defines a digital value signal kind.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ANALOG</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Analog defines an analog value signal kind.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CALCULATION</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculation defines a calculated value signal kind.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">STATISTIC</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Statistic defines a statistical value signal kind.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ALARM</span> <span class="o">=</span> <span class="mi">9</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Alarm defines an alarm value signal kind.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">QUALITY</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Quality defines a quality flags signal kind.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="mi">11</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Unknown defines an undetermined signal kind.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="SignalKindEnum"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.signalkind.SignalKindEnum">[docs]</a><span class="k">class</span> <span class="nc">SignalKindEnum</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Helper functions for the `SignalKind` enumeration.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SignalKindEnum.acronym"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.signalkind.SignalKindEnum.acronym">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">acronym</span><span class="p">(</span><span class="n">signalkind</span><span class="p">:</span> <span class="n">SignalKind</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the `SignalKind` enumeration value as its two-character acronym string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">signalkind</span> <span class="o">&lt;</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">ANGLE</span> <span class="ow">or</span> <span class="n">signalkind</span> <span class="o">&gt;</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span>
+            <span class="n">signalkind</span> <span class="o">=</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">UNKNOWN</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="s2">&quot;PA&quot;</span><span class="p">,</span> <span class="s2">&quot;PM&quot;</span><span class="p">,</span> <span class="s2">&quot;FQ&quot;</span><span class="p">,</span> <span class="s2">&quot;DF&quot;</span><span class="p">,</span> <span class="s2">&quot;SF&quot;</span><span class="p">,</span> <span class="s2">&quot;DV&quot;</span><span class="p">,</span> <span class="s2">&quot;AV&quot;</span><span class="p">,</span> <span class="s2">&quot;CV&quot;</span><span class="p">,</span> <span class="s2">&quot;ST&quot;</span><span class="p">,</span> <span class="s2">&quot;AL&quot;</span><span class="p">,</span> <span class="s2">&quot;QF&quot;</span><span class="p">,</span> <span class="s2">&quot;??&quot;</span><span class="p">][</span><span class="n">signalkind</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SignalKindEnum.signaltype"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.signalkind.SignalKindEnum.signaltype">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">signaltype</span><span class="p">(</span><span class="n">signalkind</span><span class="p">:</span> <span class="n">SignalKind</span><span class="p">,</span> <span class="n">phasortype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the specific four-character signal type acronym for a &#39;SignalKind&#39;</span>
+<span class="sd">        enumeration value and phasor type, i.e., &quot;V&quot; voltage or &quot;I&quot; current.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        signalkind: The `SignalKind` enumeration value for the acronym.</span>
+<span class="sd">        phasortype: &quot;V&quot; for voltage or &quot;I&quot; for current when `signalkind` is `SignalKind.ANGLE` or `SignalKind.MAGNITUDE`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">signalkind</span> <span class="o">&lt;</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">ANGLE</span> <span class="ow">or</span> <span class="n">signalkind</span> <span class="o">&gt;</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span>
+            <span class="n">signalkind</span> <span class="o">=</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">UNKNOWN</span>
+
+        <span class="n">phasortype</span> <span class="o">=</span> <span class="s2">&quot;?&quot;</span> <span class="k">if</span> <span class="n">phasortype</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">phasortype</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">phasortype</span><span class="si">}</span><span class="s2">PHA&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">phasortype</span><span class="si">}</span><span class="s2">PHM&quot;</span><span class="p">,</span> <span class="s2">&quot;FREQ&quot;</span><span class="p">,</span> <span class="s2">&quot;DFDT&quot;</span><span class="p">,</span> <span class="s2">&quot;FLAG&quot;</span><span class="p">,</span> <span class="s2">&quot;DIGI&quot;</span><span class="p">,</span> <span class="s2">&quot;ALOG&quot;</span><span class="p">,</span> <span class="s2">&quot;CALC&quot;</span><span class="p">,</span> <span class="s2">&quot;STAT&quot;</span><span class="p">,</span> <span class="s2">&quot;ALRM&quot;</span><span class="p">,</span> <span class="s2">&quot;QUAL&quot;</span><span class="p">,</span> <span class="s2">&quot;NULL&quot;</span><span class="p">][</span><span class="n">signalkind</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="SignalKindEnum.parse_acronym"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.signalkind.SignalKindEnum.parse_acronym">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">parse_acronym</span><span class="p">(</span><span class="n">acronym</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SignalKind</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the `SignalKind` enumeration value for the specified two-character acronym.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">acronym</span> <span class="o">=</span> <span class="n">acronym</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;PA&quot;</span><span class="p">:</span>  <span class="c1"># Phase Angle</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Angle</span>
+
+        <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;PM&quot;</span><span class="p">:</span>  <span class="c1"># Phase Magnitude</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Magnitude</span>
+
+        <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;FQ&quot;</span><span class="p">:</span>  <span class="c1"># Frequency</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Frequency</span>
+
+        <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;DF&quot;</span><span class="p">:</span>  <span class="c1"># dF/dt</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">DfDt</span>
+
+        <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;SF&quot;</span><span class="p">:</span>  <span class="c1"># Status Flags</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Status</span>
+
+        <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;DV&quot;</span><span class="p">:</span>  <span class="c1"># Digital Value</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Digital</span>
+
+        <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;AV&quot;</span><span class="p">:</span>  <span class="c1"># Analog Value</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Analog</span>
+
+        <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;CV&quot;</span><span class="p">:</span>  <span class="c1"># Calculated Value</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Calculation</span>
+
+        <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;ST&quot;</span><span class="p">:</span>  <span class="c1"># Statistical Value</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Statistic</span>
+
+        <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;AL&quot;</span><span class="p">:</span>  <span class="c1"># Alarm Value</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Alarm</span>
+
+        <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;QF&quot;</span><span class="p">:</span>  <span class="c1"># Quality Flags</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Quality</span>
+
+        <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Unknown</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

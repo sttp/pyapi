@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sttp.metadata.record.measurement &mdash; STTP 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../index.html" class="icon icon-home"> STTP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">STTP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      <li>sttp.metadata.record.measurement</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sttp.metadata.record.measurement</h1><div class="highlight"><pre>
+<span></span><span class="c1"># ******************************************************************************************************</span>
+<span class="c1">#  metadata/record/measurement.py - Gbtc</span>
+<span class="c1">#</span>
+<span class="c1">#  Copyright © 2021, Grid Protection Alliance.  All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See</span>
+<span class="c1">#  the NOTICE file distributed with this work for additional information regarding copyright ownership.</span>
+<span class="c1">#  The GPA licenses this file to you under the MIT License (MIT), the &quot;License&quot;; you may not use this</span>
+<span class="c1">#  file except in compliance with the License. You may obtain a copy of the License at:</span>
+<span class="c1">#</span>
+<span class="c1">#      http://opensource.org/licenses/MIT</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless agreed to in writing, the subject software distributed under the License is distributed on an</span>
+<span class="c1">#  &quot;AS-IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. Refer to the</span>
+<span class="c1">#  License for the specific language governing permissions and limitations.</span>
+<span class="c1">#</span>
+<span class="c1">#  Code Modification History:</span>
+<span class="c1">#  ----------------------------------------------------------------------------------------------------</span>
+<span class="c1">#  02/07/2021 - J. Ritchie Carroll</span>
+<span class="c1">#       Generated original version of source code.</span>
+<span class="c1">#</span>
+<span class="c1"># ******************************************************************************************************</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">Empty</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">IntEnum</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.device</span> <span class="kn">import</span> <span class="n">DeviceRecord</span>
+    <span class="kn">from</span> <span class="nn">.phasor</span> <span class="kn">import</span> <span class="n">PhasorRecord</span>
+
+<div class="viewcode-block" id="SignalType"><a class="viewcode-back" href="../../../../sttp.metadata.record.html#sttp.metadata.record.measurement.SignalType">[docs]</a><span class="k">class</span> <span class="nc">SignalType</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents common signal types for STTP metadata. This list may</span>
+<span class="sd">    not be exhaustive for some STTP deployments. If value is set to</span>
+<span class="sd">    `UNKN`, check the string based `SignalTypeName` in the `MeasurementRecord`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">IPHM</span> <span class="o">=</span> <span class="mi">1</span>    <span class="c1"># Current phase magnitude</span>
+    <span class="n">IPHA</span> <span class="o">=</span> <span class="mi">2</span>    <span class="c1"># Current phase angle</span>
+    <span class="n">VPHM</span> <span class="o">=</span> <span class="mi">3</span>    <span class="c1"># Voltage phase magnitude</span>
+    <span class="n">VPHA</span> <span class="o">=</span> <span class="mi">4</span>    <span class="c1"># Voltage phase angle</span>
+    <span class="n">FREQ</span> <span class="o">=</span> <span class="mi">5</span>    <span class="c1"># Frequency</span>
+    <span class="n">DFDT</span> <span class="o">=</span> <span class="mi">6</span>    <span class="c1"># Frequency derivative, i.e., Δfreq / Δtime</span>
+    <span class="n">ALOG</span> <span class="o">=</span> <span class="mi">7</span>    <span class="c1"># Analog value (scalar)</span>
+    <span class="n">FLAG</span> <span class="o">=</span> <span class="mi">8</span>    <span class="c1"># Status flags (16-bit)</span>
+    <span class="n">DIGI</span> <span class="o">=</span> <span class="mi">9</span>    <span class="c1"># Digital value (16-bit)</span>
+    <span class="n">CALC</span> <span class="o">=</span> <span class="mi">10</span>   <span class="c1"># Calculated value</span>
+    <span class="n">STAT</span> <span class="o">=</span> <span class="mi">11</span>   <span class="c1"># Statistic value</span>
+    <span class="n">ALRM</span> <span class="o">=</span> <span class="mi">12</span>   <span class="c1"># Alarm state</span>
+    <span class="n">QUAL</span> <span class="o">=</span> <span class="mi">13</span>   <span class="c1"># Quality flags (16-bit)</span>
+    <span class="n">UNKN</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>   <span class="c1"># Unknown type, see `SignalTypeName`</span>
+
+<div class="viewcode-block" id="SignalType.parse"><a class="viewcode-back" href="../../../../sttp.metadata.record.html#sttp.metadata.record.measurement.SignalType.parse">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="MeasurementRecord"><a class="viewcode-back" href="../../../../sttp.metadata.record.html#sttp.metadata.record.measurement.MeasurementRecord">[docs]</a><span class="k">class</span> <span class="nc">MeasurementRecord</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents a record of measurement metadata in the STTP.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    The `MeasurementRecord` defines  ancillary information associated with a `Measurement`.</span>
+<span class="sd">    Metadata gets cached in a registry associated with a `DataSubscriber`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DEFAULT_SIGNALID</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">GUID</span>
+    <span class="n">DEFAULT_ADDER</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">DEFAULT_MULTIPLIER</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">DEFAULT_ID</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">DEFAULT_SOURCE</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="n">DEFAULT_SIGNALTYPENAME</span> <span class="o">=</span> <span class="s2">&quot;UNKN&quot;</span>
+    <span class="n">DEFAULT_SIGNALREFERENCE</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="n">DEFAULT_POINTTAG</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="n">DEFAULT_DEVICEACRONYM</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="n">DEFAULT_DESCRIPTION</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="n">DEFAULT_UPDATEDON</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">DATETIME</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">signalid</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span>
+                 <span class="n">adder</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">multiplier</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="nb">id</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">source</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">signaltypename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">signalreference</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">pointtag</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">deviceacronym</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">description</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">updatedon</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="o">...</span>
+                 <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructs a new `MeasurementRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signalid</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_SIGNALID</span> <span class="k">if</span> <span class="n">signalid</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">signalid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_adder</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_ADDER</span> <span class="k">if</span> <span class="n">adder</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">adder</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_multiplier</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_MULTIPLIER</span> <span class="k">if</span> <span class="n">multiplier</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">multiplier</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_ID</span> <span class="k">if</span> <span class="nb">id</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="nb">id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_source</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_SOURCE</span> <span class="k">if</span> <span class="n">source</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signaltypename</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_SIGNALTYPENAME</span> <span class="k">if</span> <span class="n">signaltypename</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">signaltypename</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_signaltype</span> <span class="o">=</span> <span class="n">SignalType</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_signaltypename</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_signaltype</span> <span class="o">=</span> <span class="n">SignalType</span><span class="o">.</span><span class="n">UNKN</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signalreference</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_SIGNALREFERENCE</span> <span class="k">if</span> <span class="n">signalreference</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">signalreference</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pointtag</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_POINTTAG</span> <span class="k">if</span> <span class="n">pointtag</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">pointtag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_deviceacronym</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_DEVICEACRONYM</span> <span class="k">if</span> <span class="n">deviceacronym</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">deviceacronym</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_description</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_DESCRIPTION</span> <span class="k">if</span> <span class="n">description</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">description</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_updatedOn</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_UPDATEDON</span> <span class="k">if</span> <span class="n">updatedon</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">updatedon</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DeviceRecord</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the associated `DeviceRecord` for this `MeasurementRecord`.</span>
+<span class="sd">        Set to `None` if not applicable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phasor</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PhasorRecord</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the associated `PhasorRecord` for this `MeasurementRecord`.</span>
+<span class="sd">        Set to `None` if not applicable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">signalid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UUID</span><span class="p">:</span>  <span class="c1"># &lt;MeasurementDetail&gt;/&lt;SignalID&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the unique guid-based signal identifier for this `MeasurementRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signalid</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">adder</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">:</span>  <span class="c1"># &lt;MeasurementDetail&gt;/&lt;Adder&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the additive value modifier. Allows for linear value adjustment. Defaults to zero.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_adder</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">multiplier</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">:</span>  <span class="c1"># &lt;MeasurementDetail&gt;/&lt;Multiplier&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the multiplicative value modifier. Allows for linear value adjustment. Defaults to one.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_multiplier</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>  <span class="c1"># &lt;MeasurementDetail&gt;/&lt;ID&gt; (right part of measurement key)</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the STTP numeric ID number (from measurement key) for this `MeasurementRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">source</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;MeasurementDetail&gt;/&lt;ID&gt; (left part of measurement key)</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the STTP source instance (from measurement key) for this `MeasurementRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">signaltypename</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;MeasurementDetail&gt;/&lt;SignalAcronym&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the signal type name for this `MeasurementRecord`, e.g., &quot;FREQ&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signaltypename</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">signaltype</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SignalType</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the `SignalType` enumeration for this `MeasurementRecord`, if it can</span>
+<span class="sd">        be parsed from `signaltypename`; otherwise, returns `SignalType.UNKN`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signaltype</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">signalreference</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;MeasurementDetail&gt;/&lt;SignalReference&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the unique signal reference for this `MeasurementRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signalreference</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">pointtag</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;MeasurementDetail&gt;/&lt;PointTag&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the unique point tag for this `MeasurementRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pointtag</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">deviceacronym</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;MeasurementDetail&gt;/&lt;DeviceAcronym&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the alpha-numeric identifier of the associated device for this `MeasurementRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deviceacronym</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">description</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;MeasurementDetail&gt;/&lt;Description&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the description for this `MeasurementRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_description</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">updatedon</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>  <span class="c1"># &lt;MeasurementDetail&gt;/&lt;UpdatedOn&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the `datetime` of when this `MeasurementRecord` was last updated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updatedOn</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

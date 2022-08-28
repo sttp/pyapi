@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sttp.data package &mdash; STTP pyapi 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> STTP pyapi
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">sttp.data package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-sttp.data.datacolumn">sttp.data.datacolumn module</a></li>
+<li><a class="reference internal" href="#module-sttp.data.datarow">sttp.data.datarow module</a></li>
+<li><a class="reference internal" href="#module-sttp.data.dataset">sttp.data.dataset module</a></li>
+<li><a class="reference internal" href="#module-sttp.data.datatable">sttp.data.datatable module</a></li>
+<li><a class="reference internal" href="#module-sttp.data.datatype">sttp.data.datatype module</a></li>
+<li><a class="reference internal" href="#module-sttp.data">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">STTP pyapi</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>sttp.data package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/sttp.data.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sttp-data-package">
+<h1>sttp.data package<a class="headerlink" href="#sttp-data-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-sttp.data.datacolumn">
+<span id="sttp-data-datacolumn-module"></span><h2>sttp.data.datacolumn module<a class="headerlink" href="#module-sttp.data.datacolumn" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.data.datacolumn.DataColumn">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.data.datacolumn.</span></span><span class="sig-name descname"><span class="pre">DataColumn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.data.datatable.DataTable" title="sttp.data.datatable.DataTable"><span class="pre">DataTable</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datatype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.data.datatype.DataType" title="sttp.data.datatype.DataType"><span class="pre">DataType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">expression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/data/datacolumn.html#DataColumn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datacolumn.DataColumn" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a column, i.e., a field, in a <cite>DataTable</cite> defining a name and a data type.
+Data columns can also be computed where its value would be derived from other columns and
+functions (<a class="reference external" href="https://sttp.github.io/documentation/filter-expressions/">https://sttp.github.io/documentation/filter-expressions/</a>) defined in an expression.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.data.datacolumn.DataColumn.computed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">computed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.data.datacolumn.DataColumn.computed" title="Permalink to this definition"></a></dt>
+<dd><p>Gets a flag that determines if the <cite>DataColumn</cite> is a computed value,
+i.e., has a defined expression.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.data.datacolumn.DataColumn.expression">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">expression</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#sttp.data.datacolumn.DataColumn.expression" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the column expression value of the <cite>DataColumn</cite>, if any.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.data.datacolumn.DataColumn.index">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">index</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sttp.data.datacolumn.DataColumn.index" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the index of the <cite>DataColumn</cite> within its parent <cite>DataTable</cite> columns collection.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.data.datacolumn.DataColumn.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#sttp.data.datacolumn.DataColumn.name" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the column name of the <cite>DataColumn</cite>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.data.datacolumn.DataColumn.parent">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sttp.data.datatable.DataTable" title="sttp.data.datatable.DataTable"><span class="pre">DataTable</span></a></em><a class="headerlink" href="#sttp.data.datacolumn.DataColumn.parent" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the parent <cite>DataTable</cite> of the <cite>DataColumn</cite>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.data.datacolumn.DataColumn.type">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sttp.data.datatype.DataType" title="sttp.data.datatype.DataType"><span class="pre">DataType</span></a></em><a class="headerlink" href="#sttp.data.datacolumn.DataColumn.type" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the column <cite>DataType</cite> enumeration value of the <cite>DataColumn</cite>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-sttp.data.datarow">
+<span id="sttp-data-datarow-module"></span><h2>sttp.data.datarow module<a class="headerlink" href="#module-sttp.data.datarow" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.data.datarow.</span></span><span class="sig-name descname"><span class="pre">DataRow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.data.datatable.DataTable" title="sttp.data.datatable.DataTable"><span class="pre">DataTable</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a row, i.e., a record, in a <cite>DataTable</cite> defining a set of values for each
+defined <cite>DataColumn</cite> field in the <cite>DataTable</cite> columns collection.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.booleanvalue">
+<span class="sig-name descname"><span class="pre">booleanvalue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.booleanvalue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.booleanvalue" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the boolean-based record value at the specified column index.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.BOOLEAN</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.booleanvalue_byname">
+<span class="sig-name descname"><span class="pre">booleanvalue_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.booleanvalue_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.booleanvalue_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the boolean-based record value for the specified column name.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.BOOLEAN</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.columnvalue_as_string">
+<span class="sig-name descname"><span class="pre">columnvalue_as_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sttp.data.datacolumn.DataColumn" title="sttp.data.datacolumn.DataColumn"><span class="pre">DataColumn</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.columnvalue_as_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.columnvalue_as_string" title="Permalink to this definition"></a></dt>
+<dd><p>Reads the record value for the specified data column converted
+to a string. For any errors, an empty string will be returned.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.compare_datarowcolumns">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">compare_datarowcolumns</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">leftrow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.data.datarow.DataRow" title="sttp.data.datarow.DataRow"><span class="pre">DataRow</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">rightrow</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.data.datarow.DataRow" title="sttp.data.datarow.DataRow"><span class="pre">DataRow</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exactmatch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.compare_datarowcolumns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.compare_datarowcolumns" title="Permalink to this definition"></a></dt>
+<dd><p>Returns an integer comparing two <cite>DataRow</cite> column values for the specified column index.
+The result will be 0 if <cite>leftrow`==`rightrow</cite>, -1 if <cite>leftrow</cite> &lt; <cite>rightrow</cite>, and +1 if <cite>leftrow</cite> &gt; <cite>rightrow</cite>.
+An error will br returned if column index is out of range of either row, or row types do not match.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.datetimevalue">
+<span class="sig-name descname"><span class="pre">datetimevalue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.datetimevalue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.datetimevalue" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the datetime-based record value at the specified column index.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.DATETIME</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.datetimevalue_byname">
+<span class="sig-name descname"><span class="pre">datetimevalue_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">datetime</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.datetimevalue_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.datetimevalue_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the datetime-based record value for the specified column name.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.DATETIME</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.decimalvalue">
+<span class="sig-name descname"><span class="pre">decimalvalue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Decimal</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.decimalvalue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.decimalvalue" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the decimal-based record value at the specified column index.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.DECIMAL</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.decimalvalue_byname">
+<span class="sig-name descname"><span class="pre">decimalvalue_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Decimal</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.decimalvalue_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.decimalvalue_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the decimal-based record value for the specified column name.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.DECIMAL</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.doublevalue">
+<span class="sig-name descname"><span class="pre">doublevalue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.doublevalue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.doublevalue" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the double-based record value at the specified column index.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.DOUBLE</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.doublevalue_byname">
+<span class="sig-name descname"><span class="pre">doublevalue_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float64</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.doublevalue_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.doublevalue_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the double-based record value for the specified column name.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.DOUBLE</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.guidvalue">
+<span class="sig-name descname"><span class="pre">guidvalue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">UUID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.guidvalue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.guidvalue" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the guid-based record value at the specified column index.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.GUID</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.guidvalue_byname">
+<span class="sig-name descname"><span class="pre">guidvalue_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">UUID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.guidvalue_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.guidvalue_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the guid-based record value for the specified column name.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.GUID</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.int16value">
+<span class="sig-name descname"><span class="pre">int16value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int16</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.int16value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.int16value" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the int16-based record value at the specified column index.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.INT16</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.int16value_byname">
+<span class="sig-name descname"><span class="pre">int16value_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int16</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.int16value_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.int16value_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the int16-based record value for the specified column name.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.INT16</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.int32value">
+<span class="sig-name descname"><span class="pre">int32value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int32</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.int32value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.int32value" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the int32-based record value at the specified column index.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.INT32</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.int32value_byname">
+<span class="sig-name descname"><span class="pre">int32value_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int32</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.int32value_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.int32value_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the int32-based record value for the specified column name.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.INT32</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.int64value">
+<span class="sig-name descname"><span class="pre">int64value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int64</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.int64value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.int64value" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the int64-based record value at the specified column index.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.INT64</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.int64value_byname">
+<span class="sig-name descname"><span class="pre">int64value_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int64</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.int64value_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.int64value_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the int64-based record value for the specified column name.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.INT64</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.int8value">
+<span class="sig-name descname"><span class="pre">int8value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int8</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.int8value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.int8value" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the int8-based record value at the specified column index.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.INT8</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.int8value_byname">
+<span class="sig-name descname"><span class="pre">int8value_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int8</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.int8value_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.int8value_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the int8-based record value for the specified column name.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.INT8</cite>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.parent">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sttp.data.datatable.DataTable" title="sttp.data.datatable.DataTable"><span class="pre">DataTable</span></a></em><a class="headerlink" href="#sttp.data.datarow.DataRow.parent" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the parent <cite>DataTable</cite> of the <cite>DataRow</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.set_value">
+<span class="sig-name descname"><span class="pre">set_value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.set_value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.set_value" title="Permalink to this definition"></a></dt>
+<dd><p>Assigns the record value at the specified column index.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.set_value_byname">
+<span class="sig-name descname"><span class="pre">set_value_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.set_value_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.set_value_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Assigns the record value for the specified column name.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.singlevalue">
+<span class="sig-name descname"><span class="pre">singlevalue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float32</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.singlevalue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.singlevalue" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the single-based record value at the specified column index.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.SINGLE</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.singlevalue_byname">
+<span class="sig-name descname"><span class="pre">singlevalue_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float32</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.singlevalue_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.singlevalue_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the single-based record value for the specified column name.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.SINGLE</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.stringvalue">
+<span class="sig-name descname"><span class="pre">stringvalue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.stringvalue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.stringvalue" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the string-based record value at the specified column index.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.STRING</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.stringvalue_byname">
+<span class="sig-name descname"><span class="pre">stringvalue_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.stringvalue_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.stringvalue_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the string-based record value for the specified column name.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.STRING</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.uint16value">
+<span class="sig-name descname"><span class="pre">uint16value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">uint16</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.uint16value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.uint16value" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the uint16-based record value at the specified column index.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.UINT16</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.uint16value_byname">
+<span class="sig-name descname"><span class="pre">uint16value_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">uint16</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.uint16value_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.uint16value_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the uint16-based record value for the specified column name.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.UINT16</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.uint32value">
+<span class="sig-name descname"><span class="pre">uint32value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">uint32</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.uint32value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.uint32value" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the uint32-based record value at the specified column index.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.UINT32</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.uint32value_byname">
+<span class="sig-name descname"><span class="pre">uint32value_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">uint32</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.uint32value_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.uint32value_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the uint32-based record value for the specified column name.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.UINT32</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.uint64value">
+<span class="sig-name descname"><span class="pre">uint64value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">uint64</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.uint64value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.uint64value" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the uint64-based record value at the specified column index.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.UINT64</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.uint64value_byname">
+<span class="sig-name descname"><span class="pre">uint64value_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">uint64</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.uint64value_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.uint64value_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the uint64-based record value for the specified column name.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.UINT64</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.uint8value">
+<span class="sig-name descname"><span class="pre">uint8value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">uint8</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.uint8value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.uint8value" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the uint8-based record value at the specified column index.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.UINT8</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.uint8value_byname">
+<span class="sig-name descname"><span class="pre">uint8value_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">uint8</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.uint8value_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.uint8value_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the uint8-based record value for the specified column name.
+Second parameter in tuple return value indicates if original value was None.
+An error will be returned if column type is not <cite>DataType.UINT8</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.value">
+<span class="sig-name descname"><span class="pre">value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.value"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.value" title="Permalink to this definition"></a></dt>
+<dd><p>Reads the record value at the specified column index.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.value_as_string">
+<span class="sig-name descname"><span class="pre">value_as_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.value_as_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.value_as_string" title="Permalink to this definition"></a></dt>
+<dd><p>Reads the record value at the specified columnIndex converted to a string.
+For column index out of range or any other errors, an empty string will be returned.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.value_as_string_byname">
+<span class="sig-name descname"><span class="pre">value_as_string_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.value_as_string_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.value_as_string_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Reads the record value for the specified columnName converted to a string.
+For column name not found or any other errors, an empty string will be returned.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datarow.DataRow.value_byname">
+<span class="sig-name descname"><span class="pre">value_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datarow.html#DataRow.value_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datarow.DataRow.value_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Reads the record value for the specified column name.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-sttp.data.dataset">
+<span id="sttp-data-dataset-module"></span><h2>sttp.data.dataset module<a class="headerlink" href="#module-sttp.data.dataset" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.data.dataset.DataSet">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.data.dataset.</span></span><span class="sig-name descname"><span class="pre">DataSet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/data/dataset.html#DataSet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.dataset.DataSet" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents an in-memory cache of records that is structured similarly to information
+defined in a database. The data set object consists of a collection of data table objects.
+See <a class="reference external" href="https://sttp.github.io/documentation/data-sets/">https://sttp.github.io/documentation/data-sets/</a> for more information.
+Note that this implementation uses a if columntype ==-insensitive map for <cite>DataTable</cite> name lookups.
+Internally, if columntype ==-insensitive lookups are accomplished using <cite>str.upper()</cite>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.data.dataset.DataSet.DEFAULT_NAME">
+<span class="sig-name descname"><span class="pre">DEFAULT_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'DataSet'</span></em><a class="headerlink" href="#sttp.data.dataset.DataSet.DEFAULT_NAME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.dataset.DataSet.add_table">
+<span class="sig-name descname"><span class="pre">add_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.data.datatable.DataTable" title="sttp.data.datatable.DataTable"><span class="pre">DataTable</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/data/dataset.html#DataSet.add_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.dataset.DataSet.add_table" title="Permalink to this definition"></a></dt>
+<dd><p>Adds the specified table to the <cite>DataSet</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.dataset.DataSet.clear_tables">
+<span class="sig-name descname"><span class="pre">clear_tables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/data/dataset.html#DataSet.clear_tables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.dataset.DataSet.clear_tables" title="Permalink to this definition"></a></dt>
+<dd><p>Clears the internal table collection.
+Any existing tables will be deleted.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.dataset.DataSet.create_table">
+<span class="sig-name descname"><span class="pre">create_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sttp.data.datatable.DataTable" title="sttp.data.datatable.DataTable"><span class="pre">DataTable</span></a></span></span><a class="reference internal" href="_modules/sttp/data/dataset.html#DataSet.create_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.dataset.DataSet.create_table" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a new <cite>DataTable</cite> associated with the <cite>DataSet</cite>.
+Use <cite>add_table</cite> to add the new table to the <cite>DataSet</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.dataset.DataSet.from_xml">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_xml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bytes</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sttp.data.dataset.DataSet" title="sttp.data.dataset.DataSet"><span class="pre">DataSet</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/dataset.html#DataSet.from_xml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.dataset.DataSet.from_xml" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a new <cite>DataSet</cite> as read from the XML in the specified buffer.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.data.dataset.DataSet.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#sttp.data.dataset.DataSet.name" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the name of the <cite>DataSet</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.dataset.DataSet.parse_xml">
+<span class="sig-name descname"><span class="pre">parse_xml</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">buffer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bytes</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/dataset.html#DataSet.parse_xml"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.dataset.DataSet.parse_xml" title="Permalink to this definition"></a></dt>
+<dd><p>Loads the <cite>DataSet</cite> from the XML in the specified buffer.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.dataset.DataSet.parse_xmldoc">
+<span class="sig-name descname"><span class="pre">parse_xmldoc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">root</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespaces</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/dataset.html#DataSet.parse_xmldoc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.dataset.DataSet.parse_xmldoc" title="Permalink to this definition"></a></dt>
+<dd><p>Loads the <cite>DataSet</cite> from an existing root XML document element.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.dataset.DataSet.remove_table">
+<span class="sig-name descname"><span class="pre">remove_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tablename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/sttp/data/dataset.html#DataSet.remove_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.dataset.DataSet.remove_table" title="Permalink to this definition"></a></dt>
+<dd><p>Removes the specified table name from the <cite>DataSet</cite>. Returns
+True if table was removed; otherwise, False if it did not exist.
+Lookup is if columntype ==-insensitive.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.dataset.DataSet.table">
+<span class="sig-name descname"><span class="pre">table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tablename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sttp.data.datatable.DataTable" title="sttp.data.datatable.DataTable"><span class="pre">DataTable</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/dataset.html#DataSet.table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.dataset.DataSet.table" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the <cite>DataTable</cite> for the specified table name if it exists;
+otherwise, None is returned. Lookup is if columntype ==-insensitive.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.data.dataset.DataSet.tablecount">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">tablecount</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sttp.data.dataset.DataSet.tablecount" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the total number of tables defined in the <cite>DataSet</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.dataset.DataSet.tablenames">
+<span class="sig-name descname"><span class="pre">tablenames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/dataset.html#DataSet.tablenames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.dataset.DataSet.tablenames" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the table names defined in the <cite>DataSet</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.dataset.DataSet.tables">
+<span class="sig-name descname"><span class="pre">tables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sttp.data.datatable.DataTable" title="sttp.data.datatable.DataTable"><span class="pre">DataTable</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/dataset.html#DataSet.tables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.dataset.DataSet.tables" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the <cite>DataTable</cite> instances defined in the <cite>DataSet</cite>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="sttp.data.dataset.EXT_XMLSCHEMADATA_NAMESPACE">
+<span class="sig-prename descclassname"><span class="pre">sttp.data.dataset.</span></span><span class="sig-name descname"><span class="pre">EXT_XMLSCHEMADATA_NAMESPACE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'urn:schemas-microsoft-com:xml-msdata'</span></em><a class="headerlink" href="#sttp.data.dataset.EXT_XMLSCHEMADATA_NAMESPACE" title="Permalink to this definition"></a></dt>
+<dd><p>Defines extended types for XSD elements, e.g., Guid and expression data types.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="sttp.data.dataset.XMLSCHEMA_NAMESPACE">
+<span class="sig-prename descclassname"><span class="pre">sttp.data.dataset.</span></span><span class="sig-name descname"><span class="pre">XMLSCHEMA_NAMESPACE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'http://www.w3.org/2001/XMLSchema'</span></em><a class="headerlink" href="#sttp.data.dataset.XMLSCHEMA_NAMESPACE" title="Permalink to this definition"></a></dt>
+<dd><p>Defines schema namespace for the W3C XML Schema Definition Language (XSD) used by STTP metadata tables.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sttp.data.dataset.xsdformat">
+<span class="sig-prename descclassname"><span class="pre">sttp.data.dataset.</span></span><span class="sig-name descname"><span class="pre">xsdformat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/sttp/data/dataset.html#xsdformat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.dataset.xsdformat" title="Permalink to this definition"></a></dt>
+<dd><p>Converts date/time value to a string in XSD XML schema format.</p>
+</dd></dl>
+
+</section>
+<section id="module-sttp.data.datatable">
+<span id="sttp-data-datatable-module"></span><h2>sttp.data.datatable module<a class="headerlink" href="#module-sttp.data.datatable" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.data.datatable.</span></span><span class="sig-name descname"><span class="pre">DataTable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.data.dataset.DataSet" title="sttp.data.dataset.DataSet"><span class="pre">DataSet</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/data/datatable.html#DataTable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatable.DataTable" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a collection of <cite>DataColumn</cite> objects where each data column defines a name and a data
+type. Data columns can also be computed where its value would be derived from other columns and
+functions (<a class="reference external" href="https://sttp.github.io/documentation/filter-expressions/">https://sttp.github.io/documentation/filter-expressions/</a>) defined in an expression.
+Note that this implementation uses a case-insensitive map for <cite>DataColumn</cite> name lookups.
+Internally, case-insensitive lookups are accomplished using <cite>str.upper()</cite>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.add_column">
+<span class="sig-name descname"><span class="pre">add_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">column</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.data.datacolumn.DataColumn" title="sttp.data.datacolumn.DataColumn"><span class="pre">DataColumn</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/data/datatable.html#DataTable.add_column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatable.DataTable.add_column" title="Permalink to this definition"></a></dt>
+<dd><p>Adds the specified column to the <cite>DataTable</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.add_row">
+<span class="sig-name descname"><span class="pre">add_row</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">row</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.data.datarow.DataRow" title="sttp.data.datarow.DataRow"><span class="pre">DataRow</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/data/datatable.html#DataTable.add_row"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatable.DataTable.add_row" title="Permalink to this definition"></a></dt>
+<dd><p>Adds the specified row to the <cite>DataTable</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.clear_columns">
+<span class="sig-name descname"><span class="pre">clear_columns</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/data/datatable.html#DataTable.clear_columns"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatable.DataTable.clear_columns" title="Permalink to this definition"></a></dt>
+<dd><p>Clears the internal column collections.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.clear_rows">
+<span class="sig-name descname"><span class="pre">clear_rows</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/data/datatable.html#DataTable.clear_rows"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatable.DataTable.clear_rows" title="Permalink to this definition"></a></dt>
+<dd><p>Clears the internal row collection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.clone_column">
+<span class="sig-name descname"><span class="pre">clone_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.data.datacolumn.DataColumn" title="sttp.data.datacolumn.DataColumn"><span class="pre">DataColumn</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sttp.data.datacolumn.DataColumn" title="sttp.data.datacolumn.DataColumn"><span class="pre">DataColumn</span></a></span></span><a class="reference internal" href="_modules/sttp/data/datatable.html#DataTable.clone_column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatable.DataTable.clone_column" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a copy of the specified source <cite>DataColumn</cite> associated with the <cite>DataTable</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.clone_row">
+<span class="sig-name descname"><span class="pre">clone_row</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.data.datarow.DataRow" title="sttp.data.datarow.DataRow"><span class="pre">DataRow</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sttp.data.datarow.DataRow" title="sttp.data.datarow.DataRow"><span class="pre">DataRow</span></a></span></span><a class="reference internal" href="_modules/sttp/data/datatable.html#DataTable.clone_row"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatable.DataTable.clone_row" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a copy of the specified source <cite>DataRow</cite> associated with the <cite>DataTable</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.column">
+<span class="sig-name descname"><span class="pre">column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sttp.data.datacolumn.DataColumn" title="sttp.data.datacolumn.DataColumn"><span class="pre">DataColumn</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datatable.html#DataTable.column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatable.DataTable.column" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the <cite>DataColumn</cite> at the specified column index if the index is in range;
+otherwise, None is returned.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.column_byname">
+<span class="sig-name descname"><span class="pre">column_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sttp.data.datacolumn.DataColumn" title="sttp.data.datacolumn.DataColumn"><span class="pre">DataColumn</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datatable.html#DataTable.column_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatable.DataTable.column_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the <cite>DataColumn</cite> for the specified column name if the name exists;
+otherwise, None is returned. Lookup is case-insensitive.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.columncount">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">columncount</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sttp.data.datatable.DataTable.columncount" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the total number columns defined in the <cite>DataTable</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.columnindex">
+<span class="sig-name descname"><span class="pre">columnindex</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/sttp/data/datatable.html#DataTable.columnindex"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatable.DataTable.columnindex" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the index for the specified column name if the name exists;
+otherwise, -1 is returned. Lookup is case-insensitive.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.create_column">
+<span class="sig-name descname"><span class="pre">create_column</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datatype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.data.datatype.DataType" title="sttp.data.datatype.DataType"><span class="pre">DataType</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">expression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/data/datatable.html#DataTable.create_column"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatable.DataTable.create_column" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a new <cite>DataColumn</cite> associated with the <cite>DataTable</cite>.
+Use <cite>add_column</cite> to add the new column to the <cite>DataTable</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.create_row">
+<span class="sig-name descname"><span class="pre">create_row</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sttp.data.datarow.DataRow" title="sttp.data.datarow.DataRow"><span class="pre">DataRow</span></a></span></span><a class="reference internal" href="_modules/sttp/data/datatable.html#DataTable.create_row"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatable.DataTable.create_row" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a new <cite>DataRow</cite> associated with the <cite>DataTable</cite>.
+Use <cite>add_row</cite> to add the new row to the <cite>DataTable</cite>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.name">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#sttp.data.datatable.DataTable.name" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the name of the <cite>DataTable</cite>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.parent">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">parent</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sttp.data.dataset.DataSet" title="sttp.data.dataset.DataSet"><span class="pre">DataSet</span></a></em><a class="headerlink" href="#sttp.data.datatable.DataTable.parent" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the parent <cite>DataSet</cite> of the <cite>DataTable</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.row">
+<span class="sig-name descname"><span class="pre">row</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rowindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sttp.data.datarow.DataRow" title="sttp.data.datarow.DataRow"><span class="pre">DataRow</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datatable.html#DataTable.row"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatable.DataTable.row" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the <cite>DataRow</cite> at the specified row index if the index is in range;
+otherwise, None is returned.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.rowcount">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">rowcount</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sttp.data.datatable.DataTable.rowcount" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the total number of rows defined in the <cite>DataTable</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.rowswhere">
+<span class="sig-name descname"><span class="pre">rowswhere</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">predicate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sttp.data.datarow.DataRow" title="sttp.data.datarow.DataRow"><span class="pre">DataRow</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sttp.data.datarow.DataRow" title="sttp.data.datarow.DataRow"><span class="pre">DataRow</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datatable.html#DataTable.rowswhere"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatable.DataTable.rowswhere" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the rows matching the predicate expression. Set limit parameter
+to -1 for all matching rows.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.rowvalue_as_string">
+<span class="sig-name descname"><span class="pre">rowvalue_as_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rowindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columnindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/sttp/data/datatable.html#DataTable.rowvalue_as_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatable.DataTable.rowvalue_as_string" title="Permalink to this definition"></a></dt>
+<dd><p>Reads the row record value at the specified column index converted to a string.
+For column index out of range or any other errors, an empty string will be returned.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.rowvalue_as_string_byname">
+<span class="sig-name descname"><span class="pre">rowvalue_as_string_byname</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rowindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">columnname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/sttp/data/datatable.html#DataTable.rowvalue_as_string_byname"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatable.DataTable.rowvalue_as_string_byname" title="Permalink to this definition"></a></dt>
+<dd><p>Reads the row record value for the specified column name converted to a string.
+For column name not found or any other errors, an empty string will be returned.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.data.datatable.DataTable.select">
+<span class="sig-name descname"><span class="pre">select</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filterexpression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sortorder</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sttp.data.datarow.DataRow" title="sttp.data.datarow.DataRow"><span class="pre">DataRow</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datatable.html#DataTable.select"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatable.DataTable.select" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the rows matching the filter expression criteria in the specified sort order. The <cite>filterexpression</cite>
+parameter should be in the syntax of a SQL WHERE expression but should not include the WHERE keyword.
+The <cite>sortorder</cite> parameter defines field names, separated by commas, that exist in the <cite>DataTable</cite> used to
+order the results. Each field specified in the <cite>sortorder</cite> can have an <cite>ASC</cite> or <cite>DESC</cite> suffix; defaults to
+<cite>ASC</cite> when no suffix is provided. When <cite>sortorder</cite> is an empty string, records will be returned in natural
+order. Set limit parameter to -1 for all matching rows. When <cite>filterexpression</cite> is an empty string, all
+records will be returned; any specified sort order and limit will still be respected.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-sttp.data.datatype">
+<span id="sttp-data-datatype-module"></span><h2>sttp.data.datatype module<a class="headerlink" href="#module-sttp.data.datatype" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.data.datatype.DataType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.data.datatype.</span></span><span class="sig-name descname"><span class="pre">DataType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/data/datatype.html#DataType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatype.DataType" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<p>Enumeration of the possible data types for a <cite>DataColumn</cite>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.data.datatype.DataType.BOOLEAN">
+<span class="sig-name descname"><span class="pre">BOOLEAN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#sttp.data.datatype.DataType.BOOLEAN" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a Python <cite>bool</cite> data type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.data.datatype.DataType.DATETIME">
+<span class="sig-name descname"><span class="pre">DATETIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#sttp.data.datatype.DataType.DATETIME" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a Python <cite>datetime</cite> data type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.data.datatype.DataType.DECIMAL">
+<span class="sig-name descname"><span class="pre">DECIMAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#sttp.data.datatype.DataType.DECIMAL" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a Python <cite>decimal.Decimal</cite> data type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.data.datatype.DataType.DOUBLE">
+<span class="sig-name descname"><span class="pre">DOUBLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#sttp.data.datatype.DataType.DOUBLE" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a Python <cite>numpy.float64</cite> data type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.data.datatype.DataType.GUID">
+<span class="sig-name descname"><span class="pre">GUID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#sttp.data.datatype.DataType.GUID" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a Python <cite>uuid.UUID</cite> data type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.data.datatype.DataType.INT16">
+<span class="sig-name descname"><span class="pre">INT16</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#sttp.data.datatype.DataType.INT16" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a Python <cite>numpy.int16</cite> data type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.data.datatype.DataType.INT32">
+<span class="sig-name descname"><span class="pre">INT32</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9</span></em><a class="headerlink" href="#sttp.data.datatype.DataType.INT32" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a Python <cite>numpy.int32</cite> data type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.data.datatype.DataType.INT64">
+<span class="sig-name descname"><span class="pre">INT64</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#sttp.data.datatype.DataType.INT64" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a Python <cite>numpy.int64</cite> data type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.data.datatype.DataType.INT8">
+<span class="sig-name descname"><span class="pre">INT8</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#sttp.data.datatype.DataType.INT8" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a Python <cite>numpy.int8</cite> data type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.data.datatype.DataType.SINGLE">
+<span class="sig-name descname"><span class="pre">SINGLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#sttp.data.datatype.DataType.SINGLE" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a Python <cite>numpy.float32</cite> data type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.data.datatype.DataType.STRING">
+<span class="sig-name descname"><span class="pre">STRING</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#sttp.data.datatype.DataType.STRING" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a Python <cite>str</cite> data type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.data.datatype.DataType.UINT16">
+<span class="sig-name descname"><span class="pre">UINT16</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">12</span></em><a class="headerlink" href="#sttp.data.datatype.DataType.UINT16" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a Python <cite>numpy.uint16</cite> data type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.data.datatype.DataType.UINT32">
+<span class="sig-name descname"><span class="pre">UINT32</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">13</span></em><a class="headerlink" href="#sttp.data.datatype.DataType.UINT32" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a Python <cite>numpy.uint32</cite> data type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.data.datatype.DataType.UINT64">
+<span class="sig-name descname"><span class="pre">UINT64</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#sttp.data.datatype.DataType.UINT64" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a Python <cite>numpy.uint64</cite> data type.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.data.datatype.DataType.UINT8">
+<span class="sig-name descname"><span class="pre">UINT8</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">11</span></em><a class="headerlink" href="#sttp.data.datatype.DataType.UINT8" title="Permalink to this definition"></a></dt>
+<dd><p>Represents a Python <cite>numpy.uint8</cite> data type.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sttp.data.datatype.default_datatype">
+<span class="sig-prename descclassname"><span class="pre">sttp.data.datatype.</span></span><span class="sig-name descname"><span class="pre">default_datatype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datatype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.data.datatype.DataType" title="sttp.data.datatype.DataType"><span class="pre">DataType</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="_modules/sttp/data/datatype.html#default_datatype"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatype.default_datatype" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="sttp.data.datatype.parse_xsddatatype">
+<span class="sig-prename descclassname"><span class="pre">sttp.data.datatype.</span></span><span class="sig-name descname"><span class="pre">parse_xsddatatype</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">xsdtypename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extdatatype</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sttp.data.datatype.DataType" title="sttp.data.datatype.DataType"><span class="pre">DataType</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/data/datatype.html#parse_xsddatatype"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.data.datatype.parse_xsddatatype" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the <cite>DataType</cite> from the provided XSD data type. Return tuple includes boolean
+value that determines if parse was successful. See XML Schema Language Datatypes
+for possible xsd type name values: <a class="reference external" href="https://www.w3.org/TR/xmlschema-2/">https://www.w3.org/TR/xmlschema-2/</a></p>
+</dd></dl>
+
+</section>
+<section id="module-sttp.data">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sttp.data" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Grid Protection Alliance.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+ 
+<hr />
+<p><a href="https://sttp.github.io/pyapi/">Return to Home</a></p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

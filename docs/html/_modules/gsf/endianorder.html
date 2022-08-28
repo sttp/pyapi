@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>gsf.endianorder &mdash; STTP 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> STTP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">STTP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+          <li><a href="../gsf.html">gsf</a> &raquo;</li>
+      <li>gsf.endianorder</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for gsf.endianorder</h1><div class="highlight"><pre>
+<span></span><span class="c1">#******************************************************************************************************</span>
+<span class="c1">#  endianorder.py - Gbtc</span>
+<span class="c1">#</span>
+<span class="c1">#  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See</span>
+<span class="c1">#  the NOTICE file distributed with this work for additional information regarding copyright ownership.</span>
+<span class="c1">#  The GPA licenses this file to you under the MIT License (MIT), the &quot;License&quot;; you may not use this</span>
+<span class="c1">#  file except in compliance with the License. You may obtain a copy of the License at:</span>
+<span class="c1">#</span>
+<span class="c1">#      http://opensource.org/licenses/MIT</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless agreed to in writing, the subject software distributed under the License is distributed on an</span>
+<span class="c1">#  &quot;AS-IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. Refer to the</span>
+<span class="c1">#  License for the specific language governing permissions and limitations.</span>
+<span class="c1">#</span>
+<span class="c1">#  Code Modification History:</span>
+<span class="c1">#  ----------------------------------------------------------------------------------------------------</span>
+<span class="c1">#  08/18/2022 - J. Ritchie Carroll</span>
+<span class="c1">#       Generated original version of source code.</span>
+<span class="c1">#</span>
+<span class="c1">#******************************************************************************************************</span>
+
+<span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">static_init</span><span class="p">,</span> <span class="n">ByteSize</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="NativeEndian"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian">[docs]</a><span class="nd">@static_init</span>
+<span class="k">class</span> <span class="nc">NativeEndian</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Manages conversion of bytes to basic types in native endian order.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="NativeEndian.static_init"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.static_init">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">static_init</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">target_byteorder</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">byteorder</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">swaporder</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_from_buffer</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">bytesize</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">bytesize</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Buffer size too small, </span><span class="si">{</span><span class="n">bytesize</span><span class="si">}</span><span class="s2"> bytes required to convert bytes to </span><span class="si">{</span><span class="n">bytesize</span> <span class="o">*</span> <span class="mi">8</span><span class="si">}</span><span class="s2">-bit type&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">swaporder</span><span class="p">:</span>
+            <span class="n">dtype</span> <span class="o">=</span> <span class="n">dtype</span><span class="o">.</span><span class="n">newbyteorder</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">bytesize</span><span class="p">],</span> <span class="n">dtype</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_int_to_bytes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">bytesize</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">signed</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">bytesize</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">target_byteorder</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="n">signed</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_float_to_bytes</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">bytesize</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;&gt;&#39;</span> <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">target_byteorder</span> <span class="o">==</span> <span class="s1">&#39;big&#39;</span> <span class="k">else</span> <span class="s1">&#39;&lt;&#39;</span><span class="si">}{</span><span class="s1">&#39;e&#39;</span> <span class="k">if</span> <span class="n">bytesize</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="s1">&#39;f&#39;</span> <span class="k">if</span> <span class="n">bytesize</span> <span class="o">==</span> <span class="mi">4</span> <span class="k">else</span> <span class="s1">&#39;d&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+<div class="viewcode-block" id="NativeEndian.to_int16"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.to_int16">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">to_int16</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">ByteSize</span><span class="o">.</span><span class="n">INT16</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="NativeEndian.from_int16"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.from_int16">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_int16</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_int_to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">INT16</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NativeEndian.to_uint16"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.to_uint16">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">to_uint16</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT16</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="NativeEndian.from_uint16"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.from_uint16">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_uint16</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_int_to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT16</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NativeEndian.to_int32"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.to_int32">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">to_int32</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">ByteSize</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="NativeEndian.from_int32"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.from_int32">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_int32</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_int_to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NativeEndian.to_uint32"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.to_uint32">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">to_uint32</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="NativeEndian.from_uint32"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.from_uint32">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_uint32</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_int_to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT32</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NativeEndian.to_int64"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.to_int64">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">to_int64</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">ByteSize</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="NativeEndian.from_int64"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.from_int64">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_int64</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_int_to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NativeEndian.to_uint64"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.to_uint64">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">to_uint64</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT64</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="NativeEndian.from_uint64"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.from_uint64">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_uint64</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_int_to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT64</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NativeEndian.to_float16"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.to_float16">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">to_float16</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">float16</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">ByteSize</span><span class="o">.</span><span class="n">FLOAT16</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float16</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="NativeEndian.from_float16"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.from_float16">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_float16</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_float_to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">FLOAT16</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NativeEndian.to_float32"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.to_float32">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">to_float32</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">ByteSize</span><span class="o">.</span><span class="n">FLOAT32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="NativeEndian.from_float32"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.from_float32">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_float32</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_float_to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">FLOAT32</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="NativeEndian.to_float64"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.to_float64">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">to_float64</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_from_buffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">ByteSize</span><span class="o">.</span><span class="n">FLOAT64</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="NativeEndian.from_float64"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.NativeEndian.from_float64">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">from_float64</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_float_to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">FLOAT64</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="BigEndian"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.BigEndian">[docs]</a><span class="nd">@static_init</span>
+<span class="k">class</span> <span class="nc">BigEndian</span><span class="p">(</span><span class="n">NativeEndian</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Manages conversion of bytes to basic types in big endian order.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="BigEndian.static_init"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.BigEndian.static_init">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">static_init</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">target_byteorder</span> <span class="o">=</span> <span class="s2">&quot;big&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">swaporder</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">byteorder</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">target_byteorder</span></div></div>
+
+
+<div class="viewcode-block" id="LittleEndian"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.LittleEndian">[docs]</a><span class="nd">@static_init</span>
+<span class="k">class</span> <span class="nc">LittleEndian</span><span class="p">(</span><span class="n">NativeEndian</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Manages conversion of bytes to basic types in little endian order.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LittleEndian.static_init"><a class="viewcode-back" href="../../gsf.html#gsf.endianorder.LittleEndian.static_init">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">static_init</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">target_byteorder</span> <span class="o">=</span> <span class="s2">&quot;little&quot;</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">swaporder</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">byteorder</span> <span class="o">!=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">target_byteorder</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

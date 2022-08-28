@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sttp.metadata.record.device &mdash; STTP 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../index.html" class="icon icon-home"> STTP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">STTP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      <li>sttp.metadata.record.device</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sttp.metadata.record.device</h1><div class="highlight"><pre>
+<span></span><span class="c1"># ******************************************************************************************************</span>
+<span class="c1">#  metadata/record/device.py - Gbtc</span>
+<span class="c1">#</span>
+<span class="c1">#  Copyright © 2021, Grid Protection Alliance.  All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See</span>
+<span class="c1">#  the NOTICE file distributed with this work for additional information regarding copyright ownership.</span>
+<span class="c1">#  The GPA licenses this file to you under the MIT License (MIT), the &quot;License&quot;; you may not use this</span>
+<span class="c1">#  file except in compliance with the License. You may obtain a copy of the License at:</span>
+<span class="c1">#</span>
+<span class="c1">#      http://opensource.org/licenses/MIT</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless agreed to in writing, the subject software distributed under the License is distributed on an</span>
+<span class="c1">#  &quot;AS-IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. Refer to the</span>
+<span class="c1">#  License for the specific language governing permissions and limitations.</span>
+<span class="c1">#</span>
+<span class="c1">#  Code Modification History:</span>
+<span class="c1">#  ----------------------------------------------------------------------------------------------------</span>
+<span class="c1">#  02/09/2021 - J. Ritchie Carroll</span>
+<span class="c1">#       Generated original version of source code.</span>
+<span class="c1">#</span>
+<span class="c1"># ******************************************************************************************************</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">Empty</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Set</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span>
+<span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.measurement</span> <span class="kn">import</span> <span class="n">MeasurementRecord</span>
+    <span class="kn">from</span> <span class="nn">.phasor</span> <span class="kn">import</span> <span class="n">PhasorRecord</span>
+
+<div class="viewcode-block" id="DeviceRecord"><a class="viewcode-back" href="../../../../sttp.metadata.record.html#sttp.metadata.record.device.DeviceRecord">[docs]</a><span class="k">class</span> <span class="nc">DeviceRecord</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents a record of device metadata in the STTP.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DEFAULT_PARENTACRONYM</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="n">DEFAULT_PROTOCOLNAME</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="n">DEFAULT_FRAMESPERSECOND</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="n">DEFAULT_COMPANYNAME</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="n">DEFAULT_VENDORACRONYM</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="n">DEFAULT_VENDORDEVICENAME</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="n">DEFAULT_LONGITUDE</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">DECIMAL</span>
+    <span class="n">DEFAULT_LATITUDE</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">DECIMAL</span>
+    <span class="n">DEFAULT_UPDATEDON</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">DATETIME</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">nodeid</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span>
+                 <span class="n">deviceid</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span>
+                 <span class="n">acronym</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                 <span class="n">accessid</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                 <span class="n">parentacronym</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">protocolname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">framespersecond</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">companyacronym</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">vendoracronym</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">vendordevicename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">longitude</span><span class="p">:</span> <span class="n">Decimal</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">latitude</span><span class="p">:</span> <span class="n">Decimal</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">updatedon</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="o">...</span>
+                 <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructs a new `DeviceRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nodeid</span> <span class="o">=</span> <span class="n">nodeid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_deviceid</span> <span class="o">=</span> <span class="n">deviceid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_acronym</span> <span class="o">=</span> <span class="n">acronym</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_accessid</span> <span class="o">=</span> <span class="n">accessid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parentacronym</span> <span class="o">=</span> <span class="n">DeviceRecord</span><span class="o">.</span><span class="n">DEFAULT_PARENTACRONYM</span> <span class="k">if</span> <span class="n">parentacronym</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">parentacronym</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_protocolname</span> <span class="o">=</span> <span class="n">DeviceRecord</span><span class="o">.</span><span class="n">DEFAULT_PROTOCOLNAME</span> <span class="k">if</span> <span class="n">protocolname</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">protocolname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_framespersecond</span> <span class="o">=</span> <span class="n">DeviceRecord</span><span class="o">.</span><span class="n">DEFAULT_FRAMESPERSECOND</span> <span class="k">if</span> <span class="n">framespersecond</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">framespersecond</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_companyacronym</span> <span class="o">=</span> <span class="n">DeviceRecord</span><span class="o">.</span><span class="n">DEFAULT_COMPANYNAME</span> <span class="k">if</span> <span class="n">companyacronym</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">companyacronym</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vendoracronym</span> <span class="o">=</span> <span class="n">DeviceRecord</span><span class="o">.</span><span class="n">DEFAULT_VENDORACRONYM</span> <span class="k">if</span> <span class="n">vendoracronym</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">vendoracronym</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_vendordevicename</span> <span class="o">=</span> <span class="n">DeviceRecord</span><span class="o">.</span><span class="n">DEFAULT_VENDORDEVICENAME</span> <span class="k">if</span> <span class="n">vendordevicename</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">vendordevicename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_longitude</span> <span class="o">=</span> <span class="n">DeviceRecord</span><span class="o">.</span><span class="n">DEFAULT_LONGITUDE</span> <span class="k">if</span> <span class="n">longitude</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">longitude</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_latitude</span> <span class="o">=</span> <span class="n">DeviceRecord</span><span class="o">.</span><span class="n">DEFAULT_LATITUDE</span> <span class="k">if</span> <span class="n">latitude</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">latitude</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_updatedon</span> <span class="o">=</span> <span class="n">DeviceRecord</span><span class="o">.</span><span class="n">DEFAULT_UPDATEDON</span> <span class="k">if</span> <span class="n">updatedon</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">updatedon</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">measurements</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">MeasurementRecord</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets `MeasurementRecord` values associated with this `DeviceRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">phasors</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">PhasorRecord</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets `PhasorRecord` values associated with this `DeviceRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">nodeid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UUID</span><span class="p">:</span>  <span class="c1"># &lt;DeviceDetail&gt;/&lt;NodeID&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the guid-based STTP node identifier for this `DeviceRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodeid</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">deviceid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UUID</span><span class="p">:</span>  <span class="c1"># &lt;DeviceDetail&gt;/&lt;UniqueID&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the unique guid-based identifier for this `DeviceRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deviceid</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">acronym</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;DeviceDetail&gt;/&lt;Acronym&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the unique alpha-numeric identifier for this `DeviceRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_acronym</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;DeviceDetail&gt;/&lt;Name&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the free form name of this `DeviceRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_name</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">accessid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>  <span class="c1"># &lt;DeviceDetail&gt;/&lt;AccessID&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the access ID (a.k.a. ID code) for this `DeviceRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_accessid</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">parentacronym</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;DeviceDetail&gt;/&lt;ParentAcronym&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the parent device alpha-numeric identifier for this `DeviceRecord`, if any.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parentacronym</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">protocolname</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;DeviceDetail&gt;/&lt;ProtocolName&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the name of the source protocol for this `DeviceRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_protocolname</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">framespersecond</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>  <span class="c1"># &lt;DeviceDetail&gt;/&lt;FramesPerSecond&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the data reporting rate, in data frames per second, for this `DeviceRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_framespersecond</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">companyacronym</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;DeviceDetail&gt;/&lt;CompanyAcronym&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the acronym of the company associated with this `DeviceRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_companyacronym</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vendoracronym</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;DeviceDetail&gt;/&lt;VendorAcronym&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the acronym of the vendor associated with this `DeviceRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vendoracronym</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">vendordevicename</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;DeviceDetail&gt;/&lt;VendorDeviceName&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the acronym of the vendor device name associated with this `DeviceRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_vendordevicename</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">longitude</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Decimal</span><span class="p">:</span>  <span class="c1"># &lt;DeviceDetail&gt;/&lt;Longitude&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the longitude of this `DeviceRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_longitude</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">latitude</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Decimal</span><span class="p">:</span>  <span class="c1"># &lt;DeviceDetail&gt;/&lt;Latitude&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the latitude of this `DeviceRecord`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_latitude</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">updatedon</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>  <span class="c1"># &lt;DeviceDetail&gt;/&lt;UpdatedOn&gt;</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the `datetime` of when this `DeviceRecord` was last updated.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_updatedon</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

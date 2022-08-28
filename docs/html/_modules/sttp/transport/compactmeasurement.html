@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sttp.transport.compactmeasurement &mdash; STTP 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> STTP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">STTP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>sttp.transport.compactmeasurement</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sttp.transport.compactmeasurement</h1><div class="highlight"><pre>
+<span></span><span class="c1">#******************************************************************************************************</span>
+<span class="c1">#  compact_measurement.py - Gbtc</span>
+<span class="c1">#</span>
+<span class="c1">#  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See</span>
+<span class="c1">#  the NOTICE file distributed with this work for additional information regarding copyright ownership.</span>
+<span class="c1">#  The GPA licenses this file to you under the MIT License (MIT), the &quot;License&quot;; you may not use this</span>
+<span class="c1">#  file except in compliance with the License. You may obtain a copy of the License at:</span>
+<span class="c1">#</span>
+<span class="c1">#      http://opensource.org/licenses/MIT</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless agreed to in writing, the subject software distributed under the License is distributed on an</span>
+<span class="c1">#  &quot;AS-IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. Refer to the</span>
+<span class="c1">#  License for the specific language governing permissions and limitations.</span>
+<span class="c1">#</span>
+<span class="c1">#  Code Modification History:</span>
+<span class="c1">#  ----------------------------------------------------------------------------------------------------</span>
+<span class="c1">#  08/!4/2022 - J. Ritchie Carroll</span>
+<span class="c1">#       Generated original version of source code.</span>
+<span class="c1">#</span>
+<span class="c1">#******************************************************************************************************</span>
+
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">IntFlag</span>
+<span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">Limits</span>
+<span class="kn">from</span> <span class="nn">gsf.endianorder</span> <span class="kn">import</span> <span class="n">BigEndian</span>
+<span class="kn">from</span> <span class="nn">..ticks</span> <span class="kn">import</span> <span class="n">Ticks</span>
+<span class="kn">from</span> <span class="nn">.measurement</span> <span class="kn">import</span> <span class="n">Measurement</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">StateFlags</span>
+<span class="kn">from</span> <span class="nn">.signalindexcache</span> <span class="kn">import</span> <span class="n">SignalIndexCache</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="CompactStateFlags"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.compactmeasurement.CompactStateFlags">[docs]</a><span class="k">class</span> <span class="nc">CompactStateFlags</span><span class="p">(</span><span class="n">IntFlag</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enumeration constants represent each flag in the 8-bit compact measurement state flags.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DATARANGE</span> <span class="o">=</span> <span class="mh">0x01</span>
+    <span class="n">DATAQUALITY</span> <span class="o">=</span> <span class="mh">0x02</span>
+    <span class="n">TIMEQUALITY</span> <span class="o">=</span> <span class="mh">0x04</span>
+    <span class="n">SYSTEMISSUE</span> <span class="o">=</span> <span class="mh">0x08</span>
+    <span class="n">CALCULATEDVALUE</span> <span class="o">=</span> <span class="mh">0x10</span>
+    <span class="n">DISCARDEDVALUE</span> <span class="o">=</span> <span class="mh">0x20</span>
+    <span class="n">BASETIMEOFFSET</span> <span class="o">=</span> <span class="mh">0x40</span>
+    <span class="n">TIMEINDEX</span> <span class="o">=</span> <span class="mh">0x80</span></div>
+
+
+<span class="n">DATARANGEMASK</span><span class="p">:</span> <span class="n">StateFlags</span> <span class="o">=</span> <span class="mh">0x000000FC</span>
+<span class="n">DATAQUALITYMASK</span><span class="p">:</span> <span class="n">StateFlags</span> <span class="o">=</span> <span class="mh">0x0000EF03</span>
+<span class="n">TIMEQUALITYMASK</span><span class="p">:</span> <span class="n">StateFlags</span> <span class="o">=</span> <span class="mh">0x00BF0000</span>
+<span class="n">SYSTEMISSUEMASK</span><span class="p">:</span> <span class="n">StateFlags</span> <span class="o">=</span> <span class="mh">0xE0000000</span>
+<span class="n">CALCULATEDVALUEMASK</span><span class="p">:</span> <span class="n">StateFlags</span> <span class="o">=</span> <span class="mh">0x00001000</span>
+<span class="n">DISCARDEDVALUEMASK</span><span class="p">:</span> <span class="n">StateFlags</span> <span class="o">=</span> <span class="mh">0x00400000</span>
+
+<span class="n">FIXEDLENGTH</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span> <span class="o">=</span> <span class="mi">9</span>
+
+
+<span class="k">def</span> <span class="nf">_map_to_fullflags</span><span class="p">(</span><span class="n">compactflags</span><span class="p">:</span> <span class="n">CompactStateFlags</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">StateFlags</span><span class="p">:</span>
+    <span class="n">fullflags</span><span class="p">:</span> <span class="n">StateFlags</span> <span class="o">=</span> <span class="n">StateFlags</span><span class="o">.</span><span class="n">NORMAL</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">compactflags</span> <span class="o">&amp;</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">DATARANGE</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">fullflags</span> <span class="o">|=</span> <span class="n">DATARANGEMASK</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">compactflags</span> <span class="o">&amp;</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">DATAQUALITY</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">fullflags</span> <span class="o">|=</span> <span class="n">DATAQUALITYMASK</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">compactflags</span> <span class="o">&amp;</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">TIMEQUALITY</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">fullflags</span> <span class="o">|=</span> <span class="n">TIMEQUALITYMASK</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">compactflags</span> <span class="o">&amp;</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">SYSTEMISSUE</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">fullflags</span> <span class="o">|=</span> <span class="n">SYSTEMISSUEMASK</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">compactflags</span> <span class="o">&amp;</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">CALCULATEDVALUE</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">fullflags</span> <span class="o">|=</span> <span class="n">CALCULATEDVALUEMASK</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">compactflags</span> <span class="o">&amp;</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">DISCARDEDVALUE</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">fullflags</span> <span class="o">|=</span> <span class="n">DISCARDEDVALUEMASK</span>
+
+    <span class="k">return</span> <span class="n">fullflags</span>
+
+
+<span class="k">def</span> <span class="nf">_map_to_compactflags</span><span class="p">(</span><span class="n">fullflags</span><span class="p">:</span> <span class="n">StateFlags</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CompactStateFlags</span><span class="p">:</span>
+    <span class="n">compactflags</span><span class="p">:</span> <span class="n">CompactStateFlags</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">fullflags</span> <span class="o">&amp;</span> <span class="n">DATARANGEMASK</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">compactflags</span> <span class="o">|=</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">DATARANGE</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">fullflags</span> <span class="o">&amp;</span> <span class="n">DATAQUALITYMASK</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">compactflags</span> <span class="o">|=</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">DATAQUALITY</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">fullflags</span> <span class="o">&amp;</span> <span class="n">TIMEQUALITYMASK</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">compactflags</span> <span class="o">|=</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">TIMEQUALITY</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">fullflags</span> <span class="o">&amp;</span> <span class="n">SYSTEMISSUEMASK</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">compactflags</span> <span class="o">|=</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">SYSTEMISSUE</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">fullflags</span> <span class="o">&amp;</span> <span class="n">CALCULATEDVALUEMASK</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">compactflags</span> <span class="o">|=</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">CALCULATEDVALUE</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">fullflags</span> <span class="o">&amp;</span> <span class="n">DISCARDEDVALUEMASK</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">compactflags</span> <span class="o">|=</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">DISCARDEDVALUE</span>
+
+    <span class="k">return</span> <span class="n">compactflags</span>
+
+
+<div class="viewcode-block" id="CompactMeasurement"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.compactmeasurement.CompactMeasurement">[docs]</a><span class="k">class</span> <span class="nc">CompactMeasurement</span><span class="p">(</span><span class="n">Measurement</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents a measured value, in simple compact format, for transmission or reception in STTP.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">signalindexcache</span><span class="p">:</span> <span class="n">SignalIndexCache</span><span class="p">,</span>
+                 <span class="n">includetime</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                 <span class="n">usemillisecondresolution</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+                 <span class="n">basetimeoffsets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">],</span>
+                 <span class="n">signalid</span><span class="p">:</span> <span class="n">UUID</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">timestamp</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">flags</span><span class="p">:</span> <span class="n">StateFlags</span> <span class="o">=</span> <span class="o">...</span>
+                 <span class="p">):</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">signalid</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">flags</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signalindexcache</span> <span class="o">=</span> <span class="n">signalindexcache</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_includetime</span> <span class="o">=</span> <span class="n">includetime</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_usemillisecondresolution</span> <span class="o">=</span> <span class="n">usemillisecondresolution</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_basetimeoffsets</span> <span class="o">=</span> <span class="n">basetimeoffsets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeindex</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_usingbasetimeoffset</span> <span class="o">=</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="CompactMeasurement.get_binarylength"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.compactmeasurement.CompactMeasurement.get_binarylength">[docs]</a>    <span class="k">def</span> <span class="nf">get_binarylength</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the binary byte length of a `CompactMeasurement`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">length</span> <span class="o">=</span> <span class="n">FIXEDLENGTH</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_includetime</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">length</span>
+
+        <span class="n">basetimeoffset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basetimeoffsets</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeindex</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">basetimeoffset</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># See if timestamp will fit within space allowed for active base offset. We cache result so that post call</span>
+            <span class="c1"># to GetBinaryLength, result will speed other subsequent parsing operations by not having to reevaluate.</span>
+            <span class="n">difference</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ticksvalue</span> <span class="o">-</span> <span class="n">basetimeoffset</span>
+
+            <span class="k">if</span> <span class="n">difference</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_usemillisecondresolution</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_usingbasetimeoffset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">(</span>
+                        <span class="n">difference</span> <span class="o">/</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">PERMILLISECOND</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">Limits</span><span class="o">.</span><span class="n">MAXUINT16</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_usingbasetimeoffset</span> <span class="o">=</span> <span class="n">difference</span> <span class="o">&lt;</span> <span class="n">Limits</span><span class="o">.</span><span class="n">MAXUINT32</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_usingbasetimeoffset</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_usingbasetimeoffset</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_usemillisecondresolution</span><span class="p">:</span>
+                    <span class="n">length</span> <span class="o">+=</span> <span class="mi">2</span>  <span class="c1"># Use two bytes for millisecond resolution timestamp with valid offset</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">length</span> <span class="o">+=</span> <span class="mi">4</span>  <span class="c1"># Use four bytes for tick resolution timestamp with valid offset</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">length</span> <span class="o">+=</span> <span class="mi">8</span>  <span class="c1"># Use eight bytes for full fidelity time</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Use eight bytes for full fidelity time</span>
+            <span class="n">length</span> <span class="o">+=</span> <span class="mi">8</span>
+
+        <span class="k">return</span> <span class="n">length</span></div>
+
+<div class="viewcode-block" id="CompactMeasurement.get_timestamp_c2"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.compactmeasurement.CompactMeasurement.get_timestamp_c2">[docs]</a>    <span class="k">def</span> <span class="nf">get_timestamp_c2</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets offset compressed millisecond-resolution 2-byte timestamp.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">ticksvalue</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basetimeoffsets</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeindex</span><span class="p">])</span> <span class="o">/</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">PERMILLISECOND</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CompactMeasurement.get_timestamp_c4"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.compactmeasurement.CompactMeasurement.get_timestamp_c4">[docs]</a>    <span class="k">def</span> <span class="nf">get_timestamp_c4</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets offset compressed tick-resolution 4-byte timestamp.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ticksvalue</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basetimeoffsets</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeindex</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="CompactMeasurement.get_compact_stateflags"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.compactmeasurement.CompactMeasurement.get_compact_stateflags">[docs]</a>    <span class="k">def</span> <span class="nf">get_compact_stateflags</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">byte</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets byte level compact state flags with encoded time index and base time offset bits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Encode compact state flags</span>
+        <span class="n">flags</span><span class="p">:</span> <span class="n">CompactStateFlags</span> <span class="o">=</span> <span class="n">_map_to_compactflags</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">flags</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timeindex</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">flags</span> <span class="o">|=</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">TIMEINDEX</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_usingbasetimeoffset</span><span class="p">:</span>
+            <span class="n">flags</span> <span class="o">|=</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">BASETIMEOFFSET</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">byte</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CompactMeasurement.set_compact_stateflags"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.compactmeasurement.CompactMeasurement.set_compact_stateflags">[docs]</a>    <span class="k">def</span> <span class="nf">set_compact_stateflags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">byte</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets byte level compact state flags with encoded time index and base time offset bits.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Decode compact state flags</span>
+        <span class="n">flags</span> <span class="o">=</span> <span class="n">CompactStateFlags</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">flags</span> <span class="o">=</span> <span class="n">_map_to_fullflags</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">TIMEINDEX</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_timeindex</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_timeindex</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_usingbasetimeoffset</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">flags</span> <span class="o">&amp;</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">BASETIMEOFFSET</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">runtimeid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the 4-byte run-time signal index for this measurement.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signalindexcache</span><span class="o">.</span><span class="n">signalindex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">signalid</span><span class="p">)</span>
+
+    <span class="nd">@runtimeid</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">runtimeid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the 4-byte run-time signal index for this measurement.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        This assigns `CompactMeasurement` signal ID from the specified signal index</span>
+<span class="sd">        based on lookup in the active `SignalIndexCache`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">signalid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signalindexcache</span><span class="o">.</span><span class="n">signalid</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CompactMeasurement.decode"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.compactmeasurement.CompactMeasurement.decode">[docs]</a>    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parses a `CompactMeasurement` from the specified byte buffer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;not enough buffer available to deserialize compact measurement&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Basic Compact Measurement Format:</span>
+        <span class="c1"># 		Field:     Bytes:</span>
+        <span class="c1"># 		--------   -------</span>
+        <span class="c1">#		 Flags        1</span>
+        <span class="c1">#		  ID          4</span>
+        <span class="c1">#		 Value        4</span>
+        <span class="c1">#		 [Time]    0/2/4/8</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Decode state flags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_compact_stateflags</span><span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Decode runtime ID</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runtimeid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">BigEndian</span><span class="o">.</span><span class="n">to_uint32</span><span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="n">index</span><span class="p">:]))</span>
+        <span class="n">index</span> <span class="o">+=</span> <span class="mi">4</span>
+
+        <span class="c1"># Decode value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">BigEndian</span><span class="o">.</span><span class="n">to_float32</span><span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="n">index</span><span class="p">:]))</span>
+        <span class="n">index</span> <span class="o">+=</span> <span class="mi">4</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_includetime</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">index</span><span class="p">,</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_usingbasetimeoffset</span><span class="p">:</span>
+            <span class="n">basetimeoffset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_basetimeoffsets</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeindex</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_usemillisecondresolution</span><span class="p">:</span>
+                <span class="c1"># Decode 2-byte millisecond offset timestamp</span>
+                <span class="k">if</span> <span class="n">basetimeoffset</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="n">basetimeoffset</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">BigEndian</span><span class="o">.</span><span class="n">to_uint16</span><span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="n">index</span><span class="p">:]))</span> <span class="o">*</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">PERMILLISECOND</span>
+
+                <span class="n">index</span> <span class="o">+=</span> <span class="mi">2</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Decode 4-byte tick offset timestamp</span>
+                <span class="k">if</span> <span class="n">basetimeoffset</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="n">basetimeoffset</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">BigEndian</span><span class="o">.</span><span class="n">to_uint32</span><span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="n">index</span><span class="p">:]))</span>
+
+                <span class="n">index</span> <span class="o">+=</span> <span class="mi">4</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Decode 8-byte full fidelity timestamp</span>
+            <span class="c1"># Note that only a full fidelity timestamp can carry leap second flags</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">timestamp</span> <span class="o">=</span> <span class="n">BigEndian</span><span class="o">.</span><span class="n">to_uint64</span><span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="n">index</span><span class="p">:])</span>
+            <span class="n">index</span> <span class="o">+=</span> <span class="mi">8</span>
+
+        <span class="k">return</span> <span class="n">index</span><span class="p">,</span> <span class="kc">None</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

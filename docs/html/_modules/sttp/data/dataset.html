@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sttp.data.dataset &mdash; STTP 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> STTP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">STTP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>sttp.data.dataset</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sttp.data.dataset</h1><div class="highlight"><pre>
+<span></span><span class="c1"># ******************************************************************************************************</span>
+<span class="c1">#  dataset.py - Gbtc</span>
+<span class="c1">#</span>
+<span class="c1">#  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See</span>
+<span class="c1">#  the NOTICE file distributed with this work for additional information regarding copyright ownership.</span>
+<span class="c1">#  The GPA licenses this file to you under the MIT License (MIT), the &quot;License&quot;; you may not use this</span>
+<span class="c1">#  file except in compliance with the License. You may obtain a copy of the License at:</span>
+<span class="c1">#</span>
+<span class="c1">#      http://opensource.org/licenses/MIT</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless agreed to in writing, the subject software distributed under the License is distributed on an</span>
+<span class="c1">#  &quot;AS-IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. Refer to the</span>
+<span class="c1">#  License for the specific language governing permissions and limitations.</span>
+<span class="c1">#</span>
+<span class="c1">#  Code Modification History:</span>
+<span class="c1">#  ----------------------------------------------------------------------------------------------------</span>
+<span class="c1">#  08/25/2022 - J. Ritchie Carroll</span>
+<span class="c1">#       Generated original version of source code.</span>
+<span class="c1">#</span>
+<span class="c1"># ******************************************************************************************************</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">Convert</span><span class="p">,</span> <span class="n">Empty</span>
+<span class="kn">from</span> <span class="nn">.datatable</span> <span class="kn">import</span> <span class="n">DataTable</span>
+<span class="kn">from</span> <span class="nn">.datatype</span> <span class="kn">import</span> <span class="n">DataType</span><span class="p">,</span> <span class="n">parse_xsddatatype</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">dateutil</span> <span class="kn">import</span> <span class="n">parser</span>
+<span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BytesIO</span>
+<span class="kn">from</span> <span class="nn">xml.etree</span> <span class="kn">import</span> <span class="n">ElementTree</span>
+<span class="kn">from</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">import</span> <span class="n">Element</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.dataset</span> <span class="kn">import</span> <span class="n">DataSet</span>
+
+<span class="n">XMLSCHEMA_NAMESPACE</span> <span class="o">=</span> <span class="s2">&quot;http://www.w3.org/2001/XMLSchema&quot;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Defines schema namespace for the W3C XML Schema Definition Language (XSD) used by STTP metadata tables.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">EXT_XMLSCHEMADATA_NAMESPACE</span> <span class="o">=</span> <span class="s2">&quot;urn:schemas-microsoft-com:xml-msdata&quot;</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Defines extended types for XSD elements, e.g., Guid and expression data types.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="xsdformat"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.dataset.xsdformat">[docs]</a><span class="k">def</span> <span class="nf">xsdformat</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Converts date/time value to a string in XSD XML schema format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(</span><span class="n">sep</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">timespec</span><span class="o">=</span><span class="s2">&quot;milliseconds&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># 2 digit fractional second</span></div>
+
+
+<div class="viewcode-block" id="DataSet"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.dataset.DataSet">[docs]</a><span class="k">class</span> <span class="nc">DataSet</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents an in-memory cache of records that is structured similarly to information</span>
+<span class="sd">    defined in a database. The data set object consists of a collection of data table objects.</span>
+<span class="sd">    See https://sttp.github.io/documentation/data-sets/ for more information.</span>
+<span class="sd">    Note that this implementation uses a if columntype ==-insensitive map for `DataTable` name lookups.</span>
+<span class="sd">    Internally, if columntype ==-insensitive lookups are accomplished using `str.upper()`.    </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DEFAULT_NAME</span> <span class="o">=</span> <span class="s2">&quot;DataSet&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span>
+                 <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a new `DataSet`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DataTable</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">DataSet</span><span class="o">.</span><span class="n">DEFAULT_NAME</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">name</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the name of the `DataSet`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="c1"># Case-insensitive get table by name; None returned when value does not exist</span>
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataTable</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="c1"># Case-insensitive set table by name</span>
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">DataTable</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="p">)</span>
+
+    <span class="c1"># Case-insensitive table name search</span>
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">item</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">DataTable</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+
+<div class="viewcode-block" id="DataSet.clear_tables"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.dataset.DataSet.clear_tables">[docs]</a>    <span class="k">def</span> <span class="nf">clear_tables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Clears the internal table collection.</span>
+<span class="sd">        Any existing tables will be deleted.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DataSet.add_table"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.dataset.DataSet.add_table">[docs]</a>    <span class="k">def</span> <span class="nf">add_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="n">DataTable</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds the specified table to the `DataSet`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="p">[</span><span class="n">table</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span> <span class="o">=</span> <span class="n">table</span></div>
+
+<div class="viewcode-block" id="DataSet.table"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.dataset.DataSet.table">[docs]</a>    <span class="k">def</span> <span class="nf">table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tablename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DataTable</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the `DataTable` for the specified table name if it exists;</span>
+<span class="sd">        otherwise, None is returned. Lookup is if columntype ==-insensitive.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tablename</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span></div>
+
+<div class="viewcode-block" id="DataSet.tablenames"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.dataset.DataSet.tablenames">[docs]</a>    <span class="k">def</span> <span class="nf">tablenames</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the table names defined in the `DataSet`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">tablenames</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">tablenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">tablenames</span></div>
+
+<div class="viewcode-block" id="DataSet.tables"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.dataset.DataSet.tables">[docs]</a>    <span class="k">def</span> <span class="nf">tables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">DataTable</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the `DataTable` instances defined in the `DataSet`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">values</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="DataSet.create_table"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.dataset.DataSet.create_table">[docs]</a>    <span class="k">def</span> <span class="nf">create_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataTable</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a new `DataTable` associated with the `DataSet`.</span>
+<span class="sd">        Use `add_table` to add the new table to the `DataSet`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">DataTable</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">tablecount</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the total number of tables defined in the `DataSet`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DataSet.remove_table"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.dataset.DataSet.remove_table">[docs]</a>    <span class="k">def</span> <span class="nf">remove_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tablename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Removes the specified table name from the `DataSet`. Returns</span>
+<span class="sd">        True if table was removed; otherwise, False if it did not exist.</span>
+<span class="sd">        Lookup is if columntype ==-insensitive.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">tablename</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">image</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">image</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> [&quot;</span><span class="p">)</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">image</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span>
+
+            <span class="n">image</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="n">image</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DataSet.from_xml"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.dataset.DataSet.from_xml">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_xml</span><span class="p">(</span><span class="n">buffer</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">DataSet</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a new `DataSet` as read from the XML in the specified buffer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dataset</span> <span class="o">=</span> <span class="n">DataSet</span><span class="p">()</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">parse_xml</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">err</span></div>
+
+<div class="viewcode-block" id="DataSet.parse_xml"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.dataset.DataSet.parse_xml">[docs]</a>    <span class="k">def</span> <span class="nf">parse_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the `DataSet` from the XML in the specified buffer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">err</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">doc</span> <span class="o">=</span> <span class="n">ElementTree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="n">ex</span>
+
+        <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">err</span>
+
+        <span class="n">namespaces</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">node</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">ElementTree</span><span class="o">.</span><span class="n">iterparse</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">buffer</span><span class="p">),</span> <span class="n">events</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;start-ns&quot;</span><span class="p">])])</span>
+
+        <span class="k">del</span> <span class="n">namespaces</span><span class="p">[</span><span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_xmldoc</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">namespaces</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DataSet.parse_xmldoc"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.dataset.DataSet.parse_xmldoc">[docs]</a>    <span class="k">def</span> <span class="nf">parse_xmldoc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">namespaces</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads the `DataSet` from an existing root XML document element.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">get_schemaprefix</span><span class="p">(</span><span class="n">target_namespace</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+
+            <span class="k">for</span> <span class="n">prefix</span> <span class="ow">in</span> <span class="n">namespaces</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">namespaces</span><span class="p">[</span><span class="n">prefix</span><span class="p">]</span> <span class="o">==</span> <span class="n">target_namespace</span><span class="p">:</span>
+                    <span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span>
+                    <span class="k">break</span>
+
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">prefix</span> <span class="o">+=</span> <span class="s2">&quot;:&quot;</span>
+
+            <span class="k">return</span> <span class="n">prefix</span>
+
+        <span class="n">xs</span> <span class="o">=</span> <span class="n">get_schemaprefix</span><span class="p">(</span><span class="n">XMLSCHEMA_NAMESPACE</span><span class="p">)</span>
+
+        <span class="c1"># Find schema node</span>
+        <span class="n">schema</span> <span class="o">=</span> <span class="n">root</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">xs</span><span class="si">}</span><span class="s2">schema&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">schema</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;failed to parse DataSet XML: Cannot find schema node&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nb">id</span> <span class="o">:=</span> <span class="n">schema</span><span class="o">.</span><span class="n">attrib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;id&quot;</span><span class="p">))</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">id</span> <span class="o">!=</span> <span class="n">root</span><span class="o">.</span><span class="n">tag</span><span class="p">:</span>
+            <span class="k">return</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;failed to parse DataSet XML: Cannot find schema node matching </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">root</span><span class="o">.</span><span class="n">tag</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Populate DataSet schema</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_load_schema</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="n">namespaces</span><span class="p">,</span> <span class="n">xs</span><span class="p">)</span>
+
+        <span class="c1"># Populate DataSet records</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_load_records</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+    <span class="k">def</span> <span class="nf">_load_schema</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">namespaces</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">xs</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">EXT_PREFIX</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="n">EXT_XMLSCHEMADATA_NAMESPACE</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span>
+
+        <span class="c1"># Find choice elements representing schema table definitions</span>
+        <span class="n">tablenodes</span> <span class="o">=</span> <span class="n">schema</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">xs</span><span class="si">}</span><span class="s2">element/</span><span class="si">{</span><span class="n">xs</span><span class="si">}</span><span class="s2">complexType/</span><span class="si">{</span><span class="n">xs</span><span class="si">}</span><span class="s2">choice/</span><span class="si">{</span><span class="n">xs</span><span class="si">}</span><span class="s2">element&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">tablenode</span> <span class="ow">in</span> <span class="n">tablenodes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">tablename</span> <span class="o">:=</span> <span class="n">tablenode</span><span class="o">.</span><span class="n">attrib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">))</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">datatable</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_table</span><span class="p">(</span><span class="n">tablename</span><span class="p">)</span>
+
+            <span class="c1"># Find sequence elements representing schema table field definitions</span>
+            <span class="n">fieldnodes</span> <span class="o">=</span> <span class="n">tablenode</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">xs</span><span class="si">}</span><span class="s2">complexType/</span><span class="si">{</span><span class="n">xs</span><span class="si">}</span><span class="s2">sequence/</span><span class="si">{</span><span class="n">xs</span><span class="si">}</span><span class="s2">element&quot;</span><span class="p">,</span> <span class="n">namespaces</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">fieldnode</span> <span class="ow">in</span> <span class="n">fieldnodes</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">fieldname</span> <span class="o">:=</span> <span class="n">fieldnode</span><span class="o">.</span><span class="n">attrib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">))</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="n">typename</span> <span class="o">:=</span> <span class="n">fieldnode</span><span class="o">.</span><span class="n">attrib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">))</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="k">if</span> <span class="n">typename</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="n">xs</span><span class="p">):</span>
+                    <span class="n">typename</span> <span class="o">=</span> <span class="n">typename</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">xs</span><span class="p">):]</span>
+
+                <span class="c1"># Check for extended data type (allows XSD Guid field definitions)</span>
+                <span class="n">extdatatype</span> <span class="o">=</span> <span class="n">fieldnode</span><span class="o">.</span><span class="n">attrib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">EXT_PREFIX</span><span class="si">}</span><span class="s2">DataType&quot;</span><span class="p">)</span>
+
+                <span class="n">datatype</span><span class="p">,</span> <span class="n">found</span> <span class="o">=</span> <span class="n">parse_xsddatatype</span><span class="p">(</span><span class="n">typename</span><span class="p">,</span> <span class="n">extdatatype</span><span class="p">)</span>
+
+                <span class="c1"># Columns with unsupported XSD data types are skipped</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Check for computed expression</span>
+                <span class="n">expression</span> <span class="o">=</span> <span class="n">fieldnode</span><span class="o">.</span><span class="n">attrib</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">EXT_PREFIX</span><span class="si">}</span><span class="s2">Expression&quot;</span><span class="p">)</span>
+
+                <span class="n">datacolumn</span> <span class="o">=</span> <span class="n">datatable</span><span class="o">.</span><span class="n">create_column</span><span class="p">(</span><span class="n">fieldname</span><span class="p">,</span> <span class="n">datatype</span><span class="p">,</span> <span class="n">expression</span><span class="p">)</span>
+
+                <span class="n">datatable</span><span class="o">.</span><span class="n">add_column</span><span class="p">(</span><span class="n">datacolumn</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span><span class="n">datatable</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_load_records</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">Element</span><span class="p">):</span>
+        <span class="c1"># Each root node child that matches a table name represents a record</span>
+        <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">root</span><span class="p">:</span>
+            <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">table</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">datarow</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">create_row</span><span class="p">()</span>
+
+            <span class="c1"># Each child node of a record represents a field value</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">record</span><span class="p">:</span>
+                <span class="n">column</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">column_byname</span><span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">column</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
+
+                <span class="n">index</span> <span class="o">=</span> <span class="n">column</span><span class="o">.</span><span class="n">index</span>
+                <span class="nb">type</span> <span class="o">=</span> <span class="n">column</span><span class="o">.</span><span class="n">type</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">text</span>
+
+                <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">STRING</span><span class="p">:</span>
+                    <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">value</span>
+                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">GUID</span><span class="p">:</span>
+                    <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">GUID</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">UUID</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">DATETIME</span><span class="p">:</span>
+                    <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">DATETIME</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span>
+                    <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">SINGLE</span><span class="p">:</span>
+                    <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">SINGLE</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
+                    <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">DOUBLE</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">:</span>
+                    <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">DECIMAL</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT8</span><span class="p">:</span>
+                    <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">INT8</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT16</span><span class="p">:</span>
+                    <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">INT16</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT32</span><span class="p">:</span>
+                    <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">INT32</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
+                    <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">INT64</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT8</span><span class="p">:</span>
+                    <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">UINT8</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT16</span><span class="p">:</span>
+                    <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">UINT16</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT32</span><span class="p">:</span>
+                    <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">UINT32</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT64</span><span class="p">:</span>
+                    <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">UINT64</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="n">table</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span><span class="n">datarow</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

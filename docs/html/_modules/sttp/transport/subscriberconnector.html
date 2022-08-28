@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sttp.transport.subscriberconnector &mdash; STTP 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> STTP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">STTP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>sttp.transport.subscriberconnector</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sttp.transport.subscriberconnector</h1><div class="highlight"><pre>
+<span></span><span class="c1"># ******************************************************************************************************</span>
+<span class="c1">#  subscriberconnector.py - Gbtc</span>
+<span class="c1">#</span>
+<span class="c1">#  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See</span>
+<span class="c1">#  the NOTICE file distributed with this work for additional information regarding copyright ownership.</span>
+<span class="c1">#  The GPA licenses this file to you under the MIT License (MIT), the &quot;License&quot;; you may not use this</span>
+<span class="c1">#  file except in compliance with the License. You may obtain a copy of the License at:</span>
+<span class="c1">#</span>
+<span class="c1">#      http://opensource.org/licenses/MIT</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless agreed to in writing, the subject software distributed under the License is distributed on an</span>
+<span class="c1">#  &quot;AS-IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. Refer to the</span>
+<span class="c1">#  License for the specific language governing permissions and limitations.</span>
+<span class="c1">#</span>
+<span class="c1">#  Code Modification History:</span>
+<span class="c1">#  ----------------------------------------------------------------------------------------------------</span>
+<span class="c1">#  08/17/2022 - J. Ritchie Carroll</span>
+<span class="c1">#       Generated original version of source code.</span>
+<span class="c1">#</span>
+<span class="c1"># ******************************************************************************************************</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+<span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">Empty</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">ConnectStatus</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Lock</span><span class="p">,</span> <span class="n">Thread</span><span class="p">,</span> <span class="n">Event</span>
+<span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
+<span class="kn">from</span> <span class="nn">sys</span> <span class="kn">import</span> <span class="n">stderr</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">datasubscriber</span> <span class="kn">import</span> <span class="n">DataSubscriber</span>
+
+
+<div class="viewcode-block" id="SubscriberConnector"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriberconnector.SubscriberConnector">[docs]</a><span class="k">class</span> <span class="nc">SubscriberConnector</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents a connector that will establish or automatically reestablish a connection from a `DataSubscriber` to a `DataPublisher`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DEFAULT_ERRORMESSAGE_CALLBACK</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stderr</span><span class="p">)</span>
+    <span class="n">DEFAULT_RECONNECT_CALLBACK</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">DataSubscriber</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="o">...</span>
+    <span class="n">DEFAULT_HOSTNAME</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="n">DEFAULT_PORT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">DEFAULT_MAXRETRIES</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">DEFAULT_RETRYINTERVAL</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">DEFAULT_MAXRETRYINTERVAL</span> <span class="o">=</span> <span class="mf">30.0</span>
+    <span class="n">DEFAULT_AUTORECONNECT</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">errormessage_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">reconnect_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">DataSubscriber</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">hostname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">port</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">maxretries</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">retryinterval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">maxretryinterval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">autoreconnect</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span>
+                 <span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">errormessage_callback</span> <span class="o">=</span> <span class="n">SubscriberConnector</span><span class="o">.</span><span class="n">DEFAULT_ERRORMESSAGE_CALLBACK</span> <span class="k">if</span> <span class="n">errormessage_callback</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">errormessage_callback</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called when an error message should be logged.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">reconnect_callback</span> <span class="o">=</span> <span class="n">SubscriberConnector</span><span class="o">.</span><span class="n">DEFAULT_RECONNECT_CALLBACK</span> <span class="k">if</span> <span class="n">reconnect_callback</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">reconnect_callback</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called when `SubscriberConnector` attempts to reconnect.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="n">SubscriberConnector</span><span class="o">.</span><span class="n">DEFAULT_HOSTNAME</span> <span class="k">if</span> <span class="n">hostname</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">hostname</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        `DataPublisher` DNS name or IP.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">SubscriberConnector</span><span class="o">.</span><span class="n">DEFAULT_PORT</span> <span class="k">if</span> <span class="n">port</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">port</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        TCP/IP listening port of the `DataPublisher`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxretries</span> <span class="o">=</span> <span class="n">SubscriberConnector</span><span class="o">.</span><span class="n">DEFAULT_MAXRETRIES</span> <span class="k">if</span> <span class="n">maxretries</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">maxretries</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        MaxRetries defines the maximum number of times to retry a connection. Set value to -1 to retry infinitely.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">retryinterval</span> <span class="o">=</span> <span class="n">SubscriberConnector</span><span class="o">.</span><span class="n">DEFAULT_RETRYINTERVAL</span> <span class="k">if</span> <span class="n">retryinterval</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">retryinterval</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        defines the base retry interval, in milliseconds. Retries will exponentially back-off starting from this interval.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxretryinterval</span> <span class="o">=</span> <span class="n">SubscriberConnector</span><span class="o">.</span><span class="n">DEFAULT_MAXRETRYINTERVAL</span> <span class="k">if</span> <span class="n">maxretryinterval</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">maxretryinterval</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the maximum retry interval, in milliseconds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoreconnect</span> <span class="o">=</span> <span class="n">SubscriberConnector</span><span class="o">.</span><span class="n">DEFAULT_AUTORECONNECT</span> <span class="k">if</span> <span class="n">autoreconnect</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">autoreconnect</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines flag that determines if connections should be automatically reattempted.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connectionrefused</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cancel</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reconnectthread</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Thread</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reconnectthread_mutex</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_waittimer</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_waittimer_mutex</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_threadpool</span> <span class="o">=</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">thread_name_prefix</span><span class="o">=</span><span class="s2">&quot;SC-PoolThread&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_autoreconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">:</span> <span class="n">DataSubscriber</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancel</span> <span class="ow">or</span> <span class="n">ds</span><span class="o">.</span><span class="n">disposing</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Make sure to wait on any running reconnect to complete...</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reconnectthread_mutex</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+        <span class="n">reconnectthread</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reconnectthread</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reconnectthread_mutex</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">reconnectthread</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">reconnectthread</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+            <span class="n">reconnectthread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+        <span class="n">reconnectthread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_reconnectthread</span><span class="p">(</span><span class="n">ds</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;ReconnectThread&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reconnectthread_mutex</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reconnectthread</span> <span class="o">=</span> <span class="n">reconnectthread</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reconnectthread_mutex</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+        <span class="n">reconnectthread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">_run_reconnectthread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">:</span> <span class="n">DataSubscriber</span><span class="p">):</span>
+        <span class="c1"># Reset connection attempt counter if last attempt was not refused</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectionrefused</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reset_connection</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxretries</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxretries</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="s2">&quot;Maximum connection retries attempted. Auto-reconnect canceled.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_wait_for_retry</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancel</span> <span class="ow">or</span> <span class="n">ds</span><span class="o">.</span><span class="n">disposing</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connect</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="o">==</span> <span class="n">ConnectStatus</span><span class="o">.</span><span class="n">CANCELED</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Notify the user that reconnect attempt was completed.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancel</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">reconnect_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reconnect_callback</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_wait_for_retry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Apply exponential back-off algorithm for retry attempt delays</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">&gt;</span> <span class="mi">13</span><span class="p">:</span>
+            <span class="n">exponent</span> <span class="o">=</span> <span class="mi">12</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">exponent</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">retryinterval</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">retryinterval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retryinterval</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">exponent</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">retryinterval</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxretryinterval</span><span class="p">:</span>
+            <span class="n">retryinterval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxretryinterval</span>
+
+        <span class="c1"># Notify the user that we are attempting to reconnect.</span>
+        <span class="n">message</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Connection&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; attempt </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">+</span> <span class="mi">1</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; to </span><span class="se">\&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> was terminated. &quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">retryinterval</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Attempting to reconnect in </span><span class="si">{</span><span class="n">retryinterval</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> seconds...&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Attempting to reconnect...&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">message</span><span class="p">))</span>
+
+        <span class="n">waittimer</span> <span class="o">=</span> <span class="n">Event</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_waittimer_mutex</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_waittimer</span> <span class="o">=</span> <span class="n">waittimer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_waittimer_mutex</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+        <span class="n">waittimer</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">retryinterval</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SubscriberConnector.connect"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriberconnector.SubscriberConnector.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">:</span> <span class="n">DataSubscriber</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConnectStatus</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initiates a connection sequence for a `DataSubscriber`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancel</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ConnectStatus</span><span class="o">.</span><span class="n">CANCELED</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connect</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">:</span> <span class="n">DataSubscriber</span><span class="p">,</span> <span class="n">autoreconnecting</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConnectStatus</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autoreconnect</span><span class="p">:</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">autoreconnect_callback</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_autoreconnect</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cancel</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">ds</span><span class="o">.</span><span class="n">disposing</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxretries</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxretries</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="s2">&quot;Maximum connection retries attempted. Auto-reconnect canceled.&quot;</span><span class="p">)</span>
+                <span class="k">break</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">disposing</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ConnectStatus</span><span class="o">.</span><span class="n">CANCELED</span>
+
+            <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">_connect</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="p">,</span> <span class="n">autoreconnecting</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">break</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">ds</span><span class="o">.</span><span class="n">disposing</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">retryinterval</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">autoreconnecting</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_wait_for_retry</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancel</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">ConnectStatus</span><span class="o">.</span><span class="n">CANCELED</span>
+
+        <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">disposing</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ConnectStatus</span><span class="o">.</span><span class="n">CANCELED</span>
+
+        <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ConnectStatus</span><span class="o">.</span><span class="n">SUCCESS</span>
+
+        <span class="k">return</span> <span class="n">ConnectStatus</span><span class="o">.</span><span class="n">FAILED</span>
+
+<div class="viewcode-block" id="SubscriberConnector.cancel"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriberconnector.SubscriberConnector.cancel">[docs]</a>    <span class="k">def</span> <span class="nf">cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Stops all current and future connection sequences.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancel</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cancel</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_waittimer_mutex</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+        <span class="n">waittimer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_waittimer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_waittimer_mutex</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">waittimer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">waittimer</span><span class="o">.</span><span class="n">set</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reconnectthread_mutex</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+        <span class="n">reconnectthread</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reconnectthread</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reconnectthread_mutex</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">reconnectthread</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">reconnectthread</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
+            <span class="n">reconnectthread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="SubscriberConnector.reset_connection"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriberconnector.SubscriberConnector.reset_connection">[docs]</a>    <span class="k">def</span> <span class="nf">reset_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resets `SubscriberConnector` for a new connection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cancel</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+    <span class="k">def</span> <span class="nf">_dispatch_errormessage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">errormessage_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_threadpool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">errormessage_callback</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

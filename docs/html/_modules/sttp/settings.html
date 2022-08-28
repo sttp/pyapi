@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sttp.settings &mdash; STTP 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> STTP
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">STTP</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>sttp.settings</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sttp.settings</h1><div class="highlight"><pre>
+<span></span><span class="c1"># ******************************************************************************************************</span>
+<span class="c1">#  settings.py - Gbtc</span>
+<span class="c1">#</span>
+<span class="c1">#  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See</span>
+<span class="c1">#  the NOTICE file distributed with this work for additional information regarding copyright ownership.</span>
+<span class="c1">#  The GPA licenses this file to you under the MIT License (MIT), the &quot;License&quot;; you may not use this</span>
+<span class="c1">#  file except in compliance with the License. You may obtain a copy of the License at:</span>
+<span class="c1">#</span>
+<span class="c1">#      http://opensource.org/licenses/MIT</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless agreed to in writing, the subject software distributed under the License is distributed on an</span>
+<span class="c1">#  &quot;AS-IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. Refer to the</span>
+<span class="c1">#  License for the specific language governing permissions and limitations.</span>
+<span class="c1">#</span>
+<span class="c1">#  Code Modification History:</span>
+<span class="c1">#  ----------------------------------------------------------------------------------------------------</span>
+<span class="c1">#  08/23/2022 - J. Ritchie Carroll</span>
+<span class="c1">#       Generated original version of source code.</span>
+<span class="c1">#</span>
+<span class="c1"># ******************************************************************************************************</span>
+
+<span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">Empty</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="Settings"><a class="viewcode-back" href="../../sttp.html#sttp.settings.Settings">[docs]</a><span class="k">class</span> <span class="nc">Settings</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines the STTP subscription related settings.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The `Settings` class exists as a simplified implementation of the `SubscriptionInfo`</span>
+<span class="sd">    class found in the `transport` namespace. Internally, the `Subscriber` class maps</span>
+<span class="sd">    `Settings` values to a `SubscriptionInfo` instance for use with a `DataSubscriber`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DEFAULT_THROTTLED</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">DEFAULT_PUBLISHINTERVAL</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">DEFAULT_UDPPORT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">DEFAULT_INCLUDETIME</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">DEFAULT_USE_MILLISECONDRESOLUTION</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">DEFAULT_REQUEST_NANVALUEFILTER</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">DEFAULT_STARTTIME</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="n">DEFAULT_STOPTIME</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="n">DEFAULT_CONSTRAINTPARAMETERS</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="n">DEFAULT_PROCESSINGINTERVAL</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">DEFAULT_EXTRA_CONNECTIONSTRING_PARAMETERS</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">throttled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">publishinterval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">udpport</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">includetime</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">usemillisecondresolution</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">requestnanvaluefilter</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">starttime</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">stoptime</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">constraintparameters</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">processinginterval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">extra_connectionstring_parameters</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span>
+                 <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a new `Settings` instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">throttled</span> <span class="o">=</span> <span class="n">Settings</span><span class="o">.</span><span class="n">DEFAULT_THROTTLED</span> <span class="k">if</span> <span class="n">throttled</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">throttled</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determines if data will be published using down-sampling.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">publishinterval</span> <span class="o">=</span> <span class="n">Settings</span><span class="o">.</span><span class="n">DEFAULT_PUBLISHINTERVAL</span> <span class="k">if</span> <span class="n">publishinterval</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">publishinterval</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the down-sampling publish interval, in seconds, to use when `Throttled` is True.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">udpport</span> <span class="o">=</span> <span class="n">Settings</span><span class="o">.</span><span class="n">DEFAULT_UDPPORT</span> <span class="k">if</span> <span class="n">udpport</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">udpport</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the desired UDP port to use for publication. Zero value means do not receive data on UDP, i.e.,</span>
+<span class="sd">	/   data will be delivered to the STTP client via TCP.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">includetime</span> <span class="o">=</span> <span class="n">Settings</span><span class="o">.</span><span class="n">DEFAULT_INCLUDETIME</span> <span class="k">if</span> <span class="n">includetime</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">includetime</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determines if time should be included in non-compressed, compact measurements.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_millisecondresolution</span> <span class="o">=</span> <span class="n">Settings</span><span class="o">.</span><span class="n">DEFAULT_USE_MILLISECONDRESOLUTION</span> <span class="k">if</span> <span class="n">usemillisecondresolution</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">usemillisecondresolution</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determines if time should be restricted to milliseconds in non-compressed, compact measurements.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">request_nanvaluefilter</span> <span class="o">=</span> <span class="n">Settings</span><span class="o">.</span><span class="n">DEFAULT_REQUEST_NANVALUEFILTER</span> <span class="k">if</span> <span class="n">requestnanvaluefilter</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">requestnanvaluefilter</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Requests that the publisher filter, i.e., does not send, any NaN values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">starttime</span> <span class="o">=</span> <span class="n">Settings</span><span class="o">.</span><span class="n">DEFAULT_STARTTIME</span> <span class="k">if</span> <span class="n">starttime</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">starttime</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the start time for a requested temporal data playback, i.e., a historical subscription.</span>
+<span class="sd">        Simply by specifying a `starttime` and `stoptime`, a subscription is considered a historical subscription.</span>
+<span class="sd">        Note that the publisher may not support historical subscriptions, in which case the subscribe will fail.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">stoptime</span> <span class="o">=</span> <span class="n">Settings</span><span class="o">.</span><span class="n">DEFAULT_STOPTIME</span> <span class="k">if</span> <span class="n">stoptime</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">stoptime</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the stop time for a requested temporal data playback, i.e., a historical subscription.</span>
+<span class="sd">        Simply by specifying a `starttime` and `stoptime`, a subscription is considered a historical subscription.</span>
+<span class="sd">        Note that the publisher may not support historical subscriptions, in which case the subscribe will fail.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">constraintparameters</span> <span class="o">=</span> <span class="n">Settings</span><span class="o">.</span><span class="n">DEFAULT_CONSTRAINTPARAMETERS</span> <span class="k">if</span> <span class="n">constraintparameters</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">constraintparameters</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines any custom constraint parameters for a requested temporal data playback. This can</span>
+<span class="sd">        include parameters that may be needed to initiate, filter, or control historical data access.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">processinginterval</span> <span class="o">=</span> <span class="n">Settings</span><span class="o">.</span><span class="n">DEFAULT_PROCESSINGINTERVAL</span> <span class="k">if</span> <span class="n">processinginterval</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">processinginterval</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the initial playback speed, in milliseconds, for a requested temporal data playback.</span>
+<span class="sd">        With the exception of the values of -1 and 0, this value specifies the desired processing interval for data, i.e.,</span>
+<span class="sd">        basically a delay, or timer interval, over which to process data. A value of -1 means to use the default processing</span>
+<span class="sd">        interval while a value of 0 means to process data as fast as possible.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">extra_connectionstring_parameters</span> <span class="o">=</span> <span class="n">Settings</span><span class="o">.</span><span class="n">DEFAULT_EXTRA_CONNECTIONSTRING_PARAMETERS</span> <span class="k">if</span> <span class="n">extra_connectionstring_parameters</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">extra_connectionstring_parameters</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines any extra custom connection string parameters that may be needed for a subscription.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

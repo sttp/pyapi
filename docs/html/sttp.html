@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sttp package &mdash; STTP pyapi 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> STTP pyapi
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">sttp package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-sttp.config">sttp.config module</a></li>
+<li><a class="reference internal" href="#module-sttp.reader">sttp.reader module</a></li>
+<li><a class="reference internal" href="#module-sttp.settings">sttp.settings module</a></li>
+<li><a class="reference internal" href="#module-sttp.subscriber">sttp.subscriber module</a></li>
+<li><a class="reference internal" href="#module-sttp.ticks">sttp.ticks module</a></li>
+<li><a class="reference internal" href="#module-sttp.version">sttp.version module</a></li>
+<li><a class="reference internal" href="#module-sttp">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">STTP pyapi</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>sttp package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/sttp.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="sttp-package">
+<h1>sttp package<a class="headerlink" href="#sttp-package" title="Permalink to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="sttp.data.html">sttp.data package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sttp.data.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.data.html#module-sttp.data.datacolumn">sttp.data.datacolumn module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.data.html#module-sttp.data.datarow">sttp.data.datarow module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.data.html#module-sttp.data.dataset">sttp.data.dataset module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.data.html#module-sttp.data.datatable">sttp.data.datatable module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.data.html#module-sttp.data.datatype">sttp.data.datatype module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.data.html#module-sttp.data">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sttp.metadata.html">sttp.metadata package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sttp.metadata.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sttp.metadata.record.html">sttp.metadata.record package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sttp.metadata.record.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.metadata.record.html#module-sttp.metadata.record.device">sttp.metadata.record.device module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.metadata.record.html#module-sttp.metadata.record.measurement">sttp.metadata.record.measurement module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.metadata.record.html#module-sttp.metadata.record.phasor">sttp.metadata.record.phasor module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.metadata.record.html#module-sttp.metadata.record">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.metadata.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.metadata.html#module-sttp.metadata.cache">sttp.metadata.cache module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.metadata.html#module-sttp.metadata">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="sttp.transport.html">sttp.transport package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="sttp.transport.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.transport.html#module-sttp.transport.bufferblock">sttp.transport.bufferblock module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.transport.html#module-sttp.transport.compactmeasurement">sttp.transport.compactmeasurement module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.transport.html#module-sttp.transport.constants">sttp.transport.constants module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.transport.html#module-sttp.transport.datasubscriber">sttp.transport.datasubscriber module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.transport.html#module-sttp.transport.measurement">sttp.transport.measurement module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.transport.html#module-sttp.transport.signalindexcache">sttp.transport.signalindexcache module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.transport.html#module-sttp.transport.signalkind">sttp.transport.signalkind module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.transport.html#module-sttp.transport.subscriberconnector">sttp.transport.subscriberconnector module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.transport.html#module-sttp.transport.subscriptioninfo">sttp.transport.subscriptioninfo module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.transport.html#module-sttp.transport">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-sttp.config">
+<span id="sttp-config-module"></span><h2>sttp.config module<a class="headerlink" href="#module-sttp.config" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.config.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.config.</span></span><span class="sig-name descname"><span class="pre">Config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maxretries</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">retryinterval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxretryinterval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autoreconnect</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autorequestmetadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">autosubscribe</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compress_payloaddata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compress_metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compress_signalindexcache</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadatafilters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int8</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/config.html#Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.config.Config" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Defines the STTP connection related configuration parameters.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.DEFAULT_AUTORECONNECT">
+<span class="sig-name descname"><span class="pre">DEFAULT_AUTORECONNECT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sttp.config.Config.DEFAULT_AUTORECONNECT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.DEFAULT_AUTOREQUESTMETADATA">
+<span class="sig-name descname"><span class="pre">DEFAULT_AUTOREQUESTMETADATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sttp.config.Config.DEFAULT_AUTOREQUESTMETADATA" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.DEFAULT_AUTOSUBSCRIBE">
+<span class="sig-name descname"><span class="pre">DEFAULT_AUTOSUBSCRIBE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sttp.config.Config.DEFAULT_AUTOSUBSCRIBE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.DEFAULT_COMPRESS_METADATA">
+<span class="sig-name descname"><span class="pre">DEFAULT_COMPRESS_METADATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sttp.config.Config.DEFAULT_COMPRESS_METADATA" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.DEFAULT_COMPRESS_PAYLOADDATA">
+<span class="sig-name descname"><span class="pre">DEFAULT_COMPRESS_PAYLOADDATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sttp.config.Config.DEFAULT_COMPRESS_PAYLOADDATA" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.DEFAULT_COMPRESS_SIGNALINDEXCACHE">
+<span class="sig-name descname"><span class="pre">DEFAULT_COMPRESS_SIGNALINDEXCACHE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sttp.config.Config.DEFAULT_COMPRESS_SIGNALINDEXCACHE" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.DEFAULT_MAXRETRIES">
+<span class="sig-name descname"><span class="pre">DEFAULT_MAXRETRIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#sttp.config.Config.DEFAULT_MAXRETRIES" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.DEFAULT_MAXRETRYINTERVAL">
+<span class="sig-name descname"><span class="pre">DEFAULT_MAXRETRYINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">30.0</span></em><a class="headerlink" href="#sttp.config.Config.DEFAULT_MAXRETRYINTERVAL" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.DEFAULT_METADATAFILTERS">
+<span class="sig-name descname"><span class="pre">DEFAULT_METADATAFILTERS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#sttp.config.Config.DEFAULT_METADATAFILTERS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.DEFAULT_RETRYINTERVAL">
+<span class="sig-name descname"><span class="pre">DEFAULT_RETRYINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#sttp.config.Config.DEFAULT_RETRYINTERVAL" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.DEFAULT_VERSION">
+<span class="sig-name descname"><span class="pre">DEFAULT_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#sttp.config.Config.DEFAULT_VERSION" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.autoreconnect">
+<span class="sig-name descname"><span class="pre">autoreconnect</span></span><a class="headerlink" href="#sttp.config.Config.autoreconnect" title="Permalink to this definition"></a></dt>
+<dd><p>Defines flag that determines if connections should be automatically reattempted.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.autorequestmetadata">
+<span class="sig-name descname"><span class="pre">autorequestmetadata</span></span><a class="headerlink" href="#sttp.config.Config.autorequestmetadata" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the flag that determines if metadata should be automatically requested
+upon successful connection. When True, metadata will be requested upon connection
+before subscription; otherwise, any metadata operations must be handled manually.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.autosubscribe">
+<span class="sig-name descname"><span class="pre">autosubscribe</span></span><a class="headerlink" href="#sttp.config.Config.autosubscribe" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the flag that determines if subscription should be handled automatically
+upon successful connection. When <cite>autorequestmetadata</cite> is True and
+<cite>autosubscribe</cite> is True, subscription will occur after reception of metadata.
+When <cite>autorequestmetadata</cite> is False and <cite>autosubscribe</cite> is True, subscription
+will occur at successful connection. When <cite>autosubscribe</cite> is False, any
+subscribe operations must be handled manually.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.compress_metadata">
+<span class="sig-name descname"><span class="pre">compress_metadata</span></span><a class="headerlink" href="#sttp.config.Config.compress_metadata" title="Permalink to this definition"></a></dt>
+<dd><p>Determines whether the metadata transfer is compressed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.compress_payloaddata">
+<span class="sig-name descname"><span class="pre">compress_payloaddata</span></span><a class="headerlink" href="#sttp.config.Config.compress_payloaddata" title="Permalink to this definition"></a></dt>
+<dd><p>Determines whether payload data is compressed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.compress_signalindexcache">
+<span class="sig-name descname"><span class="pre">compress_signalindexcache</span></span><a class="headerlink" href="#sttp.config.Config.compress_signalindexcache" title="Permalink to this definition"></a></dt>
+<dd><p>Determines whether the signal index cache is compressed.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.maxretries">
+<span class="sig-name descname"><span class="pre">maxretries</span></span><a class="headerlink" href="#sttp.config.Config.maxretries" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the maximum number of times to retry a connection.
+Set value to -1 to retry infinitely.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.maxretryinterval">
+<span class="sig-name descname"><span class="pre">maxretryinterval</span></span><a class="headerlink" href="#sttp.config.Config.maxretryinterval" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the maximum retry interval, in seconds.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.metadatafilters">
+<span class="sig-name descname"><span class="pre">metadatafilters</span></span><a class="headerlink" href="#sttp.config.Config.metadatafilters" title="Permalink to this definition"></a></dt>
+<dd><p>Defines any filters to be applied to incoming metadata to reduce total received metadata.
+Each filter expression should be separated by semi-colon.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.retryinterval">
+<span class="sig-name descname"><span class="pre">retryinterval</span></span><a class="headerlink" href="#sttp.config.Config.retryinterval" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the base retry interval, in seconds. Retries will exponentially back-off
+starting from this interval.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.config.Config.version">
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#sttp.config.Config.version" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the target STTP protocol version. This currently defaults to 2.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-sttp.reader">
+<span id="sttp-reader-module"></span><h2>sttp.reader module<a class="headerlink" href="#module-sttp.reader" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.reader.MeasurementReader">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.reader.</span></span><span class="sig-name descname"><span class="pre">MeasurementReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subscriber</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.subscriber.Subscriber" title="sttp.subscriber.Subscriber"><span class="pre">Subscriber</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/reader.html#MeasurementReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.reader.MeasurementReader" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Defines an STTP measurement reader.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.reader.MeasurementReader.dispose">
+<span class="sig-name descname"><span class="pre">dispose</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/reader.html#MeasurementReader.dispose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.reader.MeasurementReader.dispose" title="Permalink to this definition"></a></dt>
+<dd><p>Cleanly shuts down a <cite>MeasurmentReader</cite> that is no longer being used.
+This method will release any waiting threads.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.reader.MeasurementReader.next_measurement">
+<span class="sig-name descname"><span class="pre">next_measurement</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="sttp.transport.html#sttp.transport.measurement.Measurement" title="sttp.transport.measurement.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/reader.html#MeasurementReader.next_measurement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.reader.MeasurementReader.next_measurement" title="Permalink to this definition"></a></dt>
+<dd><p>Blocks current thread until a new measurement arrived.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-sttp.settings">
+<span id="sttp-settings-module"></span><h2>sttp.settings module<a class="headerlink" href="#module-sttp.settings" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.settings.Settings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.settings.</span></span><span class="sig-name descname"><span class="pre">Settings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">throttled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">publishinterval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">udpport</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint16</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">includetime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">usemillisecondresolution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requestnanvaluefilter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">starttime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stoptime</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">constraintparameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">processinginterval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra_connectionstring_parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/settings.html#Settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.settings.Settings" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Defines the STTP subscription related settings.</p>
+<p class="rubric">Notes</p>
+<p>The <cite>Settings</cite> class exists as a simplified implementation of the <cite>SubscriptionInfo</cite>
+class found in the <cite>transport</cite> namespace. Internally, the <cite>Subscriber</cite> class maps
+<cite>Settings</cite> values to a <cite>SubscriptionInfo</cite> instance for use with a <cite>DataSubscriber</cite>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_CONSTRAINTPARAMETERS">
+<span class="sig-name descname"><span class="pre">DEFAULT_CONSTRAINTPARAMETERS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_CONSTRAINTPARAMETERS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_EXTRA_CONNECTIONSTRING_PARAMETERS">
+<span class="sig-name descname"><span class="pre">DEFAULT_EXTRA_CONNECTIONSTRING_PARAMETERS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_EXTRA_CONNECTIONSTRING_PARAMETERS" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_INCLUDETIME">
+<span class="sig-name descname"><span class="pre">DEFAULT_INCLUDETIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_INCLUDETIME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_PROCESSINGINTERVAL">
+<span class="sig-name descname"><span class="pre">DEFAULT_PROCESSINGINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_PROCESSINGINTERVAL" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_PUBLISHINTERVAL">
+<span class="sig-name descname"><span class="pre">DEFAULT_PUBLISHINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_PUBLISHINTERVAL" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_REQUEST_NANVALUEFILTER">
+<span class="sig-name descname"><span class="pre">DEFAULT_REQUEST_NANVALUEFILTER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_REQUEST_NANVALUEFILTER" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_STARTTIME">
+<span class="sig-name descname"><span class="pre">DEFAULT_STARTTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_STARTTIME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_STOPTIME">
+<span class="sig-name descname"><span class="pre">DEFAULT_STOPTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_STOPTIME" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_THROTTLED">
+<span class="sig-name descname"><span class="pre">DEFAULT_THROTTLED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_THROTTLED" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_UDPPORT">
+<span class="sig-name descname"><span class="pre">DEFAULT_UDPPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_UDPPORT" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_USE_MILLISECONDRESOLUTION">
+<span class="sig-name descname"><span class="pre">DEFAULT_USE_MILLISECONDRESOLUTION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_USE_MILLISECONDRESOLUTION" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.constraintparameters">
+<span class="sig-name descname"><span class="pre">constraintparameters</span></span><a class="headerlink" href="#sttp.settings.Settings.constraintparameters" title="Permalink to this definition"></a></dt>
+<dd><p>Defines any custom constraint parameters for a requested temporal data playback. This can
+include parameters that may be needed to initiate, filter, or control historical data access.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.extra_connectionstring_parameters">
+<span class="sig-name descname"><span class="pre">extra_connectionstring_parameters</span></span><a class="headerlink" href="#sttp.settings.Settings.extra_connectionstring_parameters" title="Permalink to this definition"></a></dt>
+<dd><p>Defines any extra custom connection string parameters that may be needed for a subscription.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.includetime">
+<span class="sig-name descname"><span class="pre">includetime</span></span><a class="headerlink" href="#sttp.settings.Settings.includetime" title="Permalink to this definition"></a></dt>
+<dd><p>Determines if time should be included in non-compressed, compact measurements.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.processinginterval">
+<span class="sig-name descname"><span class="pre">processinginterval</span></span><a class="headerlink" href="#sttp.settings.Settings.processinginterval" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the initial playback speed, in milliseconds, for a requested temporal data playback.
+With the exception of the values of -1 and 0, this value specifies the desired processing interval for data, i.e.,
+basically a delay, or timer interval, over which to process data. A value of -1 means to use the default processing
+interval while a value of 0 means to process data as fast as possible.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.publishinterval">
+<span class="sig-name descname"><span class="pre">publishinterval</span></span><a class="headerlink" href="#sttp.settings.Settings.publishinterval" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the down-sampling publish interval, in seconds, to use when <cite>Throttled</cite> is True.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.request_nanvaluefilter">
+<span class="sig-name descname"><span class="pre">request_nanvaluefilter</span></span><a class="headerlink" href="#sttp.settings.Settings.request_nanvaluefilter" title="Permalink to this definition"></a></dt>
+<dd><p>Requests that the publisher filter, i.e., does not send, any NaN values.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.starttime">
+<span class="sig-name descname"><span class="pre">starttime</span></span><a class="headerlink" href="#sttp.settings.Settings.starttime" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the start time for a requested temporal data playback, i.e., a historical subscription.
+Simply by specifying a <cite>starttime</cite> and <cite>stoptime</cite>, a subscription is considered a historical subscription.
+Note that the publisher may not support historical subscriptions, in which case the subscribe will fail.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.stoptime">
+<span class="sig-name descname"><span class="pre">stoptime</span></span><a class="headerlink" href="#sttp.settings.Settings.stoptime" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the stop time for a requested temporal data playback, i.e., a historical subscription.
+Simply by specifying a <cite>starttime</cite> and <cite>stoptime</cite>, a subscription is considered a historical subscription.
+Note that the publisher may not support historical subscriptions, in which case the subscribe will fail.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.throttled">
+<span class="sig-name descname"><span class="pre">throttled</span></span><a class="headerlink" href="#sttp.settings.Settings.throttled" title="Permalink to this definition"></a></dt>
+<dd><p>Determines if data will be published using down-sampling.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.udpport">
+<span class="sig-name descname"><span class="pre">udpport</span></span><a class="headerlink" href="#sttp.settings.Settings.udpport" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the desired UDP port to use for publication. Zero value means do not receive data on UDP, i.e.,
+/   data will be delivered to the STTP client via TCP.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.settings.Settings.use_millisecondresolution">
+<span class="sig-name descname"><span class="pre">use_millisecondresolution</span></span><a class="headerlink" href="#sttp.settings.Settings.use_millisecondresolution" title="Permalink to this definition"></a></dt>
+<dd><p>Determines if time should be restricted to milliseconds in non-compressed, compact measurements.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-sttp.subscriber">
+<span id="sttp-subscriber-module"></span><h2>sttp.subscriber module<a class="headerlink" href="#module-sttp.subscriber" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.subscriber.</span></span><span class="sig-name descname"><span class="pre">Subscriber</span></span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents an STTP data subscriber.</p>
+<p class="rubric">Notes</p>
+<p>The <cite>Subscriber</cite> class exists as a simplified implementation of the <cite>DataSubscriber</cite>
+class found in the <cite>transport</cite> namespace. This class maintains an internal instance
+of the <cite>DataSubscriber</cite> class for subscription based functionality and is intended
+to simplify common uses of STTP data reception.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.activesignalindexcache">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">activesignalindexcache</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache" title="sttp.transport.signalindexcache.SignalIndexCache"><span class="pre">SignalIndexCache</span></a></em><a class="headerlink" href="#sttp.subscriber.Subscriber.activesignalindexcache" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the active signal index cache.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.adjustedvalue">
+<span class="sig-name descname"><span class="pre">adjustedvalue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="sttp.transport.html#sttp.transport.measurement.Measurement" title="sttp.transport.measurement.Measurement"><span class="pre">Measurement</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float64</span></span></span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.adjustedvalue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.adjustedvalue" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the Value of a <cite>Measurement</cite> with any linear adjustments applied from the
+measurement’s Adder and Multiplier metadata, if found.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.config.Config" title="sttp.config.Config"><span class="pre">Config</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Exception</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.connect" title="Permalink to this definition"></a></dt>
+<dd><p>Starts the client-based connection cycle to an STTP publisher. Config parameter controls
+connection related settings. When the config defines <cite>AutoReconnect</cite> as True, the connection
+will automatically be retried when the connection drops. If the config parameter defines
+<cite>AutoRequestMetadata</cite> as True, then upon successful connection, meta-data will be requested.
+When the config defines both <cite>AutoRequestMetadata</cite> and <cite>AutoSubscribe</cite> as True, subscription
+will occur after reception of metadata. When the config defines <cite>AutoRequestMetadata</cite> as
+False and <cite>AutoSubscribe</cite> as True, subscription will occur at successful connection.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.connected">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connected</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.subscriber.Subscriber.connected" title="Permalink to this definition"></a></dt>
+<dd><p>Gets flag that determines if <cite>Subscriber</cite> is currently connected to a data publisher.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.default_connectionestablished_receiver">
+<span class="sig-name descname"><span class="pre">default_connectionestablished_receiver</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.default_connectionestablished_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.default_connectionestablished_receiver" title="Permalink to this definition"></a></dt>
+<dd><p>Implements the default handler for the connection established callback.
+Default implementation simply writes connection feedback to status message callback.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.default_connectionterminated_receiver">
+<span class="sig-name descname"><span class="pre">default_connectionterminated_receiver</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.default_connectionterminated_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.default_connectionterminated_receiver" title="Permalink to this definition"></a></dt>
+<dd><p>Implements the default handler for the connection terminated callback.
+Default implementation simply writes connection terminated feedback to error message callback.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.default_errormessage_logger">
+<span class="sig-name descname"><span class="pre">default_errormessage_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.default_errormessage_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.default_errormessage_logger" title="Permalink to this definition"></a></dt>
+<dd><p>Implements the default handler for the error message callback.
+Default implementation synchronously writes output to stderr.
+Logging is recommended.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.default_statusmessage_logger">
+<span class="sig-name descname"><span class="pre">default_statusmessage_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.default_statusmessage_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.default_statusmessage_logger" title="Permalink to this definition"></a></dt>
+<dd><p>Implements the default handler for the status message callback.
+Default implementation synchronously writes output to stdio.
+Logging is recommended.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.disconnect">
+<span class="sig-name descname"><span class="pre">disconnect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.disconnect" title="Permalink to this definition"></a></dt>
+<dd><p>Disconnects from an STTP publisher.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.dispose">
+<span class="sig-name descname"><span class="pre">dispose</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.dispose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.dispose" title="Permalink to this definition"></a></dt>
+<dd><p>Cleanly shuts down a <cite>Subscriber</cite> that is no longer being used, e.g.,
+during a normal application exit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.errormessage">
+<span class="sig-name descname"><span class="pre">errormessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.errormessage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.errormessage" title="Permalink to this definition"></a></dt>
+<dd><p>Executes the defined error message logger callback.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.measurement_metadata">
+<span class="sig-name descname"><span class="pre">measurement_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="sttp.transport.html#sttp.transport.measurement.Measurement" title="sttp.transport.measurement.Measurement"><span class="pre">Measurement</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="sttp.metadata.record.html#sttp.metadata.record.measurement.MeasurementRecord" title="sttp.metadata.record.measurement.MeasurementRecord"><span class="pre">MeasurementRecord</span></a></span></span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.measurement_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.measurement_metadata" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the <cite>MeasurementRecord</cite> for the specified measurement, based on its signal ID,
+from the local metadata cache; or, None if the measurement cannot be found.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.metadatacache">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metadatacache</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="sttp.metadata.html#sttp.metadata.cache.MetadataCache" title="sttp.metadata.cache.MetadataCache"><span class="pre">MetadataCache</span></a></em><a class="headerlink" href="#sttp.subscriber.Subscriber.metadatacache" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the current metadata cache.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.read_measurements">
+<span class="sig-name descname"><span class="pre">read_measurements</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sttp.reader.MeasurementReader" title="sttp.reader.MeasurementReader"><span class="pre">MeasurementReader</span></a></span></span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.read_measurements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.read_measurements" title="Permalink to this definition"></a></dt>
+<dd><p>Sets up a new <cite>MeasurementReader</cite> to start reading measurements.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.request_metadata">
+<span class="sig-name descname"><span class="pre">request_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.request_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.request_metadata" title="Permalink to this definition"></a></dt>
+<dd><p>Sends a request to the data publisher indicating that the <cite>Subscriber</cite> would
+like new metadata. Any defined MetadataFilters will be included in request.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.set_configurationchanged_receiver">
+<span class="sig-name descname"><span class="pre">set_configurationchanged_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_configurationchanged_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.set_configurationchanged_receiver" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the callback that handles notifications that the data publisher configuration has changed.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.set_connectionestablished_receiver">
+<span class="sig-name descname"><span class="pre">set_connectionestablished_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_connectionestablished_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.set_connectionestablished_receiver" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the callback that handles notification that a connection has been established.
+Default implementation simply writes connection feedback to status message handler.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.set_connectionterminated_receiver">
+<span class="sig-name descname"><span class="pre">set_connectionterminated_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_connectionterminated_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.set_connectionterminated_receiver" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the callback that handles notification that a connection has been terminated.
+Default implementation simply writes connection terminated feedback to error message handler.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.set_data_starttime_receiver">
+<span class="sig-name descname"><span class="pre">set_data_starttime_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_data_starttime_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.set_data_starttime_receiver" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the callback that handles notification of first received measurement.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.set_errormessage_logger">
+<span class="sig-name descname"><span class="pre">set_errormessage_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_errormessage_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.set_errormessage_logger" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the callback that handles error message logging.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.set_historicalreadcomplete_receiver">
+<span class="sig-name descname"><span class="pre">set_historicalreadcomplete_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_historicalreadcomplete_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.set_historicalreadcomplete_receiver" title="Permalink to this definition"></a></dt>
+<dd><p>defines the callback that handles notification that temporal processing has completed, i.e.,
+the end of a historical playback data stream has been reached.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.set_metadatanotification_receiver">
+<span class="sig-name descname"><span class="pre">set_metadatanotification_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="sttp.data.html#sttp.data.dataset.DataSet" title="sttp.data.dataset.DataSet"><span class="pre">DataSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_metadatanotification_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.set_metadatanotification_receiver" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the callback that handles reception of the metadata received notification response.
+Receiver parameter defines full XML response received from publisher.
+Parsed metadata available via <cite>Subscriber.metadatacache</cite> property.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.set_newbufferblock_receiver">
+<span class="sig-name descname"><span class="pre">set_newbufferblock_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="sttp.transport.html#sttp.transport.bufferblock.BufferBlock" title="sttp.transport.bufferblock.BufferBlock"><span class="pre">BufferBlock</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_newbufferblock_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.set_newbufferblock_receiver" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the callback that handles reception of new buffer blocks.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.set_newmeasurements_receiver">
+<span class="sig-name descname"><span class="pre">set_newmeasurements_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="sttp.transport.html#sttp.transport.measurement.Measurement" title="sttp.transport.measurement.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_newmeasurements_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.set_newmeasurements_receiver" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the callback that handles reception of new measurements.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.set_notification_receiver">
+<span class="sig-name descname"><span class="pre">set_notification_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_notification_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.set_notification_receiver" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the callback that handles reception of a notification.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.set_statusmessage_logger">
+<span class="sig-name descname"><span class="pre">set_statusmessage_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_statusmessage_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.set_statusmessage_logger" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the callback that handles informational message logging.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.set_subscriptionupdated_receiver">
+<span class="sig-name descname"><span class="pre">set_subscriptionupdated_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache" title="sttp.transport.signalindexcache.SignalIndexCache"><span class="pre">SignalIndexCache</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_subscriptionupdated_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.set_subscriptionupdated_receiver" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the callback that handles notifications that a new <cite>SignalIndexCache</cite> has been received.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.statusmessage">
+<span class="sig-name descname"><span class="pre">statusmessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.statusmessage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.statusmessage" title="Permalink to this definition"></a></dt>
+<dd><p>Executes the defined status message logger callback.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.subscribe">
+<span class="sig-name descname"><span class="pre">subscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filterexpression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.settings.Settings" title="sttp.settings.Settings"><span class="pre">Settings</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.subscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.subscribe" title="Permalink to this definition"></a></dt>
+<dd><p>Subscribe sets up a request indicating that the <cite>Subscriber</cite> would like to start receiving
+streaming data from a data publisher. If the subscriber is already connected, the updated
+filter expression and subscription settings will be requested immediately; otherwise, the
+settings will be used when the connection to the data publisher is established.</p>
+<p>The filterExpression defines the desired measurements for a subscription. Examples include:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Directly specified signal IDs (UUID values in string format):</dt><dd><p>38A47B0-F10B-4143-9A0A-0DBC4FFEF1E8; E4BBFE6A-35BD-4E5B-92C9-11FF913E7877</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Directly specified tag names:</dt><dd><p>DOM_GPLAINS-BUS1:VH; TVA_SHELBY-BUS1:VH</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Directly specified identifiers in “measurement key” format:</dt><dd><p>PPA:15; STAT:20</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>A filter expression against a selection view:</dt><dd><p>FILTER ActiveMeasurements WHERE Company=’GPA’ AND SignalType=’FREQ’</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Settings parameter controls subscription related settings.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.subscribed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subscribed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.subscriber.Subscriber.subscribed" title="Permalink to this definition"></a></dt>
+<dd><p>Gets flag that determines if <cite>Subscriber</cite> is currently subscribed to a data stream.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.subscriberid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subscriberid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">UUID</span></em><a class="headerlink" href="#sttp.subscriber.Subscriber.subscriberid" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the subscriber ID as assigned by the data publisher upon receipt of the <cite>SignalIndexCache</cite>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.total_commandchannel_bytesreceived">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">total_commandchannel_bytesreceived</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uint64</span></em><a class="headerlink" href="#sttp.subscriber.Subscriber.total_commandchannel_bytesreceived" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the total number of bytes received via the command channel since last connection.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.total_datachannel_bytesreceived">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">total_datachannel_bytesreceived</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uint64</span></em><a class="headerlink" href="#sttp.subscriber.Subscriber.total_datachannel_bytesreceived" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the total number of bytes received via the data channel since last connection.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.total_measurementsreceived">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">total_measurementsreceived</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uint64</span></em><a class="headerlink" href="#sttp.subscriber.Subscriber.total_measurementsreceived" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the total number of measurements received since last subscription.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.subscriber.Subscriber.unsubscribe">
+<span class="sig-name descname"><span class="pre">unsubscribe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.unsubscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.unsubscribe" title="Permalink to this definition"></a></dt>
+<dd><p>Sends a request to the data publisher indicating that the Subscriber would
+like to stop receiving streaming data.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-sttp.ticks">
+<span id="sttp-ticks-module"></span><h2>sttp.ticks module<a class="headerlink" href="#module-sttp.ticks" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.ticks.</span></span><span class="sig-name descname"><span class="pre">Ticks</span></span><a class="reference internal" href="_modules/sttp/ticks.html#Ticks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.ticks.Ticks" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Defines constants and functions for tick values, 64-bit integers used to designate time in STTP. A tick value represents
+the number of 100-nanosecond intervals that have elapsed since 12:00:00 midnight, January 1, 0001 UTC, Gregorian calendar.
+A single tick represents one hundred nanoseconds, or one ten-millionth of a second. There are 10,000 ticks in a millisecond
+and 10 million ticks in a second. Only bits 01 to 62 (0x3FFFFFFFFFFFFFFF) are used to represent the timestamp value.
+Bit 64 (0x8000000000000000) is used to denote leap second, i.e., second 60, where actual second value would remain at 59.
+Bit 63 is reserved and unset.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.LEAPSECONDFLAG">
+<span class="sig-name descname"><span class="pre">LEAPSECONDFLAG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9223372036854775808</span></em><a class="headerlink" href="#sttp.ticks.Ticks.LEAPSECONDFLAG" title="Permalink to this definition"></a></dt>
+<dd><p>Flag (64th bit) that marks a Ticks value as a leap second, i.e., second 60 (one beyond normal second 59).</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.PERDAY">
+<span class="sig-name descname"><span class="pre">PERDAY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">864000000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERDAY" title="Permalink to this definition"></a></dt>
+<dd><p>Number of Ticks that occur in a day.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.PERHOUR">
+<span class="sig-name descname"><span class="pre">PERHOUR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">36000000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERHOUR" title="Permalink to this definition"></a></dt>
+<dd><p>Number of Ticks that occur in an hour.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.PERMICROSECOND">
+<span class="sig-name descname"><span class="pre">PERMICROSECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMICROSECOND" title="Permalink to this definition"></a></dt>
+<dd><p>Number of Ticks that occur in a microsecond.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.PERMILLISECOND">
+<span class="sig-name descname"><span class="pre">PERMILLISECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMILLISECOND" title="Permalink to this definition"></a></dt>
+<dd><p>Number of Ticks that occur in a millisecond.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.PERMINUTE">
+<span class="sig-name descname"><span class="pre">PERMINUTE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">600000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMINUTE" title="Permalink to this definition"></a></dt>
+<dd><p>Number of Ticks that occur in a minute.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.PERSECOND">
+<span class="sig-name descname"><span class="pre">PERSECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERSECOND" title="Permalink to this definition"></a></dt>
+<dd><p>Number of Ticks that occur in a second.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.RESERVEDUTCFLAG">
+<span class="sig-name descname"><span class="pre">RESERVEDUTCFLAG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4611686018427387904</span></em><a class="headerlink" href="#sttp.ticks.Ticks.RESERVEDUTCFLAG" title="Permalink to this definition"></a></dt>
+<dd><p>Reserved flag (63rd bit) that should be unset when serializing and deserializing Ticks.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.UNIXBASEOFFSET">
+<span class="sig-name descname"><span class="pre">UNIXBASEOFFSET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">621355968000000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.UNIXBASEOFFSET" title="Permalink to this definition"></a></dt>
+<dd><p>Ticks representation of the Unix epoch timestamp starting at January 1, 1970.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.VALUEMASK">
+<span class="sig-name descname"><span class="pre">VALUEMASK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4611686018427387903</span></em><a class="headerlink" href="#sttp.ticks.Ticks.VALUEMASK" title="Permalink to this definition"></a></dt>
+<dd><p>All bits (bits 1 to 62) that make up the value portion of a Ticks that represent time.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.from_datetime">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_datetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">uint64</span></span></span><a class="reference internal" href="_modules/sttp/ticks.html#Ticks.from_datetime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.ticks.Ticks.from_datetime" title="Permalink to this definition"></a></dt>
+<dd><p>Converts a standard Python dattime value to a Ticks value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.from_timedelta">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">from_timedelta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">td</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">timedelta</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">uint64</span></span></span><a class="reference internal" href="_modules/sttp/ticks.html#Ticks.from_timedelta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.ticks.Ticks.from_timedelta" title="Permalink to this definition"></a></dt>
+<dd><p>Converts a standard Python timedelta value to a Ticks value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.is_leapsecond">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_leapsecond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint64</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/sttp/ticks.html#Ticks.is_leapsecond"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.ticks.Ticks.is_leapsecond" title="Permalink to this definition"></a></dt>
+<dd><p>Determines if the deserialized Ticks value represents a leap second, i.e., second 60.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.now">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">now</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">uint64</span></span></span><a class="reference internal" href="_modules/sttp/ticks.html#Ticks.now"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.ticks.Ticks.now" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the current local time as a Ticks value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.set_leapsecond">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">set_leapsecond</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint64</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">uint64</span></span></span><a class="reference internal" href="_modules/sttp/ticks.html#Ticks.set_leapsecond"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.ticks.Ticks.set_leapsecond" title="Permalink to this definition"></a></dt>
+<dd><p>Flags a Ticks value to represent a leap second, i.e., second 60, before wire serialization.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.to_datetime">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_datetime</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint64</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">datetime</span></span></span><a class="reference internal" href="_modules/sttp/ticks.html#Ticks.to_datetime"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.ticks.Ticks.to_datetime" title="Permalink to this definition"></a></dt>
+<dd><p>Converts a Ticks value to standard Python datetime value.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.to_shortstring">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_shortstring</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint64</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/sttp/ticks.html#Ticks.to_shortstring"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.ticks.Ticks.to_shortstring" title="Permalink to this definition"></a></dt>
+<dd><p>Shows just the timestamp portion of a Ticks value with milliseconds, e.g., 15:04:05.999.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.to_string">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">to_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ticks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timespec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'microseconds'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/sttp/ticks.html#Ticks.to_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.ticks.Ticks.to_string" title="Permalink to this definition"></a></dt>
+<dd><p>Standard timestamp representation for a Ticks value, e.g., 2006-01-02 15:04:05.999999999.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.ticks.Ticks.utcnow">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">utcnow</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">uint64</span></span></span><a class="reference internal" href="_modules/sttp/ticks.html#Ticks.utcnow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.ticks.Ticks.utcnow" title="Permalink to this definition"></a></dt>
+<dd><p>Gets the current time in UTC as a Ticks value.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-sttp.version">
+<span id="sttp-version-module"></span><h2>sttp.version module<a class="headerlink" href="#module-sttp.version" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.version.Version">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.version.</span></span><span class="sig-name descname"><span class="pre">Version</span></span><a class="reference internal" href="_modules/sttp/version.html#Version"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.version.Version" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.version.Version.STTP_SOURCE">
+<span class="sig-name descname"><span class="pre">STTP_SOURCE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'STTP</span> <span class="pre">Python</span> <span class="pre">Library'</span></em><a class="headerlink" href="#sttp.version.Version.STTP_SOURCE" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the STTP library API title used for data subscriber identification.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.version.Version.STTP_UPDATEDON">
+<span class="sig-name descname"><span class="pre">STTP_UPDATEDON</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'2022-08-28'</span></em><a class="headerlink" href="#sttp.version.Version.STTP_UPDATEDON" title="Permalink to this definition"></a></dt>
+<dd><p>Defines when the STTP library API was last updated used for data subscriber identification.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.version.Version.STTP_VERSION">
+<span class="sig-name descname"><span class="pre">STTP_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'0.1.0'</span></em><a class="headerlink" href="#sttp.version.Version.STTP_VERSION" title="Permalink to this definition"></a></dt>
+<dd><p>Defines the STTP library API version used for data subscriber identification.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-sttp">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sttp" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Grid Protection Alliance.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+ 
+<hr />
+<p><a href="https://sttp.github.io/pyapi/">Return to Home</a></p>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
