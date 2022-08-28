@@ -17,4 +17,4 @@ echo Ready to deploy new HTML
 pause
 rmdir /s /q docs\html
 xcopy /e /i docs\_build\html docs\html
-cd . > docs\html\.nojekyll
+

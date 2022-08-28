@@ -7,3 +7,7 @@ github:
   owner_name: Grid Protection Alliance
 plugins:
   - jemoji
+include:
+  html/_modules
+  html/_sources
+  html/_static
