@@ -409,10 +409,8 @@ class Subscriber:
             self._datasubscriber.subscribe()
 
     def _show_metadatasummary(self, dataset: DataSet, parsestarted: float):
-        tabledetails = []
+        tabledetails = ["    Discovered:\n"]
         totalrows = 0
-
-        tabledetails.append("    Discovered:\n")
 
         for table in dataset:
             tablename = table.name
@@ -420,9 +418,10 @@ class Subscriber:
             totalrows += tablerows
             tabledetails.append(f"        {tablerows:,} {tablename} records\n")
 
-        message = []
-        message.append(f"Parsed {totalrows:,} metadata records in {(time() - parsestarted):.3f} seconds\n")
-        message.append("".join(tabledetails))
+        message = [
+            f"Parsed {totalrows:,} metadata records in {(time() - parsestarted):.3f} seconds\n",
+            "".join(tabledetails)
+        ]
 
         schemaversion = dataset["SchemaVersion"]
 
@@ -579,7 +578,7 @@ class Subscriber:
 
     def set_historicalreadcomplete_receiver(self, callback: Optional[Callable[[], None]]):
         """
-        defines the callback that handles notification that temporal processing has completed, i.e.,
+        Defines the callback that handles notification that temporal processing has completed, i.e.,
         the end of a historical playback data stream has been reached.
         Assignment will take effect immediately, even while subscription is active.
         """

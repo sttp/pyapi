@@ -126,7 +126,7 @@ class SignalKindEnum:
         return [f"{phasortype}PHA", f"{phasortype}PHM", "FREQ", "DFDT", "FLAG", "DIGI", "ALOG", "CALC", "STAT", "ALRM", "QUAL", "NULL"][signalkind]
 
     @staticmethod
-    def parse_acronym(acronym: str) -> SignalKind:
+    def parse_acronym(acronym: str) -> SignalKind:  # sourcery skip: assign-if-exp, reintroduce-else
         """
         Gets the `SignalKind` enumeration value for the specified two-character acronym.
         """

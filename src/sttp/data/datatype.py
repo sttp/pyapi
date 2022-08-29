@@ -107,7 +107,7 @@ class DataType(IntEnum):
     """
 
 
-def default_datatype(datatype: DataType) -> Any:
+def default_datatype(datatype: DataType) -> Any:  # sourcery skip: assign-if-exp, reintroduce-else
     if datatype == DataType.STRING:
         return Empty.STRING
     if datatype == DataType.BOOLEAN:

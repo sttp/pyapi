@@ -131,7 +131,7 @@ class CompactMeasurement(Measurement):
         self._timeindex = 0
         self._usingbasetimeoffset = False
 
-    def get_binarylength(self) -> np.uint32:
+    def get_binarylength(self) -> np.uint32:  # sourcery skip: assign-if-exp
         """
         Gets the binary byte length of a `CompactMeasurement`
         """
@@ -210,10 +210,7 @@ class CompactMeasurement(Measurement):
 
         self.flags = _map_to_fullflags(flags)
 
-        if (flags & CompactStateFlags.TIMEINDEX) > 0:
-            self._timeindex = 1
-        else:
-            self._timeindex = 0
+        self._timeindex = 1 if flags & CompactStateFlags.TIMEINDEX > 0 else 0
 
         self._usingbasetimeoffset = (
             flags & CompactStateFlags.BASETIMEOFFSET) > 0
@@ -244,7 +241,7 @@ class CompactMeasurement(Measurement):
         Parses a `CompactMeasurement` from the specified byte buffer.
         """
 
-        if len(buffer) < 1:
+        if len(buffer) < FIXEDLENGTH:
             return 0, ValueError("not enough buffer available to deserialize compact measurement")
 
         # Basic Compact Measurement Format:
@@ -254,11 +251,10 @@ class CompactMeasurement(Measurement):
         #		  ID          4
         #		 Value        4
         #		 [Time]    0/2/4/8
-        index = int(0)
 
         # Decode state flags
         self.set_compact_stateflags(buffer[0])
-        index += 1
+        index = 1
 
         # Decode runtime ID
         self.runtimeid = np.int32(BigEndian.to_uint32(buffer[index:]))

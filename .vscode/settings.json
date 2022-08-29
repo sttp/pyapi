@@ -28,6 +28,7 @@
         "isconnected",
         "issubscribed",
         "IVINDEX",
+        "keyid",
         "lastoosreport",
         "msdata",
         "nodeid",

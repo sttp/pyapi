@@ -186,17 +186,17 @@ class SignalIndexCache:
 
             offset += 16
 
-            # Source
+            # Measurement key Source
             sourcesize = BigEndian.to_uint32(buffer[offset:])
             offset += 4
 
             source = ds.decodestr(buffer[offset: offset + sourcesize])
             offset += sourcesize
 
-            # ID
-            id = BigEndian.to_uint64(buffer[offset:])
+            # Measurement key ID
+            keyid = BigEndian.to_uint64(buffer[offset:])
             offset += 8
 
-            self._add_record(ds, signalindex, signalid, source, id)
+            self._add_record(ds, signalindex, signalid, source, keyid)
 
         return (subscriberid, None)

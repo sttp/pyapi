@@ -256,10 +256,7 @@ class DataTable:
 
         row = self.row(rowindex)
 
-        if row is None:
-            return Empty.STRING
-
-        return row.value_as_string_byname(columnname)
+        return Empty.STRING if row is None else row.value_as_string_byname(columnname)
 
     def __repr__(self):
         image: List[str] = [f"{self.name} ["]

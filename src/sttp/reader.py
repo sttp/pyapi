@@ -25,6 +25,7 @@ from __future__ import annotations
 from .transport.measurement import Measurement
 from typing import List, Optional, Tuple, TYPE_CHECKING
 from queue import Full, Queue
+import contextlib
 
 if TYPE_CHECKING:
     from subscriber import Subscriber
@@ -52,18 +53,14 @@ class MeasurementReader:
 
         self._disposed = True
 
-        try:
+        with contextlib.suppress(Full):
             self._queue.put_nowait(Measurement())
-        except Full:
-            pass
 
         self._task_done()
 
     def _task_done(self):
-        try:
+        with contextlib.suppress(ValueError):
             self._queue.task_done()
-        except ValueError:
-            pass
 
     def _read_measurements(self, measurements: List[Measurement]):
         for measurement in measurements:

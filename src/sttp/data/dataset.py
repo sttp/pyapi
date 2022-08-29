@@ -131,12 +131,7 @@ class DataSet:
         Gets the table names defined in the `DataSet`.
         """
 
-        tablenames: List[str] = []
-
-        for table in self._tables.values():
-            tablenames.append(table.name)
-
-        return tablenames
+        return [table.name for table in self._tables.values()]
 
     def tables(self) -> List[DataTable]:
         """

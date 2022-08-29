@@ -135,6 +135,7 @@ class DataRow:
     # return value, None
 
     def _get_computedvalue(self, column: DataColumn) -> Tuple[Optional[Any], Optional[Exception]]:
+        # sourcery skip: assign-if-exp, reintroduce-else
         (expressiontree, err) = self._expressiontree(column)
 
         if err is not None:

@@ -221,15 +221,13 @@ class SubscriberConnector:
         if ds.disposing:
             return ConnectStatus.CANCELED
 
-        if ds.connected:
-            return ConnectStatus.SUCCESS
-
-        return ConnectStatus.FAILED
+        return ConnectStatus.SUCCESS if ds.connected else ConnectStatus.FAILED
 
     def cancel(self):
         """
         Stops all current and future connection sequences.
         """
+
         if self._cancel:
             return
 
