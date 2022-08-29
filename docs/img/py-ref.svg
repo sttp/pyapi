@@ -1,0 +1,20 @@
+<svg width="169.5" height="20" viewBox="0 0 1695 200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" role="img" aria-label="sttpapi: python-reference">
+  <title>sttpapi: python-reference</title>
+  <linearGradient id="a" x2="0" y2="100%">
+    <stop offset="0" stop-opacity=".1" stop-color="#EEE"/>
+    <stop offset="1" stop-opacity=".1"/>
+  </linearGradient>
+  <mask id="m"><rect width="1695" height="200" rx="30" fill="#FFF"/></mask>
+  <g mask="url(#m)">
+    <rect width="637" height="200" fill="#555"/>
+    <rect width="1058" height="200" fill="#08C" x="637"/>
+    <rect width="1695" height="200" fill="url(#a)"/>
+  </g>
+  <g aria-hidden="true" fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
+    <text x="220" y="148" textLength="377" fill="#000" opacity="0.25">sttpapi</text>
+    <text x="210" y="138" textLength="377">sttpapi</text>
+    <text x="692" y="148" textLength="958" fill="#000" opacity="0.25">python-reference</text>
+    <text x="682" y="138" textLength="958">python-reference</text>
+  </g>
+  <image x="40" y="35" width="130" height="130" xlink:href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTIzLjkyMiAxMy41OHYzLjkxMkwyMC41NSAxOC43MmwtLjA3OC4wNTUuMDUyLjAzNyAzLjQ1LTEuMjU2LjAyNi0uMDM2di0zLjk5N2wtLjA1My0uMDM2LS4wMjUuMDkyem0tLjMwMS03Ljk2MmwtMy4wNCAxLjEwN3YzLjkxMmwzLjMzOS0xLjIxNVY1LjUwOXptLjI5OSA3LjgzOVY5LjU0NGwtMy4zMzYgMS4yMTV2My45MTN6bS0zLjQ1IDEuMjUzVjEwLjhsLTMuMyAxLjJ2My45MTN6bS0zLjQzNiA1LjI4NnYtMy45MTJsLTMuMzEzIDEuMjA2djMuOTEyem0uMTM2LTMuOTM5djMuODY4bDMuMzE0LTEuMjA2VjE0Ljg1bC0zLjMxNCAxLjIwNnptMi4wOTMgMS44ODJjLS4zNjcuMTM0LS42NjMtLjA3NC0uNjYzLS40NjNzLjI5Ni0uODE0LjY2My0uOTQ3Yy4zNjUtLjEzMy42NjIuMDc1LjY2Mi40NjRzLS4yOTcuODE0LS42NjIuOTQ2em0tNi4wMzgtOC42MjRsLjM2NS0uMTMyLTMuMjg1LTEuMTk3LTMuMzIzIDEuMjEuMTAyLjAzNyAzLjE4NCAxLjE2em03LjI4MiAxLjM0OVY2Ljc1MUwxNy4xNyA3Ljk2NXYzLjkxM3ptLTMuNDQ5IDEuMjU0VjguMDA1bC0zLjMwMiAxLjIwMnYzLjkxMnptLTMuNDE1LTIuNjcybC0zLjMzNiAxLjIxNXYzLjkxM2wzLjMzNi0xLjIxNXptLTYuNzM2IDMuOTE5bDMuMzIyIDEuMjA5di0zLjkxM0w2LjkwNyA5LjI1MnptMy40MzMtNS4yOTJsMy4yODEgMS4xOTNWNS4xOThsLTMuMjgtMS4xOTN6bTEwLjE2Ny01LjE1OEwxNy4xOSAzLjkyMnYzLjkxM2wzLjMxNy0xLjIwN3pNMTYuOTUgMy45MDNMMTMuNzI0IDIuNzNsLTMuMjY5IDEuMTkgMy4yMjUgMS4xNzR6bS0xLjU4NS43MDNsLTEuNjI0LjU5MnYzLjg2OGwzLjMxNy0xLjIwN1YzLjk5MWwtMS42OTMuNjE1em0tLjM5MSAyLjc3OGMtLjM2Ny4xMzQtLjY2Mi0uMDc0LS42NjItLjQ2NHMuMjk1LS44MTMuNjYyLS45NDZjLjM2Ni0uMTMzLjY2My4wNzQuNjYzLjQ2NHMtLjI5Ny44MTMtLjY2My45NDZ6TTEwLjIyOSAxOC40MXYtMy45MTRsLTMuMzIyLTEuMjA5VjE3LjJ6bTMuNDQ5LTEuMjI4di0zLjkxM2wtMy4zNzEgMS4yMjd2My45MTN6bS4wNzgtLjAyOGwzLjMtMS4yVjEyLjA0bC0zLjMgMS4yem0tLjA3OCA0LjA2M2wtMy4zNzEgMS4yMjd2LTMuOTEyaC0uMDc4djMuOTEybC0zLjMyMi0xLjIwOXYtMy45MTNsLS4wNTMtLjA1OC0uMDI1LS4wNi0zLjMzNi0xLjIxdi0zLjk0OGwuMDM0LjAxMyAzLjI4NyAxLjE5Ni4wMTUtLjA3OC0zLjI2MS0xLjE4NyAzLjI2LTEuMTg3di0uMTA5TDMuODc2IDkuNjJsLS4zMDctLjExMiAzLjI2LTEuMTg4di44NzdsLjA3OS0uMDU1VjYuNzY5bDMuMjU3IDEuMTg1LjA1OC0uMDYxTDcuMDg0IDYuNzVsLS4xMDItLjAzNyAzLjI0LTEuMTc5di0uMDgzTDYuODU0IDYuNjc3di4wMThsLS4wMjUuMDE4djEuNTIzTDMuNDQgOS40N3YuMDJsLS4wMjUuMDE3djQuMDA3bC0zLjM5IDEuMjMzdi4wMTlMMCAxNC43ODR2My45OTVsLjAyNS4wMzcgMy40IDEuMjM3LjAwOC0uMDA2LjAwNy4wMSAzLjQgMS4yMzguMDA4LS4wMDYuMDA2LjAxIDMuNCAxLjIzNy4wMTQtLjAwOS4wMTIuMDEgMy40NS0xLjI1Ni4wMjYtLjAzNy0uMDc4LS4wMjd6TTMuNDkzIDkuNTYzbDMuMjU3IDEuMTg1LTMuMjU3IDEuMTg3VjkuNTYyek0zLjQgMTkuOTZMLjA3OCAxOC43NTJ2LTMuOTEzbDIuMzYxLjg2Ljk2LjM0OXYzLjkxM3ptLjAxNS0zLjk5bC0zLjA4LTEuMTItLjE4Mi0uMDY2IDMuMjYyLTEuMTg3djIuMzc0em0zLjM5OSA1LjIzMWwtMy4zMjEtMS4yMDlWMTYuMDhsMy4zMjEgMS4yMDl2My45MTJ6TTIzLjc5MSA1LjQzNGwtMy4yMS0xLjE3djIuMzM4em0tMy40MDQtMi43OTFsLTMuMjQtMS4xOC0zLjI3IDEuMTkgMy4yNDcgMS4xODJ6Ii8+PC9zdmc+Cg=="/>
+</svg>
