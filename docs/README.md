@@ -39,7 +39,7 @@ def read_data(subscriber: Subscriber):
     lastmessage = 0.0
 
     while subscriber.connected:
-        (measurement, success) = reader.next_measurement()
+        measurement, success = reader.next_measurement()
 
         if not success:
             break
@@ -51,11 +51,11 @@ def read_data(subscriber: Subscriber):
             lastmessage = time()
             continue
 
-        message = []
-
-        message.append(f"{subscriber.total_measurementsreceived:,}")
-        message.append(" measurements received so far. Current measurement:\n    ")
-        message.append(str(measurement))
+        message = [
+            f"{subscriber.total_measurementsreceived:,}",
+            " measurements received so far. Current measurement:\n    ",
+            str(measurement)
+        ]
 
         subscriber.statusmessage("".join(message))
         lastmessage = time()

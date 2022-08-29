@@ -75,7 +75,7 @@ class DataSet:
         Creates a new `DataSet`.
         """
 
-        self._tables: Dict[str, DataTable] = dict()
+        self._tables: Dict[str, DataTable] = {}
 
         self.name = DataSet.DEFAULT_NAME if name is ... else name
         """
@@ -109,7 +109,7 @@ class DataSet:
         Any existing tables will be deleted.
         """
 
-        self._tables = dict()
+        self._tables = {}
 
     def add_table(self, table: DataTable):
         """
@@ -171,18 +171,13 @@ class DataSet:
         return self._tables.pop(tablename.upper()) is not None
 
     def __repr__(self):
-        image: List[str] = []
+        image: List[str] = [f"{self.name} ["]
 
-        image.append(f"{self.name} [")
-        i = 0
-
-        for table in self._tables:
+        for i, table in enumerate(self._tables):
             if i > 0:
                 image.append(", ")
 
             image.append(table.name)
-            i += 1
-
         image.append("]")
 
         return "".join(image)
@@ -298,7 +293,7 @@ class DataSet:
 
             self.add_table(datatable)
 
-    def _load_records(self, root: Element):
+    def _load_records(self, root: Element):  # sourcery skip: low-code-quality
         # Each root node child that matches a table name represents a record
         for record in root:
             table = self.table(record.tag)
@@ -316,38 +311,38 @@ class DataSet:
                     continue
 
                 index = column.index
-                type = column.type
+                datatype = column.datatype
                 value = field.text
 
-                if type == DataType.STRING:
+                if datatype == DataType.STRING:
                     datarow[index] = Empty.STRING if value is None else value
-                elif type == DataType.GUID:
+                elif datatype == DataType.GUID:
                     datarow[index] = Empty.GUID if value is None else UUID(value)
-                elif type == DataType.DATETIME:
+                elif datatype == DataType.DATETIME:
                     datarow[index] = Empty.DATETIME if value is None else parser.parse(value)
-                elif type == DataType.BOOLEAN:
+                elif datatype == DataType.BOOLEAN:
                     datarow[index] = False if value is None else bool(value)
-                elif type == DataType.SINGLE:
+                elif datatype == DataType.SINGLE:
                     datarow[index] = Empty.SINGLE if value is None else Convert.from_str(value, np.float32)
-                elif type == DataType.DOUBLE:
+                elif datatype == DataType.DOUBLE:
                     datarow[index] = Empty.DOUBLE if value is None else Convert.from_str(value, np.float64)
-                elif type == DataType.DECIMAL:
+                elif datatype == DataType.DECIMAL:
                     datarow[index] = Empty.DECIMAL if value is None else Decimal(value)
-                elif type == DataType.INT8:
+                elif datatype == DataType.INT8:
                     datarow[index] = Empty.INT8 if value is None else Convert.from_str(value, np.int8)
-                elif type == DataType.INT16:
+                elif datatype == DataType.INT16:
                     datarow[index] = Empty.INT16 if value is None else Convert.from_str(value, np.int16)
-                elif type == DataType.INT32:
+                elif datatype == DataType.INT32:
                     datarow[index] = Empty.INT32 if value is None else Convert.from_str(value, np.int32)
-                elif type == DataType.INT64:
+                elif datatype == DataType.INT64:
                     datarow[index] = Empty.INT64 if value is None else Convert.from_str(value, np.int64)
-                elif type == DataType.UINT8:
+                elif datatype == DataType.UINT8:
                     datarow[index] = Empty.UINT8 if value is None else Convert.from_str(value, np.uint8)
-                elif type == DataType.UINT16:
+                elif datatype == DataType.UINT16:
                     datarow[index] = Empty.UINT16 if value is None else Convert.from_str(value, np.uint16)
-                elif type == DataType.UINT32:
+                elif datatype == DataType.UINT32:
                     datarow[index] = Empty.UINT32 if value is None else Convert.from_str(value, np.uint32)
-                elif type == DataType.UINT64:
+                elif datatype == DataType.UINT64:
                     datarow[index] = Empty.UINT64 if value is None else Convert.from_str(value, np.uint64)
                 else:
                     datarow[index] = None

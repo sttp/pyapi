@@ -46,6 +46,7 @@
         "signalid",
         "signalidcache",
         "signalidlist",
+        "sourcery",
         "statid",
         "stringbyname",
         "STTP",

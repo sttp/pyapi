@@ -61,7 +61,7 @@ class DataRow:
 
         if err is not None:
             raise err
-        
+
         return value
 
     def __setitem__(self, key: Union[int, str], value: Any):
@@ -100,7 +100,7 @@ class DataRow:
         if (column := self._parent.column(columnindex)) is None:
             return None, ValueError(f"column index {columnindex} is out of range for table \"{self._parent.name}\"")
 
-        if targettype > -1 and column.type != targettype:
+        if targettype > -1 and column.datatype != targettype:
             if read:
                 action = "read"
                 preposition = "from"
@@ -108,7 +108,7 @@ class DataRow:
                 action = "assign"
                 preposition = "to"
 
-            return None, ValueError(f"cannot {action} \"{normalize_enumname(DataType(targettype))}\" value {preposition} DataColumn \"{column.name}\" for table \"{self._parent.name}\", column data type is \"{normalize_enumname(column.type)}\"")
+            return None, ValueError(f"cannot {action} \"{normalize_enumname(DataType(targettype))}\" value {preposition} DataColumn \"{column.name}\" for table \"{self._parent.name}\", column data type is \"{normalize_enumname(column.datatype)}\"")
 
         if not read and column.computed:
             return None, ValueError(f"cannot assign value to DataColumn \"{column.name}\" for table \"{self._parent.name}\", column is computed with an expression")
@@ -187,19 +187,16 @@ class DataRow:
             if targettype == DataType.STRING:
                 return str(value), None
             if targettype == DataType.GUID:
-                return value, None                
-            if targettype == DataType.BOOLEAN or targettype == DataType.DATETIME or \
-                    targettype == DataType.SINGLE or targettype == DataType.DOUBLE or \
-                    targettype == DataType.DECIMAL or targettype == DataType.INT8 or \
-                    targettype == DataType.INT16 or targettype == DataType.INT32 or \
-                    targettype == DataType.INT64 or targettype == DataType.UINT8 or \
-                    targettype == DataType.UINT16 or targettype == DataType.UINT32 or \
-                    targettype == DataType.UINT64:
-                return None, ValueError(f"cannot convert \"Guid\" expression value to \"{normalize_enumname(targettype)}\" column")
-            
+                return value, None
+            if targettype in [DataType.BOOLEAN, DataType.DATETIME, DataType.SINGLE,
+                              DataType.DOUBLE, DataType.DECIMAL, DataType.INT8, DataType.INT16,
+                              DataType.INT32, DataType.INT64, DataType.UINT8, DataType.UINT16,
+                              DataType.UINT32, DataType.UINT64]:
+                return None, ValueError(f'cannot convert \"Guid\" expression value to \"{normalize_enumname(targettype)}\" column')
+
             return None, ValueError("unexpected column data type encountered")
         except Exception as ex:
-            return None, ValueError(f"failed to convert \"Guid\" expression value to \"{normalize_enumname(targettype)}\" column: {ex}")
+            return None, ValueError(f'failed to convert \"Guid\" expression value to \"{normalize_enumname(targettype)}\" column: {ex}')
 
     def _convert_fromvalue(self, value: Any, sourcetype: DataType, targettype: DataType) -> Tuple[Optional[Any], Optional[Exception]]:
         try:
@@ -229,7 +226,7 @@ class DataRow:
                 return np.uint32(value), None
             if targettype == DataType.UINT64:
                 return np.uint64(value), None
-            if targettype == DataType.DATETIME or targettype == DataType.GUID:
+            if targettype in [DataType.DATETIME, DataType.GUID]:
                 return None, ValueError(f"cannot convert \"{normalize_enumname(sourcetype)}\" expression value to \"{normalize_enumname(targettype)}\" column")
 
             return None, ValueError("unexpected column data type encountered")
@@ -271,7 +268,7 @@ class DataRow:
 
         if err is not None:
             return None, err
-        
+
         if column.computed:
             return self._get_computedvalue(column)
 
@@ -283,13 +280,10 @@ class DataRow:
         """
 
         index, err = self._get_columnindex(columnname)
+        return (None, err) if err is not None else (self._values[index], None)
 
-        if err is not None:
-            return None, err
-
-        return self._values[index], None
-    
     def set_value(self, columnindex: int, value: Any) -> Optional[Exception]:
+        # sourcery skip: assign-if-exp
         """
         Assigns the record value at the specified column index.
         """
@@ -301,18 +295,14 @@ class DataRow:
 
         self._values[columnindex] = value
         return None
-        
+
     def set_value_byname(self, columnname: str, value: Any) -> Optional[Exception]:
         """
         Assigns the record value for the specified column name.
         """
 
         index, err = self._get_columnindex(columnname)
-
-        if err is not None:
-            return err
-        
-        return self.set_value(index, value)
+        return err if err is not None else self.set_value(index, value)
 
     def value_as_string(self, columnindex: int) -> str:
         """
@@ -340,7 +330,7 @@ class DataRow:
             return Empty.STRING
 
         index = column.index
-        type = column.type
+        type = column.datatype
 
         if type == DataType.STRING:
             return self._string_from_typevalue(index, self.stringvalue)
@@ -372,27 +362,20 @@ class DataRow:
             return self._string_from_typevalue(index, self.uint32value)
         if type == DataType.UINT64:
             return self._string_from_typevalue(index, self.uint64value)
-        
+
         return Empty.STRING
 
     def _checkstate(self, null: bool, err: Optional[Exception]) -> Tuple[bool, str]:
         if err is not None:
             return True, Empty.STRING
-
-        if null:
-            return True, "<NULL>"
-
-        return False, Empty.STRING
+        
+        return (True, "<NULL>") if null else (False, Empty.STRING)
 
     def _string_from_typevalue(self, index: int, getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]], strconv: Callable[[Any], str] = str) -> str:
         value, null, err = getvalue(index)
-
         invalid, result = self._checkstate(null, err)
-
-        if invalid:
-            return result
-
-        return strconv(value)
+        
+        return result if invalid else strconv(value)
 
     def _typevalue(self, columnindex: int, targettype: DataType) -> Tuple[Any, bool, Optional[Exception]]:
         column, err = self._validate_columntype(columnindex, targettype, True)
@@ -406,18 +389,12 @@ class DataRow:
 
             if err is not None:
                 return default, False, err
-            
-            if value is None:
-                return default, True, None
 
-            return value, False, None
-
+            return (default, True, None) if value is None else (value, False, None)
+        
         value = self._values[columnindex]
-
-        if value is None:
-            return default, True, None
-
-        return value, False, None
+        
+        return (default, True, None) if value is None else (value, False, None)
 
     def _typevalue_byname(self, columnname: str, targettype: DataType) -> Tuple[Any, bool, Optional[Exception]]:
         index, err = self._get_columnindex(columnname)
@@ -433,7 +410,7 @@ class DataRow:
         Second parameter in tuple return value indicates if original value was None.
         An error will be returned if column type is not `DataType.STRING`.
         """
-        
+
         return self._typevalue(columnindex, DataType.STRING)
 
     def stringvalue_byname(self, columnname: str) -> Tuple[str, bool, Optional[Exception]]:
@@ -451,7 +428,7 @@ class DataRow:
         Second parameter in tuple return value indicates if original value was None.
         An error will be returned if column type is not `DataType.BOOLEAN`.
         """
-        
+
         return self._typevalue(columnindex, DataType.BOOLEAN)
 
     def booleanvalue_byname(self, columnname: str) -> Tuple[bool, bool, Optional[Exception]]:
@@ -469,7 +446,7 @@ class DataRow:
         Second parameter in tuple return value indicates if original value was None.
         An error will be returned if column type is not `DataType.DATETIME`.
         """
-        
+
         return self._typevalue(columnindex, DataType.DATETIME)
 
     def datetimevalue_byname(self, columnname: str) -> Tuple[datetime, bool, Optional[Exception]]:
@@ -487,7 +464,7 @@ class DataRow:
         Second parameter in tuple return value indicates if original value was None.
         An error will be returned if column type is not `DataType.SINGLE`.
         """
-        
+
         return self._typevalue(columnindex, DataType.SINGLE)
 
     def singlevalue_byname(self, columnname: str) -> Tuple[np.float32, bool, Optional[Exception]]:
@@ -505,7 +482,7 @@ class DataRow:
         Second parameter in tuple return value indicates if original value was None.
         An error will be returned if column type is not `DataType.DOUBLE`.
         """
-        
+
         return self._typevalue(columnindex, DataType.DOUBLE)
 
     def doublevalue_byname(self, columnname: str) -> Tuple[np.float64, bool, Optional[Exception]]:
@@ -523,7 +500,7 @@ class DataRow:
         Second parameter in tuple return value indicates if original value was None.
         An error will be returned if column type is not `DataType.DECIMAL`.
         """
-        
+
         return self._typevalue(columnindex, DataType.DECIMAL)
 
     def decimalvalue_byname(self, columnname: str) -> Tuple[Decimal, bool, Optional[Exception]]:
@@ -541,7 +518,7 @@ class DataRow:
         Second parameter in tuple return value indicates if original value was None.
         An error will be returned if column type is not `DataType.GUID`.
         """
-        
+
         return self._typevalue(columnindex, DataType.DECIMAL)
 
     def guidvalue_byname(self, columnname: str) -> Tuple[UUID, bool, Optional[Exception]]:
@@ -559,7 +536,7 @@ class DataRow:
         Second parameter in tuple return value indicates if original value was None.
         An error will be returned if column type is not `DataType.INT8`.
         """
-        
+
         return self._typevalue(columnindex, DataType.INT8)
 
     def int8value_byname(self, columnname: str) -> Tuple[np.int8, bool, Optional[Exception]]:
@@ -577,7 +554,7 @@ class DataRow:
         Second parameter in tuple return value indicates if original value was None.
         An error will be returned if column type is not `DataType.INT16`.
         """
-        
+
         return self._typevalue(columnindex, DataType.INT16)
 
     def int16value_byname(self, columnname: str) -> Tuple[np.int16, bool, Optional[Exception]]:
@@ -595,7 +572,7 @@ class DataRow:
         Second parameter in tuple return value indicates if original value was None.
         An error will be returned if column type is not `DataType.INT32`.
         """
-        
+
         return self._typevalue(columnindex, DataType.INT32)
 
     def int32value_byname(self, columnname: str) -> Tuple[np.int32, bool, Optional[Exception]]:
@@ -613,7 +590,7 @@ class DataRow:
         Second parameter in tuple return value indicates if original value was None.
         An error will be returned if column type is not `DataType.INT64`.
         """
-        
+
         return self._typevalue(columnindex, DataType.INT64)
 
     def int64value_byname(self, columnname: str) -> Tuple[np.int64, bool, Optional[Exception]]:
@@ -631,7 +608,7 @@ class DataRow:
         Second parameter in tuple return value indicates if original value was None.
         An error will be returned if column type is not `DataType.UINT8`.
         """
-        
+
         return self._typevalue(columnindex, DataType.UINT8)
 
     def uint8value_byname(self, columnname: str) -> Tuple[np.uint8, bool, Optional[Exception]]:
@@ -649,7 +626,7 @@ class DataRow:
         Second parameter in tuple return value indicates if original value was None.
         An error will be returned if column type is not `DataType.UINT16`.
         """
-        
+
         return self._typevalue(columnindex, DataType.UINT16)
 
     def uint16value_byname(self, columnname: str) -> Tuple[np.uint16, bool, Optional[Exception]]:
@@ -667,7 +644,7 @@ class DataRow:
         Second parameter in tuple return value indicates if original value was None.
         An error will be returned if column type is not `DataType.UINT32`.
         """
-        
+
         return self._typevalue(columnindex, DataType.UINT32)
 
     def uint32value_byname(self, columnname: str) -> Tuple[np.uint32, bool, Optional[Exception]]:
@@ -685,7 +662,7 @@ class DataRow:
         Second parameter in tuple return value indicates if original value was None.
         An error will be returned if column type is not `DataType.UINT64`.
         """
-        
+
         return self._typevalue(columnindex, DataType.UINT64)
 
     def uint64value_byname(self, columnname: str) -> Tuple[np.uint64, bool, Optional[Exception]]:
@@ -698,21 +675,19 @@ class DataRow:
         return self._typevalue_byname(columnname, DataType.UINT64)
 
     def __repr__(self):
-        image = []
-
-        image.append("[")
+        image = ["["]
 
         for i in range(self._parent.columncount):
             if i > 0:
                 image.append(", ")
 
-            strcol = self._parent.column(i).type == DataType.STRING
+            strcol = self._parent.column(i).datatype == DataType.STRING
 
             if strcol:
                 image.append("\"")
 
             image.append(self.value_as_string(i))
-            
+
             if strcol:
                 image.append("\"")
 
@@ -721,7 +696,7 @@ class DataRow:
         return "".join(image)
 
     @staticmethod
-    def compare_datarowcolumns(leftrow: DataRow, rightrow: DataRow, columnindex: int, exactmatch: bool) -> Tuple[int, Optional[Exception]]:
+    def compare_datarowcolumns(leftrow: DataRow, rightrow: DataRow, columnindex: int, exactmatch: bool) -> Tuple[int, Optional[Exception]]:  # sourcery skip: low-code-quality
         """
         Returns an integer comparing two `DataRow` column values for the specified column index.
         The result will be 0 if `leftrow`==`rightrow`, -1 if `leftrow` < `rightrow`, and +1 if `leftrow` > `rightrow`.
@@ -734,8 +709,8 @@ class DataRow:
         if leftcolumn is None or rightcolumn is None:
             return 0, ValueError("cannot compare, column index out of range")
 
-        lefttype = leftcolumn.type
-        righttype = rightcolumn.type
+        lefttype = leftcolumn.datatype
+        righttype = rightcolumn.datatype
 
         if lefttype != righttype:
             return 0, ValueError("cannot compare, types do not match")
@@ -744,47 +719,42 @@ class DataRow:
             if not lefthasvalue and not righthasvalue:
                 return 0
 
-            if lefthasvalue:
-                return 1
-
-            return -1
+            return 1 if lefthasvalue else -1
 
         def typecompare(
-            leftrow_getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]],
-            rightrow_getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]]) -> \
-                Tuple[int, Optional[Exception]]:
-            
+                leftrow_getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]],
+                rightrow_getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]]) -> \
+                    Tuple[int, Optional[Exception]]:
+
             leftvalue, leftnull, lefterr = leftrow_getvalue(columnindex)
             rightvalue, rightnull, righterr = rightrow_getvalue(columnindex)
-            lefthasvalue = not leftnull and lefterr == None
-            righthasvalue = not rightnull and righterr == None
+            
+            lefthasvalue = not leftnull and lefterr is None
+            righthasvalue = not rightnull and righterr is None
 
             if lefthasvalue and righthasvalue:
                 if leftvalue < rightvalue:
                     return -1, None
 
-                if leftvalue > rightvalue:
-                    return 1, None
+                return (1, None) if leftvalue > rightvalue else (0, None)
 
-                return 0, None
-            
             return nullcompare(lefthasvalue, righthasvalue)
 
         if lefttype == DataType.STRING:
             if exactmatch:
-                def upperstringvalue(index: int, 
-                    getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]]) -> \
-                        Tuple[str, bool, Optional[Exception]]:
-                    
+                def upperstringvalue(index: int, getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]]) -> Tuple[str, bool, Optional[Exception]]:
                     value, null, err = getvalue(index)
 
-                    if not null and err == None:
+                    if not null and err is None:
                         return value.upper(), False, None
 
                     return value, null, err
 
-                leftrowvalue = lambda index: upperstringvalue(index, leftrow.stringvalue)
-                rightrowvalue = lambda index: upperstringvalue(index, rightrow.stringvalue)
+                def leftrowvalue(index):
+                    return upperstringvalue(index, leftrow.stringvalue)
+
+                def rightrowvalue(index):
+                    return upperstringvalue(index, rightrow.stringvalue)
             else:
                 leftrowvalue = leftrow.stringvalue
                 rightrowvalue = rightrow.stringvalue
@@ -793,18 +763,16 @@ class DataRow:
         if lefttype == DataType.BOOLEAN:
             leftvalue, leftnull, lefterr = leftrow.booleanvalue(columnindex)
             rightvalue, rightnull, righterr = rightrow.booleanvalue(columnindex)
-            lefthasvalue = not leftnull and lefterr == None
-            righthasvalue = not rightnull and righterr == None
+
+            lefthasvalue = not leftnull and lefterr is None
+            righthasvalue = not rightnull and righterr is None
 
             if lefthasvalue and righthasvalue:
                 if leftvalue and not rightvalue:
                     return -1, None
 
-                if not leftvalue and rightvalue:
-                    return 1, None
+                return (1, None) if not leftvalue and rightvalue else (0, None)
 
-                return 0, None
-            
             return nullcompare(lefthasvalue, righthasvalue)
         if lefttype == DataType.DATETIME:
             return typecompare(leftrow.datetimevalue, rightrow.datetimevalue)

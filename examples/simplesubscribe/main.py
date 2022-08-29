@@ -23,7 +23,7 @@
 
 import os  # nopep8
 import sys  # nopep8
-sys.path.append(os.path.dirname(os.path.realpath(__file__)) + "/../../src")  # nopep8
+sys.path.append(f"{os.path.dirname(os.path.realpath(__file__))}/../../src")  # nopep8
 
 from gsf import Limits
 from sttp.subscriber import Subscriber
@@ -32,6 +32,7 @@ from threading import Thread
 import argparse
 
 MAXPORT = Limits.MAXUINT16
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -67,7 +68,7 @@ def read_data(subscriber: Subscriber):
     lastmessage = 0.0
 
     while subscriber.connected:
-        (measurement, success) = reader.next_measurement()
+        measurement, success = reader.next_measurement()
 
         if not success:
             break
@@ -79,11 +80,11 @@ def read_data(subscriber: Subscriber):
             lastmessage = time()
             continue
 
-        message = []
-
-        message.append(f"{subscriber.total_measurementsreceived:,}")
-        message.append(" measurements received so far. Current measurement:\n    ")
-        message.append(str(measurement))
+        message = [
+            f"{subscriber.total_measurementsreceived:,}",
+            " measurements received so far. Current measurement:\n    ",
+            str(measurement)
+        ]
 
         subscriber.statusmessage("".join(message))
         lastmessage = time()

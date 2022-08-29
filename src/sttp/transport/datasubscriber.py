@@ -218,7 +218,7 @@ class DataSubscriber:
         self._tssc_lastoosreport_mutex = Lock()
 
         self._bufferblock_expectedsequencenumber = np.uint32(0)
-        self._bufferblock_cache: List[BufferBlock] = list()
+        self._bufferblock_cache: List[BufferBlock] = []
 
         self._threadpool = ThreadPoolExecutor(thread_name_prefix="DS-PoolThread")
 
@@ -925,7 +925,7 @@ class DataSubscriber:
     def _parse_tssc_measurements(self, signalindexcache: SignalIndexCache, data: bytes, count: np.uint32) -> List[Measurement]:
         self._dispatch_errormessage("Python TSSC not implemented yet - disconnecting.")
         self._dispatch_connectionterminated()
-        return list()
+        return []
 
     def _parse_compact_measurements(self, signalindexcache: SignalIndexCache, data: bytes, count: np.uint32) -> List[Measurement]:
         if signalindexcache.count == 0:
@@ -936,7 +936,7 @@ class DataSubscriber:
 
                 self._last_missingcachewarning = time()
 
-            return list()
+            return []
 
         measurements: List[Measurement] = []
         usemillisecondresolution = self.subscription.use_millisecondresolution
@@ -958,7 +958,7 @@ class DataSubscriber:
 
         return measurements
 
-    def _handle_bufferblock(self, data: bytes):
+    def _handle_bufferblock(self, data: bytes):  # sourcery skip: low-code-quality
         # Buffer block received - wrap as a BufferBlockMeasurement and expose back to consumer
         sequencenumber = BigEndian.to_uint32(data)
         buffercacheindex = int(sequencenumber - self._bufferblock_expectedsequencenumber)
@@ -1052,7 +1052,7 @@ class DataSubscriber:
             self._writebuffer = bytearray(commandbuffersize)
 
         # Insert packet size
-        self._writebuffer[0:4] = BigEndian.from_uint32(packetsize)
+        self._writebuffer[:4] = BigEndian.from_uint32(packetsize)
 
         # Insert command code
         self._writebuffer[4] = commandcode

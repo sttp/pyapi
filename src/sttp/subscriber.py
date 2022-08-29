@@ -277,7 +277,7 @@ class Subscriber:
         filters = ds.encodestr(self._config.metadatafilters)
         buffer = bytearray(4 + len(filters))
 
-        buffer[0:4] = BigEndian.from_uint32(np.uint32(len(filters)))
+        buffer[:4] = BigEndian.from_uint32(np.uint32(len(filters)))
         buffer[4:] = filters
 
         ds.send_servercommand(ServerCommand.METADATAREFRESH, buffer)

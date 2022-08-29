@@ -74,7 +74,7 @@ class PhasorRecord:
         Defines the associated `DeviceRecord` for this `PhasorRecord`.
         """
 
-        self.measurements: List[MeasurementRecord] = list()
+        self.measurements: List[MeasurementRecord] = []
         """
         Defines the two `MeasurementRecord` values, i.e., the angle and magnitude, associated with this `PhasorRecord`.
         """

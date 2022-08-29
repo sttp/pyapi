@@ -47,10 +47,11 @@ class NativeEndian:
         if cls.swaporder:
             dtype = dtype.newbyteorder()
 
-        return np.frombuffer(buffer[0:bytesize], dtype)[0]
+        return np.frombuffer(buffer[:bytesize], dtype)[0]
 
     @classmethod
     def _int_to_bytes(cls, bytesize: int, value: int, signed: bool) -> bytes:
+        # sourcery skip: remove-unnecessary-cast
         return int(value).to_bytes(bytesize, cls.target_byteorder, signed=signed)
 
     @classmethod

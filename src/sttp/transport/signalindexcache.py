@@ -31,6 +31,7 @@ import numpy as np
 if TYPE_CHECKING:
     from datasubscriber import DataSubscriber
 
+
 class SignalIndexCache:
     """
     Represents a mapping of 32-bit runtime IDs to 128-bit globally unique measurement IDs. The class
@@ -38,11 +39,11 @@ class SignalIndexCache:
     """
 
     def __init__(self):
-        self._reference: Dict[np.int32, np.uint32] = dict()
-        self._signalidlist: List[UUID] = list()
-        self._sourcelist: List[str] = list()
-        self._idlist: List[np.uint64] = list()
-        self._signalidcache: Dict[UUID, np.int32] = dict()
+        self._reference: Dict[np.int32, np.uint32] = {}
+        self._signalidlist: List[UUID] = []
+        self._sourcelist: List[str] = []
+        self._idlist: List[np.uint64] = []
+        self._signalidcache: Dict[UUID, np.int32] = {}
         self._binarylength = np.uint32(0)
         self._maxsignalindex = np.uint32(0)
         #self.tsscDecoder = tssc.Decoder()
@@ -161,11 +162,9 @@ class SignalIndexCache:
         if length < 4:
             return Empty.GUID, ValueError("not enough buffer provided to parse")
 
-        offset = 0
-
         # Byte size of cache
         binarylength = BigEndian.to_uint32(buffer)
-        offset += 4
+        offset = 4
 
         if length < binarylength:
             return Empty.GUID, ValueError("not enough buffer provided to parse")
@@ -177,7 +176,7 @@ class SignalIndexCache:
         referencecount = BigEndian.to_uint32(buffer[offset:])
         offset += 4
 
-        for i in range(referencecount):
+        for _ in range(referencecount):
             # Signal index
             signalindex = np.int32(BigEndian.to_uint32(buffer[offset:]))
             offset += 4
