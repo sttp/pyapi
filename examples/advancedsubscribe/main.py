@@ -22,7 +22,7 @@
 # ******************************************************************************************************
 
 import os  # nopep8
-import sys
+import sys  # nopep8
 sys.path.append(f"{os.path.dirname(os.path.realpath(__file__))}/../../src")  # nopep8
 
 from gsf import Limits

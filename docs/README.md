@@ -88,6 +88,13 @@ Receiving measurements...
 Connection to 127.0.0.1:7175 terminated.
 ```
 
+## Examples
+> [https://github.com/sttp/pyapi/tree/main/examples](https://github.com/sttp/pyapi/tree/main/examples)
+
+
+## Support
+For discussion and support, join our [discussions channel](https://github.com/sttp/pyapi/discussions) or [open an issue](https://github.com/sttp/pyapi/issues) on GitHub.
+
 ## Links
 
 * [STTP PyPi Package: sttpapi](https://pypi.org/project/sttpapi/)
