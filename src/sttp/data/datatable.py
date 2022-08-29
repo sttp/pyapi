@@ -50,9 +50,9 @@ class DataTable:
 
         self._parent = parent
         self._name = name
-        self._columnindexes: Dict[str, int] = dict()
-        self._columns: List[DataColumn] = list()
-        self._rows: List[DataRow] = list()
+        self._columnindexes: Dict[str, int] = {}
+        self._columns: List[DataColumn] = []
+        self._rows: List[DataRow] = []
 
     # Container methods for DataTable map to rows, not columns
     def __getitem__(self, key: int) -> DataRow:
@@ -94,8 +94,8 @@ class DataTable:
         Clears the internal column collections.
         """
 
-        self._columnindexes = dict()
-        self._columns = list()
+        self._columnindexes = {}
+        self._columns = []
 
     def add_column(self, column: DataColumn):
         """
@@ -167,7 +167,7 @@ class DataTable:
         Clears the internal row collection.
         """
 
-        self._rows = list()
+        self._rows = []
 
     def add_row(self, row: DataRow):
         """
@@ -246,10 +246,7 @@ class DataTable:
 
         row = self.row(rowindex)
 
-        if row is None:
-            return Empty.STRING
-
-        return row.value_as_string(columnindex)
+        return Empty.STRING if row is None else row.value_as_string(columnindex)
 
     def rowvalue_as_string_byname(self, rowindex: int, columnname: str) -> str:
         """
@@ -259,15 +256,10 @@ class DataTable:
 
         row = self.row(rowindex)
 
-        if row is None:
-            return Empty.STRING
-
-        return row.value_as_string_byname(columnname)
+        return Empty.STRING if row is None else row.value_as_string_byname(columnname)
 
     def __repr__(self):
-        image: List[str] = []
-
-        image.append(f"{self.name} [")
+        image: List[str] = [f"{self.name} ["]
 
         for i in range(self._columns):
             if i > 0:

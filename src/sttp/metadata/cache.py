@@ -40,53 +40,53 @@ class MetadataCache:
 
     def __init__(self, dataset: DataSet = ...):
 
-        self.signalid_measurement_map: Dict[UUID, MeasurementRecord] = dict()
+        self.signalid_measurement_map: Dict[UUID, MeasurementRecord] = {}
         """
         Defines map of unique measurement signal IDs to measurement records.
         Measurement signal IDs (a UUID) are typically unique across disparate systems.
         """
 
-        self.id_measurement_map: Dict[np.uint64, MeasurementRecord] = dict()
+        self.id_measurement_map: Dict[np.uint64, MeasurementRecord] = {}
         """
         Defines map of measurement key IDs to measurement records.
         Measurement key IDs are typically unique for a given publisher.
         """
 
-        self.pointtag_measurement_map: Dict[str, MeasurementRecord] = dict()
+        self.pointtag_measurement_map: Dict[str, MeasurementRecord] = {}
         """
         Defines map of measurement point tags to measurement records.
         Measurement point tags are typically unique for a given publisher.
         """
 
-        self.signalref_measurement_map: Dict[str, MeasurementRecord] = dict()
+        self.signalref_measurement_map: Dict[str, MeasurementRecord] = {}
         """
         Defines map of measurement signal references to measurement records.
         Measurement signal references are typically unique for a given publisher.
         """
 
-        self.deviceacronym_device_map: Dict[str, DeviceRecord] = dict()
+        self.deviceacronym_device_map: Dict[str, DeviceRecord] = {}
         """
         Defines map of device acronym to device records.
         Device acronyms are typically unique for a given publisher.
         """
 
-        self.deviceid_device_map: Dict[UUID, DeviceRecord] = dict()
+        self.deviceid_device_map: Dict[UUID, DeviceRecord] = {}
         """
         Defines map of unique device IDs to device records.
         Device IDs (a UUID) are typically unique across disparate systems.
         """
 
-        self.measurement_records: List[MeasurementRecord] = list()
+        self.measurement_records: List[MeasurementRecord] = []
         """
         Defines list of measurement records in the cache.
         """
 
-        self.device_records: List[DeviceRecord] = list()
+        self.device_records: List[DeviceRecord] = []
         """
         Defines list of device records in the cache.
         """
 
-        self.phasorRecords: List[PhasorRecord] = list()
+        self.phasorRecords: List[PhasorRecord] = []
         """
         Defines list of phasor records in the cache.
         """
@@ -95,7 +95,7 @@ class MetadataCache:
             return
 
         # Extract measurement records from MeasurementDetail table rows
-        measurement_records: List[MeasurementRecord] = list()
+        measurement_records: List[MeasurementRecord] = []
 
         for measurement in dataset["MeasurementDetail"]:
             get_rowvalue = lambda columnname, default = None: self._get_rowvalue(measurement, columnname, default)
@@ -142,7 +142,7 @@ class MetadataCache:
         self.measurement_records = measurement_records
 
         # Extract device records from DeviceDetail table rows
-        device_records: List[DeviceRecord] = list()
+        device_records: List[DeviceRecord] = []
         default_nodeid = uuid1()
 
         for device in dataset["DeviceDetail"]:
@@ -196,7 +196,7 @@ class MetadataCache:
                 device.measurements.add(measurement)
 
         # Extract phasor records from PhasorDetail table rows
-        phasor_records: List[PhasorRecord] = list()
+        phasor_records: List[PhasorRecord] = []
 
         for phasor in dataset["PhasorDetail"]:
             get_rowvalue = lambda columnname, default = None: self._get_rowvalue(phasor, columnname, default)
@@ -248,12 +248,12 @@ class MetadataCache:
         if value is None or err is not None:
             if default is not None:
                 return default
-            
+
             if (column := row.parent.column_byname(columnname)) is None:
                 return default
-            
+
             return default_datatype(column.type)
-        
+
         return value
 
     def _parse_measurementkey(self, value: str) -> Tuple[str, np.uint64]:
@@ -262,10 +262,7 @@ class MetadataCache:
         try:
             parts = value.split(":")
 
-            if len(parts) != 2:
-                return defaultvalue
-
-            return (parts[0], np.uint64(parts[1]))
+            return defaultvalue if len(parts) != 2 else (parts[0], np.uint64(parts[1]))
         except:
             return defaultvalue
 
@@ -299,17 +296,17 @@ class MetadataCache:
         return self.find_measurements_signaltypename(str(signaltype), instancename)
 
     def find_measurements_signaltypename(self, signaltypename: str, instancename: Optional[str] = None) -> List[MeasurementRecord]:
-        matched_records: List[MeasurementRecord] = list()
+        matched_records: List[MeasurementRecord] = []
         signaltypename = signaltypename.upper()
 
         #                             012345678901
-        if signaltypename.startswith("SIGNALTYPE."):
-            signaltypename = signaltypename[11:]
-
-        for record in self.measurement_records:
-            if record.signaltypename.upper() == signaltypename:
-                if instancename is None or record.instancename == instancename:
-                    matched_records.append(record)
+        signaltypename = signaltypename.removeprefix("SIGNALTYPE.")
+        matched_records.extend(
+            record
+            for record in self.measurement_records
+            if record.signaltypename.upper() == signaltypename
+            and (instancename is None or record.instancename == instancename)
+        )
 
         return matched_records
 
@@ -327,9 +324,11 @@ class MetadataCache:
                 records.add(record)
 
         for record in self.measurement_records:
-            if searchval in record.description or searchval in record.deviceacronym:
-                if instancename is None or record.instancename == instancename:
-                    records.add(record)
+            if (
+                searchval in record.description
+                or searchval in record.deviceacronym
+            ) and (instancename is None or record.instancename == instancename):
+                records.add(record)
 
         return list(records)
 

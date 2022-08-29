@@ -107,7 +107,16 @@ class StreamEncoder:
         return self.read_byte() != 0
 
     def _write_int(self, size: int, value: int, signed: bool, byteorder: Optional[str]) -> int:
-        if self._write(int(value).to_bytes(size, self._default_byteorder if byteorder is None else byteorder, signed=signed)) != size:
+        if (
+            self._write(
+                value.to_bytes(
+                    size,
+                    self._default_byteorder if byteorder is None else byteorder,
+                    signed=signed,
+                )
+            )
+            != size
+        ):
             raise RuntimeError(f"Failed to write {size}-bytes to stream")
 
         return size

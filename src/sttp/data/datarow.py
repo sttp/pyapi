@@ -61,7 +61,7 @@ class DataRow:
 
         if err is not None:
             raise err
-        
+
         return value
 
     def __setitem__(self, key: Union[int, str], value: Any):
@@ -137,10 +137,7 @@ class DataRow:
     def _get_computedvalue(self, column: DataColumn) -> Tuple[Optional[Any], Optional[Exception]]:
         (expressiontree, err) = self._expressiontree(column)
 
-        if err is not None:
-            return None, err
-
-        return None, NotImplementedError()
+        return (None, err) if err is not None else (None, NotImplementedError())
 
         # (sourcevalue, err) = expressiontree.evaluate(self)
         # TODO: Add remaining code when filter expression engine is implemented
@@ -187,16 +184,24 @@ class DataRow:
             if targettype == DataType.STRING:
                 return str(value), None
             if targettype == DataType.GUID:
-                return value, None                
-            if targettype == DataType.BOOLEAN or targettype == DataType.DATETIME or \
-                    targettype == DataType.SINGLE or targettype == DataType.DOUBLE or \
-                    targettype == DataType.DECIMAL or targettype == DataType.INT8 or \
-                    targettype == DataType.INT16 or targettype == DataType.INT32 or \
-                    targettype == DataType.INT64 or targettype == DataType.UINT8 or \
-                    targettype == DataType.UINT16 or targettype == DataType.UINT32 or \
-                    targettype == DataType.UINT64:
+                return value, None
+            if targettype in [
+                DataType.BOOLEAN,
+                DataType.DATETIME,
+                DataType.SINGLE,
+                DataType.DOUBLE,
+                DataType.DECIMAL,
+                DataType.INT8,
+                DataType.INT16,
+                DataType.INT32,
+                DataType.INT64,
+                DataType.UINT8,
+                DataType.UINT16,
+                DataType.UINT32,
+                DataType.UINT64,
+            ]:
                 return None, ValueError(f"cannot convert \"Guid\" expression value to \"{normalize_enumname(targettype)}\" column")
-            
+
             return None, ValueError("unexpected column data type encountered")
         except Exception as ex:
             return None, ValueError(f"failed to convert \"Guid\" expression value to \"{normalize_enumname(targettype)}\" column: {ex}")
@@ -229,7 +234,7 @@ class DataRow:
                 return np.uint32(value), None
             if targettype == DataType.UINT64:
                 return np.uint64(value), None
-            if targettype == DataType.DATETIME or targettype == DataType.GUID:
+            if targettype in [DataType.DATETIME, DataType.GUID]:
                 return None, ValueError(f"cannot convert \"{normalize_enumname(sourcetype)}\" expression value to \"{normalize_enumname(targettype)}\" column")
 
             return None, ValueError("unexpected column data type encountered")
@@ -271,7 +276,7 @@ class DataRow:
 
         if err is not None:
             return None, err
-        
+
         if column.computed:
             return self._get_computedvalue(column)
 
@@ -284,10 +289,7 @@ class DataRow:
 
         index, err = self._get_columnindex(columnname)
 
-        if err is not None:
-            return None, err
-
-        return self._values[index], None
+        return (None, err) if err is not None else (self._values[index], None)
     
     def set_value(self, columnindex: int, value: Any) -> Optional[Exception]:
         """
@@ -309,10 +311,7 @@ class DataRow:
 
         index, err = self._get_columnindex(columnname)
 
-        if err is not None:
-            return err
-        
-        return self.set_value(index, value)
+        return err if err is not None else self.set_value(index, value)
 
     def value_as_string(self, columnindex: int) -> str:
         """
@@ -372,27 +371,21 @@ class DataRow:
             return self._string_from_typevalue(index, self.uint32value)
         if type == DataType.UINT64:
             return self._string_from_typevalue(index, self.uint64value)
-        
+
         return Empty.STRING
 
     def _checkstate(self, null: bool, err: Optional[Exception]) -> Tuple[bool, str]:
         if err is not None:
             return True, Empty.STRING
 
-        if null:
-            return True, "<NULL>"
-
-        return False, Empty.STRING
+        return (True, "<NULL>") if null else (False, Empty.STRING)
 
     def _string_from_typevalue(self, index: int, getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]], strconv: Callable[[Any], str] = str) -> str:
         value, null, err = getvalue(index)
 
         invalid, result = self._checkstate(null, err)
 
-        if invalid:
-            return result
-
-        return strconv(value)
+        return result if invalid else strconv(value)
 
     def _typevalue(self, columnindex: int, targettype: DataType) -> Tuple[Any, bool, Optional[Exception]]:
         column, err = self._validate_columntype(columnindex, targettype, True)
@@ -406,18 +399,11 @@ class DataRow:
 
             if err is not None:
                 return default, False, err
-            
-            if value is None:
-                return default, True, None
 
-            return value, False, None
-
+            return (default, True, None) if value is None else (value, False, None)
         value = self._values[columnindex]
 
-        if value is None:
-            return default, True, None
-
-        return value, False, None
+        return (default, True, None) if value is None else (value, False, None)
 
     def _typevalue_byname(self, columnname: str, targettype: DataType) -> Tuple[Any, bool, Optional[Exception]]:
         index, err = self._get_columnindex(columnname)
@@ -698,9 +684,7 @@ class DataRow:
         return self._typevalue_byname(columnname, DataType.UINT64)
 
     def __repr__(self):
-        image = []
-
-        image.append("[")
+        image = ["["]
 
         for i in range(self._parent.columncount):
             if i > 0:
@@ -712,7 +696,7 @@ class DataRow:
                 image.append("\"")
 
             image.append(self.value_as_string(i))
-            
+
             if strcol:
                 image.append("\"")
 
@@ -744,41 +728,32 @@ class DataRow:
             if not lefthasvalue and not righthasvalue:
                 return 0
 
-            if lefthasvalue:
-                return 1
-
-            return -1
+            return 1 if lefthasvalue else -1
 
         def typecompare(
-            leftrow_getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]],
-            rightrow_getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]]) -> \
-                Tuple[int, Optional[Exception]]:
-            
+                leftrow_getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]],
+                rightrow_getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]]) -> Tuple[int, Optional[Exception]]:
+
             leftvalue, leftnull, lefterr = leftrow_getvalue(columnindex)
             rightvalue, rightnull, righterr = rightrow_getvalue(columnindex)
-            lefthasvalue = not leftnull and lefterr == None
-            righthasvalue = not rightnull and righterr == None
+            lefthasvalue = not leftnull and lefterr is None
+            righthasvalue = not rightnull and righterr is None
 
             if lefthasvalue and righthasvalue:
                 if leftvalue < rightvalue:
                     return -1, None
 
-                if leftvalue > rightvalue:
-                    return 1, None
-
-                return 0, None
-            
+                return (1, None) if leftvalue > rightvalue else (0, None)
             return nullcompare(lefthasvalue, righthasvalue)
 
         if lefttype == DataType.STRING:
             if exactmatch:
                 def upperstringvalue(index: int, 
-                    getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]]) -> \
-                        Tuple[str, bool, Optional[Exception]]:
-                    
+                                getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]]) -> Tuple[str, bool, Optional[Exception]]:
+
                     value, null, err = getvalue(index)
 
-                    if not null and err == None:
+                    if not null and err is None:
                         return value.upper(), False, None
 
                     return value, null, err
@@ -793,18 +768,14 @@ class DataRow:
         if lefttype == DataType.BOOLEAN:
             leftvalue, leftnull, lefterr = leftrow.booleanvalue(columnindex)
             rightvalue, rightnull, righterr = rightrow.booleanvalue(columnindex)
-            lefthasvalue = not leftnull and lefterr == None
-            righthasvalue = not rightnull and righterr == None
+            lefthasvalue = not leftnull and lefterr is None
+            righthasvalue = not rightnull and righterr is None
 
             if lefthasvalue and righthasvalue:
                 if leftvalue and not rightvalue:
                     return -1, None
 
-                if not leftvalue and rightvalue:
-                    return 1, None
-
-                return 0, None
-            
+                return (1, None) if not leftvalue and rightvalue else (0, None)
             return nullcompare(lefthasvalue, righthasvalue)
         if lefttype == DataType.DATETIME:
             return typecompare(leftrow.datetimevalue, rightrow.datetimevalue)

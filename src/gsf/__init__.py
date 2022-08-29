@@ -93,10 +93,7 @@ class ByteSize(IntEnum):
 def normalize_enumname(value: Enum) -> str:
     parts = str(value).split(".")
 
-    if len(parts) == 2:
-        return parts[1].capitalize()
-
-    return str(value).capitalize()
+    return parts[1].capitalize() if len(parts) == 2 else str(value).capitalize()
 
 class Validate:
     @staticmethod

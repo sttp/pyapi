@@ -160,7 +160,7 @@ class BinaryStream:
     def read_bytes(self, count: int) -> bytes:
         buffer = self._buffer if count <= BinaryStream.VALUE_BUFFERSIZE else bytearray(count)
         self.read_all(buffer, 0, count)
-        return bytes(buffer[0:count])
+        return bytes(buffer[:count])
 
     def read_buffer(self) -> bytes:
         return self.read_bytes(self.read7bit_uint32())
@@ -256,10 +256,15 @@ class BinaryStream:
             return value
 
         self.ReadAll(self._buffer, 0, size)
-        return np.frombuffer(self._buffer[0:size], dtype)[0]
+        return np.frombuffer(self._buffer[:size], dtype)[0]
 
     def _write_int(self, size: int, value: int, signed: bool, byteorder: Optional[str]) -> int:
-        buffer = int(value).to_bytes(size, self._default_byteorder if byteorder is None else byteorder, signed=signed)
+        buffer = value.to_bytes(
+            size,
+            self._default_byteorder if byteorder is None else byteorder,
+            signed=signed,
+        )
+
 
         if self._send_length <= BinaryStream.IO_BUFFERSIZE - size:
             for i in range(size):
@@ -316,7 +321,7 @@ class BinaryStream:
             buffer[i] = self._receive_buffer[self._receive_position + i]
 
         self._receive_position += length
-        return bytes(buffer[0:length])
+        return bytes(buffer[:length])
 
     def _send_buffer_write(self, buffer: bytes) -> int:
         length = len(buffer)

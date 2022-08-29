@@ -153,23 +153,15 @@ class SubscriberConnector:
 
     def _wait_for_retry(self):
         # Apply exponential back-off algorithm for retry attempt delays
-        if self._connectattempt > 13:
-            exponent = 12
-        else:
-            exponent = int(self._connectattempt - 1)
-
+        exponent = 12 if self._connectattempt > 13 else int(self._connectattempt - 1)
         retryinterval = 0.0
 
         if self._connectattempt > 0:
             retryinterval = self.retryinterval * math.pow(2, exponent)
 
-        if retryinterval > self.maxretryinterval:
-            retryinterval = self.maxretryinterval
-
+        retryinterval = min(retryinterval, self.maxretryinterval)
         # Notify the user that we are attempting to reconnect.
-        message: List[str] = []
-
-        message.append("Connection")
+        message: List[str] = ["Connection"]
 
         if self._connectattempt > 0:
             message.append(f" attempt {self._connectattempt + 1:,}")
@@ -196,10 +188,7 @@ class SubscriberConnector:
         Initiates a connection sequence for a `DataSubscriber`
         """
 
-        if self._cancel:
-            return ConnectStatus.CANCELED
-
-        return self._connect(ds, False)
+        return ConnectStatus.CANCELED if self._cancel else self._connect(ds, False)
 
     def _connect(self, ds: DataSubscriber, autoreconnecting: bool) -> ConnectStatus:
         if self.autoreconnect:
@@ -230,10 +219,7 @@ class SubscriberConnector:
         if ds.disposing:
             return ConnectStatus.CANCELED
 
-        if ds.connected:
-            return ConnectStatus.SUCCESS
-
-        return ConnectStatus.FAILED
+        return ConnectStatus.SUCCESS if ds.connected else ConnectStatus.FAILED
 
     def cancel(self):
         """

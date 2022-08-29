@@ -163,7 +163,4 @@ class SignalKindEnum:
         if acronym == "AL":  # Alarm Value
             return SignalKind.Alarm
 
-        if acronym == "QF":  # Quality Flags
-            return SignalKind.Quality
-
-        return SignalKind.Unknown
+        return SignalKind.Quality if acronym == "QF" else SignalKind.Unknown

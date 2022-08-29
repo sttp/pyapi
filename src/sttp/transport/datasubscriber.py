@@ -218,7 +218,7 @@ class DataSubscriber:
         self._tssc_lastoosreport_mutex = Lock()
 
         self._bufferblock_expectedsequencenumber = np.uint32(0)
-        self._bufferblock_cache: List[BufferBlock] = list()
+        self._bufferblock_cache: List[BufferBlock] = []
 
         self._threadpool = ThreadPoolExecutor(thread_name_prefix="DS-PoolThread")
 
@@ -390,17 +390,18 @@ class DataSubscriber:
         self._total_measurementsreceived = np.uint64(0)
 
         subscription = self._subscription
-        connectionbuilder: List[str] = []
+        connectionbuilder: List[str] = [
+            f"throttled={subscription.throttled}",
+            f";publishInterval={subscription.publishinterval:.6f}",
+            f";includeTime={subscription.includetime}",
+            f";processingInterval={subscription.processinginterval}",
+            f";useMillisecondResolution={subscription.use_millisecondresolution}",
+            f";requestNaNValueFilter={subscription.request_nanvaluefilter}",
+            f";assemblyInfo={{source={self.sttp_sourceinfo}",
+            f";version={self.sttp_versioninfo}",
+            f";updatedOn={self.sttp_updatedoninfo}}}",
+        ]
 
-        connectionbuilder.append(f"throttled={subscription.throttled}")
-        connectionbuilder.append(f";publishInterval={subscription.publishinterval:.6f}")
-        connectionbuilder.append(f";includeTime={subscription.includetime}")
-        connectionbuilder.append(f";processingInterval={subscription.processinginterval}")
-        connectionbuilder.append(f";useMillisecondResolution={subscription.use_millisecondresolution}")
-        connectionbuilder.append(f";requestNaNValueFilter={subscription.request_nanvaluefilter}")
-        connectionbuilder.append(f";assemblyInfo={{source={self.sttp_sourceinfo}")
-        connectionbuilder.append(f";version={self.sttp_versioninfo}")
-        connectionbuilder.append(f";updatedOn={self.sttp_updatedoninfo}}}")
 
         if len(subscription.filterexpression) > 0:
             connectionbuilder.append(f";filterExpression={{{subscription.filterexpression}}}")
@@ -488,7 +489,7 @@ class DataSubscriber:
     def _disconnect(self, jointhread: bool, autoreconnecting: bool):
         # Check if disconnect thread is running or subscriber has already disconnected
         if self._disconnecting:
-            if not autoreconnecting and self._disconnecting and not self._disconnected:
+            if not autoreconnecting and not self._disconnected:
                 self._connector.cancel()
 
             self._disconnectthread_mutex.acquire()
@@ -694,10 +695,7 @@ class DataSubscriber:
             self._handle_bufferblock(data)
         elif responsecode == ServerResponse.NOTIFICATION:
             self._handle_notification(data)
-        elif responsecode == ServerResponse.NOOP:
-            # NoOP Handled
-            pass
-        else:
+        elif responsecode != ServerResponse.NOOP:
             self._dispatch_errormessage(f"Encountered unexpected server response code: {str(responsecode)}")
 
     def _handle_succeeded(self, commandcode: ServerCommand, data: bytes):
@@ -705,10 +703,13 @@ class DataSubscriber:
 
         if commandcode == ServerCommand.METADATAREFRESH:
             self._handle_metadatarefresh(data)
-        elif commandcode == ServerCommand.SUBSCRIBE or commandcode == ServerCommand.UNSUBSCRIBE:
+        elif commandcode in [ServerCommand.SUBSCRIBE, ServerCommand.UNSUBSCRIBE]:
             self._subscribed = commandcode == ServerCommand.SUBSCRIBE
             has_response_message = True
-        elif commandcode == ServerCommand.ROTATECIPHERKEYS or commandcode == ServerCommand.UPDATEPROCESSINGINTERVAL:
+        elif commandcode in [
+            ServerCommand.ROTATECIPHERKEYS,
+            ServerCommand.UPDATEPROCESSINGINTERVAL,
+        ]:
             has_response_message = True
         else:
             # If we don't know what the message is, we can't interpret
@@ -721,10 +722,11 @@ class DataSubscriber:
 
         # Each of these responses come with a message that will
         # be delivered to the user via the status message callback.
-        message: List[str] = []
-        message.append(f"Received success code in response to server command: {normalize_enumname(commandcode)}")
+        message: List[str] = [
+            f"Received success code in response to server command: {normalize_enumname(commandcode)}"
+        ]
 
-        if len(data) > 0:
+        if data:
             message.append("\n")
             message.append(self.decodestr(data))
 
@@ -738,13 +740,13 @@ class DataSubscriber:
         else:
             message.append(f"Received failure code in response to server command: {normalize_enumname(commandcode)}")
 
-        if len(data) > 0:
-            if len(message) > 0:
+        if data:
+            if message:
                 message.append("\n")
 
             message.append(self.decodestr(data))
 
-        if len(message) > 0:
+        if message:
             self._dispatch_errormessage("".join(message))
 
     def _handle_metadatarefresh(self, data: bytes):
@@ -775,7 +777,7 @@ class DataSubscriber:
             self.processingcomplete_callback(self.decodestr(data))
 
     def _handle_update_signalindexcache(self, data: bytes):
-        if len(data) == 0:
+        if not data:
             return
 
         version = self.version
@@ -814,7 +816,7 @@ class DataSubscriber:
             self.subscriptionupdated_callback(signalindexcache)
 
     def _handle_update_basetimes(self, data: bytes):
-        if len(data) == 0:
+        if not data:
             return
 
         self._timeindex = 0 if BigEndian.to_uint32(data) == 0 else 1
@@ -887,11 +889,7 @@ class DataSubscriber:
         if self._key_ivs is not None:
             # Get a local copy keyIVs - these can change at any time
             key_ivs = self._key_ivs
-            cipherindex = 0
-
-            if datapacketflags & DataPacketFlags.CIPHERINDEX > 0:
-                cipherindex = 1
-
+            cipherindex = 1 if datapacketflags & DataPacketFlags.CIPHERINDEX > 0 else 0
             try:
                 cipher = AES.new(key_ivs[cipherindex][KEY_INDEX], AES.MODE_CBC, key_ivs[cipherindex][IV_INDEX])
                 data = cipher.decrypt(data)
@@ -901,11 +899,7 @@ class DataSubscriber:
                 return
 
         count = BigEndian.to_uint32(data)
-        cacheindex = 0
-
-        if datapacketflags & DataPacketFlags.CACHEINDEX > 0:
-            cacheindex = 1
-
+        cacheindex = 1 if datapacketflags & DataPacketFlags.CACHEINDEX > 0 else 0
         self._signalindexcache_mutex.acquire()
         signalindexcache = self._signalindexcache[cacheindex]
         self._signalindexcache_mutex.release()
@@ -925,7 +919,7 @@ class DataSubscriber:
     def _parse_tssc_measurements(self, signalindexcache: SignalIndexCache, data: bytes, count: np.uint32) -> List[Measurement]:
         self._dispatch_errormessage("Python TSSC not implemented yet - disconnecting.")
         self._dispatch_connectionterminated()
-        return list()
+        return []
 
     def _parse_compact_measurements(self, signalindexcache: SignalIndexCache, data: bytes, count: np.uint32) -> List[Measurement]:
         if signalindexcache.count == 0:
@@ -936,14 +930,14 @@ class DataSubscriber:
 
                 self._last_missingcachewarning = time()
 
-            return list()
+            return []
 
         measurements: List[Measurement] = []
         usemillisecondresolution = self.subscription.use_millisecondresolution
         includetime = self.subscription.includetime
         index = 0
 
-        for i in range(count):
+        for _ in range(count):
             # Deserialize compact measurement format
             measurement = CompactMeasurement(signalindexcache, includetime, usemillisecondresolution, self._basetimeoffsets)
             (bytesdecoded, err) = measurement.decode(data[index:])

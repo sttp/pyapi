@@ -75,7 +75,7 @@ class DataSet:
         Creates a new `DataSet`.
         """
 
-        self._tables: Dict[str, DataTable] = dict()
+        self._tables: Dict[str, DataTable] = {}
 
         self.name = DataSet.DEFAULT_NAME if name is ... else name
         """
@@ -109,7 +109,7 @@ class DataSet:
         Any existing tables will be deleted.
         """
 
-        self._tables = dict()
+        self._tables = {}
 
     def add_table(self, table: DataTable):
         """
@@ -131,12 +131,7 @@ class DataSet:
         Gets the table names defined in the `DataSet`.
         """
 
-        tablenames: List[str] = []
-
-        for table in self._tables.values():
-            tablenames.append(table.name)
-
-        return tablenames
+        return [table.name for table in self._tables.values()]
 
     def tables(self) -> List[DataTable]:
         """
@@ -171,18 +166,13 @@ class DataSet:
         return self._tables.pop(tablename.upper()) is not None
 
     def __repr__(self):
-        image: List[str] = []
+        image: List[str] = [f"{self.name} ["]
 
-        image.append(f"{self.name} [")
-        i = 0
-
-        for table in self._tables:
+        for i, table in enumerate(self._tables):
             if i > 0:
                 image.append(", ")
 
             image.append(table.name)
-            i += 1
-
         image.append("]")
 
         return "".join(image)

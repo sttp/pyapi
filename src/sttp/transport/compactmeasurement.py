@@ -158,10 +158,7 @@ class CompactMeasurement(Measurement):
                 self._usingbasetimeoffset = False
 
             if self._usingbasetimeoffset:
-                if self._usemillisecondresolution:
-                    length += 2  # Use two bytes for millisecond resolution timestamp with valid offset
-                else:
-                    length += 4  # Use four bytes for tick resolution timestamp with valid offset
+                length += 2 if self._usemillisecondresolution else 4
             else:
                 length += 8  # Use eight bytes for full fidelity time
         else:
@@ -210,11 +207,7 @@ class CompactMeasurement(Measurement):
 
         self.flags = _map_to_fullflags(flags)
 
-        if (flags & CompactStateFlags.TIMEINDEX) > 0:
-            self._timeindex = 1
-        else:
-            self._timeindex = 0
-
+        self._timeindex = 1 if (flags & CompactStateFlags.TIMEINDEX) > 0 else 0
         self._usingbasetimeoffset = (
             flags & CompactStateFlags.BASETIMEOFFSET) > 0
 
@@ -244,22 +237,12 @@ class CompactMeasurement(Measurement):
         Parses a `CompactMeasurement` from the specified byte buffer.
         """
 
-        if len(buffer) < 1:
+        if not buffer:
             return 0, ValueError("not enough buffer available to deserialize compact measurement")
-
-        # Basic Compact Measurement Format:
-        # 		Field:     Bytes:
-        # 		--------   -------
-        #		 Flags        1
-        #		  ID          4
-        #		 Value        4
-        #		 [Time]    0/2/4/8
-        index = int(0)
 
         # Decode state flags
         self.set_compact_stateflags(buffer[0])
-        index += 1
-
+        index = 0 + 1
         # Decode runtime ID
         self.runtimeid = np.int32(BigEndian.to_uint32(buffer[index:]))
         index += 4

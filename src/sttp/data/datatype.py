@@ -136,10 +136,7 @@ def default_datatype(datatype: DataType) -> Any:
         return Empty.UINT16
     if datatype == DataType.UINT32:
         return Empty.UINT32
-    if datatype == DataType.UINT64:
-        return Empty.UINT64
-
-    return None
+    return Empty.UINT64 if datatype == DataType.UINT64 else None
 
 def parse_xsddatatype(xsdtypename: str, extdatatype: Optional[str]) -> Tuple[DataType, bool]:
     """

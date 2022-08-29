@@ -277,7 +277,7 @@ class Subscriber:
         filters = ds.encodestr(self._config.metadatafilters)
         buffer = bytearray(4 + len(filters))
 
-        buffer[0:4] = BigEndian.from_uint32(np.uint32(len(filters)))
+        buffer[:4] = BigEndian.from_uint32(np.uint32(len(filters)))
         buffer[4:] = filters
 
         ds.send_servercommand(ServerCommand.METADATAREFRESH, buffer)
@@ -409,20 +409,19 @@ class Subscriber:
             self._datasubscriber.subscribe()
 
     def _show_metadatasummary(self, dataset: DataSet, parsestarted: float):
-        tabledetails = []
         totalrows = 0
 
-        tabledetails.append("    Discovered:\n")
-
+        tabledetails = ["    Discovered:\n"]
         for table in dataset:
             tablename = table.name
             tablerows = table.rowcount
             totalrows += tablerows
             tabledetails.append(f"        {tablerows:,} {tablename} records\n")
 
-        message = []
-        message.append(f"Parsed {totalrows:,} metadata records in {(time() - parsestarted):.3f} seconds\n")
-        message.append("".join(tabledetails))
+        message = [
+            f"Parsed {totalrows:,} metadata records in {time() - parsestarted:.3f} seconds\n",
+            "".join(tabledetails),
+        ]
 
         schemaversion = dataset["SchemaVersion"]
 
