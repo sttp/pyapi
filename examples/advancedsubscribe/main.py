@@ -43,14 +43,13 @@ class AdvancedSubscriber(Subscriber):
     def __init__(self):
         super().__init__()
 
-        self.subscriber = Subscriber()
         self.config = Config()
         self.settings = Settings()
         self.lastmessage = 0.0
 
-        self.subscriber.set_subscriptionupdated_receiver(self.subscription_updated)
-        self.subscriber.set_newmeasurements_receiver(self.new_measurements)
-        self.subscriber.set_connectionterminated_receiver(self.connection_terminated)
+        self.set_subscriptionupdated_receiver(self.subscription_updated)
+        self.set_newmeasurements_receiver(self.new_measurements)
+        self.set_connectionterminated_receiver(self.connection_terminated)
 
     def subscription_updated(self, signalindexcache: SignalIndexCache):
         self.statusmessage(f"Received signal index cache with {signalindexcache.count:,} mappings")
@@ -59,21 +58,24 @@ class AdvancedSubscriber(Subscriber):
         if time() - self.lastmessage < 5.0:
             return
 
-        if self.lastmessage == 0.0:
-            self.statusmessage("Receiving measurements...")
-            return
+        try:
+            if self.lastmessage == 0.0:
+                self.statusmessage("Receiving measurements...")
+                return
 
-        message = [
-            f"{self.total_measurementsreceived:,} measurements received so far...\n",
-            f"Timestamp: {Ticks.to_string(measurements[0].timestamp)}\n",
-            "\tID\tSignal ID\t\t\t\tValue\n"
-        ]
+            message = [
+                f"{self.total_measurementsreceived:,} measurements received so far...\n",
+                f"Timestamp: {Ticks.to_string(measurements[0].timestamp)}\n",
+                "\tID\tSignal ID\t\t\t\tValue\n"
+            ]
 
-        for measurement in measurements:
-            metadata = self.measurement_metadata(measurement)
-            message.append(f"\t{metadata.id}\t{measurement.signalid}\t{measurement.value:.6}\n")
+            for measurement in measurements:
+                metadata = self.measurement_metadata(measurement)
+                message.append(f"\t{metadata.id}\t{measurement.signalid}\t{measurement.value:.6}\n")
 
-        self.lastmessage = time()
+            self.statusmessage("".join(message))
+        finally:
+            self.lastmessage = time()
 
     def connection_terminated(self):
         # Call default implementation which will display a connection terminated message to stderr
