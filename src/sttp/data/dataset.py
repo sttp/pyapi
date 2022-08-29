@@ -143,7 +143,7 @@ class DataSet:
         Gets the `DataTable` instances defined in the `DataSet`.
         """
 
-        return self._tables.values()
+        return list(self._tables.values())
 
     def create_table(self, name: str) -> DataTable:
         """
