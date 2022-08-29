@@ -29,7 +29,7 @@ from decimal import Decimal
 from datetime import datetime
 from dateutil import parser
 from uuid import UUID
-from typing import Any, Callable, Iterator, List, Optional, Tuple, Union, TYPE_CHECKING
+from typing import Any, Callable, Iterator, Optional, Tuple, Union, TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:

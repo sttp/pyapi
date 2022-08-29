@@ -1,5 +1,5 @@
 # ******************************************************************************************************
-#  dataset_test.py - Gbtc
+#  test_dataset.py.py - Gbtc
 #
 #  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.
 #
@@ -22,9 +22,9 @@
 # ******************************************************************************************************
 
 import unittest
-from .dataset import DataSet
-from .datatable import DataTable
-from .datatype import DataType
+from src.sttp.data.dataset import DataSet
+from src.sttp.data.datatable import DataTable
+from src.sttp.data.datatype import DataType
 from uuid import UUID, uuid1
 from typing import Tuple
 
