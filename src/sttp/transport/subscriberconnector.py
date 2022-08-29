@@ -110,6 +110,14 @@ class SubscriberConnector:
 
         self._threadpool = ThreadPoolExecutor(thread_name_prefix="SC-PoolThread")
 
+    def dispose(self):
+        """
+        Cleanly shuts down a `DataConnector` that is no longer being used, e.g., during a normal application exit.
+        """
+
+        self.cancel()
+        self._threadpool.shutdown(wait=False)
+
     def _autoreconnect(self, ds: DataSubscriber):
         if self._cancel or ds.disposing:
             return

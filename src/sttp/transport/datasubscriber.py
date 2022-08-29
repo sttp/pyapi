@@ -227,11 +227,11 @@ class DataSubscriber:
         """
 
         self._disposing = True
-        self._connector.cancel()
+        self._connector.dispose()
         self._disconnect(True, False)
 
-        # Allow a moment for connection terminated event to complete
-        Event().wait(0.01)  # 10ms
+        # Wait for connection terminated event to complete
+        self._threadpool.shutdown(wait=True)
 
     @property
     def connected(self) -> bool:
@@ -574,15 +574,16 @@ class DataSubscriber:
     # by the peer. Additionally, this allows the user to automatically reconnect in their
     # callback function without having to spawn their own separate thread.
     def _dispatch_connectionterminated(self):
-        self._connection_terminationthread_mutex.acquire()
+        try:
+            self._connection_terminationthread_mutex.acquire()
 
-        if self._connection_terminationthread is not None:
-            return
+            if self._connection_terminationthread is not None:
+                return
 
-        self._connection_terminationthread = Thread(target=self._handle_connectionterminated, name="ConnectionTerminationThread")
-        self._connection_terminationthread.start()
-
-        self._connection_terminationthread_mutex.release()
+            self._connection_terminationthread = Thread(target=self._handle_connectionterminated, name="ConnectionTerminationThread")
+            self._connection_terminationthread.start()
+        finally:
+            self._connection_terminationthread_mutex.release()
 
     def _handle_connectionterminated(self):
         self._disconnect(False, True)
