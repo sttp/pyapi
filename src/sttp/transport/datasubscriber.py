@@ -410,7 +410,7 @@ class DataSubscriber:
 
             try:
                 self._datachannel_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-                self._datachannel_socket.bind(("127.0.0.1", udpport))
+                self._datachannel_socket.bind(("", udpport))
             except Exception as ex:
                 return RuntimeError(f"failed to open UDP socket for port {udpport}:{ex}")
 
@@ -644,8 +644,8 @@ class DataSubscriber:
     # subscription, data packets get handled from this thread.
     def _run_datachannel_responsethread(self):
         reader = StreamEncoder(
-            (lambda length: self._datachannel_socket.recvfrom(length)),
-            (lambda buffer: self._datachannel_socket.sendto(buffer)))
+            (lambda length: self._datachannel_socket.recvfrom(length)[0]),
+            (lambda _: ...))
 
         buffer = bytearray(MAXPACKET_SIZE)
 
@@ -657,7 +657,7 @@ class DataSubscriber:
                 self._total_datachannel_bytesreceived += length
 
                 # Process response
-                self._process_serverresponse(bytes(self._readbuffer[:length]))
+                self._process_serverresponse(bytes(buffer[:length]))
             except Exception:
                 # Read error, connection may have been closed by peer; terminate connection
                 self._dispatch_connectionterminated()
