@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.subscriberconnector &mdash; STTP 0.1.0 documentation</title>
+  <title>sttp.transport.subscriberconnector &mdash; sttp/pyapi 0.3.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -25,7 +25,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> STTP
+            <a href="../../../index.html" class="icon icon-home"> sttp/pyapi
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -43,7 +43,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">STTP</a>
+          <a href="../../../index.html">sttp/pyapi</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -174,6 +174,14 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_threadpool</span> <span class="o">=</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">thread_name_prefix</span><span class="o">=</span><span class="s2">&quot;SC-PoolThread&quot;</span><span class="p">)</span>
 
+<div class="viewcode-block" id="SubscriberConnector.dispose"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriberconnector.SubscriberConnector.dispose">[docs]</a>    <span class="k">def</span> <span class="nf">dispose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Cleanly shuts down a `DataConnector` that is no longer being used, e.g., during a normal application exit.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_threadpool</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
     <span class="k">def</span> <span class="nf">_autoreconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">:</span> <span class="n">DataSubscriber</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancel</span> <span class="ow">or</span> <span class="n">ds</span><span class="o">.</span><span class="n">disposing</span><span class="p">:</span>
             <span class="k">return</span>
@@ -217,23 +225,17 @@
 
     <span class="k">def</span> <span class="nf">_wait_for_retry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Apply exponential back-off algorithm for retry attempt delays</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">&gt;</span> <span class="mi">13</span><span class="p">:</span>
-            <span class="n">exponent</span> <span class="o">=</span> <span class="mi">12</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">exponent</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">exponent</span> <span class="o">=</span> <span class="mi">12</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">&gt;</span> <span class="mi">13</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="n">retryinterval</span> <span class="o">=</span> <span class="mf">0.0</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">retryinterval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retryinterval</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pow</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">exponent</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">retryinterval</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxretryinterval</span><span class="p">:</span>
-            <span class="n">retryinterval</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxretryinterval</span>
+        <span class="n">retryinterval</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">retryinterval</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxretryinterval</span><span class="p">)</span>
 
         <span class="c1"># Notify the user that we are attempting to reconnect.</span>
-        <span class="n">message</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="n">message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;Connection&quot;</span><span class="p">)</span>
+        <span class="n">message</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Connection&quot;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; attempt </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">+</span> <span class="mi">1</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -260,10 +262,7 @@
 <span class="sd">        Initiates a connection sequence for a `DataSubscriber`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancel</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">ConnectStatus</span><span class="o">.</span><span class="n">CANCELED</span>
-
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connect</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">ConnectStatus</span><span class="o">.</span><span class="n">CANCELED</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancel</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connect</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">:</span> <span class="n">DataSubscriber</span><span class="p">,</span> <span class="n">autoreconnecting</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConnectStatus</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autoreconnect</span><span class="p">:</span>
@@ -294,15 +293,13 @@
         <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">disposing</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">ConnectStatus</span><span class="o">.</span><span class="n">CANCELED</span>
 
-        <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">ConnectStatus</span><span class="o">.</span><span class="n">SUCCESS</span>
-
-        <span class="k">return</span> <span class="n">ConnectStatus</span><span class="o">.</span><span class="n">FAILED</span>
+        <span class="k">return</span> <span class="n">ConnectStatus</span><span class="o">.</span><span class="n">SUCCESS</span> <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">connected</span> <span class="k">else</span> <span class="n">ConnectStatus</span><span class="o">.</span><span class="n">FAILED</span>
 
 <div class="viewcode-block" id="SubscriberConnector.cancel"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriberconnector.SubscriberConnector.cancel">[docs]</a>    <span class="k">def</span> <span class="nf">cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Stops all current and future connection sequences.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancel</span><span class="p">:</span>
             <span class="k">return</span>
 
@@ -342,13 +339,21 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+    <p>&#169; Copyright 2022, Grid Protection Alliance.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+  
+ 
+<hr />
+<p>
+    <a href="https://github.com/sttp/pyapi">GitHub Home</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
+</p>
+
 
 </footer>
         </div>

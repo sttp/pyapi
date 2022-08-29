@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.data.datatable &mdash; STTP 0.1.0 documentation</title>
+  <title>sttp.data.datatable &mdash; sttp/pyapi 0.3.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -25,7 +25,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> STTP
+            <a href="../../../index.html" class="icon icon-home"> sttp/pyapi
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -43,7 +43,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">STTP</a>
+          <a href="../../../index.html">sttp/pyapi</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -114,9 +114,9 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="n">parent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="n">name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_columnindexes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DataColumn</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_rows</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DataRow</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_columnindexes</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DataColumn</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rows</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">DataRow</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># Container methods for DataTable map to rows, not columns</span>
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataRow</span><span class="p">:</span>
@@ -158,8 +158,8 @@
 <span class="sd">        Clears the internal column collections.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_columnindexes</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_columnindexes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_columns</span> <span class="o">=</span> <span class="p">[]</span></div>
 
 <div class="viewcode-block" id="DataTable.add_column"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.datatable.DataTable.add_column">[docs]</a>    <span class="k">def</span> <span class="nf">add_column</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">:</span> <span class="n">DataColumn</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -216,7 +216,7 @@
 <span class="sd">        Creates a copy of the specified source `DataColumn` associated with the `DataTable`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_column</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">type</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">expression</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_column</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">datatype</span><span class="p">,</span> <span class="n">source</span><span class="o">.</span><span class="n">expression</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">columncount</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
@@ -231,7 +231,7 @@
 <span class="sd">        Clears the internal row collection.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_rows</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rows</span> <span class="o">=</span> <span class="p">[]</span></div>
 
 <div class="viewcode-block" id="DataTable.add_row"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.datatable.DataTable.add_row">[docs]</a>    <span class="k">def</span> <span class="nf">add_row</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span> <span class="n">DataRow</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -310,10 +310,7 @@
 
         <span class="n">row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="n">rowindex</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">row</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
-
-        <span class="k">return</span> <span class="n">row</span><span class="o">.</span><span class="n">value_as_string</span><span class="p">(</span><span class="n">columnindex</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span> <span class="k">if</span> <span class="n">row</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">row</span><span class="o">.</span><span class="n">value_as_string</span><span class="p">(</span><span class="n">columnindex</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="DataTable.rowvalue_as_string_byname"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.datatable.DataTable.rowvalue_as_string_byname">[docs]</a>    <span class="k">def</span> <span class="nf">rowvalue_as_string_byname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rowindex</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">columnname</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -323,16 +320,11 @@
 
         <span class="n">row</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="n">rowindex</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">row</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
-
-        <span class="k">return</span> <span class="n">row</span><span class="o">.</span><span class="n">value_as_string_byname</span><span class="p">(</span><span class="n">columnname</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span> <span class="k">if</span> <span class="n">row</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">row</span><span class="o">.</span><span class="n">value_as_string_byname</span><span class="p">(</span><span class="n">columnname</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">image</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="n">image</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> [&quot;</span><span class="p">)</span>
-
+        <span class="n">image</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> [&quot;</span><span class="p">]</span>
+        
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_columns</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">image</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span>
@@ -380,13 +372,21 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+    <p>&#169; Copyright 2022, Grid Protection Alliance.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+  
+ 
+<hr />
+<p>
+    <a href="https://github.com/sttp/pyapi">GitHub Home</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
+</p>
+
 
 </footer>
         </div>

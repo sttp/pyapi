@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.compactmeasurement &mdash; STTP 0.1.0 documentation</title>
+  <title>sttp.transport.compactmeasurement &mdash; sttp/pyapi 0.3.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -25,7 +25,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> STTP
+            <a href="../../../index.html" class="icon icon-home"> sttp/pyapi
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -43,7 +43,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">STTP</a>
+          <a href="../../../index.html">sttp/pyapi</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -195,7 +195,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeindex</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_usingbasetimeoffset</span> <span class="o">=</span> <span class="kc">False</span>
 
-<div class="viewcode-block" id="CompactMeasurement.get_binarylength"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.compactmeasurement.CompactMeasurement.get_binarylength">[docs]</a>    <span class="k">def</span> <span class="nf">get_binarylength</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">:</span>
+<div class="viewcode-block" id="CompactMeasurement.get_binarylength"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.compactmeasurement.CompactMeasurement.get_binarylength">[docs]</a>    <span class="k">def</span> <span class="nf">get_binarylength</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">:</span>  <span class="c1"># sourcery skip: assign-if-exp</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the binary byte length of a `CompactMeasurement`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -274,10 +274,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">flags</span> <span class="o">=</span> <span class="n">_map_to_fullflags</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">TIMEINDEX</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_timeindex</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_timeindex</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeindex</span> <span class="o">=</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">flags</span> <span class="o">&amp;</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">TIMEINDEX</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_usingbasetimeoffset</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">flags</span> <span class="o">&amp;</span> <span class="n">CompactStateFlags</span><span class="o">.</span><span class="n">BASETIMEOFFSET</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
@@ -308,7 +305,7 @@
 <span class="sd">        Parses a `CompactMeasurement` from the specified byte buffer.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">FIXEDLENGTH</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;not enough buffer available to deserialize compact measurement&quot;</span><span class="p">)</span>
 
         <span class="c1"># Basic Compact Measurement Format:</span>
@@ -318,11 +315,10 @@
         <span class="c1">#		  ID          4</span>
         <span class="c1">#		 Value        4</span>
         <span class="c1">#		 [Time]    0/2/4/8</span>
-        <span class="n">index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="c1"># Decode state flags</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">set_compact_stateflags</span><span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">1</span>
 
         <span class="c1"># Decode runtime ID</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">runtimeid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">BigEndian</span><span class="o">.</span><span class="n">to_uint32</span><span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="n">index</span><span class="p">:]))</span>
@@ -366,13 +362,21 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+    <p>&#169; Copyright 2022, Grid Protection Alliance.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+  
+ 
+<hr />
+<p>
+    <a href="https://github.com/sttp/pyapi">GitHub Home</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
+</p>
+
 
 </footer>
         </div>

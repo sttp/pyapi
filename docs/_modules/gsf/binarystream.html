@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gsf.binarystream &mdash; STTP 0.1.0 documentation</title>
+  <title>gsf.binarystream &mdash; sttp/pyapi 0.3.0 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -25,7 +25,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> STTP
+            <a href="../../index.html" class="icon icon-home"> sttp/pyapi
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
@@ -43,7 +43,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../index.html">STTP</a>
+          <a href="../../index.html">sttp/pyapi</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -131,7 +131,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_stream</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_send_buffer</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_length</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_send_length</span> <span class="o">=</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="BinaryStream.read"><a class="viewcode-back" href="../../gsf.html#gsf.binarystream.BinaryStream.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="nb">bytearray</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<div class="viewcode-block" id="BinaryStream.read"><a class="viewcode-back" href="../../gsf.html#gsf.binarystream.BinaryStream.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="nb">bytearray</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>  <span class="c1"># sourcery skip: low-code-quality</span>
         <span class="k">if</span> <span class="n">count</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span> <span class="mi">0</span>
 
@@ -225,7 +225,7 @@
 <div class="viewcode-block" id="BinaryStream.read_bytes"><a class="viewcode-back" href="../../gsf.html#gsf.binarystream.BinaryStream.read_bytes">[docs]</a>    <span class="k">def</span> <span class="nf">read_bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
         <span class="n">buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="k">if</span> <span class="n">count</span> <span class="o">&lt;=</span> <span class="n">BinaryStream</span><span class="o">.</span><span class="n">VALUE_BUFFERSIZE</span> <span class="k">else</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">read_all</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">count</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">count</span><span class="p">])</span></div>
+        <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">buffer</span><span class="p">[:</span><span class="n">count</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="BinaryStream.read_buffer"><a class="viewcode-back" href="../../gsf.html#gsf.binarystream.BinaryStream.read_buffer">[docs]</a>    <span class="k">def</span> <span class="nf">read_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">read7bit_uint32</span><span class="p">())</span></div>
@@ -321,9 +321,10 @@
             <span class="k">return</span> <span class="n">value</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ReadAll</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">size</span><span class="p">],</span> <span class="n">dtype</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span><span class="p">[:</span><span class="n">size</span><span class="p">],</span> <span class="n">dtype</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_write_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">signed</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="c1"># sourcery skip: class-extract-method, remove-unnecessary-cast</span>
         <span class="n">buffer</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_byteorder</span> <span class="k">if</span> <span class="n">byteorder</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">byteorder</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="n">signed</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send_length</span> <span class="o">&lt;=</span> <span class="n">BinaryStream</span><span class="o">.</span><span class="n">IO_BUFFERSIZE</span> <span class="o">-</span> <span class="n">size</span><span class="p">:</span>
@@ -381,7 +382,7 @@
             <span class="n">buffer</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_receive_buffer</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_receive_position</span> <span class="o">+</span> <span class="n">i</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_receive_position</span> <span class="o">+=</span> <span class="n">length</span>
-        <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">length</span><span class="p">])</span>
+        <span class="k">return</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">buffer</span><span class="p">[:</span><span class="n">length</span><span class="p">])</span>
 
     <span class="k">def</span> <span class="nf">_send_buffer_write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
@@ -400,13 +401,21 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+    <p>&#169; Copyright 2022, Grid Protection Alliance.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+  
+ 
+<hr />
+<p>
+    <a href="https://github.com/sttp/pyapi">GitHub Home</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
+</p>
+
 
 </footer>
         </div>

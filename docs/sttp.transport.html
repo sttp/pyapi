@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport package &mdash; sttp/pyapi 0.2.0 documentation</title>
+  <title>sttp.transport package &mdash; sttp/pyapi 0.3.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -982,12 +982,12 @@ This buffer typically represents a partial image of a larger whole.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.datasubscriber.DataSubscriber.DEFAULT_STTP_UPDATEDONINFO">
-<span class="sig-name descname"><span class="pre">DEFAULT_STTP_UPDATEDONINFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'2022-08-28'</span></em><a class="headerlink" href="#sttp.transport.datasubscriber.DataSubscriber.DEFAULT_STTP_UPDATEDONINFO" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_STTP_UPDATEDONINFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'2022-08-29'</span></em><a class="headerlink" href="#sttp.transport.datasubscriber.DataSubscriber.DEFAULT_STTP_UPDATEDONINFO" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.datasubscriber.DataSubscriber.DEFAULT_STTP_VERSIONINFO">
-<span class="sig-name descname"><span class="pre">DEFAULT_STTP_VERSIONINFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'0.2.0'</span></em><a class="headerlink" href="#sttp.transport.datasubscriber.DataSubscriber.DEFAULT_STTP_VERSIONINFO" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_STTP_VERSIONINFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'0.3.0'</span></em><a class="headerlink" href="#sttp.transport.datasubscriber.DataSubscriber.DEFAULT_STTP_VERSIONINFO" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1563,6 +1563,12 @@ enumeration value and phasor type, i.e., “V” voltage or “I” current.</p>
 <dt class="sig sig-object py" id="sttp.transport.subscriberconnector.SubscriberConnector.connect">
 <span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.transport.datasubscriber.DataSubscriber" title="sttp.transport.datasubscriber.DataSubscriber"><span class="pre">DataSubscriber</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sttp.transport.constants.ConnectStatus" title="sttp.transport.constants.ConnectStatus"><span class="pre">ConnectStatus</span></a></span></span><a class="reference internal" href="_modules/sttp/transport/subscriberconnector.html#SubscriberConnector.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.subscriberconnector.SubscriberConnector.connect" title="Permalink to this definition"></a></dt>
 <dd><p>Initiates a connection sequence for a <cite>DataSubscriber</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.subscriberconnector.SubscriberConnector.dispose">
+<span class="sig-name descname"><span class="pre">dispose</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/subscriberconnector.html#SubscriberConnector.dispose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.subscriberconnector.SubscriberConnector.dispose" title="Permalink to this definition"></a></dt>
+<dd><p>Cleanly shuts down a <cite>DataConnector</cite> that is no longer being used, e.g., during a normal application exit.</p>
 </dd></dl>
 
 <dl class="py attribute">

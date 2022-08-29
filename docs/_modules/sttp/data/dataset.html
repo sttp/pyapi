@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.data.dataset &mdash; STTP 0.1.0 documentation</title>
+  <title>sttp.data.dataset &mdash; sttp/pyapi 0.3.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -25,7 +25,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> STTP
+            <a href="../../../index.html" class="icon icon-home"> sttp/pyapi
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -43,7 +43,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">STTP</a>
+          <a href="../../../index.html">sttp/pyapi</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -139,7 +139,7 @@
 <span class="sd">        Creates a new `DataSet`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DataTable</span><span class="p">]</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">DataTable</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">DataSet</span><span class="o">.</span><span class="n">DEFAULT_NAME</span> <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">name</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -173,7 +173,7 @@
 <span class="sd">        Any existing tables will be deleted.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span> <span class="o">=</span> <span class="p">{}</span></div>
 
 <div class="viewcode-block" id="DataSet.add_table"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.dataset.DataSet.add_table">[docs]</a>    <span class="k">def</span> <span class="nf">add_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="n">DataTable</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -195,19 +195,14 @@
 <span class="sd">        Gets the table names defined in the `DataSet`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">tablenames</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-
-        <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-            <span class="n">tablenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="n">tablenames</span></div>
+        <span class="k">return</span> <span class="p">[</span><span class="n">table</span><span class="o">.</span><span class="n">name</span> <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">values</span><span class="p">()]</span></div>
 
 <div class="viewcode-block" id="DataSet.tables"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.dataset.DataSet.tables">[docs]</a>    <span class="k">def</span> <span class="nf">tables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">DataTable</span><span class="p">]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the `DataTable` instances defined in the `DataSet`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">values</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">values</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="DataSet.create_table"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.dataset.DataSet.create_table">[docs]</a>    <span class="k">def</span> <span class="nf">create_table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataTable</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -235,18 +230,13 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">tablename</span><span class="o">.</span><span class="n">upper</span><span class="p">())</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
 
     <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">image</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">image</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> [&quot;</span><span class="p">]</span>
 
-        <span class="n">image</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> [&quot;</span><span class="p">)</span>
-        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
-
-        <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">table</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">image</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span>
 
             <span class="n">image</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
-
         <span class="n">image</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;]&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
@@ -362,7 +352,7 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">add_table</span><span class="p">(</span><span class="n">datatable</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_load_records</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">Element</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_load_records</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">root</span><span class="p">:</span> <span class="n">Element</span><span class="p">):</span>  <span class="c1"># sourcery skip: low-code-quality</span>
         <span class="c1"># Each root node child that matches a table name represents a record</span>
         <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">root</span><span class="p">:</span>
             <span class="n">table</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">tag</span><span class="p">)</span>
@@ -380,38 +370,38 @@
                     <span class="k">continue</span>
 
                 <span class="n">index</span> <span class="o">=</span> <span class="n">column</span><span class="o">.</span><span class="n">index</span>
-                <span class="nb">type</span> <span class="o">=</span> <span class="n">column</span><span class="o">.</span><span class="n">type</span>
+                <span class="n">datatype</span> <span class="o">=</span> <span class="n">column</span><span class="o">.</span><span class="n">datatype</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">text</span>
 
-                <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">STRING</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">STRING</span><span class="p">:</span>
                     <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">value</span>
-                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">GUID</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">GUID</span><span class="p">:</span>
                     <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">GUID</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">UUID</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">DATETIME</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">DATETIME</span><span class="p">:</span>
                     <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">DATETIME</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span>
                     <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">SINGLE</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">SINGLE</span><span class="p">:</span>
                     <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">SINGLE</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
                     <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">DOUBLE</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">:</span>
                     <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">DECIMAL</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT8</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT8</span><span class="p">:</span>
                     <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">INT8</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT16</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT16</span><span class="p">:</span>
                     <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">INT16</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT32</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT32</span><span class="p">:</span>
                     <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">INT32</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
                     <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">INT64</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT8</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT8</span><span class="p">:</span>
                     <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">UINT8</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT16</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT16</span><span class="p">:</span>
                     <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">UINT16</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT32</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT32</span><span class="p">:</span>
                     <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">UINT32</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
-                <span class="k">elif</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT64</span><span class="p">:</span>
+                <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT64</span><span class="p">:</span>
                     <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">UINT64</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">datarow</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -426,13 +416,21 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+    <p>&#169; Copyright 2022, Grid Protection Alliance.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+  
+ 
+<hr />
+<p>
+    <a href="https://github.com/sttp/pyapi">GitHub Home</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
+</p>
+
 
 </footer>
         </div>
