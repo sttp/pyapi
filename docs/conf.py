@@ -35,3 +35,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+html_show_copyright = False
+html_show_sphinx = True
+html_logo = 'https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png'
+html_favicon = 'https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico'

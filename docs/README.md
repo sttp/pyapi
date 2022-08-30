@@ -103,4 +103,4 @@ For discussion and support, join our [discussions channel](https://github.com/st
 * [STTP (IEEE 2664) Standard](https://standards.ieee.org/project/2664.html)
 
 
-![Lock](https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/LockPython_64High.png)
+[![Lock](https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/LockPython_64High.png)](https://github.com/sttp/pyapi)
