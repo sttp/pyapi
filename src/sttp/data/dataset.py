@@ -25,7 +25,7 @@ from __future__ import annotations
 from gsf import Convert, Empty
 from .datatable import DataTable
 from .datatype import DataType, parse_xsddatatype
-from typing import Dict, Iterator, List, Tuple, Union, Optional, TYPE_CHECKING
+from typing import Dict, Iterator, List, Tuple, Union, Optional
 from decimal import Decimal
 from datetime import datetime
 from dateutil import parser
@@ -35,8 +35,6 @@ from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 import numpy as np
 
-if TYPE_CHECKING:
-    from .dataset import DataSet
 
 XMLSCHEMA_NAMESPACE = "http://www.w3.org/2001/XMLSchema"
 """
@@ -216,9 +214,9 @@ class DataSet:
         def get_schemaprefix(target_namespace: str):
             prefix = ""
 
-            for prefix in namespaces:
-                if namespaces[prefix] == target_namespace:
-                    prefix = prefix
+            for key in namespaces:
+                if namespaces[key] == target_namespace:
+                    prefix = key
                     break
 
             if len(prefix) > 0:

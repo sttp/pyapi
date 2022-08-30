@@ -23,7 +23,7 @@
 
 from gsf import Empty, normalize_enumname
 from ..ticks import Ticks
-from .constants import *
+from .constants import StateFlags
 from uuid import UUID
 from datetime import datetime
 import numpy as np

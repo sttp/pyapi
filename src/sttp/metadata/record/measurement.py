@@ -108,7 +108,7 @@ class MeasurementRecord:
 
         try:
             self._signaltype = SignalType.parse(self._signaltypename)
-        except:
+        except Exception:
             self._signaltype = SignalType.UNKN
 
         self._signalreference = MeasurementRecord.DEFAULT_SIGNALREFERENCE if signalreference is ... else signalreference

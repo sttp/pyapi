@@ -30,7 +30,8 @@ from .compactmeasurement import CompactMeasurement
 from ..metadata.record.measurement import MeasurementRecord
 from ..metadata.cache import MetadataCache
 from .bufferblock import BufferBlock
-from .constants import *
+from .constants import OperationalModes, OperationalEncoding, CompressionModes
+from .constants import DataPacketFlags, ServerCommand, ServerResponse
 from .subscriptioninfo import SubscriptionInfo
 from .subscriberconnector import SubscriberConnector
 from .signalindexcache import SignalIndexCache
@@ -39,14 +40,21 @@ from ..version import Version
 from typing import List, Callable, Optional
 from time import time
 from uuid import UUID
-from threading import Lock, Thread, Event
+from threading import Lock, Thread
 from concurrent.futures import ThreadPoolExecutor
 from Crypto.Cipher import AES
 import gzip
 import socket
 import numpy as np
 
-
+MAXPACKET_SIZE = 32768
+PAYLOADHEADER_SIZE = 4
+RESPONSEHEADER_SIZE = 6
+EVEN_KEY = 0
+ODD_KEY = 1
+KEY_INDEX = 0
+IV_INDEX = 1
+MISSINGCACHEWARNING_INTERVAL = 20.0
 class DataSubscriber:
     """
     Represents a client subscription for an STTP connection.
@@ -358,7 +366,7 @@ class DataSubscriber:
 
             try:
                 hostendpoint = socket.getaddrinfo(hostname, int(port), family=socket.AF_INET, proto=socket.IPPROTO_TCP)[0][4]
-            except:
+            except Exception:
                 hostendpoint = (hostname, int(port))
 
             self._commandchannel_socket.connect(hostendpoint)
@@ -410,7 +418,7 @@ class DataSubscriber:
 
             try:
                 self._datachannel_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-                self._datachannel_socket.bind(("", udpport))
+                self._datachannel_socket.bind(("", udpport))  # lgtm [py/bind-socket-all-network-interfaces]
             except Exception as ex:
                 return RuntimeError(f"failed to open UDP socket for port {udpport}:{ex}")
 
