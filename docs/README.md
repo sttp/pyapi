@@ -6,7 +6,7 @@
 
 [![CodeQL](https://github.com/sttp/pyapi/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/sttp/pyapi/actions/workflows/codeql-analysis.yml) [![docs](https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/py-ref.svg)]( https://sttp.github.io/pyapi)
 
-The Streaming Telemetry Transport Protocol (STTP) protocol is optimized for the demands of transporting high volume streaming data. The protocol allows for the transmission of any information that can be represented longitudinally, e.g., time-series data.
+The Streaming Telemetry Transport Protocol (STTP) is optimized for the demands of transporting high volume streaming data. The protocol allows for the transmission of any information that can be represented longitudinally, e.g., time-series data.
 
 STTP is currently undergoing IEEE standardization (P2664), see: https://standards.ieee.org/ieee/2664/7397/
 
