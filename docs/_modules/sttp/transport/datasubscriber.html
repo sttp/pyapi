@@ -6,6 +6,7 @@
   <title>sttp.transport.datasubscriber &mdash; sttp/pyapi 0.3.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -26,6 +27,7 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="../../../index.html" class="icon icon-home"> sttp/pyapi
+            <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -94,7 +96,8 @@
 <span class="kn">from</span> <span class="nn">..metadata.record.measurement</span> <span class="kn">import</span> <span class="n">MeasurementRecord</span>
 <span class="kn">from</span> <span class="nn">..metadata.cache</span> <span class="kn">import</span> <span class="n">MetadataCache</span>
 <span class="kn">from</span> <span class="nn">.bufferblock</span> <span class="kn">import</span> <span class="n">BufferBlock</span>
-<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">OperationalModes</span><span class="p">,</span> <span class="n">OperationalEncoding</span><span class="p">,</span> <span class="n">CompressionModes</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">DataPacketFlags</span><span class="p">,</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="n">ServerResponse</span>
 <span class="kn">from</span> <span class="nn">.subscriptioninfo</span> <span class="kn">import</span> <span class="n">SubscriptionInfo</span>
 <span class="kn">from</span> <span class="nn">.subscriberconnector</span> <span class="kn">import</span> <span class="n">SubscriberConnector</span>
 <span class="kn">from</span> <span class="nn">.signalindexcache</span> <span class="kn">import</span> <span class="n">SignalIndexCache</span>
@@ -103,14 +106,21 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
 <span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span>
-<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Lock</span><span class="p">,</span> <span class="n">Thread</span><span class="p">,</span> <span class="n">Event</span>
+<span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Lock</span><span class="p">,</span> <span class="n">Thread</span>
 <span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
 <span class="kn">from</span> <span class="nn">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">AES</span>
 <span class="kn">import</span> <span class="nn">gzip</span>
 <span class="kn">import</span> <span class="nn">socket</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-
+<span class="n">MAXPACKET_SIZE</span> <span class="o">=</span> <span class="mi">32768</span>
+<span class="n">PAYLOADHEADER_SIZE</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">RESPONSEHEADER_SIZE</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">EVEN_KEY</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">ODD_KEY</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">KEY_INDEX</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">IV_INDEX</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">MISSINGCACHEWARNING_INTERVAL</span> <span class="o">=</span> <span class="mf">20.0</span>
 <div class="viewcode-block" id="DataSubscriber"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber">[docs]</a><span class="k">class</span> <span class="nc">DataSubscriber</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Represents a client subscription for an STTP connection.</span>
@@ -422,7 +432,7 @@
 
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">hostendpoint</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">getaddrinfo</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">port</span><span class="p">),</span> <span class="n">family</span><span class="o">=</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">proto</span><span class="o">=</span><span class="n">socket</span><span class="o">.</span><span class="n">IPPROTO_TCP</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span>
-            <span class="k">except</span><span class="p">:</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="n">hostendpoint</span> <span class="o">=</span> <span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">port</span><span class="p">))</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_socket</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">hostendpoint</span><span class="p">)</span>
@@ -474,7 +484,7 @@
 
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_DGRAM</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">udpport</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">udpport</span><span class="p">))</span>  <span class="c1"># lgtm [py/bind-socket-all-network-interfaces]</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
                 <span class="k">return</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;failed to open UDP socket for port </span><span class="si">{</span><span class="n">udpport</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -1208,7 +1218,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Grid Protection Alliance.</p>
+    <p></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
@@ -1222,6 +1232,12 @@
     &nbsp;&nbsp;•&nbsp;&nbsp;
     <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
 </p>
+<br /><br />
+Copyright © 2022, <a href="https://gridprotectionalliance.org/" target="_blank">Grid&nbsp;Protection&nbsp;Alliance</a>
+<a href="https://github.com/sttp/pyapi">
+    <img align="right" style="margin-top: -50px"
+        src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/LockPython_64High.png">
+</a>
 
 
 </footer>
