@@ -331,37 +331,37 @@ class DataRow:
             return Empty.STRING
 
         index = column.index
-        type = column.datatype
+        datatype = column.datatype
 
-        if type == DataType.STRING:
+        if datatype == DataType.STRING:
             return self._string_from_typevalue(index, self.stringvalue)
-        if type == DataType.BOOLEAN:
+        if datatype == DataType.BOOLEAN:
             return self._string_from_typevalue(index, self.booleanvalue)
-        if type == DataType.DATETIME:
+        if datatype == DataType.DATETIME:
             return self._string_from_typevalue(index, self.datetimevalue, xsdformat)
-        if type == DataType.SINGLE:
+        if datatype == DataType.SINGLE:
             return self._string_from_typevalue(index, self.singlevalue)
-        if type == DataType.DOUBLE:
+        if datatype == DataType.DOUBLE:
             return self._string_from_typevalue(index, self.doublevalue)
-        if type == DataType.DECIMAL:
+        if datatype == DataType.DECIMAL:
             return self._string_from_typevalue(index, self.decimalvalue)
-        if type == DataType.GUID:
+        if datatype == DataType.GUID:
             return self._string_from_typevalue(index, self.guidvalue)
-        if type == DataType.INT8:
+        if datatype == DataType.INT8:
             return self._string_from_typevalue(index, self.int8value)
-        if type == DataType.INT16:
+        if datatype == DataType.INT16:
             return self._string_from_typevalue(index, self.int16value)
-        if type == DataType.INT32:
+        if datatype == DataType.INT32:
             return self._string_from_typevalue(index, self.int32value)
-        if type == DataType.INT64:
+        if datatype == DataType.INT64:
             return self._string_from_typevalue(index, self.int64value)
-        if type == DataType.UINT8:
+        if datatype == DataType.UINT8:
             return self._string_from_typevalue(index, self.uint8value)
-        if type == DataType.UINT16:
+        if datatype == DataType.UINT16:
             return self._string_from_typevalue(index, self.uint16value)
-        if type == DataType.UINT32:
+        if datatype == DataType.UINT32:
             return self._string_from_typevalue(index, self.uint32value)
-        if type == DataType.UINT64:
+        if datatype == DataType.UINT64:
             return self._string_from_typevalue(index, self.uint64value)
 
         return Empty.STRING

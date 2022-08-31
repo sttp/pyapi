@@ -55,6 +55,8 @@ ODD_KEY = 1
 KEY_INDEX = 0
 IV_INDEX = 1
 MISSINGCACHEWARNING_INTERVAL = 20.0
+
+
 class DataSubscriber:
     """
     Represents a client subscription for an STTP connection.
@@ -672,7 +674,7 @@ class DataSubscriber:
                 self._dispatch_connectionterminated()
                 return
 
-    def _process_serverresponse(self, buffer: bytes): # sourcery skip: remove-pass-elif        
+    def _process_serverresponse(self, buffer: bytes):  # sourcery skip: remove-pass-elif
         if self._disconnecting:
             return
 

@@ -38,6 +38,7 @@
         "phasorrecord",
         "phasors",
         "phasortype",
+        "pointid",
         "pyapi",
         "RDWR",
         "readmutex",
