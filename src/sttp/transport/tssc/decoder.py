@@ -22,6 +22,7 @@
 # ******************************************************************************************************
 
 from gsf import Limits
+from gsf.endianorder import NativeEndian
 from .pointmetadata import PointMetadata, codeWords
 from typing import List, Optional, Tuple
 import ctypes
@@ -152,8 +153,134 @@ class Decoder:
             # Decode measurement timestamp and read next code for quality flags decoding
             if code < np.int32(codeWords.TimeXor7Bit):
                 timestamp = self.decode_timestamp(np.byte(code))
+                code, err = self.lastPoint.ReadCode()
+
+                if err is not None:
+                    return 0, 0, 0, 0.0, False, err
+
+                if code < np.int32(codeWords.StateFlags2):
+                    message = [
+                        f"expecting code >= {codeWords.StateFlags2}"
+                        f" at position {self.position}"
+                        f" with last position {self.lastPosition}"
+                    ]
+
+                    return 0, 0, 0, 0.0, False, RuntimeError("".join(message))
+            else:
+                timestamp = self.prevTimestamp1
+
+            # Decode measurement state flags and read next code for measurement value decoding
+            if code <= np.int32(codeWords.StateFlags7Bit32):
+                stateFlags = self.decode_stateflags(np.byte(code), nextPoint)
+                code, err = self.lastPoint.ReadCode()
+
+                if err is not None:
+                    return 0, 0, 0, 0.0, False, err
+
+                if code < np.int32(codeWords.Value1):
+                    message = [
+                        f"expecting code >= {codeWords.Value1}"
+                        f" at position {self.position}"
+                        f" with last position {self.lastPosition}"
+                    ]
+
+                    return 0, 0, 0, 0.0, False, RuntimeError("".join(message))
+            else:
+                stateFlags = self.lastPoint.PrevStateFlags1
+
+            # Since measurement value will almost always change, this is not put inside a function call             
+            valueRaw = np.uint32(0)
+
+            # Decode measurement value
+            if code == np.int32(codeWords.Value1):
+                valueRaw = nextPoint.PrevValue1
+            elif code == np.int32(codeWords.Value2):
+                valueRaw = nextPoint.PrevValue2
+                nextPoint.PrevValue2 = nextPoint.PrevValue1
+                nextPoint.PrevValue1 = valueRaw
+            elif code == np.int32(codeWords.Value3):
+                valueRaw = nextPoint.PrevValue3
+                nextPoint.PrevValue3 = nextPoint.PrevValue2
+                nextPoint.PrevValue2 = nextPoint.PrevValue1
+                nextPoint.PrevValue1 = valueRaw
+            elif code == np.int32(codeWords.ValueZero):
+                valueRaw = 0
+                nextPoint.PrevValue3 = nextPoint.PrevValue2
+                nextPoint.PrevValue2 = nextPoint.PrevValue1
+                nextPoint.PrevValue1 = valueRaw
+            else:
+                if code == codeWords.ValueXor4:
+                    valueRaw = np.uint32(self.readBits4()) ^ nextPoint.PrevValue1
+                elif code == codeWords.ValueXor8:
+                    valueRaw = np.uint32(self.data[self.position]) ^ nextPoint.PrevValue1
+                    self.position += 1
+                elif code == codeWords.ValueXor12:
+                    valueRaw = np.uint32(self.readBits4()) ^ np.uint32(self.data[self.position]) << 4 ^ nextPoint.PrevValue1
+                    self.position += 1
+                elif code == codeWords.ValueXor16:
+                    valueRaw = np.uint32(self.data[self.position]) ^ np.uint32(self.data[self.position+1]) << 8 ^ nextPoint.PrevValue1
+                    self.position += 2
+                elif code == codeWords.ValueXor20:
+                    valueRaw = np.uint32(self.readBits4()) ^ np.uint32(self.data[self.position]) << 4 ^ np.uint32(self.data[self.position+1]) << 12 ^ nextPoint.PrevValue1
+                    self.position += 2
+                elif code == codeWords.ValueXor24:
+                    valueRaw = np.uint32(self.data[self.position]) ^ np.uint32(self.data[self.position+1]) << 8 ^ np.uint32(self.data[self.position+2]) << 16 ^ nextPoint.PrevValue1
+                    self.position += 3
+                elif code == codeWords.ValueXor28:
+                    valueRaw = np.uint32(self.readBits4()) ^ np.uint32(self.data[self.position]) << 4 ^ np.uint32(self.data[self.position+1]) << 12 ^ np.uint32(self.data[self.position+2]) << 20 ^ nextPoint.PrevValue1
+                    self.position += 3
+                elif code == codeWords.ValueXor32:
+                    valueRaw = np.uint32(self.data[self.position]) ^ np.uint32(self.data[self.position+1]) << 8 ^ np.uint32(self.data[self.position+2]) << 16 ^ np.uint32(self.data[self.position+3]) << 24 ^ nextPoint.PrevValue1
+                    self.position += 4
+                else:
+                    message = [
+                        f"invalid code received {code}"
+                        f" at position {self.position}"
+                        f" with last position {self.lastPosition}"
+                    ]
+
+                    return 0, 0, 0, 0.0, False, RuntimeError("".join(message))
+
+                nextPoint.PrevValue3 = nextPoint.PrevValue2
+                nextPoint.PrevValue2 = nextPoint.PrevValue1
+                nextPoint.PrevValue1 = valueRaw
+
+            # Assign decoded measurement value to out parameter
+            value = NativeEndian.to_float32(NativeEndian.from_int32(valueRaw))
+            self.lastPoint = nextPoint       
+
+        return pointid, timestamp, stateFlags, value, True, None     
 
     def decode_pointid(self, code: np.byte) -> Optional[Exception]:
+        if code == codeWords.PointIDXor4:
+            self.lastPoint.PrevNextPointID1 = self.readBits4() ^ self.lastPoint.PrevNextPointID1
+        elif code == codeWords.PointIDXor8:
+            self.lastPoint.PrevNextPointID1 = np.int32(self.data[self.position]) ^ self.lastPoint.PrevNextPointID1
+            self.position += 1
+        elif code == codeWords.PointIDXor12:
+            self.lastPoint.PrevNextPointID1 = self.readBits4() ^ np.int32(self.data[self.position]) << 4 ^ self.lastPoint.PrevNextPointID1
+            self.position += 1
+        elif code == codeWords.PointIDXor16:
+            self.lastPoint.PrevNextPointID1 = np.int32(self.data[self.position]) ^ np.int32(self.data[self.position + 1]) << 8 ^ self.lastPoint.PrevNextPointID1
+            self.position += 2
+        elif code == codeWords.PointIDXor20:
+            self.lastPoint.PrevNextPointID1 = self.readBits4() ^ np.int32(self.data[self.position]) << 4 ^ np.int32(self.data[self.position + 1]) << 12 ^ self.lastPoint.PrevNextPointID1
+            self.position += 2
+        elif code == codeWords.PointIDXor24:
+            self.lastPoint.PrevNextPointID1 = np.int32(self.data[self.position]) ^ np.int32(self.data[self.position + 1]) << 8 ^ np.int32(self.data[self.position + 2]) << 16 ^ self.lastPoint.PrevNextPointID1
+            self.position += 3
+        elif code == codeWords.PointIDXor32:
+            self.lastPoint.PrevNextPointID1 = np.int32(self.data[self.position]) ^ np.int32(self.data[self.position + 1]) << 8 ^ np.int32(self.data[self.position + 2]) << 16 ^ np.int32(self.data[self.position + 3]) << 24 ^ self.lastPoint.PrevNextPointID1
+            self.position += 4
+        else:
+            message = [
+                f"invalid code received {code}"
+                f" at position {self.position}"
+                f" with last position {self.lastPosition}"
+            ]
+
+            return RuntimeError("".join(message))
+        
         return None
 
     def decode_timestamp(self, code: np.byte) -> np.int64:
@@ -206,7 +333,15 @@ class Decoder:
         return timestamp
 
     def decodeStateFlags(self, code: np.byte, nextPoint: PointMetadata) -> np.uint32:
-        return np.uint32(0)
+        if code == codeWords.StateFlags2:
+            stateFlags = nextPoint.PrevStateFlags2
+        else:
+            stateFlags, self.position = self.decode7BitUInt32(self.data, self.position)
+
+        nextPoint.PrevStateFlags2 = nextPoint.PrevStateFlags1
+        nextPoint.PrevStateFlags1 = stateFlags
+
+        return stateFlags
 
     def readBit(self) -> np.int32:
         if self.bitStreamCount == np.int32(0):
@@ -226,8 +361,88 @@ class Decoder:
 
     @staticmethod
     def decode7BitUInt32(stream: bytes, position: int) -> Tuple[np.uint32, int]:
-        return np.uint32(0), position
+        stream = stream[position:]
+        value = np.uint32(stream[0])
+
+        if value < np.uint32(128):
+            position += 1
+            return value
+
+        value ^= np.uint32(stream[1]) << np.uint32(7)
+
+        if value < np.uint32(16384):
+            position += 2
+            return value ^ np.uint32(0x80)
+
+        value ^= np.uint32(stream[2]) << np.uint32(14)
+
+        if value < np.uint32(2097152):
+            position += 3
+            return value ^ np.uint32(0x4080)
+
+        value ^= np.uint32(stream[3]) << np.uint32(21)
+
+        if value < np.uint32(268435456):
+            position += 4
+            return value ^ np.uint32(0x204080)
+
+        value ^= np.uint32(stream[4]) << np.uint32(28)
+        position += 5
+
+        return (value ^ np.uint32(0x10204080), position)
 
     @staticmethod
     def decode7BitUInt64(stream: bytes, position: int) -> Tuple[np.uint64, int]:
-        return np.uint64(0), position
+        stream = stream[position:]
+        value = np.uint64(stream[0])
+
+        if value < np.uint64(128):
+            position += 1
+            return value
+
+        value ^= np.uint64(stream[1]) << np.uint64(7)
+
+        if value < np.uint64(16384):
+            position += 2
+            return value ^ np.uint64(0x80)
+
+        value ^= np.uint64(stream[2]) << np.uint64(14)
+
+        if value < np.uint64(2097152):
+            position += 3
+            return value ^ np.uint64(0x4080)
+
+        value ^= np.uint64(stream[3]) << np.uint64(21)
+
+        if value < np.uint64(268435456):
+            position += 4
+            return value ^ np.uint64(0x204080)
+
+        value ^= np.uint64(stream[4]) << np.uint64(28)
+
+        if value < np.uint64(34359738368):
+            position += 5
+            return value ^ np.uint64(0x10204080)
+
+        value ^= np.uint64(stream[5]) << np.uint64(35)
+
+        if value < np.uint64(4398046511104):
+            position += 6
+            return value ^ np.uint64(0x810204080)
+
+        value ^= np.uint64(stream[6]) << np.uint64(42)
+
+        if value < np.uint64(562949953421312):
+            position += 7
+            return value ^ np.uint64(0x40810204080)
+
+        value ^= np.uint64(stream[7]) << np.uint64(49)
+
+        if value < np.uint64(72057594037927936):
+            position += 8
+            return value ^ np.uint64(0x2040810204080)
+
+        value ^= np.uint64(stream[8]) << np.uint64(56)
+        position += 9
+
+        return (value ^ np.uint64(0x102040810204080), position)
