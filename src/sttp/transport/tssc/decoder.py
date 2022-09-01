@@ -53,7 +53,7 @@ class Decoder:
         self.prevTimeDelta4 = np.int64(Limits.MAXINT64)
 
         self.lastPoint = self._new_pointmetadata()
-        self.points: List[PointMetadata] = (maxSignalIndex * ctypes.py_object)()
+        self.points: List[Optional[PointMetadata]] = [None] * maxSignalIndex
 
         # The number of bits in m_bitStreamCache that are valid. 0 Means the bitstream is empty
         self.bitStreamCount = np.int32(0)
@@ -85,10 +85,10 @@ class Decoder:
         self.position = 0
         self.lastPosition = len(data)
 
-    def try_get_measurement(self) -> Tuple[np.int32, np.int64, np.uint32, np.float32, Optional[Exception]]:
+    def try_get_measurement(self) -> Tuple[np.int32, np.int64, np.uint32, np.float32, bool, Optional[Exception]]:
         if self.position == self.lastPosition or self._bitstream_isempty():
             self._clear_bitstream()
-            return 0, 0, 0, 0.0, None
+            return 0, 0, 0, 0.0, False, None
 
         # Given that the incoming pointID is not known in advance, the current
         # measurement will contain the encoding details for the next.
@@ -104,48 +104,130 @@ class Decoder:
         code, err = self.lastPoint.ReadCode()
 
         if err is not None:
-            return 0, 0, 0, 0.0, err
+            return 0, 0, 0, 0.0, False, err
 
         if code == np.int32(codeWords.EndOfStream):
             self._clear_bitstream()
-            return 0, 0, 0, 0.0, None
+            return 0, 0, 0, 0.0, False, None
 
         # Decode measurement ID and read next code for timestamp decoding
         if code < np.int32(codeWords.PointIDXor32):
             err = self.decode_pointid(code)
 
             if err is not None:
-                return 0, 0, 0, 0.0, err
+                return 0, 0, 0, 0.0, False, err
 
             code, err = self.lastPoint.ReadCode()
 
             if err is not None:
-                return 0, 0, 0, 0.0, err
+                return 0, 0, 0, 0.0, False, err
 
             if code < np.int32(codeWords.TimeDelta1Forward):
                 message = [
                     f"expecting code >= {codeWords.TimeDelta1Forward}"
-         			        f" at position {self.position}"
-         			        f" with last position {self.lastPosition}"
+                    f" at position {self.position}"
+                    f" with last position {self.lastPosition}"
                 ]
 
-                return 0, 0, 0, 0.0, RuntimeError("".join(message))
+                return 0, 0, 0, 0.0, False, RuntimeError("".join(message))
 
             # Assign decoded measurement ID to out parameter
-            id = self.lastPoint.PrevNextPointID1
+            pointid = self.lastPoint.PrevNextPointID1
 
             # Setup tracking for metadata associated with measurement ID and next point to decode
             pointCount = np.int32(len(self.points))
 
-            nextPoint = None if id > pointCount else self.points[id]
+            nextPoint = None if pointid > pointCount else self.points[pointid]
 
             if nextPoint is None:
                 nextPoint = self._new_pointmetadata()
 
-                if id > pointCount:
-                    while id + 1 > len(self.points):
+                if pointid > pointCount:
+                    while pointid + 1 > len(self.points):
                         self.points.append(None)
 
-                self.points[id] = nextPoint
+            self.points[pointid] = nextPoint
+            nextPoint.PrevNextPointID1 = pointid + 1
+
+            # Decode measurement timestamp and read next code for quality flags decoding
+            if code < np.int32(codeWords.TimeXor7Bit):
+                timestamp = self.decode_timestamp(np.byte(code))
+
+    def decode_pointid(self, code: np.byte) -> Optional[Exception]:
+        return None
+
+    def decode_timestamp(self, code: np.byte) -> np.int64:
+        timestamp = np.int64(0)
+
+        if code == codeWords.TimeDelta1Forward:
+            timestamp = self.prevTimestamp1 + self.prevTimeDelta1
+        elif code == codeWords.TimeDelta2Forward:
+            timestamp = self.prevTimestamp1 + self.prevTimeDelta2
+        elif code == codeWords.TimeDelta3Forward:
+            timestamp = self.prevTimestamp1 + self.prevTimeDelta3
+        elif code == codeWords.TimeDelta4Forward:
+            timestamp = self.prevTimestamp1 + self.prevTimeDelta4
+        elif code == codeWords.TimeDelta1Reverse:
+            timestamp = self.prevTimestamp1 - self.prevTimeDelta1
+        elif code == codeWords.TimeDelta2Reverse:
+            timestamp = self.prevTimestamp1 - self.prevTimeDelta2
+        elif code == codeWords.TimeDelta3Reverse:
+            timestamp = self.prevTimestamp1 - self.prevTimeDelta3
+        elif code == codeWords.TimeDelta4Reverse:
+            timestamp = self.prevTimestamp1 - self.prevTimeDelta4
+        elif code == codeWords.Timestamp2:
+            timestamp = self.prevTimestamp2
+        else:
+            value, self.position = Decoder.decode7BitUInt64(self.data, self.position)
+            timestamp = self.prevTimestamp1 ^ np.int64(value)
+
+        # Save the smallest delta time
+        minDelta = abs(self.prevTimestamp1 - timestamp)
+
+        if minDelta < self.prevTimeDelta4 and minDelta != self.prevTimeDelta1 and minDelta != self.prevTimeDelta2 and minDelta != self.prevTimeDelta3:
+            if minDelta < self.prevTimeDelta1:
+                self.prevTimeDelta4 = self.prevTimeDelta3
+                self.prevTimeDelta3 = self.prevTimeDelta2
+                self.prevTimeDelta2 = self.prevTimeDelta1
+                self.prevTimeDelta1 = minDelta
+            elif minDelta < self.prevTimeDelta2:
+                self.prevTimeDelta4 = self.prevTimeDelta3
+                self.prevTimeDelta3 = self.prevTimeDelta2
+                self.prevTimeDelta2 = minDelta
+            elif minDelta < self.prevTimeDelta3:
+                self.prevTimeDelta4 = self.prevTimeDelta3
+                self.prevTimeDelta3 = minDelta
             else:
-                #self.points.append(nextPoint)
+                self.prevTimeDelta4 = minDelta
+
+        self.prevTimestamp2 = self.prevTimestamp1
+        self.prevTimestamp1 = timestamp
+
+        return timestamp
+
+    def decodeStateFlags(self, code: np.byte, nextPoint: PointMetadata) -> np.uint32:
+        return np.uint32(0)
+
+    def readBit(self) -> np.int32:
+        if self.bitStreamCount == np.int32(0):
+            self.bitStreamCount = np.int32(8)
+            self.bitStreamCache = np.int32(self.position)
+            self.position += 1
+
+        self.bitStreamCount -= 1
+
+        return self.bitStreamCache >> self.bitStreamCount & np.int32(1)
+
+    def readBits4(self) -> np.int32:
+        return self.readBit() << np.int32(3) | self.readBit() << np.int32(2) | self.readBit() << np.int32(1) | self.readBit()
+
+    def readBits5(self) -> np.int32:
+        return self.readBit() << np.int32(4) | self.readBit() << np.int32(3) | self.readBit() << np.int32(2) | self.readBit() << np.int32(1) | self.readBit()
+
+    @staticmethod
+    def decode7BitUInt32(stream: bytes, position: int) -> Tuple[np.uint32, int]:
+        return np.uint32(0), position
+
+    @staticmethod
+    def decode7BitUInt64(stream: bytes, position: int) -> Tuple[np.uint64, int]:
+        return np.uint64(0), position
