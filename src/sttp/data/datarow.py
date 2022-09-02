@@ -725,7 +725,7 @@ class DataRow:
         def typecompare(
                 leftrow_getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]],
                 rightrow_getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]]) -> \
-                            Tuple[int, Optional[Exception]]:
+                                Tuple[int, Optional[Exception]]:
 
             leftvalue, leftnull, lefterr = leftrow_getvalue(columnindex)
             rightvalue, rightnull, righterr = rightrow_getvalue(columnindex)
