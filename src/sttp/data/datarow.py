@@ -369,7 +369,7 @@ class DataRow:
     def _checkstate(self, null: bool, err: Optional[Exception]) -> Tuple[bool, str]:
         if err is not None:
             return True, Empty.STRING
-        
+
         return (True, "<NULL>") if null else (False, Empty.STRING)
 
     def _string_from_typevalue(self, index: int, getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]], strconv: Callable[[Any], str] = str) -> str:
@@ -392,9 +392,9 @@ class DataRow:
                 return default, False, err
 
             return (default, True, None) if value is None else (value, False, None)
-        
+
         value = self._values[columnindex]
-        
+
         return (default, True, None) if value is None else (value, False, None)
 
     def _typevalue_byname(self, columnname: str, targettype: DataType) -> Tuple[Any, bool, Optional[Exception]]:
@@ -725,11 +725,11 @@ class DataRow:
         def typecompare(
                 leftrow_getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]],
                 rightrow_getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]]) -> \
-                    Tuple[int, Optional[Exception]]:
+                        Tuple[int, Optional[Exception]]:
 
             leftvalue, leftnull, lefterr = leftrow_getvalue(columnindex)
             rightvalue, rightnull, righterr = rightrow_getvalue(columnindex)
-            
+
             lefthasvalue = not leftnull and lefterr is None
             righthasvalue = not rightnull and righterr is None
 
