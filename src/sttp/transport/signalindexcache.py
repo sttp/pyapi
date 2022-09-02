@@ -24,6 +24,7 @@
 from __future__ import annotations
 from gsf import Empty, Limits
 from gsf.endianorder import BigEndian
+from .tssc.decoder import Decoder
 from typing import Dict, List, Set, Tuple, Optional, TYPE_CHECKING
 from uuid import UUID
 import numpy as np
@@ -45,8 +46,8 @@ class SignalIndexCache:
         self._idlist: List[np.uint64] = []
         self._signalidcache: Dict[UUID, np.int32] = {}
         self._binarylength = np.uint32(0)
-        self._maxsignalindex = np.uint32(0)
-        #self.tsscDecoder = tssc.Decoder()
+        self._maxsignalindex = np.uint32(0)        
+        self._tsscdecoder: Optional[Decoder] = None
 
     def _add_record(self, ds: DataSubscriber, signalindex: np.int32, signalid: UUID, source: str, id: np.uint64, charsizeestimate: np.uint32 = 1):
         index = np.uint32(len(self._signalidlist))
@@ -77,7 +78,7 @@ class SignalIndexCache:
 
         return signalindex in self._reference
 
-    def signalid(self, signalindex: np.uint32) -> UUID:
+    def signalid(self, signalindex: np.int32) -> UUID:
         """
         Returns the signal ID Guid for the specified signalindex in the `SignalIndexCache`.
         """

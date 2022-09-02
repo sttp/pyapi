@@ -102,9 +102,6 @@ class Config:
         Determines whether payload data is compressed.
         """
 
-        # TODO: Temporarily disabling TSSC until implemented
-        self.compress_payloaddata = False
-
         self.compress_metadata = Config.DEFAULT_COMPRESS_METADATA if compress_metadata is ... else compress_metadata
         """
         Determines whether the metadata transfer is compressed.
