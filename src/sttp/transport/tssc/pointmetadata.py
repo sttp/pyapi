@@ -141,10 +141,7 @@ class PointMetadata:
 
         return self._update_codestatistics(code)
 
-    def read_code(self) -> Tuple[np.int32, Optional[Exception]]:
-        # sourcery skip: assign-if-exp
-        code = INT32_0
-
+    def read_code(self) -> Tuple[np.int32, Optional[Exception]]:  # sourcery skip: assign-if-exp
         if self._mode == BYTE_1:
             code = self._readbits5()
         elif self._mode == BYTE_2:
