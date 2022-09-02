@@ -21,7 +21,7 @@
 #
 # ******************************************************************************************************
 
-from gsf import Empty, normalize_enumname
+from gsf import Empty, Limits, normalize_enumname
 from gsf.endianorder import BigEndian
 from gsf.binarystream import BinaryStream
 from gsf.streamencoder import StreamEncoder
@@ -31,13 +31,14 @@ from ..metadata.record.measurement import MeasurementRecord
 from ..metadata.cache import MetadataCache
 from .bufferblock import BufferBlock
 from .constants import OperationalModes, OperationalEncoding, CompressionModes
-from .constants import DataPacketFlags, ServerCommand, ServerResponse
+from .constants import DataPacketFlags, ServerCommand, ServerResponse, StateFlags
 from .subscriptioninfo import SubscriptionInfo
 from .subscriberconnector import SubscriberConnector
 from .signalindexcache import SignalIndexCache
+from .tssc.decoder import Decoder
 from ..ticks import Ticks
 from ..version import Version
-from typing import List, Callable, Optional
+from typing import List, Callable, Optional, Tuple
 from time import time
 from uuid import UUID
 from threading import Lock, Thread
@@ -123,12 +124,12 @@ class DataSubscriber:
         Called when an error message should be logged.
         """
 
-        self.connectionterminated_callback: Optional[Callable] = None
+        self.connectionterminated_callback: Optional[Callable[[], None]] = None
         """
         Called when `DataSubscriber` terminates its connection.
         """
 
-        self.autoreconnect_callback: Optional[Callable] = None
+        self.autoreconnect_callback: Optional[Callable[[], None]] = None
         """
         Called when `DataSubscriber` automatically reconnects.
         """
@@ -148,7 +149,7 @@ class DataSubscriber:
         Called with timestamp of first received measurement in a subscription.
         """
 
-        self.configurationchanged_callback: Optional[Callable] = None
+        self.configurationchanged_callback: Optional[Callable[[], None]] = None
         """
         Called when the `DataPublisher` sends a notification that configuration has changed.
         """
@@ -625,7 +626,7 @@ class DataSubscriber:
                 self._read_payloadheader()
             except Exception as ex:
                 # DEBUG:
-                #self._dispatch_errormessage(f"Exception processing server response: {ex}")
+                self._dispatch_errormessage(f"Exception processing server response: {ex}")
 
                 # Read error, connection may have been closed by peer; terminate connection
                 self._dispatch_connectionterminated()
@@ -915,23 +916,92 @@ class DataSubscriber:
         self._signalindexcache_mutex.release()
 
         if compressed:
-            measurements = self._parse_tssc_measurements(signalindexcache, data[4:], count)
+            measurements, err = self._parse_tssc_measurements(signalindexcache, data[4:], count)
         else:
-            measurements = self._parse_compact_measurements(signalindexcache, data[4:], count)
+            measurements, err = self._parse_compact_measurements(signalindexcache, data[4:], count)
 
-        if self.newmeasurements_callback is not None and len(measurements) > 0:
-            # Do not use thread pool here, processing sequence may be important.
-            # Execute callback directly from socket processing thread:
-            self.newmeasurements_callback(measurements)
+        if err is not None:
+            self._dispatch_errormessage(str(err))
+            self._dispatch_connectionterminated()
+        else:
+            if self.newmeasurements_callback is not None and len(measurements) > 0:
+                # Do not use thread pool here, processing sequence may be important.
+                # Execute callback directly from socket processing thread:
+                self.newmeasurements_callback(measurements)
 
-        self._total_measurementsreceived += count
+            self._total_measurementsreceived += count
 
-    def _parse_tssc_measurements(self, signalindexcache: SignalIndexCache, data: bytes, count: np.uint32) -> List[Measurement]:
-        self._dispatch_errormessage("Python TSSC not implemented yet - disconnecting.")
-        self._dispatch_connectionterminated()
-        return []
+    def _parse_tssc_measurements(self, signalindexcache: SignalIndexCache, data: bytes, count: np.uint32) -> Tuple[List[Measurement], Optional[Exception]]:
+        decoder = signalindexcache._tsscdecoder
+        newdecoder = False
 
-    def _parse_compact_measurements(self, signalindexcache: SignalIndexCache, data: bytes, count: np.uint32) -> List[Measurement]:
+        if decoder is None:
+            signalindexcache._tsscdecoder = Decoder(signalindexcache.maxsignalindex)
+            decoder = signalindexcache._tsscdecoder
+            decoder.sequencenumber = 0
+            newdecoder = True
+
+        if data[0] != 85:
+            return [], RuntimeError(f"TSSC version not recognized - disconnecting. Received version: {data[0]}")
+
+        sequencenumber = BigEndian.to_uint16(data[1:])
+
+        if sequencenumber == 0:
+            if not newdecoder:
+                if decoder.sequencenumber > 0:
+                    self._dispatch_errormessage(f"TSSC algorithm reset before sequence number: {decoder.sequencenumber}")
+                
+                signalindexcache._tsscdecoder = Decoder(signalindexcache.maxsignalindex)
+                decoder = signalindexcache._tsscdecoder
+                decoder.sequencenumber = 0
+            
+            self._tssc_resetrequested = False
+            self._tssc_lastoosreport_mutex.acquire()
+            self._tssc_lastoosreport = time()
+            self._tssc_lastoosreport_mutex.release()
+
+        if decoder.sequencenumber != sequencenumber:
+            if not self._tssc_resetrequested:
+                self._tssc_lastoosreport_mutex.acquire()
+
+                if time() - self._tssc_lastoosreport > 2.0:
+                    self._dispatch_errormessage(f"TSSC is out of sequence. Expecting: {decoder.sequencenumber}, received: {sequencenumber}")
+                    self._tssc_lastoosreport = time()
+
+                self._tssc_lastoosreport_mutex.release()
+
+            return [], None
+
+        decoder.set_buffer(data[3:])
+
+        measurements = [Measurement] * count
+        index = 0
+        success = True
+
+        while success:
+            pointid, timestamp, stateflags, value, success, err = decoder.try_get_measurement()
+
+            if success:
+                measurements[index] = Measurement(
+                    signalindexcache.signalid(pointid), 
+                    np.float64(value),
+                    np.uint64(timestamp), 
+                    StateFlags(stateflags))
+                
+                index += 1
+
+        if err is not None:
+            return [], RuntimeError(f"Failed to parse TSSC measurements - disconnecting: {err}")
+
+        decoder.sequencenumber += 1
+
+        # Do not increment to 0 on roll-over
+        if decoder.sequencenumber > Limits.MAXUINT16:
+            decoder.sequencenumber = 1
+
+        return measurements, None
+
+    def _parse_compact_measurements(self, signalindexcache: SignalIndexCache, data: bytes, count: np.uint32) -> Tuple[List[Measurement], Optional[Exception]]:
         if signalindexcache.count == 0:
             if self._last_missingcachewarning + MISSINGCACHEWARNING_INTERVAL < time():
                 # Warning message for missing signal index cache
@@ -940,27 +1010,25 @@ class DataSubscriber:
 
                 self._last_missingcachewarning = time()
 
-            return []
+            return [], None
 
         measurements: List[Measurement] = []
-        usemillisecondresolution = self.subscription.use_millisecondresolution
+        use_millisecondresolution = self.subscription.use_millisecondresolution
         includetime = self.subscription.includetime
         index = 0
 
         for _ in range(count):
             # Deserialize compact measurement format
-            measurement = CompactMeasurement(signalindexcache, includetime, usemillisecondresolution, self._basetimeoffsets)
+            measurement = CompactMeasurement(signalindexcache, includetime, use_millisecondresolution, self._basetimeoffsets)
             (bytesdecoded, err) = measurement.decode(data[index:])
 
             if err is not None:
-                self._dispatch_errormessage(f"Failed to parse compact measurements - disconnecting: {err}")
-                self._dispatch_connectionterminated()
-                return
+                return [], RuntimeError(f"Failed to parse compact measurements - disconnecting: {err}")
 
             index += bytesdecoded
             measurements.append(measurement)
 
-        return measurements
+        return measurements, None
 
     def _handle_bufferblock(self, data: bytes):  # sourcery skip: low-code-quality, extract-method
         # Buffer block received - wrap as a BufferBlockMeasurement and expose back to consumer
@@ -979,10 +1047,10 @@ class DataSubscriber:
             signalindex = BigEndian.to_uint32(data)
 
             self._signalindexcache_mutex.acquire()
-            signalIndexCache = self._signalindexcache[signalindexcacheindex]
+            signalindexCache = self._signalindexcache[signalindexcacheindex]
             self._signalindexcache_mutex.release()
 
-            signalid = signalIndexCache.signalid(signalindex)
+            signalid = signalindexCache.signalid(signalindex)
             bufferblockmeasurement = BufferBlock(signalid)
 
             # Determine if this is the next buffer block in the sequence
