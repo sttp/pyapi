@@ -612,9 +612,13 @@ class DataSubscriber:
             self._threadpool.submit(self.errormessage_callback, message)
 
     def _run_commandchannel_responsethread(self):
-        self._reader = BinaryStream(StreamEncoder(
-            (lambda length: self._commandchannel_socket.recv(length)),
-            (lambda buffer: self._commandchannel_socket.send(buffer))))
+        def recv_data(length: int) -> bytes:
+            try:
+                return self._commandchannel_socket.recv(length)
+            except Exception:
+                return bytes()
+
+        self._reader = BinaryStream(StreamEncoder(recv_data, lambda _: ...))
 
         while self._connected:
             try:
@@ -624,10 +628,7 @@ class DataSubscriber:
                 self._total_commandchannel_bytesreceived += PAYLOADHEADER_SIZE
 
                 self._read_payloadheader()
-            except Exception as ex:
-                # DEBUG:
-                self._dispatch_errormessage(f"Exception processing server response: {ex}")
-
+            except Exception:
                 # Read error, connection may have been closed by peer; terminate connection
                 self._dispatch_connectionterminated()
                 return
@@ -650,15 +651,24 @@ class DataSubscriber:
         self._total_commandchannel_bytesreceived += packetsize
 
         # Process response
-        self._process_serverresponse(bytes(self._readbuffer[:packetsize]))
+        try:
+            self._process_serverresponse(bytes(self._readbuffer[:packetsize]))
+        except Exception as ex:
+            self._dispatch_errormessage(f"Exception processing server response: {ex}")
+            self._dispatch_connectionterminated()
+            return
+
 
     # If the user defines a separate UDP channel for their
     # subscription, data packets get handled from this thread.
     def _run_datachannel_responsethread(self):
-        reader = StreamEncoder(
-            (lambda length: self._datachannel_socket.recvfrom(length)[0]),
-            (lambda _: ...))
+        def recv_data(length: int) -> bytes:
+            try:
+                return self._datachannel_socket.recvfrom(length)[0]
+            except Exception:
+                return bytes()
 
+        reader = StreamEncoder(recv_data, lambda _: ...)
         buffer = bytearray(MAXPACKET_SIZE)
 
         while self._connected:

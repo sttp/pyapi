@@ -51,7 +51,7 @@ class DataRow:
         """
 
         self._parent = parent
-        self._values = np.empty(parent.columncount, dtype=object)
+        self._values = np.empty(parent.columncount, object)
 
     def __getitem__(self, key: Union[int, str]) -> Any:
         if isinstance(key, str):
