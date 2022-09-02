@@ -288,8 +288,6 @@ class Decoder:
         return None
 
     def _decode_timestamp(self, code: np.byte) -> np.int64:
-        timestamp = INT64_0
-
         if code == CodeWords.TIMEDELTA1FORWARD:
             timestamp = self._prevtimestamp1 + self._prevtimedelta1
         elif code == CodeWords.TIMEDELTA2FORWARD:
