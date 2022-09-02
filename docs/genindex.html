@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; sttp/pyapi 0.3.0 documentation</title>
+  <title>Index &mdash; sttp/pyapi 0.4.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
@@ -227,6 +227,8 @@
 </li>
       <li><a href="sttp.data.html#sttp.data.datatable.DataTable.clone_row">clone_row() (sttp.data.datatable.DataTable method)</a>
 </li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords">CodeWords (class in sttp.transport.tssc.pointmetadata)</a>
+</li>
       <li><a href="sttp.data.html#sttp.data.datatable.DataTable.column">column() (sttp.data.datatable.DataTable method)</a>
 </li>
       <li><a href="sttp.data.html#sttp.data.datatable.DataTable.column_byname">column_byname() (sttp.data.datatable.DataTable method)</a>
@@ -399,6 +401,8 @@
         <li><a href="sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache.decode">(sttp.transport.signalindexcache.SignalIndexCache method)</a>
 </li>
       </ul></li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.decoder.Decoder">Decoder (class in sttp.transport.tssc.decoder)</a>
+</li>
       <li><a href="sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.decodestr">decodestr() (sttp.transport.datasubscriber.DataSubscriber method)</a>
 </li>
       <li><a href="sttp.metadata.record.html#sttp.metadata.record.measurement.MeasurementRecord.DEFAULT_ADDER">DEFAULT_ADDER (sttp.metadata.record.measurement.MeasurementRecord attribute)</a>
@@ -507,10 +511,10 @@
 </li>
       <li><a href="sttp.metadata.record.html#sttp.metadata.record.device.DeviceRecord.DEFAULT_PARENTACRONYM">DEFAULT_PARENTACRONYM (sttp.metadata.record.device.DeviceRecord attribute)</a>
 </li>
-      <li><a href="sttp.metadata.record.html#sttp.metadata.record.phasor.PhasorRecord.DEFAULT_PHASE">DEFAULT_PHASE (sttp.metadata.record.phasor.PhasorRecord attribute)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="sttp.metadata.record.html#sttp.metadata.record.phasor.PhasorRecord.DEFAULT_PHASE">DEFAULT_PHASE (sttp.metadata.record.phasor.PhasorRecord attribute)</a>
+</li>
       <li><a href="sttp.metadata.record.html#sttp.metadata.record.measurement.MeasurementRecord.DEFAULT_POINTTAG">DEFAULT_POINTTAG (sttp.metadata.record.measurement.MeasurementRecord attribute)</a>
 </li>
       <li><a href="sttp.transport.html#sttp.transport.subscriberconnector.SubscriberConnector.DEFAULT_PORT">DEFAULT_PORT (sttp.transport.subscriberconnector.SubscriberConnector attribute)</a>
@@ -702,6 +706,8 @@
       <li><a href="gsf.html#gsf.encoding7bit.Encoding7Bit">Encoding7Bit (class in gsf.encoding7bit)</a>
 </li>
       <li><a href="sttp.transport.html#sttp.transport.constants.OperationalModes.ENCODINGMASK">ENCODINGMASK (sttp.transport.constants.OperationalModes attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.ENDOFSTREAM">ENDOFSTREAM (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
 </li>
       <li><a href="sttp.html#sttp.subscriber.Subscriber.errormessage">errormessage() (sttp.subscriber.Subscriber method)</a>
 </li>
@@ -1130,6 +1136,12 @@
 </li>
         <li><a href="sttp.transport.html#module-sttp.transport.subscriptioninfo">sttp.transport.subscriptioninfo</a>
 </li>
+        <li><a href="sttp.transport.tssc.html#module-sttp.transport.tssc">sttp.transport.tssc</a>
+</li>
+        <li><a href="sttp.transport.tssc.html#module-sttp.transport.tssc.decoder">sttp.transport.tssc.decoder</a>
+</li>
+        <li><a href="sttp.transport.tssc.html#module-sttp.transport.tssc.pointmetadata">sttp.transport.tssc.pointmetadata</a>
+</li>
         <li><a href="sttp.html#module-sttp.version">sttp.version</a>
 </li>
       </ul></li>
@@ -1241,8 +1253,6 @@
 </li>
       <li><a href="sttp.html#sttp.ticks.Ticks.PERMINUTE">PERMINUTE (sttp.ticks.Ticks attribute)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="sttp.html#sttp.ticks.Ticks.PERSECOND">PERSECOND (sttp.ticks.Ticks attribute)</a>
 </li>
       <li><a href="sttp.metadata.record.html#sttp.metadata.record.phasor.PhasorRecord.phase">phase (sttp.metadata.record.phasor.PhasorRecord property)</a>
@@ -1251,9 +1261,27 @@
 </li>
       <li><a href="sttp.metadata.record.html#sttp.metadata.record.phasor.PhasorRecord">PhasorRecord (class in sttp.metadata.record.phasor)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="sttp.metadata.html#sttp.metadata.cache.MetadataCache.phasorRecords">phasorRecords (sttp.metadata.cache.MetadataCache attribute)</a>
 </li>
       <li><a href="sttp.metadata.record.html#sttp.metadata.record.device.DeviceRecord.phasors">phasors (sttp.metadata.record.device.DeviceRecord attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR12">POINTIDXOR12 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR16">POINTIDXOR16 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR20">POINTIDXOR20 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR24">POINTIDXOR24 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR32">POINTIDXOR32 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR4">POINTIDXOR4 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR8">POINTIDXOR8 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.PointMetadata">PointMetadata (class in sttp.transport.tssc.pointmetadata)</a>
 </li>
       <li><a href="sttp.metadata.record.html#sttp.metadata.record.measurement.MeasurementRecord.pointtag">pointtag (sttp.metadata.record.measurement.MeasurementRecord property)</a>
 </li>
@@ -1334,6 +1362,8 @@
 </li>
       </ul></li>
       <li><a href="gsf.html#gsf.binarystream.BinaryStream.read_bytes">read_bytes() (gsf.binarystream.BinaryStream method)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.PointMetadata.read_code">read_code() (sttp.transport.tssc.pointmetadata.PointMetadata method)</a>
 </li>
       <li><a href="gsf.html#gsf.binarystream.BinaryStream.read_guid">read_guid() (gsf.binarystream.BinaryStream method)</a>
 </li>
@@ -1455,9 +1485,13 @@
 </li>
       <li><a href="sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.send_servercommand_withmessage">send_servercommand_withmessage() (sttp.transport.datasubscriber.DataSubscriber method)</a>
 </li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.decoder.Decoder.sequencenumber">sequencenumber (sttp.transport.tssc.decoder.Decoder attribute)</a>
+</li>
       <li><a href="sttp.transport.html#sttp.transport.constants.ServerCommand">ServerCommand (class in sttp.transport.constants)</a>
 </li>
       <li><a href="sttp.transport.html#sttp.transport.constants.ServerResponse">ServerResponse (class in sttp.transport.constants)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.decoder.Decoder.set_buffer">set_buffer() (sttp.transport.tssc.decoder.Decoder method)</a>
 </li>
       <li><a href="sttp.transport.html#sttp.transport.compactmeasurement.CompactMeasurement.set_compact_stateflags">set_compact_stateflags() (sttp.transport.compactmeasurement.CompactMeasurement method)</a>
 </li>
@@ -1553,6 +1587,10 @@
 </li>
       <li><a href="sttp.transport.html#sttp.transport.constants.StateFlags">StateFlags (class in sttp.transport.constants)</a>
 </li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.STATEFLAGS2">STATEFLAGS2 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.STATEFLAGS7BIT32">STATEFLAGS7BIT32 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
       <li><a href="gsf.html#gsf.endianorder.BigEndian.static_init">static_init() (gsf.endianorder.BigEndian class method)</a>
 
       <ul>
@@ -1624,8 +1662,6 @@
         <li><a href="sttp.data.html#module-sttp.data.datarow">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     sttp.data.dataset
 
@@ -1633,6 +1669,8 @@
         <li><a href="sttp.data.html#module-sttp.data.dataset">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     sttp.data.datatable
 
@@ -1788,6 +1826,27 @@
 </li>
       </ul></li>
       <li>
+    sttp.transport.tssc
+
+      <ul>
+        <li><a href="sttp.transport.tssc.html#module-sttp.transport.tssc">module</a>
+</li>
+      </ul></li>
+      <li>
+    sttp.transport.tssc.decoder
+
+      <ul>
+        <li><a href="sttp.transport.tssc.html#module-sttp.transport.tssc.decoder">module</a>
+</li>
+      </ul></li>
+      <li>
+    sttp.transport.tssc.pointmetadata
+
+      <ul>
+        <li><a href="sttp.transport.tssc.html#module-sttp.transport.tssc.pointmetadata">module</a>
+</li>
+      </ul></li>
+      <li>
     sttp.version
 
       <ul>
@@ -1892,11 +1951,33 @@
 </li>
       <li><a href="sttp.transport.html#sttp.transport.measurement.Measurement.ticksvalue">ticksvalue (sttp.transport.measurement.Measurement property)</a>
 </li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA1FORWARD">TIMEDELTA1FORWARD (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA1REVERSE">TIMEDELTA1REVERSE (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA2FORWARD">TIMEDELTA2FORWARD (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA2REVERSE">TIMEDELTA2REVERSE (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA3FORWARD">TIMEDELTA3FORWARD (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA3REVERSE">TIMEDELTA3REVERSE (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA4FORWARD">TIMEDELTA4FORWARD (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA4REVERSE">TIMEDELTA4REVERSE (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
       <li><a href="sttp.transport.html#sttp.transport.compactmeasurement.CompactStateFlags.TIMEINDEX">TIMEINDEX (sttp.transport.compactmeasurement.CompactStateFlags attribute)</a>
 </li>
       <li><a href="sttp.transport.html#sttp.transport.compactmeasurement.CompactStateFlags.TIMEQUALITY">TIMEQUALITY (sttp.transport.compactmeasurement.CompactStateFlags attribute)</a>
 </li>
       <li><a href="sttp.transport.html#sttp.transport.measurement.Measurement.timestamp">timestamp (sttp.transport.measurement.Measurement attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.TIMESTAMP2">TIMESTAMP2 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.TIMEXOR7BIT">TIMEXOR7BIT (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
 </li>
       <li><a href="sttp.transport.html#sttp.transport.constants.SecurityMode.TLS">TLS (sttp.transport.constants.SecurityMode attribute)</a>
 </li>
@@ -1904,8 +1985,6 @@
 </li>
       <li><a href="gsf.html#gsf.endianorder.NativeEndian.to_float16">to_float16() (gsf.endianorder.NativeEndian class method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="gsf.html#gsf.endianorder.NativeEndian.to_float32">to_float32() (gsf.endianorder.NativeEndian class method)</a>
 </li>
       <li><a href="gsf.html#gsf.endianorder.NativeEndian.to_float64">to_float64() (gsf.endianorder.NativeEndian class method)</a>
@@ -1944,6 +2023,8 @@
         <li><a href="sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.total_measurementsreceived">(sttp.transport.datasubscriber.DataSubscriber property)</a>
 </li>
       </ul></li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.decoder.Decoder.try_get_measurement">try_get_measurement() (sttp.transport.tssc.decoder.Decoder method)</a>
+</li>
       <li><a href="sttp.transport.html#sttp.transport.constants.CompressionModes.TSSC">TSSC (sttp.transport.constants.CompressionModes attribute)</a>
 </li>
       <li><a href="sttp.metadata.record.html#sttp.metadata.record.phasor.PhasorRecord.type">type (sttp.metadata.record.phasor.PhasorRecord property)</a>
@@ -2142,6 +2223,12 @@
 </li>
       <li><a href="sttp.data.html#sttp.data.datarow.DataRow.value">value() (sttp.data.datarow.DataRow method)</a>
 </li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.VALUE1">VALUE1 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.VALUE2">VALUE2 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.VALUE3">VALUE3 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
       <li><a href="sttp.data.html#sttp.data.datarow.DataRow.value_as_string">value_as_string() (sttp.data.datarow.DataRow method)</a>
 </li>
       <li><a href="sttp.data.html#sttp.data.datarow.DataRow.value_as_string_byname">value_as_string_byname() (sttp.data.datarow.DataRow method)</a>
@@ -2152,8 +2239,26 @@
 </li>
       <li><a href="sttp.html#sttp.ticks.Ticks.VALUEMASK">VALUEMASK (sttp.ticks.Ticks attribute)</a>
 </li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR12">VALUEXOR12 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR16">VALUEXOR16 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR20">VALUEXOR20 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR24">VALUEXOR24 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR28">VALUEXOR28 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR32">VALUEXOR32 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR4">VALUEXOR4 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR8">VALUEXOR8 (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.CodeWords.VALUEZERO">VALUEZERO (sttp.transport.tssc.pointmetadata.CodeWords attribute)</a>
+</li>
       <li><a href="sttp.metadata.record.html#sttp.metadata.record.device.DeviceRecord.vendoracronym">vendoracronym (sttp.metadata.record.device.DeviceRecord property)</a>
 </li>
       <li><a href="sttp.metadata.record.html#sttp.metadata.record.device.DeviceRecord.vendordevicename">vendordevicename (sttp.metadata.record.device.DeviceRecord property)</a>
@@ -2216,6 +2321,8 @@
         <li><a href="gsf.html#gsf.streamencoder.StreamEncoder.write_byte">(gsf.streamencoder.StreamEncoder method)</a>
 </li>
       </ul></li>
+      <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.PointMetadata.write_code">write_code() (sttp.transport.tssc.pointmetadata.PointMetadata method)</a>
+</li>
       <li><a href="gsf.html#gsf.binarystream.BinaryStream.write_guid">write_guid() (gsf.binarystream.BinaryStream method)</a>
 </li>
       <li><a href="gsf.html#gsf.binarystream.BinaryStream.write_int16">write_int16() (gsf.binarystream.BinaryStream method)</a>

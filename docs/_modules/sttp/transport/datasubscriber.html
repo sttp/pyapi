@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.datasubscriber &mdash; sttp/pyapi 0.3.0 documentation</title>
+  <title>sttp.transport.datasubscriber &mdash; sttp/pyapi 0.4.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
@@ -87,7 +87,7 @@
 <span class="c1">#</span>
 <span class="c1"># ******************************************************************************************************</span>
 
-<span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">Empty</span><span class="p">,</span> <span class="n">normalize_enumname</span>
+<span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">Empty</span><span class="p">,</span> <span class="n">Limits</span><span class="p">,</span> <span class="n">normalize_enumname</span>
 <span class="kn">from</span> <span class="nn">gsf.endianorder</span> <span class="kn">import</span> <span class="n">BigEndian</span>
 <span class="kn">from</span> <span class="nn">gsf.binarystream</span> <span class="kn">import</span> <span class="n">BinaryStream</span>
 <span class="kn">from</span> <span class="nn">gsf.streamencoder</span> <span class="kn">import</span> <span class="n">StreamEncoder</span>
@@ -97,13 +97,14 @@
 <span class="kn">from</span> <span class="nn">..metadata.cache</span> <span class="kn">import</span> <span class="n">MetadataCache</span>
 <span class="kn">from</span> <span class="nn">.bufferblock</span> <span class="kn">import</span> <span class="n">BufferBlock</span>
 <span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">OperationalModes</span><span class="p">,</span> <span class="n">OperationalEncoding</span><span class="p">,</span> <span class="n">CompressionModes</span>
-<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">DataPacketFlags</span><span class="p">,</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="n">ServerResponse</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">DataPacketFlags</span><span class="p">,</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="n">ServerResponse</span><span class="p">,</span> <span class="n">StateFlags</span>
 <span class="kn">from</span> <span class="nn">.subscriptioninfo</span> <span class="kn">import</span> <span class="n">SubscriptionInfo</span>
 <span class="kn">from</span> <span class="nn">.subscriberconnector</span> <span class="kn">import</span> <span class="n">SubscriberConnector</span>
 <span class="kn">from</span> <span class="nn">.signalindexcache</span> <span class="kn">import</span> <span class="n">SignalIndexCache</span>
+<span class="kn">from</span> <span class="nn">.tssc.decoder</span> <span class="kn">import</span> <span class="n">Decoder</span>
 <span class="kn">from</span> <span class="nn">..ticks</span> <span class="kn">import</span> <span class="n">Ticks</span>
 <span class="kn">from</span> <span class="nn">..version</span> <span class="kn">import</span> <span class="n">Version</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
 <span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span>
 <span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Lock</span><span class="p">,</span> <span class="n">Thread</span>
@@ -121,6 +122,8 @@
 <span class="n">KEY_INDEX</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="n">IV_INDEX</span> <span class="o">=</span> <span class="mi">1</span>
 <span class="n">MISSINGCACHEWARNING_INTERVAL</span> <span class="o">=</span> <span class="mf">20.0</span>
+
+
 <div class="viewcode-block" id="DataSubscriber"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber">[docs]</a><span class="k">class</span> <span class="nc">DataSubscriber</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Represents a client subscription for an STTP connection.</span>
@@ -187,12 +190,12 @@
 <span class="sd">        Called when an error message should be logged.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">connectionterminated_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connectionterminated_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called when `DataSubscriber` terminates its connection.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">autoreconnect_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">autoreconnect_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called when `DataSubscriber` automatically reconnects.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -212,7 +215,7 @@
 <span class="sd">        Called with timestamp of first received measurement in a subscription.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">configurationchanged_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">configurationchanged_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called when the `DataPublisher` sends a notification that configuration has changed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -675,9 +678,13 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_threadpool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">errormessage_callback</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_run_commandchannel_responsethread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span> <span class="o">=</span> <span class="n">BinaryStream</span><span class="p">(</span><span class="n">StreamEncoder</span><span class="p">(</span>
-            <span class="p">(</span><span class="k">lambda</span> <span class="n">length</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_socket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">length</span><span class="p">)),</span>
-            <span class="p">(</span><span class="k">lambda</span> <span class="n">buffer</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_socket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">buffer</span><span class="p">))))</span>
+        <span class="k">def</span> <span class="nf">recv_data</span><span class="p">(</span><span class="n">length</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_socket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">bytes</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span> <span class="o">=</span> <span class="n">BinaryStream</span><span class="p">(</span><span class="n">StreamEncoder</span><span class="p">(</span><span class="n">recv_data</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="o">...</span><span class="p">))</span>
 
         <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
@@ -687,10 +694,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_total_commandchannel_bytesreceived</span> <span class="o">+=</span> <span class="n">PAYLOADHEADER_SIZE</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">_read_payloadheader</span><span class="p">()</span>
-            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
-                <span class="c1"># DEBUG:</span>
-                <span class="c1">#self._dispatch_errormessage(f&quot;Exception processing server response: {ex}&quot;)</span>
-
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="c1"># Read error, connection may have been closed by peer; terminate connection</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_connectionterminated</span><span class="p">()</span>
                 <span class="k">return</span>
@@ -713,15 +717,24 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_total_commandchannel_bytesreceived</span> <span class="o">+=</span> <span class="n">packetsize</span>
 
         <span class="c1"># Process response</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_process_serverresponse</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_readbuffer</span><span class="p">[:</span><span class="n">packetsize</span><span class="p">]))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_process_serverresponse</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_readbuffer</span><span class="p">[:</span><span class="n">packetsize</span><span class="p">]))</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exception processing server response: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_connectionterminated</span><span class="p">()</span>
+            <span class="k">return</span>
+
 
     <span class="c1"># If the user defines a separate UDP channel for their</span>
     <span class="c1"># subscription, data packets get handled from this thread.</span>
     <span class="k">def</span> <span class="nf">_run_datachannel_responsethread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">reader</span> <span class="o">=</span> <span class="n">StreamEncoder</span><span class="p">(</span>
-            <span class="p">(</span><span class="k">lambda</span> <span class="n">length</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span><span class="o">.</span><span class="n">recvfrom</span><span class="p">(</span><span class="n">length</span><span class="p">)[</span><span class="mi">0</span><span class="p">]),</span>
-            <span class="p">(</span><span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="o">...</span><span class="p">))</span>
+        <span class="k">def</span> <span class="nf">recv_data</span><span class="p">(</span><span class="n">length</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span><span class="o">.</span><span class="n">recvfrom</span><span class="p">(</span><span class="n">length</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">bytes</span><span class="p">()</span>
 
+        <span class="n">reader</span> <span class="o">=</span> <span class="n">StreamEncoder</span><span class="p">(</span><span class="n">recv_data</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="o">...</span><span class="p">)</span>
         <span class="n">buffer</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">MAXPACKET_SIZE</span><span class="p">)</span>
 
         <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
@@ -738,7 +751,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_connectionterminated</span><span class="p">()</span>
                 <span class="k">return</span>
 
-    <span class="k">def</span> <span class="nf">_process_serverresponse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span> <span class="c1"># sourcery skip: remove-pass-elif        </span>
+    <span class="k">def</span> <span class="nf">_process_serverresponse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">buffer</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>  <span class="c1"># sourcery skip: remove-pass-elif</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_disconnecting</span><span class="p">:</span>
             <span class="k">return</span>
 
@@ -979,23 +992,92 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_signalindexcache_mutex</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">compressed</span><span class="p">:</span>
-            <span class="n">measurements</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_tssc_measurements</span><span class="p">(</span><span class="n">signalindexcache</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">:],</span> <span class="n">count</span><span class="p">)</span>
+            <span class="n">measurements</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_tssc_measurements</span><span class="p">(</span><span class="n">signalindexcache</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">:],</span> <span class="n">count</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">measurements</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_compact_measurements</span><span class="p">(</span><span class="n">signalindexcache</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">:],</span> <span class="n">count</span><span class="p">)</span>
+            <span class="n">measurements</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_compact_measurements</span><span class="p">(</span><span class="n">signalindexcache</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">:],</span> <span class="n">count</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">newmeasurements_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">measurements</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="c1"># Do not use thread pool here, processing sequence may be important.</span>
-            <span class="c1"># Execute callback directly from socket processing thread:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">newmeasurements_callback</span><span class="p">(</span><span class="n">measurements</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">err</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_connectionterminated</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">newmeasurements_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">measurements</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># Do not use thread pool here, processing sequence may be important.</span>
+                <span class="c1"># Execute callback directly from socket processing thread:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">newmeasurements_callback</span><span class="p">(</span><span class="n">measurements</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_total_measurementsreceived</span> <span class="o">+=</span> <span class="n">count</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_total_measurementsreceived</span> <span class="o">+=</span> <span class="n">count</span>
 
-    <span class="k">def</span> <span class="nf">_parse_tssc_measurements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signalindexcache</span><span class="p">:</span> <span class="n">SignalIndexCache</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Measurement</span><span class="p">]:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="s2">&quot;Python TSSC not implemented yet - disconnecting.&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_connectionterminated</span><span class="p">()</span>
-        <span class="k">return</span> <span class="p">[]</span>
+    <span class="k">def</span> <span class="nf">_parse_tssc_measurements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signalindexcache</span><span class="p">:</span> <span class="n">SignalIndexCache</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Measurement</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="n">decoder</span> <span class="o">=</span> <span class="n">signalindexcache</span><span class="o">.</span><span class="n">_tsscdecoder</span>
+        <span class="n">newdecoder</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="k">def</span> <span class="nf">_parse_compact_measurements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signalindexcache</span><span class="p">:</span> <span class="n">SignalIndexCache</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Measurement</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">decoder</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">signalindexcache</span><span class="o">.</span><span class="n">_tsscdecoder</span> <span class="o">=</span> <span class="n">Decoder</span><span class="p">(</span><span class="n">signalindexcache</span><span class="o">.</span><span class="n">maxsignalindex</span><span class="p">)</span>
+            <span class="n">decoder</span> <span class="o">=</span> <span class="n">signalindexcache</span><span class="o">.</span><span class="n">_tsscdecoder</span>
+            <span class="n">decoder</span><span class="o">.</span><span class="n">sequencenumber</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">newdecoder</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">85</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[],</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TSSC version not recognized - disconnecting. Received version: </span><span class="si">{</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">sequencenumber</span> <span class="o">=</span> <span class="n">BigEndian</span><span class="o">.</span><span class="n">to_uint16</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+
+        <span class="k">if</span> <span class="n">sequencenumber</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">newdecoder</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">decoder</span><span class="o">.</span><span class="n">sequencenumber</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TSSC algorithm reset before sequence number: </span><span class="si">{</span><span class="n">decoder</span><span class="o">.</span><span class="n">sequencenumber</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+                <span class="n">signalindexcache</span><span class="o">.</span><span class="n">_tsscdecoder</span> <span class="o">=</span> <span class="n">Decoder</span><span class="p">(</span><span class="n">signalindexcache</span><span class="o">.</span><span class="n">maxsignalindex</span><span class="p">)</span>
+                <span class="n">decoder</span> <span class="o">=</span> <span class="n">signalindexcache</span><span class="o">.</span><span class="n">_tsscdecoder</span>
+                <span class="n">decoder</span><span class="o">.</span><span class="n">sequencenumber</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tssc_resetrequested</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tssc_lastoosreport_mutex</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tssc_lastoosreport</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tssc_lastoosreport_mutex</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">decoder</span><span class="o">.</span><span class="n">sequencenumber</span> <span class="o">!=</span> <span class="n">sequencenumber</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tssc_resetrequested</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tssc_lastoosreport_mutex</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+
+                <span class="k">if</span> <span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tssc_lastoosreport</span> <span class="o">&gt;</span> <span class="mf">2.0</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TSSC is out of sequence. Expecting: </span><span class="si">{</span><span class="n">decoder</span><span class="o">.</span><span class="n">sequencenumber</span><span class="si">}</span><span class="s2">, received: </span><span class="si">{</span><span class="n">sequencenumber</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_tssc_lastoosreport</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tssc_lastoosreport_mutex</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+
+            <span class="k">return</span> <span class="p">[],</span> <span class="kc">None</span>
+
+        <span class="n">decoder</span><span class="o">.</span><span class="n">set_buffer</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>
+
+        <span class="n">measurements</span> <span class="o">=</span> <span class="p">[</span><span class="n">Measurement</span><span class="p">]</span> <span class="o">*</span> <span class="n">count</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">while</span> <span class="n">success</span><span class="p">:</span>
+            <span class="n">pointid</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">,</span> <span class="n">stateflags</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">success</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">decoder</span><span class="o">.</span><span class="n">try_get_measurement</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
+                <span class="n">measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Measurement</span><span class="p">(</span>
+                    <span class="n">signalindexcache</span><span class="o">.</span><span class="n">signalid</span><span class="p">(</span><span class="n">pointid</span><span class="p">),</span> 
+                    <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">value</span><span class="p">),</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">timestamp</span><span class="p">),</span> 
+                    <span class="n">StateFlags</span><span class="p">(</span><span class="n">stateflags</span><span class="p">))</span>
+
+                <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[],</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to parse TSSC measurements - disconnecting: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="n">decoder</span><span class="o">.</span><span class="n">sequencenumber</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Do not increment to 0 on roll-over</span>
+        <span class="k">if</span> <span class="n">decoder</span><span class="o">.</span><span class="n">sequencenumber</span> <span class="o">&gt;</span> <span class="n">Limits</span><span class="o">.</span><span class="n">MAXUINT16</span><span class="p">:</span>
+            <span class="n">decoder</span><span class="o">.</span><span class="n">sequencenumber</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">measurements</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">_parse_compact_measurements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signalindexcache</span><span class="p">:</span> <span class="n">SignalIndexCache</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Measurement</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
         <span class="k">if</span> <span class="n">signalindexcache</span><span class="o">.</span><span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_missingcachewarning</span> <span class="o">+</span> <span class="n">MISSINGCACHEWARNING_INTERVAL</span> <span class="o">&lt;</span> <span class="n">time</span><span class="p">():</span>
                 <span class="c1"># Warning message for missing signal index cache</span>
@@ -1004,27 +1086,25 @@
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">_last_missingcachewarning</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
 
-            <span class="k">return</span> <span class="p">[]</span>
+            <span class="k">return</span> <span class="p">[],</span> <span class="kc">None</span>
 
         <span class="n">measurements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Measurement</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">usemillisecondresolution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscription</span><span class="o">.</span><span class="n">use_millisecondresolution</span>
+        <span class="n">use_millisecondresolution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscription</span><span class="o">.</span><span class="n">use_millisecondresolution</span>
         <span class="n">includetime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscription</span><span class="o">.</span><span class="n">includetime</span>
         <span class="n">index</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">):</span>
             <span class="c1"># Deserialize compact measurement format</span>
-            <span class="n">measurement</span> <span class="o">=</span> <span class="n">CompactMeasurement</span><span class="p">(</span><span class="n">signalindexcache</span><span class="p">,</span> <span class="n">includetime</span><span class="p">,</span> <span class="n">usemillisecondresolution</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basetimeoffsets</span><span class="p">)</span>
+            <span class="n">measurement</span> <span class="o">=</span> <span class="n">CompactMeasurement</span><span class="p">(</span><span class="n">signalindexcache</span><span class="p">,</span> <span class="n">includetime</span><span class="p">,</span> <span class="n">use_millisecondresolution</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basetimeoffsets</span><span class="p">)</span>
             <span class="p">(</span><span class="n">bytesdecoded</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span> <span class="o">=</span> <span class="n">measurement</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">:])</span>
 
             <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to parse compact measurements - disconnecting: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_connectionterminated</span><span class="p">()</span>
-                <span class="k">return</span>
+                <span class="k">return</span> <span class="p">[],</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to parse compact measurements - disconnecting: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="n">index</span> <span class="o">+=</span> <span class="n">bytesdecoded</span>
             <span class="n">measurements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">measurement</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">measurements</span>
+        <span class="k">return</span> <span class="n">measurements</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="k">def</span> <span class="nf">_handle_bufferblock</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>  <span class="c1"># sourcery skip: low-code-quality, extract-method</span>
         <span class="c1"># Buffer block received - wrap as a BufferBlockMeasurement and expose back to consumer</span>
@@ -1043,10 +1123,10 @@
             <span class="n">signalindex</span> <span class="o">=</span> <span class="n">BigEndian</span><span class="o">.</span><span class="n">to_uint32</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_signalindexcache_mutex</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
-            <span class="n">signalIndexCache</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signalindexcache</span><span class="p">[</span><span class="n">signalindexcacheindex</span><span class="p">]</span>
+            <span class="n">signalindexCache</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signalindexcache</span><span class="p">[</span><span class="n">signalindexcacheindex</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_signalindexcache_mutex</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
 
-            <span class="n">signalid</span> <span class="o">=</span> <span class="n">signalIndexCache</span><span class="o">.</span><span class="n">signalid</span><span class="p">(</span><span class="n">signalindex</span><span class="p">)</span>
+            <span class="n">signalid</span> <span class="o">=</span> <span class="n">signalindexCache</span><span class="o">.</span><span class="n">signalid</span><span class="p">(</span><span class="n">signalindex</span><span class="p">)</span>
             <span class="n">bufferblockmeasurement</span> <span class="o">=</span> <span class="n">BufferBlock</span><span class="p">(</span><span class="n">signalid</span><span class="p">)</span>
 
             <span class="c1"># Determine if this is the next buffer block in the sequence</span>

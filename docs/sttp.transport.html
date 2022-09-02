@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport package &mdash; sttp/pyapi 0.3.0 documentation</title>
+  <title>sttp.transport package &mdash; sttp/pyapi 0.4.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
@@ -984,12 +984,12 @@ This buffer typically represents a partial image of a larger whole.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.datasubscriber.DataSubscriber.DEFAULT_STTP_UPDATEDONINFO">
-<span class="sig-name descname"><span class="pre">DEFAULT_STTP_UPDATEDONINFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'2022-08-29'</span></em><a class="headerlink" href="#sttp.transport.datasubscriber.DataSubscriber.DEFAULT_STTP_UPDATEDONINFO" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_STTP_UPDATEDONINFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'2022-09-02'</span></em><a class="headerlink" href="#sttp.transport.datasubscriber.DataSubscriber.DEFAULT_STTP_UPDATEDONINFO" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.datasubscriber.DataSubscriber.DEFAULT_STTP_VERSIONINFO">
-<span class="sig-name descname"><span class="pre">DEFAULT_STTP_VERSIONINFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'0.3.0'</span></em><a class="headerlink" href="#sttp.transport.datasubscriber.DataSubscriber.DEFAULT_STTP_VERSIONINFO" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_STTP_VERSIONINFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'0.4.0'</span></em><a class="headerlink" href="#sttp.transport.datasubscriber.DataSubscriber.DEFAULT_STTP_VERSIONINFO" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1011,7 +1011,7 @@ This buffer typically represents a partial image of a larger whole.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.datasubscriber.DataSubscriber.autoreconnect_callback">
-<span class="sig-name descname"><span class="pre">autoreconnect_callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sttp.transport.datasubscriber.DataSubscriber.autoreconnect_callback" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">autoreconnect_callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sttp.transport.datasubscriber.DataSubscriber.autoreconnect_callback" title="Permalink to this definition"></a></dt>
 <dd><p>Called when <cite>DataSubscriber</cite> automatically reconnects.</p>
 </dd></dl>
 
@@ -1035,7 +1035,7 @@ This buffer typically represents a partial image of a larger whole.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.datasubscriber.DataSubscriber.configurationchanged_callback">
-<span class="sig-name descname"><span class="pre">configurationchanged_callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sttp.transport.datasubscriber.DataSubscriber.configurationchanged_callback" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">configurationchanged_callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sttp.transport.datasubscriber.DataSubscriber.configurationchanged_callback" title="Permalink to this definition"></a></dt>
 <dd><p>Called when the <cite>DataPublisher</cite> sends a notification that configuration has changed.</p>
 </dd></dl>
 
@@ -1053,7 +1053,7 @@ This buffer typically represents a partial image of a larger whole.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.datasubscriber.DataSubscriber.connectionterminated_callback">
-<span class="sig-name descname"><span class="pre">connectionterminated_callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sttp.transport.datasubscriber.DataSubscriber.connectionterminated_callback" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">connectionterminated_callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sttp.transport.datasubscriber.DataSubscriber.connectionterminated_callback" title="Permalink to this definition"></a></dt>
 <dd><p>Called when <cite>DataSubscriber</cite> terminates its connection.</p>
 </dd></dl>
 
@@ -1361,7 +1361,7 @@ final boolean value representing find success for the specified signalindex in t
 
 <dl class="py method">
 <dt class="sig sig-object py" id="sttp.transport.signalindexcache.SignalIndexCache.signalid">
-<span class="sig-name descname"><span class="pre">signalid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signalindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint32</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">UUID</span></span></span><a class="reference internal" href="_modules/sttp/transport/signalindexcache.html#SignalIndexCache.signalid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.signalindexcache.SignalIndexCache.signalid" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">signalid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signalindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int32</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">UUID</span></span></span><a class="reference internal" href="_modules/sttp/transport/signalindexcache.html#SignalIndexCache.signalid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.signalindexcache.SignalIndexCache.signalid" title="Permalink to this definition"></a></dt>
 <dd><p>Returns the signal ID Guid for the specified signalindex in the <cite>SignalIndexCache</cite>.</p>
 </dd></dl>
 

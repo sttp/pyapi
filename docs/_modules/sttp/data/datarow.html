@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.data.datarow &mdash; sttp/pyapi 0.3.0 documentation</title>
+  <title>sttp.data.datarow &mdash; sttp/pyapi 0.4.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
@@ -117,7 +117,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span> <span class="o">=</span> <span class="n">parent</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">parent</span><span class="o">.</span><span class="n">columncount</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">parent</span><span class="o">.</span><span class="n">columncount</span><span class="p">,</span> <span class="nb">object</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
@@ -397,37 +397,37 @@
             <span class="k">return</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
 
         <span class="n">index</span> <span class="o">=</span> <span class="n">column</span><span class="o">.</span><span class="n">index</span>
-        <span class="nb">type</span> <span class="o">=</span> <span class="n">column</span><span class="o">.</span><span class="n">datatype</span>
+        <span class="n">datatype</span> <span class="o">=</span> <span class="n">column</span><span class="o">.</span><span class="n">datatype</span>
 
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">STRING</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">STRING</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_string_from_typevalue</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stringvalue</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_string_from_typevalue</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">booleanvalue</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">DATETIME</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">DATETIME</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_string_from_typevalue</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datetimevalue</span><span class="p">,</span> <span class="n">xsdformat</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">SINGLE</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">SINGLE</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_string_from_typevalue</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">singlevalue</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_string_from_typevalue</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">doublevalue</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_string_from_typevalue</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">decimalvalue</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">GUID</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">GUID</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_string_from_typevalue</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">guidvalue</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT8</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT8</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_string_from_typevalue</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">int8value</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT16</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT16</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_string_from_typevalue</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">int16value</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT32</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT32</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_string_from_typevalue</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">int32value</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_string_from_typevalue</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">int64value</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT8</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT8</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_string_from_typevalue</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uint8value</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT16</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT16</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_string_from_typevalue</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uint16value</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT32</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT32</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_string_from_typevalue</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uint32value</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">type</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT64</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">UINT64</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_string_from_typevalue</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uint64value</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span></div>
@@ -435,7 +435,7 @@
     <span class="k">def</span> <span class="nf">_checkstate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">null</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">err</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
         <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
-        
+
         <span class="k">return</span> <span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="s2">&quot;&lt;NULL&gt;&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">null</span> <span class="k">else</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_string_from_typevalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">getvalue</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]],</span> <span class="n">strconv</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -458,9 +458,9 @@
                 <span class="k">return</span> <span class="n">default</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">err</span>
 
             <span class="k">return</span> <span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        
+
         <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">[</span><span class="n">columnindex</span><span class="p">]</span>
-        
+
         <span class="k">return</span> <span class="p">(</span><span class="n">default</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_typevalue_byname</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">columnname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">targettype</span><span class="p">:</span> <span class="n">DataType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
@@ -791,11 +791,11 @@
         <span class="k">def</span> <span class="nf">typecompare</span><span class="p">(</span>
                 <span class="n">leftrow_getvalue</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]],</span>
                 <span class="n">rightrow_getvalue</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Any</span><span class="p">,</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]])</span> <span class="o">-&gt;</span> \
-                    <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+                            <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
 
             <span class="n">leftvalue</span><span class="p">,</span> <span class="n">leftnull</span><span class="p">,</span> <span class="n">lefterr</span> <span class="o">=</span> <span class="n">leftrow_getvalue</span><span class="p">(</span><span class="n">columnindex</span><span class="p">)</span>
             <span class="n">rightvalue</span><span class="p">,</span> <span class="n">rightnull</span><span class="p">,</span> <span class="n">righterr</span> <span class="o">=</span> <span class="n">rightrow_getvalue</span><span class="p">(</span><span class="n">columnindex</span><span class="p">)</span>
-            
+
             <span class="n">lefthasvalue</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">leftnull</span> <span class="ow">and</span> <span class="n">lefterr</span> <span class="ow">is</span> <span class="kc">None</span>
             <span class="n">righthasvalue</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">rightnull</span> <span class="ow">and</span> <span class="n">righterr</span> <span class="ow">is</span> <span class="kc">None</span>
 
