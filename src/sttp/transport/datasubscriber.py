@@ -960,11 +960,11 @@ class DataSubscriber:
             if not newdecoder:
                 if decoder.sequencenumber > 0:
                     self._dispatch_errormessage(f"TSSC algorithm reset before sequence number: {decoder.sequencenumber}")
-                
+
                 signalindexcache._tsscdecoder = Decoder(signalindexcache.maxsignalindex)
                 decoder = signalindexcache._tsscdecoder
                 decoder.sequencenumber = 0
-            
+
             self._tssc_resetrequested = False
             self._tssc_lastoosreport_mutex.acquire()
             self._tssc_lastoosreport = time()
@@ -997,7 +997,7 @@ class DataSubscriber:
                     np.float64(value),
                     np.uint64(timestamp), 
                     StateFlags(stateflags))
-                
+
                 index += 1
 
         if err is not None:
