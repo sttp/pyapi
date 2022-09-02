@@ -345,7 +345,7 @@ class Decoder:
 
         return stateFlags
 
-    def _decode_value(self, code: np.byte, nextpoint: PointMetadata) -> Tuple[np.float64, Optional[Exception]]:
+    def _decode_value(self, code: np.byte, nextpoint: PointMetadata) -> Tuple[np.float32, Optional[Exception]]:
         valueraw = UINT32_0
 
         def update_prevvalues(value: np.uint32):
@@ -399,7 +399,7 @@ class Decoder:
                     f" with last position {self._lastposition}"
                 ]
 
-                return np.float64(np.NAN), RuntimeError("".join(message))
+                return np.float32(np.NAN), RuntimeError("".join(message))
 
             update_prevvalues(valueraw)
 
