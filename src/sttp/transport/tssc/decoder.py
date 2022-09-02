@@ -27,6 +27,68 @@ from .pointmetadata import PointMetadata, CodeWords
 from typing import List, Optional, Tuple
 import numpy as np
 
+INT32_0 = np.int32(0)
+INT32_1 = np.int32(1)
+INT32_2 = np.int32(2)
+INT32_3 = np.int32(3)
+INT32_4 = np.int32(4)
+INT32_8 = np.int32(8)
+INT32_12 = np.int32(12)
+INT32_16 = np.int32(16)
+INT32_24 = np.int32(24)
+
+UINT32_0 = np.uint32(0)
+UINT32_4 = np.uint32(4)
+UINT32_7 = np.uint32(7)
+UINT32_8 = np.uint32(8)
+UINT32_12 = np.uint32(12)
+UINT32_14 = np.uint32(14)
+UINT32_16 = np.uint32(16)
+UINT32_20 = np.uint32(20)
+UINT32_21 = np.uint32(21)
+UINT32_24 = np.uint32(24)
+UINT32_28 = np.uint32(28)
+UINT32_128 = np.uint32(128)
+
+UINT32_16K = np.uint32(16384)
+UINT32_2M = np.uint32(2097152)
+UINT32_256M = np.uint32(268435456)
+
+UINT32_2BITXOR = np.uint32(0x80)
+UINT32_3BITXOR = np.uint32(0x4080)
+UINT32_4BITXOR = np.uint32(0x204080)
+UINT32_5BITXOR = np.uint32(0x10204080)
+
+INT64_0 = np.int64(0)
+INT64_MAX = np.int64(Limits.MAXINT64)
+
+UINT64_7 = np.uint64(7)
+UINT64_14 = np.uint64(14)
+UINT64_21 = np.uint64(21)
+UINT64_28 = np.uint64(28)
+UINT64_35 = np.uint64(35)
+UINT64_42 = np.uint64(42)
+UINT64_49 = np.uint64(49)
+UINT64_56 = np.uint64(56)
+UINT64_128 = np.uint64(128)
+
+UINT64_16K = np.uint64(16384)
+UINT64_2M = np.uint64(2097152)
+UINT64_256M = np.uint64(268435456)
+UINT64_32G = np.uint64(34359738368)
+UINT64_4T = np.uint64(4398046511104)
+UINT64_512T = np.uint64(562949953421312)
+UINT64_64P = np.uint64(72057594037927936)
+
+UINT64_2BITXOR = np.uint64(0x80)
+UINT64_3BITXOR = np.uint64(0x4080)
+UINT64_4BITXOR = np.uint64(0x204080)
+UINT64_5BITXOR = np.uint64(0x10204080)
+UINT64_6BITXOR = np.uint64(0x810204080)
+UINT64_7BITXOR = np.uint64(0x40810204080)
+UINT64_8BITXOR = np.uint64(0x2040810204080)
+UINT64_9BITXOR = np.uint64(0x102040810204080)
+
 
 class Decoder:
     """
@@ -44,22 +106,22 @@ class Decoder:
         self._position = 0
         self._lastposition = 0
 
-        self._prevtimestamp1 = np.int64(0)
-        self._prevtimestamp2 = np.int64(0)
+        self._prevtimestamp1 = INT64_0
+        self._prevtimestamp2 = INT64_0
 
-        self._prevtimedelta1 = np.int64(Limits.MAXINT64)
-        self._prevtimedelta2 = np.int64(Limits.MAXINT64)
-        self._prevtimedelta3 = np.int64(Limits.MAXINT64)
-        self._prevtimedelta4 = np.int64(Limits.MAXINT64)
+        self._prevtimedelta1 = INT64_MAX
+        self._prevtimedelta2 = INT64_MAX
+        self._prevtimedelta3 = INT64_MAX
+        self._prevtimedelta4 = INT64_MAX
 
         self._lastpoint = self._new_pointmetadata()
         self._points: List[Optional[PointMetadata]] = [None] * (maxsignalindex + 1)
 
         # The number of bits in m_bitStreamCache that are valid. 0 Means the bitstream is empty
-        self._bitstreamcount = np.int32(0)
+        self._bitstreamcount = INT32_0
 
         # A cache of bits that need to be flushed to m_buffer when full. Bits filled starting from the right moving left
-        self._bitstreamcache = np.int32(0)
+        self._bitstreamcache = INT32_0
 
         self.sequencenumber = 0
         """
@@ -70,11 +132,11 @@ class Decoder:
         return PointMetadata(None, self._read_bit, self._read_bits5)
 
     def _bitstream_isempty(self) -> bool:
-        return self._bitstreamcount == 0
+        return self._bitstreamcount == INT32_0
 
     def _clear_bitstream(self) -> None:
-        self._bitstreamcount = np.int32(0)
-        self._bitstreamcache = np.int32(0)
+        self._bitstreamcount = INT32_0
+        self._bitstreamcache = INT32_0
 
     def set_buffer(self, data: bytes) -> None:
         """
@@ -86,7 +148,7 @@ class Decoder:
         self._position = 0
         self._lastposition = len(data)
 
-    def try_get_measurement(self) -> Tuple[np.int32, np.int64, np.uint32, np.float32, bool, Optional[Exception]]:
+    def try_get_measurement(self) -> Tuple[np.int32, np.int64, np.uint32, np.float32, bool, Optional[Exception]]:  # sourcery skip: low-code-quality
         if self._position == self._lastposition and self._bitstream_isempty():
             self._clear_bitstream()
             return 0, 0, 0, 0.0, False, None
@@ -113,7 +175,7 @@ class Decoder:
 
         # Decode measurement ID and read next code for timestamp decoding
         if code <= np.int32(CodeWords.POINTIDXOR32):
-            err = self._decode_pointid(np.byte(code))
+            err = self._decode_pointid(np.byte(code), self._lastpoint)
 
             if err is not None:
                 return 0, 0, 0, 0.0, False, err
@@ -123,21 +185,14 @@ class Decoder:
             if err is not None:
                 return 0, 0, 0, 0.0, False, err
 
-            if code < np.int32(CodeWords.TIMEDELTA1FORWARD):
-                message = [
-                    f"expecting code >= {CodeWords.TIMEDELTA1FORWARD}"
-                    f" at position {self._position}"
-                    f" with last position {self._lastposition}"
-                ]
-
-                return 0, 0, 0, 0.0, False, RuntimeError("".join(message))
+            if err := self._validate_nextcode(code, CodeWords.TIMEDELTA1FORWARD):
+                return 0, 0, 0, 0.0, False, err
 
         # Assign decoded measurement ID to out parameter
         pointid = self._lastpoint.prevnextpointid1
 
         # Setup tracking for metadata associated with measurement ID and next point to decode
         pointcount = np.int32(len(self._points))
-
         nextpoint = None if pointid >= pointcount else self._points[pointid]
 
         if nextpoint is None:
@@ -158,14 +213,8 @@ class Decoder:
             if err is not None:
                 return 0, 0, 0, 0.0, False, err
 
-            if code < np.int32(CodeWords.STATEFLAGS2):
-                message = [
-                    f"expecting code >= {CodeWords.STATEFLAGS2}"
-                    f" at position {self._position}"
-                    f" with last position {self._lastposition}"
-                ]
-
-                return 0, 0, 0, 0.0, False, RuntimeError("".join(message))
+            if err := self._validate_nextcode(code, CodeWords.STATEFLAGS2):
+                return 0, 0, 0, 0.0, False, err
         else:
             timestamp = self._prevtimestamp1
 
@@ -177,100 +226,55 @@ class Decoder:
             if err is not None:
                 return 0, 0, 0, 0.0, False, err
 
-            if code < np.int32(CodeWords.VALUE1):
-                message = [
-                    f"expecting code >= {CodeWords.VALUE1}"
-                    f" at position {self._position}"
-                    f" with last position {self._lastposition}"
-                ]
-
-                return 0, 0, 0, 0.0, False, RuntimeError("".join(message))
+            if err := self._validate_nextcode(code, CodeWords.VALUE1):
+                return 0, 0, 0, 0.0, False, err
         else:
-            stateflags = self._lastpoint.prevstateflags1
-
-        # Since measurement value will almost always change, this is not put inside a function call             
-        valueraw = np.uint32(0)
+            stateflags = nextpoint.prevstateflags1
 
         # Decode measurement value
-        if code == np.int32(CodeWords.VALUE1):
-            valueraw = nextpoint.prevvalue1
-        elif code == np.int32(CodeWords.VALUE2):
-            valueraw = nextpoint.prevvalue2
-            nextpoint.prevvalue2 = nextpoint.prevvalue1
-            nextpoint.prevvalue1 = valueraw
-        elif code == np.int32(CodeWords.VALUE3):
-            valueraw = nextpoint.prevvalue3
-            nextpoint.prevvalue3 = nextpoint.prevvalue2
-            nextpoint.prevvalue2 = nextpoint.prevvalue1
-            nextpoint.prevvalue1 = valueraw
-        elif code == np.int32(CodeWords.VALUEZERO):
-            valueraw = 0
-            nextpoint.prevvalue3 = nextpoint.prevvalue2
-            nextpoint.prevvalue2 = nextpoint.prevvalue1
-            nextpoint.prevvalue1 = valueraw
-        else:
-            if code == np.int32(CodeWords.VALUEXOR4):
-                valueraw = np.uint32(self._read_bits4()) ^ nextpoint.prevvalue1
-            elif code == np.int32(CodeWords.VALUEXOR8):
-                valueraw = np.uint32(self._data[self._position]) ^ nextpoint.prevvalue1
-                self._position += 1
-            elif code == np.int32(CodeWords.VALUEXOR12):
-                valueraw = np.uint32(self._read_bits4()) ^ np.uint32(self._data[self._position]) << 4 ^ nextpoint.prevvalue1
-                self._position += 1
-            elif code == np.int32(CodeWords.VALUEXOR16):
-                valueraw = np.uint32(self._data[self._position]) ^ np.uint32(self._data[self._position + 1]) << 8 ^ nextpoint.prevvalue1
-                self._position += 2
-            elif code == np.int32(CodeWords.VALUEXOR20):
-                valueraw = np.uint32(self._read_bits4()) ^ np.uint32(self._data[self._position]) << 4 ^ np.uint32(self._data[self._position + 1]) << 12 ^ nextpoint.prevvalue1
-                self._position += 2
-            elif code == np.int32(CodeWords.VALUEXOR24):
-                valueraw = np.uint32(self._data[self._position]) ^ np.uint32(self._data[self._position + 1]) << 8 ^ np.uint32(self._data[self._position + 2]) << 16 ^ nextpoint.prevvalue1
-                self._position += 3
-            elif code == np.int32(CodeWords.VALUEXOR28):
-                valueraw = np.uint32(self._read_bits4()) ^ np.uint32(self._data[self._position]) << 4 ^ np.uint32(self._data[self._position + 1]) << 12 ^ np.uint32(self._data[self._position + 2]) << 20 ^ nextpoint.prevvalue1
-                self._position += 3
-            elif code == np.int32(CodeWords.VALUEXOR32):
-                valueraw = np.uint32(self._data[self._position]) ^ np.uint32(self._data[self._position + 1]) << 8 ^ np.uint32(self._data[self._position + 2]) << 16 ^ np.uint32(self._data[self._position + 3]) << 24 ^ nextpoint.prevvalue1
-                self._position += 4
-            else:
-                message = [
-                    f"invalid code received {code}"
-                    f" at position {self._position}"
-                    f" with last position {self._lastposition}"
-                ]
+        value, err = self._decode_value(np.byte(code), nextpoint)
 
-                return 0, 0, 0, 0.0, False, RuntimeError("".join(message))
+        if err is not None:
+            return 0, 0, 0, 0.0, False, err
 
-            nextpoint.prevvalue3 = nextpoint.prevvalue2
-            nextpoint.prevvalue2 = nextpoint.prevvalue1
-            nextpoint.prevvalue1 = valueraw
+        return pointid, timestamp, stateflags, value, True, None
 
-        # Assign decoded measurement value to out parameter
-        value = NativeEndian.to_float32(NativeEndian.from_uint32(valueraw))
-        self._lastpoint = nextpoint       
+    def _validate_nextcode(self, code: np.int32, nextcode: np.byte) -> Optional[Exception]:
+        if code < np.int32(nextcode):
+            message = [
+                f"expecting code >= {nextcode}"
+                f" at position {self._position}"
+                f" with last position {self._lastposition}"
+            ]
 
-        return pointid, timestamp, stateflags, value, True, None     
+            return RuntimeError("".join(message))
 
-    def _decode_pointid(self, code: np.byte) -> Optional[Exception]:
+        return None
+
+    def _decode_pointid(self, code: np.byte, lastpoint: PointMetadata) -> Optional[Exception]:
         if code == CodeWords.POINTIDXOR4:
-            self._lastpoint.prevnextpointid1 = self._read_bits4() ^ self._lastpoint.prevnextpointid1
+            lastpoint.prevnextpointid1 = self._read_bits4() ^ lastpoint.prevnextpointid1
         elif code == CodeWords.POINTIDXOR8:
-            self._lastpoint.prevnextpointid1 = np.int32(self._data[self._position]) ^ self._lastpoint.prevnextpointid1
+            lastpoint.prevnextpointid1 = np.int32(self._data[self._position]) ^ lastpoint.prevnextpointid1
             self._position += 1
         elif code == CodeWords.POINTIDXOR12:
-            self._lastpoint.prevnextpointid1 = self._read_bits4() ^ np.int32(self._data[self._position]) << 4 ^ self._lastpoint.prevnextpointid1
+            lastpoint.prevnextpointid1 = self._read_bits4() ^ (np.int32(self._data[self._position]) << INT32_4) ^ lastpoint.prevnextpointid1
             self._position += 1
         elif code == CodeWords.POINTIDXOR16:
-            self._lastpoint.prevnextpointid1 = np.int32(self._data[self._position]) ^ np.int32(self._data[self._position + 1]) << 8 ^ self._lastpoint.prevnextpointid1
+            lastpoint.prevnextpointid1 = np.int32(self._data[self._position]) ^ (np.int32(self._data[self._position + 1]) << INT32_8) ^ \
+                lastpoint.prevnextpointid1
             self._position += 2
         elif code == CodeWords.POINTIDXOR20:
-            self._lastpoint.prevnextpointid1 = self._read_bits4() ^ np.int32(self._data[self._position]) << 4 ^ np.int32(self._data[self._position + 1]) << 12 ^ self._lastpoint.prevnextpointid1
+            lastpoint.prevnextpointid1 = self._read_bits4() ^ (np.int32(self._data[self._position]) << INT32_4) ^ \
+                (np.int32(self._data[self._position + 1]) << INT32_12) ^ lastpoint.prevnextpointid1
             self._position += 2
         elif code == CodeWords.POINTIDXOR24:
-            self._lastpoint.prevnextpointid1 = np.int32(self._data[self._position]) ^ np.int32(self._data[self._position + 1]) << 8 ^ np.int32(self._data[self._position + 2]) << 16 ^ self._lastpoint.prevnextpointid1
+            lastpoint.prevnextpointid1 = np.int32(self._data[self._position]) ^ (np.int32(self._data[self._position + 1]) << INT32_8) ^ \
+                (np.int32(self._data[self._position + 2]) << INT32_16) ^ lastpoint.prevnextpointid1
             self._position += 3
         elif code == CodeWords.POINTIDXOR32:
-            self._lastpoint.prevnextpointid1 = np.int32(self._data[self._position]) ^ np.int32(self._data[self._position + 1]) << 8 ^ np.int32(self._data[self._position + 2]) << 16 ^ np.int32(self._data[self._position + 3]) << 24 ^ self._lastpoint.prevnextpointid1
+            lastpoint.prevnextpointid1 = np.int32(self._data[self._position]) ^ (np.int32(self._data[self._position + 1]) << INT32_8) ^ \
+                (np.int32(self._data[self._position + 2]) << INT32_16) ^ (np.int32(self._data[self._position + 3]) << INT32_24) ^ lastpoint.prevnextpointid1
             self._position += 4
         else:
             message = [
@@ -280,11 +284,11 @@ class Decoder:
             ]
 
             return RuntimeError("".join(message))
-        
+
         return None
 
     def _decode_timestamp(self, code: np.byte) -> np.int64:
-        timestamp = np.int64(0)
+        timestamp = INT64_0
 
         if code == CodeWords.TIMEDELTA1FORWARD:
             timestamp = self._prevtimestamp1 + self._prevtimedelta1
@@ -343,106 +347,168 @@ class Decoder:
 
         return stateFlags
 
+    def _decode_value(self, code: np.byte, nextpoint: PointMetadata) -> Tuple[np.float64, Optional[Exception]]:
+        valueraw = UINT32_0
+
+        def update_prevvalues(value: np.uint32):
+            nextpoint.prevvalue3 = nextpoint.prevvalue2
+            nextpoint.prevvalue2 = nextpoint.prevvalue1
+            nextpoint.prevvalue1 = value
+
+        if code == CodeWords.VALUE1:
+            valueraw = nextpoint.prevvalue1
+        elif code == CodeWords.VALUE2:
+            valueraw = nextpoint.prevvalue2
+            nextpoint.prevvalue2 = nextpoint.prevvalue1
+            nextpoint.prevvalue1 = valueraw
+        elif code == CodeWords.VALUE3:
+            valueraw = nextpoint.prevvalue3
+            update_prevvalues(valueraw)
+        elif code == CodeWords.VALUEZERO:
+            update_prevvalues(valueraw)
+        else:
+            if code == CodeWords.VALUEXOR4:
+                valueraw = np.uint32(self._read_bits4()) ^ nextpoint.prevvalue1
+            elif code == CodeWords.VALUEXOR8:
+                valueraw = np.uint32(self._data[self._position]) ^ nextpoint.prevvalue1
+                self._position += 1
+            elif code == CodeWords.VALUEXOR12:
+                valueraw = np.uint32(self._read_bits4()) ^ (np.uint32(self._data[self._position]) << UINT32_4) ^ nextpoint.prevvalue1
+                self._position += 1
+            elif code == CodeWords.VALUEXOR16:
+                valueraw = np.uint32(self._data[self._position]) ^ (np.uint32(self._data[self._position + 1]) << UINT32_8) ^ nextpoint.prevvalue1
+                self._position += 2
+            elif code == CodeWords.VALUEXOR20:
+                valueraw = np.uint32(self._read_bits4()) ^ (np.uint32(self._data[self._position]) << UINT32_4) ^ \
+                    (np.uint32(self._data[self._position + 1]) << UINT32_12) ^ nextpoint.prevvalue1
+                self._position += 2
+            elif code == CodeWords.VALUEXOR24:
+                valueraw = np.uint32(self._data[self._position]) ^ (np.uint32(self._data[self._position + 1]) << UINT32_8) ^ \
+                    (np.uint32(self._data[self._position + 2]) << UINT32_16) ^ nextpoint.prevvalue1
+                self._position += 3
+            elif code == CodeWords.VALUEXOR28:
+                valueraw = np.uint32(self._read_bits4()) ^ (np.uint32(self._data[self._position]) << UINT32_4) ^ \
+                    (np.uint32(self._data[self._position + 1]) << UINT32_12) ^ (np.uint32(self._data[self._position + 2]) << UINT32_20) ^ nextpoint.prevvalue1
+                self._position += 3
+            elif code == CodeWords.VALUEXOR32:
+                valueraw = np.uint32(self._data[self._position]) ^ (np.uint32(self._data[self._position + 1]) << UINT32_8) ^ \
+                    (np.uint32(self._data[self._position + 2]) << UINT32_16) ^ (np.uint32(self._data[self._position + 3]) << UINT32_24) ^ nextpoint.prevvalue1
+                self._position += 4
+            else:
+                message = [
+                    f"invalid code received {code}"
+                    f" at position {self._position}"
+                    f" with last position {self._lastposition}"
+                ]
+
+                return np.float64(np.NAN), RuntimeError("".join(message))
+
+            update_prevvalues(valueraw)
+
+        self._lastpoint = nextpoint
+
+        return NativeEndian.to_float32(NativeEndian.from_uint32(valueraw)), None
+
     def _read_bit(self) -> np.int32:
-        if self._bitstreamcount == np.int32(0):
-            self._bitstreamcount = np.int32(8)
+        if self._bitstreamcount == INT32_0:
+            self._bitstreamcount = INT32_8
             self._bitstreamcache = np.int32(self._data[self._position])
             self._position += 1
 
-        self._bitstreamcount -= np.int32(1)
+        self._bitstreamcount -= INT32_1
 
-        return self._bitstreamcache >> self._bitstreamcount & np.int32(1)
+        return (self._bitstreamcache >> self._bitstreamcount) & INT32_1
 
     def _read_bits4(self) -> np.int32:
-        return self._read_bit() << np.int32(3) | self._read_bit() << np.int32(2) | self._read_bit() << np.int32(1) | self._read_bit()
+        return self._read_bit() << INT32_3 | self._read_bit() << INT32_2 | self._read_bit() << INT32_1 | self._read_bit()
 
     def _read_bits5(self) -> np.int32:
-        return self._read_bit() << np.int32(4) | self._read_bit() << np.int32(3) | self._read_bit() << np.int32(2) | self._read_bit() << np.int32(1) | self._read_bit()
+        return self._read_bit() << INT32_4 | self._read_bit() << INT32_3 | self._read_bit() << INT32_2 | self._read_bit() << INT32_1 | self._read_bit()
 
     @staticmethod
     def _decode_7bituint32(stream: bytes, position: int) -> Tuple[np.uint32, int]:
         stream = stream[position:]
         value = np.uint32(stream[0])
 
-        if value < np.uint32(128):
+        if value < UINT32_128:
             position += 1
             return (value, position)
 
-        value ^= np.uint32(stream[1]) << np.uint32(7)
+        value ^= np.uint32(stream[1]) << UINT32_7
 
-        if value < np.uint32(16384):
+        if value < UINT32_16K:
             position += 2
-            return (value ^ np.uint32(0x80), position)
+            return (value ^ UINT32_2BITXOR, position)
 
-        value ^= np.uint32(stream[2]) << np.uint32(14)
+        value ^= np.uint32(stream[2]) << UINT32_14
 
-        if value < np.uint32(2097152):
+        if value < UINT32_2M:
             position += 3
-            return (value ^ np.uint32(0x4080), position)
+            return (value ^ UINT32_3BITXOR, position)
 
-        value ^= np.uint32(stream[3]) << np.uint32(21)
+        value ^= np.uint32(stream[3]) << UINT32_21
 
-        if value < np.uint32(268435456):
+        if value < UINT32_256M:
             position += 4
-            return (value ^ np.uint32(0x204080), position)
+            return (value ^ UINT32_4BITXOR, position)
 
-        value ^= np.uint32(stream[4]) << np.uint32(28)
+        value ^= np.uint32(stream[4]) << UINT32_28
         position += 5
 
-        return (value ^ np.uint32(0x10204080), position)
+        return (value ^ UINT32_5BITXOR, position)
 
     @staticmethod
     def _decode_7bituint64(stream: bytes, position: int) -> Tuple[np.uint64, int]:
         stream = stream[position:]
         value = np.uint64(stream[0])
 
-        if value < np.uint64(128):
+        if value < UINT64_128:
             position += 1
             return (value, position)
 
-        value ^= np.uint64(stream[1]) << np.uint64(7)
+        value ^= np.uint64(stream[1]) << UINT64_7
 
-        if value < np.uint64(16384):
+        if value < UINT64_16K:
             position += 2
-            return (value ^ np.uint64(0x80), position)
+            return (value ^ UINT64_2BITXOR, position)
 
-        value ^= np.uint64(stream[2]) << np.uint64(14)
+        value ^= np.uint64(stream[2]) << UINT64_14
 
-        if value < np.uint64(2097152):
+        if value < np.uint64(UINT64_2M):
             position += 3
-            return (value ^ np.uint64(0x4080), position)
+            return (value ^ UINT64_3BITXOR, position)
 
-        value ^= np.uint64(stream[3]) << np.uint64(21)
+        value ^= np.uint64(stream[3]) << UINT64_21
 
-        if value < np.uint64(268435456):
+        if value < UINT64_256M:
             position += 4
-            return (value ^ np.uint64(0x204080), position)
+            return (value ^ UINT64_4BITXOR, position)
 
-        value ^= np.uint64(stream[4]) << np.uint64(28)
+        value ^= np.uint64(stream[4]) << UINT64_28
 
-        if value < np.uint64(34359738368):
+        if value < UINT64_32G:
             position += 5
-            return (value ^ np.uint64(0x10204080), position)
+            return (value ^ UINT64_5BITXOR, position)
 
-        value ^= np.uint64(stream[5]) << np.uint64(35)
+        value ^= np.uint64(stream[5]) << UINT64_35
 
-        if value < np.uint64(4398046511104):
+        if value < UINT64_4T:
             position += 6
-            return (value ^ np.uint64(0x810204080), position)
+            return (value ^ UINT64_6BITXOR, position)
 
-        value ^= np.uint64(stream[6]) << np.uint64(42)
+        value ^= np.uint64(stream[6]) << UINT64_42
 
-        if value < np.uint64(562949953421312):
+        if value < UINT64_512T:
             position += 7
-            return (value ^ np.uint64(0x40810204080), position)
+            return (value ^ UINT64_7BITXOR, position)
 
-        value ^= np.uint64(stream[7]) << np.uint64(49)
+        value ^= np.uint64(stream[7]) << UINT64_49
 
-        if value < np.uint64(72057594037927936):
+        if value < UINT64_64P:
             position += 8
-            return (value ^ np.uint64(0x2040810204080), position)
+            return (value ^ UINT64_8BITXOR, position)
 
-        value ^= np.uint64(stream[8]) << np.uint64(56)
+        value ^= np.uint64(stream[8]) << UINT64_56
         position += 9
 
-        return (value ^ np.uint64(0x102040810204080), position)
+        return (value ^ UINT64_9BITXOR, position)
