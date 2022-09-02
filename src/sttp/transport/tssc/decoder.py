@@ -53,7 +53,7 @@ class Decoder:
         self._prevtimedelta4 = np.int64(Limits.MAXINT64)
 
         self._lastpoint = self._new_pointmetadata()
-        self._points: List[Optional[PointMetadata]] = [None] * maxsignalindex
+        self._points: List[Optional[PointMetadata]] = [None] * (maxsignalindex + 1)
 
         # The number of bits in m_bitStreamCache that are valid. 0 Means the bitstream is empty
         self._bitstreamcount = np.int32(0)
@@ -113,7 +113,7 @@ class Decoder:
 
         # Decode measurement ID and read next code for timestamp decoding
         if code <= np.int32(CodeWords.POINTIDXOR32):
-            err = self._decode_pointid(code)
+            err = self._decode_pointid(np.byte(code))
 
             if err is not None:
                 return 0, 0, 0, 0.0, False, err
@@ -147,8 +147,8 @@ class Decoder:
                 while pointid + 1 > len(self._points):
                     self._points.append(None)
 
-        self._points[pointid] = nextpoint
-        nextpoint.prevnextpointid1 = pointid + 1
+            self._points[pointid] = nextpoint
+            nextpoint.prevnextpointid1 = pointid + 1
 
         # Decode measurement timestamp and read next code for quality flags decoding
         if code <= np.int32(CodeWords.TIMEXOR7BIT):
