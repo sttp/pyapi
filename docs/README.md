@@ -4,7 +4,7 @@
 <!--- Do not make this image location relative, README.md in root is a symbolic reference to one in docs. See CreateReadMeSymLink.cmd for more information. --->
 <img align="right" src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png">
 
-[![CodeQL](https://github.com/sttp/pyapi/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/sttp/pyapi/actions/workflows/codeql-analysis.yml) [![docs](https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/py-ref.svg)]( https://sttp.github.io/pyapi) [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/sttp/pyapi.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/sttp/pyapi/context:python)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/sttp/pyapi.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/sttp/pyapi/context:python) [![CodeQL](https://github.com/sttp/pyapi/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/sttp/pyapi/actions/workflows/codeql-analysis.yml) [![docs](https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/py-ref.svg)]( https://sttp.github.io/pyapi) [![Release](https://img.shields.io/github/release/sttp/pyapi.svg?style=flat-square)](https://github.com/sttp/pyapi/releases/latest)
 
 The Streaming Telemetry Transport Protocol (STTP) is optimized for the demands of transporting high volume streaming data. The protocol allows for the transmission of any information that can be represented longitudinally, e.g., time-series data.
 
