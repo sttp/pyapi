@@ -21,8 +21,141 @@
 #
 # ******************************************************************************************************
 
+from gsf import Empty
 from enum import IntEnum, IntFlag
+import numpy as np
 
+
+class Defaults:
+    MAXRETRIES = -1
+    """
+    Default for maximum number of retries for a connection attempt.
+    """
+
+    RETRYINTERVAL = 1.0
+    """
+    Default for retry interval in seconds.
+    """
+
+    MAXRETRYINTERVAL = 30.0
+    """
+    Default for maximum retry interval in seconds.
+    """
+
+    AUTORECONNECT = True
+    """
+    Default for auto-reconnect flag.
+    """
+
+    AUTOREQUESTMETADATA = True
+    """
+    Default for auto-request metadata flag.
+    """
+
+    AUTOSUBSCRIBE = True
+    """
+    Default for auto-subscribe flag.
+    """
+
+    COMPRESS_PAYLOADDATA = True
+    """
+    Default for compress payload data flag.
+    """
+
+    COMPRESS_METADATA = True
+    """
+    Default for compress metadata flag.
+    """
+
+    COMPRESS_SIGNALINDEXCACHE = True
+    """
+    Default for compress signal index cache flag.
+    """
+
+    METADATAFILTERS = Empty.STRING
+    """
+    Default for metadata filters.
+    """
+
+    SOCKET_TIMEOUT = 2.0
+    """
+    Default for socket timeout in seconds.
+    """
+
+    VERSION = np.byte(2)
+    """
+    Default for STTP version.
+    """
+
+    FILTEREXPRESSION = Empty.STRING
+    """
+    Default for filter expression.
+    """
+
+    THROTTLED = False
+    """
+    Default for throttled flag.
+    """
+
+    PUBLISHINTERVAL = np.float64(1.0)
+    """
+    Default for publish interval in seconds.
+    """
+
+    UDPDATACHANNEL = False
+    """
+    Default for UDP data channel flag.
+    """
+
+    DATACHANNEL_LOCALPORT = np.uint16(0)
+    """
+    Default for local port for data channel.
+    """
+
+    DATACHANNEL_INTERFACE = ""
+    """
+    Default for interface for data channel.
+    """
+
+    INCLUDETIME = True
+    """
+    Default for include time flag.
+    """
+
+    USE_MILLISECONDRESOLUTION = False
+    """
+    Default for use millisecond resolution flag.
+    """
+
+    REQUEST_NANVALUEFILTER = False
+    """
+    Default for request nan-value filter flag.
+    """
+
+    STARTTIME = Empty.STRING
+    """
+    Default for start time.
+    """
+
+    STOPTIME = Empty.STRING
+    """
+    Default for stop time.
+    """
+
+    CONSTRAINTPARAMETERS = Empty.STRING
+    """
+    Default for constraint parameters.
+    """
+
+    PROCESSINGINTERVAL = np.int32(-1)
+    """
+    Default for processing interval in seconds.
+    """
+
+    EXTRA_CONNECTIONSTRING_PARAMETERS = Empty.STRING
+    """
+    Default for extra connection string parameters.
+    """
 
 class StateFlags(IntFlag):
     """

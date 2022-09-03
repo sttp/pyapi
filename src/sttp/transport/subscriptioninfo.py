@@ -21,7 +21,7 @@
 #
 #******************************************************************************************************
 
-from gsf import Empty
+from .constants import Defaults
 import numpy as np
 
 
@@ -30,19 +30,20 @@ class SubscriptionInfo:
     Defines subscription related settings for a `DataSubscriber` instance.
     """
 
-    DEFAULT_FILTEREXPRESSION = Empty.STRING
-    DEFAULT_THROTTLED = False
-    DEFAULT_PUBLISHINTERVAL = np.float64(1.0)
-    DEFAULT_UDPDATACHANNEL = False
-    DEFAULT_DATACHANNEL_LOCALPORT = np.uint16(0)
-    DEFAULT_INCLUDETIME = True
-    DEFAULT_USE_MILLISECONDRESOLUTION = False
-    DEFAULT_REQUEST_NANVALUEFILTER = False
-    DEFAULT_STARTTIME = Empty.STRING
-    DEFAULT_STOPTIME = Empty.STRING
-    DEFAULT_CONSTRAINTPARAMETERS = Empty.STRING
-    DEFAULT_PROCESSINGINTERVAL = np.int32(-1)
-    DEFAULT_EXTRA_CONNECTIONSTRING_PARAMETERS = Empty.STRING
+    DEFAULT_FILTEREXPRESSION = Defaults.FILTEREXPRESSION
+    DEFAULT_THROTTLED = Defaults.THROTTLED
+    DEFAULT_PUBLISHINTERVAL = Defaults.PUBLISHINTERVAL
+    DEFAULT_UDPDATACHANNEL = Defaults.UDPDATACHANNEL
+    DEFAULT_DATACHANNEL_LOCALPORT = Defaults.DATACHANNEL_LOCALPORT
+    DEFAULT_DATACHANNEL_INTERFACE = Defaults.DATACHANNEL_INTERFACE
+    DEFAULT_INCLUDETIME = Defaults.INCLUDETIME
+    DEFAULT_USE_MILLISECONDRESOLUTION = Defaults.USE_MILLISECONDRESOLUTION
+    DEFAULT_REQUEST_NANVALUEFILTER = Defaults.REQUEST_NANVALUEFILTER
+    DEFAULT_STARTTIME = Defaults.STARTTIME
+    DEFAULT_STOPTIME = Defaults.STOPTIME
+    DEFAULT_CONSTRAINTPARAMETERS = Defaults.CONSTRAINTPARAMETERS
+    DEFAULT_PROCESSINGINTERVAL = Defaults.PROCESSINGINTERVAL
+    DEFAULT_EXTRA_CONNECTIONSTRING_PARAMETERS = Defaults.EXTRA_CONNECTIONSTRING_PARAMETERS
 
     def __init__(self,
                  filterexpression: str = ...,
@@ -50,6 +51,7 @@ class SubscriptionInfo:
                  publishinterval: np.float64 = ...,
                  udpdatachannel: bool = ...,
                  datachannel_localport: np.uint16 = ...,
+                 datachannel_interface: str = ...,
                  includetime: bool = ...,
                  usemillisecondresolution: bool = ...,
                  requestnanvaluefilter: bool = ...,
@@ -94,6 +96,11 @@ class SubscriptionInfo:
         self.datachannel_localport = SubscriptionInfo.DEFAULT_DATACHANNEL_LOCALPORT if datachannel_localport is ... else datachannel_localport
         """
         Defines the desired UDP port to use for publication.
+        """
+
+        self.datachannel_interface = SubscriptionInfo.DEFAULT_DATACHANNEL_INTERFACE if datachannel_interface is ... else datachannel_interface
+        """
+        Defines the desired network interface to use for UDP publication.
         """
 
         self.includetime = SubscriptionInfo.DEFAULT_INCLUDETIME if includetime is ... else includetime

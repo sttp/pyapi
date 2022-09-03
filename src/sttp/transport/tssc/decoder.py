@@ -188,7 +188,6 @@ class Decoder:
             if err := self._validate_nextcode(code, CodeWords.TIMEDELTA1FORWARD):
                 return 0, 0, 0, 0.0, False, err
 
-        # Assign decoded measurement ID to out parameter
         pointid = self._lastpoint.prevnextpointid1
 
         # Setup tracking for metadata associated with measurement ID and next point to decode

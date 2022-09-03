@@ -25,7 +25,7 @@ from gsf import Limits
 from gsf.endianorder import BigEndian
 from .data.dataset import DataSet
 from .transport.bufferblock import BufferBlock
-from .transport.constants import ConnectStatus, ServerCommand
+from .transport.constants import ConnectStatus, ServerCommand, Defaults
 from .transport.datasubscriber import DataSubscriber
 from .transport.measurement import Measurement
 from .transport.signalindexcache import SignalIndexCache
@@ -217,6 +217,7 @@ class Subscriber:
         ds.compress_payloaddata = self._config.compress_payloaddata
         ds.compress_metadata = self._config.compress_metadata
         ds.compress_signalindexcache = self._config.compress_signalindexcache
+        ds.socket_timeout = self._config.socket_timeout
         ds.version = self._config.version
 
         # Register direct Subscriber callbacks
@@ -318,9 +319,11 @@ class Subscriber:
         if settings.udpport > 0:
             sub.udpdatachannel = True
             sub.datachannel_localport = settings.udpport
+            sub.datachannel_interface = settings.udpinterface
         else:
             sub.udpdatachannel = False
-            sub.datachannel_localport = np.uint16(0)
+            sub.datachannel_localport = Defaults.DATACHANNEL_LOCALPORT
+            sub.datachannel_interface = Defaults.DATACHANNEL_INTERFACE
 
         sub.includetime = settings.includetime
         sub.use_millisecondresolution = settings.use_millisecondresolution

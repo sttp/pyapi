@@ -21,7 +21,7 @@
 #
 # ******************************************************************************************************
 
-from gsf import Empty
+from .transport.constants import Defaults
 import numpy as np
 
 class Config:
@@ -29,17 +29,18 @@ class Config:
     Defines the STTP connection related configuration parameters.
     """
 
-    DEFAULT_MAXRETRIES = -1
-    DEFAULT_RETRYINTERVAL= 1.0
-    DEFAULT_MAXRETRYINTERVAL= 30.0
-    DEFAULT_AUTORECONNECT = True
-    DEFAULT_AUTOREQUESTMETADATA = True
-    DEFAULT_AUTOSUBSCRIBE = True
-    DEFAULT_COMPRESS_PAYLOADDATA = True
-    DEFAULT_COMPRESS_METADATA = True
-    DEFAULT_COMPRESS_SIGNALINDEXCACHE = True
-    DEFAULT_METADATAFILTERS = Empty.STRING
-    DEFAULT_VERSION = np.byte(2)
+    DEFAULT_MAXRETRIES = Defaults.MAXRETRIES
+    DEFAULT_RETRYINTERVAL = Defaults.RETRYINTERVAL
+    DEFAULT_MAXRETRYINTERVAL = Defaults.MAXRETRYINTERVAL
+    DEFAULT_AUTORECONNECT = Defaults.AUTORECONNECT
+    DEFAULT_AUTOREQUESTMETADATA = Defaults.AUTOREQUESTMETADATA
+    DEFAULT_AUTOSUBSCRIBE = Defaults.AUTOSUBSCRIBE
+    DEFAULT_COMPRESS_PAYLOADDATA = Defaults.COMPRESS_PAYLOADDATA
+    DEFAULT_COMPRESS_METADATA = Defaults.COMPRESS_METADATA
+    DEFAULT_COMPRESS_SIGNALINDEXCACHE = Defaults.COMPRESS_SIGNALINDEXCACHE
+    DEFAULT_METADATAFILTERS = Defaults.METADATAFILTERS
+    DEFAULT_SOCKET_TIMEOUT = Defaults.SOCKET_TIMEOUT
+    DEFAULT_VERSION = Defaults.VERSION
 
     def __init__(self,
                  maxretries: int = ...,
@@ -52,6 +53,7 @@ class Config:
                  compress_metadata: bool = ...,
                  compress_signalindexcache: bool = ...,
                  metadatafilters: str = ...,
+                 socket_timeout: float = ...,
                  version: np.byte = ...
                 ):
         """
@@ -116,6 +118,11 @@ class Config:
         """
         Defines any filters to be applied to incoming metadata to reduce total received metadata.
         Each filter expression should be separated by semi-colon.
+        """
+
+        self.socket_timeout = Config.DEFAULT_SOCKET_TIMEOUT if socket_timeout is ... else socket_timeout
+        """
+        Defines the timeout in seconds for all socket connections.
         """
 
         self.version = Config.DEFAULT_VERSION if version is ... else version

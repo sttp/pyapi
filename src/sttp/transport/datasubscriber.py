@@ -30,7 +30,7 @@ from .compactmeasurement import CompactMeasurement
 from ..metadata.record.measurement import MeasurementRecord
 from ..metadata.cache import MetadataCache
 from .bufferblock import BufferBlock
-from .constants import OperationalModes, OperationalEncoding, CompressionModes
+from .constants import OperationalModes, OperationalEncoding, CompressionModes, Defaults
 from .constants import DataPacketFlags, ServerCommand, ServerResponse, StateFlags
 from .subscriptioninfo import SubscriptionInfo
 from .subscriberconnector import SubscriberConnector
@@ -63,13 +63,14 @@ class DataSubscriber:
     Represents a client subscription for an STTP connection.
     """
 
-    DEFAULT_COMPRESS_PAYLOADDATA = True       # Defaults to TSSC
-    DEFAULT_COMPRESS_METADATA = True          # Defaults to Gzip
-    DEFAULT_COMPRESS_SIGNALINDEXCACHE = True  # Defaults to Gzip
-    DEFAULT_VERSION = np.byte(2)
+    DEFAULT_COMPRESS_PAYLOADDATA = Defaults.COMPRESS_PAYLOADDATA            # Defaults to TSSC
+    DEFAULT_COMPRESS_METADATA = Defaults.COMPRESS_METADATA                  # Defaults to Gzip
+    DEFAULT_COMPRESS_SIGNALINDEXCACHE = Defaults.COMPRESS_SIGNALINDEXCACHE  # Defaults to Gzip
+    DEFAULT_VERSION = Defaults.VERSION
     DEFAULT_STTP_SOURCEINFO = Version.STTP_SOURCE
     DEFAULT_STTP_VERSIONINFO = Version.STTP_VERSION
     DEFAULT_STTP_UPDATEDONINFO = Version.STTP_UPDATEDON
+    DEFAULT_SOCKET_TIMEOUT = Defaults.SOCKET_TIMEOUT
 
     def __init__(self,
                  compress_payloaddata: bool = ...,
@@ -78,7 +79,8 @@ class DataSubscriber:
                  version: np.byte = ...,
                  sttp_sourceinfo: str = ...,
                  sttp_versioninfo: str = ...,
-                 sttp_updatedoninfo: str = ...
+                 sttp_updatedoninfo: str = ...,
+                 socket_timeout: float = ...
                  ):
         """
         Creates a new `DataSubscriber`.
@@ -209,6 +211,11 @@ class DataSubscriber:
         self.metadatacache = MetadataCache()
         """
         Defines the metadata cache associated with this `DataSubscriber`.
+        """
+
+        self.socket_timeout = DataSubscriber.DEFAULT_SOCKET_TIMEOUT if socket_timeout is ... else socket_timeout
+        """
+        Defines the socket timeout in seconds for the `DataSubscriber` connection.
         """
 
         # Measurement parsing
@@ -363,6 +370,7 @@ class DataSubscriber:
 
             self._commandchannel_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP)
             self._commandchannel_socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+            self._commandchannel_socket.settimeout(self.socket_timeout)
 
             try:
                 hostendpoint = socket.getaddrinfo(hostname, int(port), family=socket.AF_INET, proto=socket.IPPROTO_TCP)[0][4]
@@ -418,7 +426,8 @@ class DataSubscriber:
 
             try:
                 self._datachannel_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-                self._datachannel_socket.bind(("", udpport))  # lgtm [py/bind-socket-all-network-interfaces]
+                self._datachannel_socket.bind((subscription.datachannel_interface, udpport))
+                self._datachannel_socket.settimeout(self.socket_timeout)
             except Exception as ex:
                 return RuntimeError(f"failed to open UDP socket for port {udpport}:{ex}")
 
@@ -471,6 +480,7 @@ class DataSubscriber:
 
         if self._datachannel_socket is not None:
             try:
+                self._datachannel_socket.shutdown(socket.SHUT_RDWR)
                 self._datachannel_socket.close()
             except Exception as ex:
                 self._dispatch_errormessage(f"Exception while disconnecting data subscriber UDP data channel: {ex}")
@@ -541,14 +551,14 @@ class DataSubscriber:
         # Release queues and close sockets so that threads can shut down gracefully
         if self._commandchannel_socket is not None:
             try:
-                self._commandchannel_socket.shutdown(socket.SHUT_RDWR)  # Important for _commandchannel_responsethread termination
+                self._commandchannel_socket.shutdown(socket.SHUT_RDWR)
                 self._commandchannel_socket.close()
             except Exception as ex:
                 self._dispatch_errormessage(f"Exception while disconnecting data subscriber TCP command channel: {ex}")
 
         if self._datachannel_socket is not None:
             try:
-                self._datachannel_socket.shutdown(socket.SHUT_RDWR)  # Important for _datachannel_responsethread termination
+                self._datachannel_socket.shutdown(socket.SHUT_RDWR)
                 self._datachannel_socket.close()
             except Exception as ex:
                 self._dispatch_errormessage(f"Exception while disconnecting data subscriber UDP data channel: {ex}")
@@ -609,10 +619,14 @@ class DataSubscriber:
             self._threadpool.submit(self.errormessage_callback, message)
 
     def _run_commandchannel_responsethread(self):
-        reader = BinaryStream(StreamEncoder(
-            lambda length: self._commandchannel_socket.recv(length),
-            lambda _: ...))
+        def recv_data(length: int) -> bytes:
+            while self._connected:
+                try:
+                    return self._commandchannel_socket.recv(length)
+                except socket.timeout:
+                    continue
 
+        reader = BinaryStream(StreamEncoder(recv_data, lambda _: ...))
         buffer = bytearray(MAXPACKET_SIZE)
 
         while self._connected:
@@ -653,10 +667,14 @@ class DataSubscriber:
     # If the user defines a separate UDP channel for their
     # subscription, data packets get handled from this thread.
     def _run_datachannel_responsethread(self):
-        reader = StreamEncoder(
-            lambda length: self._datachannel_socket.recvfrom(length)[0],
-            lambda _: ...)
+        def recv_data(length: int) -> bytes:
+            while self._connected:
+                try:
+                    return self._datachannel_socket.recvfrom(length)[0]
+                except socket.timeout:
+                    continue
 
+        reader = StreamEncoder(recv_data, lambda _: ...)
         buffer = bytearray(MAXPACKET_SIZE)
 
         while self._connected:
