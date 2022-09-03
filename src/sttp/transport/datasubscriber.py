@@ -612,13 +612,9 @@ class DataSubscriber:
             self._threadpool.submit(self.errormessage_callback, message)
 
     def _run_commandchannel_responsethread(self):
-        def recv_data(length: int) -> bytes:
-            try:
-                return self._commandchannel_socket.recv(length)
-            except Exception:
-                return bytes()
-
-        self._reader = BinaryStream(StreamEncoder(recv_data, lambda _: ...))
+        self._reader = BinaryStream(StreamEncoder(
+            lambda length: self._commandchannel_socket.recv(length),
+            lambda _: ...))
 
         while self._connected:
             try:
@@ -627,48 +623,41 @@ class DataSubscriber:
                 # Gather statistics
                 self._total_commandchannel_bytesreceived += PAYLOADHEADER_SIZE
 
-                self._read_payloadheader()
+                packetsize = BigEndian.to_uint32(self._readbuffer)
+
+                if packetsize > len(self._readbuffer):
+                    self._readbuffer = bytearray(packetsize)
+
+                # Read packet (payload body)
+                # This read method is guaranteed not to return until the
+                # requested size has been read or an error has occurred.
+                self._reader.read_all(self._readbuffer, 0, packetsize)
+
+                # Gather statistics
+                self._total_commandchannel_bytesreceived += packetsize
             except Exception:
                 # Read error, connection may have been closed by peer; terminate connection
                 self._dispatch_connectionterminated()
                 return
 
-    def _read_payloadheader(self):
-        if self._disconnecting:
-            return
+            if self._disconnecting:
+                return
 
-        packetsize = BigEndian.to_uint32(self._readbuffer)
-
-        if packetsize > len(self._readbuffer):
-            self._readbuffer = bytearray(packetsize)
-
-        # Read packet (payload body)
-        # This read method is guaranteed not to return until the
-        # requested size has been read or an error has occurred.
-        self._reader.read_all(self._readbuffer, 0, packetsize)
-
-        # Gather statistics
-        self._total_commandchannel_bytesreceived += packetsize
-
-        # Process response
-        try:
-            self._process_serverresponse(bytes(self._readbuffer[:packetsize]))
-        except Exception as ex:
-            self._dispatch_errormessage(f"Exception processing server response: {ex}")
-            self._dispatch_connectionterminated()
-            return
-
+            try:
+                # Process response
+                self._process_serverresponse(bytes(self._readbuffer[:packetsize]))
+            except Exception as ex:
+                self._dispatch_errormessage(f"Exception processing server response: {ex}")
+                self._dispatch_connectionterminated()
+                return
 
     # If the user defines a separate UDP channel for their
     # subscription, data packets get handled from this thread.
     def _run_datachannel_responsethread(self):
-        def recv_data(length: int) -> bytes:
-            try:
-                return self._datachannel_socket.recvfrom(length)[0]
-            except Exception:
-                return bytes()
+        reader = StreamEncoder(
+            lambda length: self._datachannel_socket.recvfrom(length)[0],
+            lambda _: ...)
 
-        reader = StreamEncoder(recv_data, lambda _: ...)
         buffer = bytearray(MAXPACKET_SIZE)
 
         while self._connected:
@@ -677,11 +666,19 @@ class DataSubscriber:
 
                 # Gather statistics
                 self._total_datachannel_bytesreceived += length
-
-                # Process response
-                self._process_serverresponse(bytes(buffer[:length]))
             except Exception:
                 # Read error, connection may have been closed by peer; terminate connection
+                self._dispatch_connectionterminated()
+                return
+
+            if self._disconnecting:
+                return
+
+            try:
+                # Process response
+                self._process_serverresponse(bytes(buffer[:length]))
+            except Exception as ex:
+                self._dispatch_errormessage(f"Exception processing server response: {ex}")
                 self._dispatch_connectionterminated()
                 return
 
@@ -993,9 +990,9 @@ class DataSubscriber:
 
             if success:
                 measurements[index] = Measurement(
-                    signalindexcache.signalid(pointid), 
+                    signalindexcache.signalid(pointid),
                     np.float64(value),
-                    np.uint64(timestamp), 
+                    np.uint64(timestamp),
                     StateFlags(stateflags))
 
                 index += 1
