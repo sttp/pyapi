@@ -98,7 +98,7 @@ class DataRow:
 
     def _validate_columntype(self, columnindex: int, targettype: Union[int, DataType], read: bool) -> Tuple[Optional[DataColumn], Optional[Exception]]:
         if (column := self._parent.column(columnindex)) is None:
-            return None, ValueError(f"column index {columnindex} is out of range for table \"{self._parent.name}\"")
+            return None, IndexError(f"column index {columnindex} is out of range for table \"{self._parent.name}\"")
 
         if targettype > -1 and column.datatype != targettype:
             if read:
@@ -708,7 +708,7 @@ class DataRow:
         rightcolumn = rightrow.parent.column(columnindex)
 
         if leftcolumn is None or rightcolumn is None:
-            return 0, ValueError("cannot compare, column index out of range")
+            return 0, IndexError("cannot compare, column index out of range")
 
         lefttype = leftcolumn.datatype
         righttype = rightcolumn.datatype
