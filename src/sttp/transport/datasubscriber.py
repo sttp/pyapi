@@ -92,8 +92,7 @@ class DataSubscriber:
         self._subscribed = False
 
         self._commandchannel_socket: Optional[socket.socket] = None
-        self._commandchannel_responsethread: Optional[Thread] = None
-        self._readbuffer = bytearray(MAXPACKET_SIZE)
+        self._commandchannel_responsethread: Optional[Thread] = None        
         self._reader: Optional[BinaryStream] = None
         self._writebuffer = bytearray(MAXPACKET_SIZE)
         self._datachannel_socket: Optional[socket.socket] = None
@@ -616,22 +615,24 @@ class DataSubscriber:
             lambda length: self._commandchannel_socket.recv(length),
             lambda _: ...))
 
+        buffer = bytearray(MAXPACKET_SIZE)
+
         while self._connected:
             try:
-                self._reader.read_all(self._readbuffer, 0, PAYLOADHEADER_SIZE)
+                self._reader.read_all(buffer, 0, PAYLOADHEADER_SIZE)
 
                 # Gather statistics
                 self._total_commandchannel_bytesreceived += PAYLOADHEADER_SIZE
 
-                packetsize = BigEndian.to_uint32(self._readbuffer)
+                packetsize = BigEndian.to_uint32(buffer)
 
-                if packetsize > len(self._readbuffer):
-                    self._readbuffer = bytearray(packetsize)
+                if packetsize > len(buffer):
+                    buffer = bytearray(packetsize)
 
                 # Read packet (payload body)
                 # This read method is guaranteed not to return until the
                 # requested size has been read or an error has occurred.
-                self._reader.read_all(self._readbuffer, 0, packetsize)
+                self._reader.read_all(buffer, 0, packetsize)
 
                 # Gather statistics
                 self._total_commandchannel_bytesreceived += packetsize
@@ -645,7 +646,7 @@ class DataSubscriber:
 
             try:
                 # Process response
-                self._process_serverresponse(bytes(self._readbuffer[:packetsize]))
+                self._process_serverresponse(bytes(buffer[:packetsize]))
             except Exception as ex:
                 self._dispatch_errormessage(f"Exception processing server response: {ex}")
                 self._dispatch_connectionterminated()
