@@ -92,9 +92,7 @@ class DataSubscriber:
         self._subscribed = False
 
         self._commandchannel_socket: Optional[socket.socket] = None
-        self._commandchannel_responsethread: Optional[Thread] = None        
-        self._reader: Optional[BinaryStream] = None
-        self._writebuffer = bytearray(MAXPACKET_SIZE)
+        self._commandchannel_responsethread: Optional[Thread] = None
         self._datachannel_socket: Optional[socket.socket] = None
         self._datachannel_responsethread: Optional[Thread] = None
 
@@ -611,7 +609,7 @@ class DataSubscriber:
             self._threadpool.submit(self.errormessage_callback, message)
 
     def _run_commandchannel_responsethread(self):
-        self._reader = BinaryStream(StreamEncoder(
+        reader = BinaryStream(StreamEncoder(
             lambda length: self._commandchannel_socket.recv(length),
             lambda _: ...))
 
@@ -619,7 +617,7 @@ class DataSubscriber:
 
         while self._connected:
             try:
-                self._reader.read_all(buffer, 0, PAYLOADHEADER_SIZE)
+                reader.read_all(buffer, 0, PAYLOADHEADER_SIZE)
 
                 # Gather statistics
                 self._total_commandchannel_bytesreceived += PAYLOADHEADER_SIZE
@@ -632,7 +630,7 @@ class DataSubscriber:
                 # Read packet (payload body)
                 # This read method is guaranteed not to return until the
                 # requested size has been read or an error has occurred.
-                self._reader.read_all(buffer, 0, packetsize)
+                reader.read_all(buffer, 0, packetsize)
 
                 # Gather statistics
                 self._total_commandchannel_bytesreceived += packetsize
@@ -1121,25 +1119,23 @@ class DataSubscriber:
 
         packetsize = np.uint32(1) if data is None else np.uint32(len(data)) + 1
         commandbuffersize = np.uint32(packetsize + PAYLOADHEADER_SIZE)
-
-        if commandbuffersize > len(self._writebuffer):
-            self._writebuffer = bytearray(commandbuffersize)
+        buffer = bytearray(commandbuffersize)
 
         # Insert packet size
-        self._writebuffer[:4] = BigEndian.from_uint32(packetsize)
+        buffer[:4] = BigEndian.from_uint32(packetsize)
 
         # Insert command code
-        self._writebuffer[4] = commandcode
+        buffer[4] = commandcode
 
         if data is not None and data:  # len > 0
-            self._writebuffer[5:commandbuffersize] = data
+            buffer[5:commandbuffersize] = data
 
         if commandcode == ServerCommand.METADATAREFRESH:
             # Track start time of metadata request to calculate round-trip receive time
             self._metadatarequested = time()
 
         try:
-            self._commandchannel_socket.send(self._writebuffer[:commandbuffersize])
+            self._commandchannel_socket.send(buffer)
         except Exception as ex:
             # Write error, connection may have been closed by peer; terminate connection
             self._dispatch_errormessage(f"Failed to send server command - disconnecting: {ex}")
