@@ -64,8 +64,6 @@ class CodeWords:
 BYTE_0 = np.byte(0)
 BYTE_1 = np.byte(1)
 BYTE_2 = np.byte(2)
-BYTE_3 = np.byte(3)
-BYTE_4 = np.byte(4)
 
 INT32_0 = np.int32(0)
 INT32_1 = np.int32(1)
@@ -75,7 +73,6 @@ INT32_5 = np.int32(5)
 INT32_6 = np.int32(6)
 INT32_7 = np.int32(7)
 INT32_8 = np.int32(8)
-INT32_MAX = np.int32(Limits.MAXINT32)
 
 UINT32_0 = np.uint32(0)
 
@@ -97,7 +94,7 @@ class PointMetadata:
         self._commands_sent_sincelastchange = 0
 
         # Bit codes for the 4 modes of encoding
-        self._mode = BYTE_4
+        self._mode = 4
 
         # Mode 1 means no prefix
         self._mode21 = BYTE_0
@@ -113,21 +110,21 @@ class PointMetadata:
         self._readbits5 = readbits5
 
     def write_code(self, code: np.int32) -> Optional[Exception]:
-        if self._mode == BYTE_1:
+        if self._mode == 1:
             self._writebits(code, INT32_5)
-        elif self._mode == BYTE_2:
+        elif self._mode == 2:
             if code == np.int32(self._mode21):
                 self._writebits(INT32_1, INT32_1)
             else:
                 self._writebits(code, INT32_6)
-        elif self._mode == BYTE_3:
+        elif self._mode == 3:
             if code == np.int32(self._mode31):
                 self._writebits(INT32_1, INT32_1)
             elif code == np.int32(self._mode301):
                 self._writebits(INT32_1, INT32_2)
             else:
                 self._writebits(code, INT32_7)
-        elif self._mode == BYTE_4:
+        elif self._mode == 4:
             if code == np.int32(self._mode41):
                 self._writebits(INT32_1, INT32_1)
             elif code == np.int32(self._mode401):
@@ -142,21 +139,21 @@ class PointMetadata:
         return self._update_codestatistics(code)
 
     def read_code(self) -> Tuple[np.int32, Optional[Exception]]:  # sourcery skip: assign-if-exp
-        if self._mode == BYTE_1:
+        if self._mode == 1:
             code = self._readbits5()
-        elif self._mode == BYTE_2:
+        elif self._mode == 2:
             if self._readbit() == INT32_1:
                 code = np.int32(self._mode21)
             else:
                 code = self._readbits5()
-        elif self._mode == BYTE_3:
+        elif self._mode == 3:
             if self._readbit() == INT32_1:
                 code = np.int32(self._mode31)
             elif self._readbit() == INT32_1:
                 code = np.int32(self._mode301)
             else:
                 code = self._readbits5()
-        elif self._mode == BYTE_4:
+        elif self._mode == 4:
             if self._readbit() == INT32_1:
                 code = np.int32(self._mode41)
             elif self._readbit() == INT32_1:
@@ -190,18 +187,18 @@ class PointMetadata:
 
     def _adapt_commands(self) -> Optional[Exception]:
         code1 = BYTE_0
-        count1 = INT32_0
+        count1 = 0
 
         code2 = BYTE_1
-        count2 = INT32_0
+        count2 = 0
 
         code3 = BYTE_2
-        count3 = INT32_0
+        count3 = 0
 
-        total = INT32_0
+        total = 0
 
         for i in range(len(self._commandstats)):
-            count = np.int32(self._commandstats[i])
+            count = int(self._commandstats[i])
             self._commandstats[i] = BYTE_0
 
             total += count
@@ -226,28 +223,28 @@ class PointMetadata:
                     code3 = np.byte(i)
                     count3 = count
 
-        mode1size = np.int32(total * 5)
-        mode2size = np.int32(count1 + (total - count1) * 6)
-        mode3size = np.int32(count1 + count2 * 2 + (total - count1 - count2) * 7)
-        mode4size = np.int32(count1 + count2 * 2 + count3 * 3 + (total - count1 - count2 - count3) * 8)
+        mode1size = total * 5
+        mode2size = count1 + (total - count1) * 6
+        mode3size = count1 + count2 * 2 + (total - count1 - count2) * 7
+        mode4size = count1 + count2 * 2 + count3 * 3 + (total - count1 - count2 - count3) * 8
 
-        minsize = INT32_MAX
+        minsize = Limits.MAXINT32
         minsize = min(minsize, mode1size)
         minsize = min(minsize, mode2size)
         minsize = min(minsize, mode3size)
         minsize = min(minsize, mode4size)
 
         if minsize == mode1size:
-            self._mode = BYTE_1
+            self._mode = 1
         elif minsize == mode2size:
-            self._mode = BYTE_2
+            self._mode = 2
             self._mode21 = code1
         elif minsize == mode3size:
-            self._mode = BYTE_3
+            self._mode = 3
             self._mode31 = code1
             self._mode301 = code2
         elif minsize == mode4size:
-            self._mode = BYTE_4
+            self._mode = 4
             self._mode41 = code1
             self._mode401 = code2
             self._mode4001 = code3
