@@ -15,7 +15,7 @@ copyright = '2022, Grid Protection Alliance'
 author = 'J. Ritchie Carroll'
 
 # The full version, including alpha/beta/rc tags
-release = '0.4.0'
+release = '0.5.0'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

@@ -13,6 +13,10 @@ For updates, always increment version number in:
     src/sttp/version.py
     docs/conf.py
 
+Any new dependencies should be sync'd and added to:
+    setup.cfg ([options] / install_requires)
+    requirements.txt
+
 It is always best to delete the following folders before a new build:
     build/
     dist/

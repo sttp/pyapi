@@ -27,12 +27,12 @@ class Version:
 	Defines the STTP library API title used for data subscriber identification.
 	"""
 
-	STTP_VERSION = "0.4.0"
+	STTP_VERSION = "0.5.0"
 	"""
 	Defines the STTP library API version used for data subscriber identification.
 	"""
 
-	STTP_UPDATEDON = "2022-09-02"
+	STTP_UPDATEDON = "2022-09-04"
 	"""
 	Defines when the STTP library API was last updated used for data subscriber identification.
 	"""
