@@ -48,9 +48,9 @@ def override(self):
 
 
 class Empty:
-    GUID = UUID("00000000-0000-0000-0000-000000000000")
-    DATETIME = datetime(1, 1, 1)
-    DECIMAL = Decimal(0)
+    GUID = UUID(int=0)
+    DATETIME = datetime.min
+    DECIMAL = Decimal(0.0)
     TICKS = np.uint64(0)
     STRING = ""
     SINGLE = np.float32(0.0)
@@ -117,7 +117,7 @@ class Validate:
 
 class Convert:
     @staticmethod
-    def from_str(value, dtype: np.dtype):
+    def from_str(value: str, dtype: np.dtype) -> object:
         """
         Converts a string value to the specified type.
         """

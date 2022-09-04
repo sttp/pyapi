@@ -22,7 +22,7 @@
 #******************************************************************************************************
 
 from gsf import static_init, ByteSize
-from typing import Any
+from typing import Union
 import struct
 import sys
 import numpy as np
@@ -40,7 +40,7 @@ class NativeEndian:
         cls.swaporder = False
 
     @classmethod
-    def _from_buffer(cls, buffer: bytes, bytesize: int, dtype: np.dtype) -> Any:
+    def _from_buffer(cls, buffer: bytes, bytesize: int, dtype: np.dtype) -> Union[int, float]:
         if len(buffer) < bytesize:
             raise ValueError(f"Buffer size too small, {bytesize} bytes required to convert bytes to {bytesize * 8}-bit type")
 

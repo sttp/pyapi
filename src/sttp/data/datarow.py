@@ -29,7 +29,7 @@ from decimal import Decimal
 from datetime import datetime
 from dateutil import parser
 from uuid import UUID
-from typing import Any, Callable, Iterator, Optional, Tuple, Union, TYPE_CHECKING
+from typing import Callable, Iterator, Optional, Tuple, Union, TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
@@ -53,7 +53,7 @@ class DataRow:
         self._parent = parent
         self._values = np.empty(parent.columncount, object)
 
-    def __getitem__(self, key: Union[int, str]) -> Any:
+    def __getitem__(self, key: Union[int, str]) -> object:
         if isinstance(key, str):
             value, err = self.value_byname(key)
         else:
@@ -64,7 +64,7 @@ class DataRow:
 
         return value
 
-    def __setitem__(self, key: Union[int, str], value: Any):
+    def __setitem__(self, key: Union[int, str], value: object):
         if isinstance(key, str):
             err = self.set_value_byname(key, value)
         else:
@@ -76,10 +76,10 @@ class DataRow:
     def __len__(self) -> int:
         return len(self._values)
 
-    def __contains__(self, item: Any) -> bool:
+    def __contains__(self, item: object) -> bool:
         return item in self._values
 
-    def __iter__(self) -> Iterator[Any]:
+    def __iter__(self) -> Iterator[object]:
         return iter(self._values)
 
     @property
@@ -134,7 +134,7 @@ class DataRow:
 
     # return value, None
 
-    def _get_computedvalue(self, column: DataColumn) -> Tuple[Optional[Any], Optional[Exception]]:
+    def _get_computedvalue(self, column: DataColumn) -> Tuple[Optional[object], Optional[Exception]]:
         # sourcery skip: assign-if-exp, reintroduce-else
         (expressiontree, err) = self._expressiontree(column)
 
@@ -146,7 +146,7 @@ class DataRow:
         # (sourcevalue, err) = expressiontree.evaluate(self)
         # TODO: Add remaining code when filter expression engine is implemented
 
-    def _convert_fromstring(self, value: str, targettype: DataType) -> Tuple[Optional[Any], Optional[Exception]]:
+    def _convert_fromstring(self, value: str, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
         try:
             if targettype == DataType.STRING:
                 return value, None
@@ -157,33 +157,33 @@ class DataRow:
             if targettype == DataType.GUID:
                 return UUID(value), None
             if targettype == DataType.SINGLE:
-                return Convert.from_str(np.float32), None
+                return Convert.from_str(value, np.float32), None
             if targettype == DataType.DOUBLE:
-                return Convert.from_str(np.float64), None
+                return Convert.from_str(value, np.float64), None
             if targettype == DataType.DECIMAL:
-                return Convert.from_str(Decimal), None
+                return Decimal(value), None
             if targettype == DataType.INT8:
-                return Convert.from_str(np.int8), None
+                return Convert.from_str(value, np.int8), None
             if targettype == DataType.INT16:
-                return Convert.from_str(np.int16), None
+                return Convert.from_str(value, np.int16), None
             if targettype == DataType.INT32:
-                return Convert.from_str(np.int32), None
+                return Convert.from_str(value, np.int32), None
             if targettype == DataType.INT64:
-                return Convert.from_str(np.int64), None
+                return Convert.from_str(value, np.int64), None
             if targettype == DataType.UINT8:
-                return Convert.from_str(np.uint8), None
+                return Convert.from_str(value, np.uint8), None
             if targettype == DataType.UINT16:
-                return Convert.from_str(np.uint16), None
+                return Convert.from_str(value, np.uint16), None
             if targettype == DataType.UINT32:
-                return Convert.from_str(np.uint32), None
+                return Convert.from_str(value, np.uint32), None
             if targettype == DataType.UINT64:
-                return Convert.from_str(np.uint64), None
+                return Convert.from_str(value, np.uint64), None
 
             return None, ValueError("unexpected column data type encountered")
         except Exception as ex:
             return None, ValueError(f"failed to convert \"String\" expression value to \"{normalize_enumname(targettype)}\" column: {ex}")
 
-    def _convert_fromguid(self, value: UUID, targettype: DataType) -> Tuple[Optional[Any], Optional[Exception]]:
+    def _convert_fromguid(self, value: UUID, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
         try:
             if targettype == DataType.STRING:
                 return str(value), None
@@ -199,7 +199,7 @@ class DataRow:
         except Exception as ex:
             return None, ValueError(f'failed to convert \"Guid\" expression value to \"{normalize_enumname(targettype)}\" column: {ex}')
 
-    def _convert_fromvalue(self, value: Any, sourcetype: DataType, targettype: DataType) -> Tuple[Optional[Any], Optional[Exception]]:
+    def _convert_fromvalue(self, value: object, sourcetype: DataType, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
         try:
             if targettype == DataType.STRING:
                 return str(value), None
@@ -234,22 +234,22 @@ class DataRow:
         except Exception as ex:
             return None, ValueError(f"failed to convert \"{normalize_enumname(sourcetype)}\" expression value to \"{normalize_enumname(targettype)}\" column: {ex}")
 
-    def _convert_frombool(self, value: bool, targettype: DataType) -> Tuple[Optional[Any], Optional[Exception]]:
+    def _convert_frombool(self, value: bool, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
         return self._convert_fromvalue(1 if value else 0, DataType.BOOLEAN, targettype)
 
-    def _convert_fromint32(self, value: np.int32, targettype: DataType) -> Tuple[Optional[Any], Optional[Exception]]:
+    def _convert_fromint32(self, value: np.int32, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
         return self._convert_fromvalue(value, DataType.INT32, targettype)
 
-    def _convert_fromint64(self, value: np.int64, targettype: DataType) -> Tuple[Optional[Any], Optional[Exception]]:
+    def _convert_fromint64(self, value: np.int64, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
         return self._convert_fromvalue(value, DataType.INT64, targettype)
 
-    def _convert_fromdecimal(self, value: Decimal, targettype: DataType) -> Tuple[Optional[Any], Optional[Exception]]:
+    def _convert_fromdecimal(self, value: Decimal, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
         return self._convert_fromvalue(value, DataType.DECIMAL, targettype)
 
-    def _convert_fromdouble(self, value: np.float64, targettype: DataType) -> Tuple[Optional[Any], Optional[Exception]]:
+    def _convert_fromdouble(self, value: np.float64, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
         return self._convert_fromvalue(value, DataType.DOUBLE, targettype)
 
-    def _convert_fromdatetime(self, value: datetime, targettype: DataType) -> Tuple[Optional[Any], Optional[Exception]]:
+    def _convert_fromdatetime(self, value: datetime, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
         try:
             if targettype == DataType.STRING:
                 return xsdformat(value), None
@@ -260,7 +260,7 @@ class DataRow:
 
         return self._convert_fromvalue(int(value.timestamp()), DataType.DATETIME, targettype)
 
-    def value(self, columnindex: int) -> Tuple[Optional[Any], Optional[Exception]]:
+    def value(self, columnindex: int) -> Tuple[Optional[object], Optional[Exception]]:
         """
         Reads the record value at the specified column index.
         """
@@ -275,7 +275,7 @@ class DataRow:
 
         return self._values[columnindex], None
 
-    def value_byname(self, columnname: str) -> Tuple[Optional[Any], Optional[Exception]]:
+    def value_byname(self, columnname: str) -> Tuple[Optional[object], Optional[Exception]]:
         """
         Reads the record value for the specified column name.
         """
@@ -283,7 +283,7 @@ class DataRow:
         index, err = self._get_columnindex(columnname)
         return (None, err) if err is not None else (self._values[index], None)
 
-    def set_value(self, columnindex: int, value: Any) -> Optional[Exception]:
+    def set_value(self, columnindex: int, value: object) -> Optional[Exception]:
         # sourcery skip: assign-if-exp
         """
         Assigns the record value at the specified column index.
@@ -297,7 +297,7 @@ class DataRow:
         self._values[columnindex] = value
         return None
 
-    def set_value_byname(self, columnname: str, value: Any) -> Optional[Exception]:
+    def set_value_byname(self, columnname: str, value: object) -> Optional[Exception]:
         """
         Assigns the record value for the specified column name.
         """
@@ -372,13 +372,13 @@ class DataRow:
 
         return (True, "<NULL>") if null else (False, Empty.STRING)
 
-    def _string_from_typevalue(self, index: int, getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]], strconv: Callable[[Any], str] = str) -> str:
+    def _string_from_typevalue(self, index: int, getvalue: Callable[[int], Tuple[object, bool, Optional[Exception]]], strconv: Callable[[object], str] = str) -> str:
         value, null, err = getvalue(index)
         invalid, result = self._checkstate(null, err)
         
         return result if invalid else strconv(value)
 
-    def _typevalue(self, columnindex: int, targettype: DataType) -> Tuple[Any, bool, Optional[Exception]]:
+    def _typevalue(self, columnindex: int, targettype: DataType) -> Tuple[object, bool, Optional[Exception]]:
         column, err = self._validate_columntype(columnindex, targettype, True)
         default = default_datatype(targettype)
 
@@ -397,7 +397,7 @@ class DataRow:
 
         return (default, True, None) if value is None else (value, False, None)
 
-    def _typevalue_byname(self, columnname: str, targettype: DataType) -> Tuple[Any, bool, Optional[Exception]]:
+    def _typevalue_byname(self, columnname: str, targettype: DataType) -> Tuple[object, bool, Optional[Exception]]:
         index, err = self._get_columnindex(columnname)
 
         if err is not None:
@@ -723,8 +723,8 @@ class DataRow:
             return 1 if lefthasvalue else -1
 
         def typecompare(
-                leftrow_getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]],
-                rightrow_getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]]) -> \
+                leftrow_getvalue: Callable[[int], Tuple[object, bool, Optional[Exception]]],
+                rightrow_getvalue: Callable[[int], Tuple[object, bool, Optional[Exception]]]) -> \
                             Tuple[int, Optional[Exception]]:
 
             leftvalue, leftnull, lefterr = leftrow_getvalue(columnindex)
@@ -743,7 +743,7 @@ class DataRow:
 
         if lefttype == DataType.STRING:
             if exactmatch:
-                def upperstringvalue(index: int, getvalue: Callable[[int], Tuple[Any, bool, Optional[Exception]]]) -> Tuple[str, bool, Optional[Exception]]:
+                def upperstringvalue(index: int, getvalue: Callable[[int], Tuple[object, bool, Optional[Exception]]]) -> Tuple[str, bool, Optional[Exception]]:
                     value, null, err = getvalue(index)
 
                     if not null and err is None:

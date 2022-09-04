@@ -129,7 +129,7 @@ class Ticks:
         return Ticks.from_datetime(datetime.now())
 
     @staticmethod
-    def utcnow() -> np.uint64:
+    def utcnow() -> np.uint64:  # sourcery skip: aware-datetime-for-utc
         """
         Gets the current time in UTC as a Ticks value.
         """

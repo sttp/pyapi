@@ -23,7 +23,7 @@
 
 from gsf import Empty
 from enum import IntEnum
-from typing import Any, Optional, Tuple
+from typing import Optional, Tuple
 
 
 class DataType(IntEnum):
@@ -107,7 +107,7 @@ class DataType(IntEnum):
     """
 
 
-def default_datatype(datatype: DataType) -> Any:  # sourcery skip: assign-if-exp, reintroduce-else
+def default_datatype(datatype: DataType) -> object:  # sourcery skip: assign-if-exp, reintroduce-else
     if datatype == DataType.STRING:
         return Empty.STRING
     if datatype == DataType.BOOLEAN:

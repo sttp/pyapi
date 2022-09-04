@@ -28,7 +28,7 @@ from ..data.datatype import default_datatype
 from .record.measurement import MeasurementRecord, SignalType
 from .record.device import DeviceRecord
 from .record.phasor import PhasorRecord
-from typing import Any, List, Dict, Tuple, Optional
+from typing import List, Dict, Tuple, Optional
 from uuid import UUID, uuid1
 import numpy as np
 
@@ -249,7 +249,7 @@ class MetadataCache:
 
         self.phasorRecords = phasor_records
 
-    def _get_rowvalue(self, row: DataRow, columnname: str, default: Any = None):
+    def _get_rowvalue(self, row: DataRow, columnname: str, default: Optional[object] = None):
         value, err = row.value_byname(columnname)
 
         if value is None or err is not None:

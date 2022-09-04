@@ -56,7 +56,7 @@ class SignalType(IntEnum):
     UNKN = -1   # Unknown type, see `SignalTypeName`
 
     @classmethod
-    def parse(cls, name):
+    def parse(cls, name: str) -> SignalType:
         return getattr(cls, name.upper(), None)
 
 
