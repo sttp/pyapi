@@ -623,7 +623,7 @@ class DataSubscriber:
             while self._connected:
                 try:
                     return self._commandchannel_socket.recv(length)
-                except socket.timeout:
+                except (socket.timeout, OSError):
                     continue
 
         reader = BinaryStream(StreamEncoder(recv_data, lambda _: ...))
@@ -671,7 +671,7 @@ class DataSubscriber:
             while self._connected:
                 try:
                     return self._datachannel_socket.recvfrom(length)[0]
-                except socket.timeout:
+                except (socket.timeout, OSError):
                     continue
 
         reader = StreamEncoder(recv_data, lambda _: ...)
