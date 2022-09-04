@@ -46,7 +46,6 @@ class SignalIndexCache:
         self._idlist: List[np.uint64] = []
         self._signalidcache: Dict[UUID, np.int32] = {}
         self._binarylength = np.uint32(0)
-        self._maxsignalindex = np.uint32(0)        
         self._tsscdecoder: Optional[Decoder] = None
 
     def _add_record(self, ds: DataSubscriber, signalindex: np.int32, signalid: UUID, source: str, id: np.uint64, charsizeestimate: np.uint32 = 1):
@@ -56,9 +55,6 @@ class SignalIndexCache:
         self._sourcelist.append(source)
         self._idlist.append(id)
         self._signalidcache[signalid] = signalindex
-
-        if index > self._maxsignalindex:
-            self._maxsignalindex = index
 
         metadata = ds.lookup_metadata(signalid)
 
@@ -136,14 +132,6 @@ class SignalIndexCache:
             return signalindex
 
         return -1
-
-    @property
-    def maxsignalindex(self) -> np.uint32:
-        """
-        Gets the largest signal index in the `SignalIndexCache`.
-        """
-
-        return self._maxsignalindex
 
     @property
     def count(self) -> np.uint32:

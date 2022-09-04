@@ -960,7 +960,7 @@ class DataSubscriber:
         newdecoder = False
 
         if decoder is None:
-            signalindexcache._tsscdecoder = Decoder(signalindexcache.maxsignalindex)
+            signalindexcache._tsscdecoder = Decoder()
             decoder = signalindexcache._tsscdecoder
             decoder.sequencenumber = 0
             newdecoder = True
@@ -975,7 +975,7 @@ class DataSubscriber:
                 if decoder.sequencenumber > 0:
                     self._dispatch_errormessage(f"TSSC algorithm reset before sequence number: {decoder.sequencenumber}")
 
-                signalindexcache._tsscdecoder = Decoder(signalindexcache.maxsignalindex)
+                signalindexcache._tsscdecoder = Decoder()
                 decoder = signalindexcache._tsscdecoder
                 decoder.sequencenumber = 0
 

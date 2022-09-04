@@ -24,7 +24,7 @@
 from gsf import Limits
 from gsf.endianorder import NativeEndian
 from .pointmetadata import PointMetadata, CodeWords
-from typing import List, Optional, Tuple
+from typing import Dict, Optional, Tuple
 import numpy as np
 
 INT32_0 = np.int32(0)
@@ -95,9 +95,7 @@ class Decoder:
     The decoder for the Time-Series Special Compression (TSSC) algorithm of STTP.
     """
 
-    def __init__(self,
-                 maxsignalindex: np.uint32
-                 ):
+    def __init__(self):
         """
         Creates a new TSSC decoder.
         """
@@ -115,7 +113,7 @@ class Decoder:
         self._prevtimedelta4 = INT64_MAX
 
         self._lastpoint = self._new_pointmetadata()
-        self._points: List[Optional[PointMetadata]] = [None] * (maxsignalindex + 1)
+        self._points: Dict[int, Optional[PointMetadata]] = {}
 
         # The number of bits in m_bitStreamCache that are valid. 0 Means the bitstream is empty
         self._bitstreamcount = INT32_0
@@ -191,16 +189,8 @@ class Decoder:
         pointid = self._lastpoint.prevnextpointid1
 
         # Setup tracking for metadata associated with measurement ID and next point to decode
-        pointcount = np.int32(len(self._points))
-        nextpoint = None if pointid >= pointcount else self._points[pointid]
-
-        if nextpoint is None:
+        if (nextpoint := self._points.get(pointid)) is None:
             nextpoint = self._new_pointmetadata()
-
-            if pointid >= pointcount:
-                while pointid + 1 > len(self._points):
-                    self._points.append(None)
-
             self._points[pointid] = nextpoint
             nextpoint.prevnextpointid1 = pointid + 1
 
