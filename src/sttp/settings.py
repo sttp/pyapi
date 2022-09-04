@@ -21,7 +21,6 @@
 #
 # ******************************************************************************************************
 
-from gsf import Empty
 from .transport.constants import Defaults
 import numpy as np
 
