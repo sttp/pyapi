@@ -113,7 +113,7 @@ class Decoder:
         self._prevtimedelta4 = INT64_MAX
 
         self._lastpoint = self._new_pointmetadata()
-        self._points: Dict[int, Optional[PointMetadata]] = {}
+        self._points: Dict[np.int32, Optional[PointMetadata]] = {}
 
         # The number of bits in m_bitStreamCache that are valid. 0 Means the bitstream is empty
         self._bitstreamcount = INT32_0
