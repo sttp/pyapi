@@ -54,10 +54,10 @@ UINT32_16K = np.uint32(16384)
 UINT32_2M = np.uint32(2097152)
 UINT32_256M = np.uint32(268435456)
 
-UINT32_2BITXOR = np.uint32(0x80)
-UINT32_3BITXOR = np.uint32(0x4080)
-UINT32_4BITXOR = np.uint32(0x204080)
-UINT32_5BITXOR = np.uint32(0x10204080)
+UINT32_1BYTEXOR = np.uint32(0x00000080)
+UINT32_2BYTEXOR = np.uint32(0x00004080)
+UINT32_3BYTEXOR = np.uint32(0x00204080)
+UINT32_4BYTEXOR = np.uint32(0x10204080)
 
 INT64_0 = np.int64(0)
 INT64_MAX = np.int64(Limits.MAXINT64)
@@ -80,14 +80,14 @@ UINT64_4T = np.uint64(4398046511104)
 UINT64_512T = np.uint64(562949953421312)
 UINT64_64P = np.uint64(72057594037927936)
 
-UINT64_2BITXOR = np.uint64(0x80)
-UINT64_3BITXOR = np.uint64(0x4080)
-UINT64_4BITXOR = np.uint64(0x204080)
-UINT64_5BITXOR = np.uint64(0x10204080)
-UINT64_6BITXOR = np.uint64(0x810204080)
-UINT64_7BITXOR = np.uint64(0x40810204080)
-UINT64_8BITXOR = np.uint64(0x2040810204080)
-UINT64_9BITXOR = np.uint64(0x102040810204080)
+UINT64_1BYTEXOR = np.uint64(0x000000000000080)
+UINT64_2BYTEXOR = np.uint64(0x000000000004080)
+UINT64_3BYTEXOR = np.uint64(0x000000000204080)
+UINT64_4BYTEXOR = np.uint64(0x000000010204080)
+UINT64_5BYTEXOR = np.uint64(0x000000810204080)
+UINT64_6BYTEXOR = np.uint64(0x000040810204080)
+UINT64_7BYTEXOR = np.uint64(0x002040810204080)
+UINT64_8BYTEXOR = np.uint64(0x102040810204080)
 
 
 class Decoder:
@@ -435,24 +435,24 @@ class Decoder:
 
         if value < UINT32_16K:
             position += 2
-            return (value ^ UINT32_2BITXOR, position)
+            return (value ^ UINT32_1BYTEXOR, position)
 
         value ^= np.uint32(stream[2]) << UINT32_14
 
         if value < UINT32_2M:
             position += 3
-            return (value ^ UINT32_3BITXOR, position)
+            return (value ^ UINT32_2BYTEXOR, position)
 
         value ^= np.uint32(stream[3]) << UINT32_21
 
         if value < UINT32_256M:
             position += 4
-            return (value ^ UINT32_4BITXOR, position)
+            return (value ^ UINT32_3BYTEXOR, position)
 
         value ^= np.uint32(stream[4]) << UINT32_28
         position += 5
 
-        return (value ^ UINT32_5BITXOR, position)
+        return (value ^ UINT32_4BYTEXOR, position)
 
     @staticmethod
     def _decode_7bituint64(stream: bytes, position: int) -> Tuple[np.uint64, int]:
@@ -467,45 +467,45 @@ class Decoder:
 
         if value < UINT64_16K:
             position += 2
-            return (value ^ UINT64_2BITXOR, position)
+            return (value ^ UINT64_1BYTEXOR, position)
 
         value ^= np.uint64(stream[2]) << UINT64_14
 
         if value < np.uint64(UINT64_2M):
             position += 3
-            return (value ^ UINT64_3BITXOR, position)
+            return (value ^ UINT64_2BYTEXOR, position)
 
         value ^= np.uint64(stream[3]) << UINT64_21
 
         if value < UINT64_256M:
             position += 4
-            return (value ^ UINT64_4BITXOR, position)
+            return (value ^ UINT64_3BYTEXOR, position)
 
         value ^= np.uint64(stream[4]) << UINT64_28
 
         if value < UINT64_32G:
             position += 5
-            return (value ^ UINT64_5BITXOR, position)
+            return (value ^ UINT64_4BYTEXOR, position)
 
         value ^= np.uint64(stream[5]) << UINT64_35
 
         if value < UINT64_4T:
             position += 6
-            return (value ^ UINT64_6BITXOR, position)
+            return (value ^ UINT64_5BYTEXOR, position)
 
         value ^= np.uint64(stream[6]) << UINT64_42
 
         if value < UINT64_512T:
             position += 7
-            return (value ^ UINT64_7BITXOR, position)
+            return (value ^ UINT64_6BYTEXOR, position)
 
         value ^= np.uint64(stream[7]) << UINT64_49
 
         if value < UINT64_64P:
             position += 8
-            return (value ^ UINT64_8BITXOR, position)
+            return (value ^ UINT64_7BYTEXOR, position)
 
         value ^= np.uint64(stream[8]) << UINT64_56
         position += 9
 
-        return (value ^ UINT64_9BITXOR, position)
+        return (value ^ UINT64_8BYTEXOR, position)
