@@ -30,7 +30,7 @@ from decimal import Decimal
 from datetime import datetime
 from dateutil import parser
 from uuid import UUID
-from io import BytesIO
+from io import BytesIO, StringIO
 from xml.etree import ElementTree
 from xml.etree.ElementTree import Element
 import numpy as np
@@ -196,8 +196,10 @@ class DataSet:
         if err is not None:
             return err
 
+        bufferio = StringIO(buffer) if isinstance(buffer, str) else BytesIO(buffer)
+        
         namespaces: Dict[str, str] = dict(
-            [node for _, node in ElementTree.iterparse(BytesIO(buffer), events=["start-ns"])])
+            [node for _, node in ElementTree.iterparse(bufferio, events=["start-ns"])])
 
         del namespaces[Empty.STRING]
 

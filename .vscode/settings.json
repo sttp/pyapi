@@ -10,6 +10,7 @@
         "basekv",
         "bituint",
         "BITWISEOR",
+        "bufferio",
         "byname",
         "columnbyname",
         "DAYOFYEAR",
