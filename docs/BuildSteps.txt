@@ -21,6 +21,8 @@ It is always best to delete the following folders before a new build:
     build/
     dist/
 
+Note: In order for next steps to work, make sure to run "pip install build"
+
 Build Distribution: 
     python -m build
 
