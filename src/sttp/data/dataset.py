@@ -60,8 +60,8 @@ class DataSet:
     Represents an in-memory cache of records that is structured similarly to information
     defined in a database. The data set object consists of a collection of data table objects.
     See https://sttp.github.io/documentation/data-sets/ for more information.
-    Note that this implementation uses an insensitive map for `DataTable` name lookups.
-    Internally, insensitive lookups are accomplished using `str.upper()`.    
+    Note that this implementation uses a case insensitive map for `DataTable` name lookups.
+    Internally, case insensitive lookups are accomplished using `str.upper()`.    
     """
 
     DEFAULT_NAME = "DataSet"
