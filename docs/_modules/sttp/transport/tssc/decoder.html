@@ -120,10 +120,10 @@
 <span class="n">UINT32_2M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mi">2097152</span><span class="p">)</span>
 <span class="n">UINT32_256M</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mi">268435456</span><span class="p">)</span>
 
-<span class="n">UINT32_2BITXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0x80</span><span class="p">)</span>
-<span class="n">UINT32_3BITXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0x4080</span><span class="p">)</span>
-<span class="n">UINT32_4BITXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0x204080</span><span class="p">)</span>
-<span class="n">UINT32_5BITXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0x10204080</span><span class="p">)</span>
+<span class="n">UINT32_1BYTEXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0x00000080</span><span class="p">)</span>
+<span class="n">UINT32_2BYTEXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0x00004080</span><span class="p">)</span>
+<span class="n">UINT32_3BYTEXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0x00204080</span><span class="p">)</span>
+<span class="n">UINT32_4BYTEXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0x10204080</span><span class="p">)</span>
 
 <span class="n">INT64_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">INT64_MAX</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">(</span><span class="n">Limits</span><span class="o">.</span><span class="n">MAXINT64</span><span class="p">)</span>
@@ -146,14 +146,14 @@
 <span class="n">UINT64_512T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">562949953421312</span><span class="p">)</span>
 <span class="n">UINT64_64P</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">72057594037927936</span><span class="p">)</span>
 
-<span class="n">UINT64_2BITXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x80</span><span class="p">)</span>
-<span class="n">UINT64_3BITXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x4080</span><span class="p">)</span>
-<span class="n">UINT64_4BITXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x204080</span><span class="p">)</span>
-<span class="n">UINT64_5BITXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x10204080</span><span class="p">)</span>
-<span class="n">UINT64_6BITXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x810204080</span><span class="p">)</span>
-<span class="n">UINT64_7BITXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x40810204080</span><span class="p">)</span>
-<span class="n">UINT64_8BITXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x2040810204080</span><span class="p">)</span>
-<span class="n">UINT64_9BITXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x102040810204080</span><span class="p">)</span>
+<span class="n">UINT64_1BYTEXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x000000000000080</span><span class="p">)</span>
+<span class="n">UINT64_2BYTEXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x000000000004080</span><span class="p">)</span>
+<span class="n">UINT64_3BYTEXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x000000000204080</span><span class="p">)</span>
+<span class="n">UINT64_4BYTEXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x000000010204080</span><span class="p">)</span>
+<span class="n">UINT64_5BYTEXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x000000810204080</span><span class="p">)</span>
+<span class="n">UINT64_6BYTEXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x000040810204080</span><span class="p">)</span>
+<span class="n">UINT64_7BYTEXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x002040810204080</span><span class="p">)</span>
+<span class="n">UINT64_8BYTEXOR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x102040810204080</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="Decoder"><a class="viewcode-back" href="../../../../sttp.transport.tssc.html#sttp.transport.tssc.decoder.Decoder">[docs]</a><span class="k">class</span> <span class="nc">Decoder</span><span class="p">:</span>
@@ -254,7 +254,6 @@
             <span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_nextcode</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">CodeWords</span><span class="o">.</span><span class="n">TIMEDELTA1FORWARD</span><span class="p">):</span>
                 <span class="k">return</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">err</span>
 
-        <span class="c1"># Assign decoded measurement ID to out parameter</span>
         <span class="n">pointid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lastpoint</span><span class="o">.</span><span class="n">prevnextpointid1</span>
 
         <span class="c1"># Setup tracking for metadata associated with measurement ID and next point to decode</span>
@@ -502,24 +501,24 @@
 
         <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">UINT32_16K</span><span class="p">:</span>
             <span class="n">position</span> <span class="o">+=</span> <span class="mi">2</span>
-            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT32_2BITXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT32_1BYTEXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
 
         <span class="n">value</span> <span class="o">^=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">stream</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&lt;&lt;</span> <span class="n">UINT32_14</span>
 
         <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">UINT32_2M</span><span class="p">:</span>
             <span class="n">position</span> <span class="o">+=</span> <span class="mi">3</span>
-            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT32_3BITXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT32_2BYTEXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
 
         <span class="n">value</span> <span class="o">^=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">stream</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">&lt;&lt;</span> <span class="n">UINT32_21</span>
 
         <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">UINT32_256M</span><span class="p">:</span>
             <span class="n">position</span> <span class="o">+=</span> <span class="mi">4</span>
-            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT32_4BITXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT32_3BYTEXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
 
         <span class="n">value</span> <span class="o">^=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">stream</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span> <span class="o">&lt;&lt;</span> <span class="n">UINT32_28</span>
         <span class="n">position</span> <span class="o">+=</span> <span class="mi">5</span>
 
-        <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT32_5BITXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT32_4BYTEXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
 
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_decode_7bituint64</span><span class="p">(</span><span class="n">stream</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">position</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
@@ -534,48 +533,48 @@
 
         <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">UINT64_16K</span><span class="p">:</span>
             <span class="n">position</span> <span class="o">+=</span> <span class="mi">2</span>
-            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT64_2BITXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT64_1BYTEXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
 
         <span class="n">value</span> <span class="o">^=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">stream</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&lt;&lt;</span> <span class="n">UINT64_14</span>
 
         <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">UINT64_2M</span><span class="p">):</span>
             <span class="n">position</span> <span class="o">+=</span> <span class="mi">3</span>
-            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT64_3BITXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT64_2BYTEXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
 
         <span class="n">value</span> <span class="o">^=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">stream</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">&lt;&lt;</span> <span class="n">UINT64_21</span>
 
         <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">UINT64_256M</span><span class="p">:</span>
             <span class="n">position</span> <span class="o">+=</span> <span class="mi">4</span>
-            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT64_4BITXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT64_3BYTEXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
 
         <span class="n">value</span> <span class="o">^=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">stream</span><span class="p">[</span><span class="mi">4</span><span class="p">])</span> <span class="o">&lt;&lt;</span> <span class="n">UINT64_28</span>
 
         <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">UINT64_32G</span><span class="p">:</span>
             <span class="n">position</span> <span class="o">+=</span> <span class="mi">5</span>
-            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT64_5BITXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT64_4BYTEXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
 
         <span class="n">value</span> <span class="o">^=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">stream</span><span class="p">[</span><span class="mi">5</span><span class="p">])</span> <span class="o">&lt;&lt;</span> <span class="n">UINT64_35</span>
 
         <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">UINT64_4T</span><span class="p">:</span>
             <span class="n">position</span> <span class="o">+=</span> <span class="mi">6</span>
-            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT64_6BITXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT64_5BYTEXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
 
         <span class="n">value</span> <span class="o">^=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">stream</span><span class="p">[</span><span class="mi">6</span><span class="p">])</span> <span class="o">&lt;&lt;</span> <span class="n">UINT64_42</span>
 
         <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">UINT64_512T</span><span class="p">:</span>
             <span class="n">position</span> <span class="o">+=</span> <span class="mi">7</span>
-            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT64_7BITXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT64_6BYTEXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
 
         <span class="n">value</span> <span class="o">^=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">stream</span><span class="p">[</span><span class="mi">7</span><span class="p">])</span> <span class="o">&lt;&lt;</span> <span class="n">UINT64_49</span>
 
         <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="n">UINT64_64P</span><span class="p">:</span>
             <span class="n">position</span> <span class="o">+=</span> <span class="mi">8</span>
-            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT64_8BITXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT64_7BYTEXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
 
         <span class="n">value</span> <span class="o">^=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">stream</span><span class="p">[</span><span class="mi">8</span><span class="p">])</span> <span class="o">&lt;&lt;</span> <span class="n">UINT64_56</span>
         <span class="n">position</span> <span class="o">+=</span> <span class="mi">9</span>
 
-        <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT64_9BITXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="p">(</span><span class="n">value</span> <span class="o">^</span> <span class="n">UINT64_8BYTEXOR</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

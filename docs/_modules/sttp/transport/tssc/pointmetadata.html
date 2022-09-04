@@ -130,8 +130,6 @@
 <span class="n">BYTE_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">byte</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">BYTE_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">byte</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 <span class="n">BYTE_2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">byte</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">BYTE_3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">byte</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">BYTE_4</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">byte</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
 
 <span class="n">INT32_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">INT32_1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
@@ -141,7 +139,6 @@
 <span class="n">INT32_6</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="mi">6</span><span class="p">)</span>
 <span class="n">INT32_7</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span>
 <span class="n">INT32_8</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
-<span class="n">INT32_MAX</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">Limits</span><span class="o">.</span><span class="n">MAXINT32</span><span class="p">)</span>
 
 <span class="n">UINT32_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
@@ -163,7 +160,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_commands_sent_sincelastchange</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="c1"># Bit codes for the 4 modes of encoding</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="n">BYTE_4</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="mi">4</span>
 
         <span class="c1"># Mode 1 means no prefix</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_mode21</span> <span class="o">=</span> <span class="n">BYTE_0</span>
@@ -179,21 +176,21 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_readbits5</span> <span class="o">=</span> <span class="n">readbits5</span>
 
 <div class="viewcode-block" id="PointMetadata.write_code"><a class="viewcode-back" href="../../../../sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.PointMetadata.write_code">[docs]</a>    <span class="k">def</span> <span class="nf">write_code</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]:</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">==</span> <span class="n">BYTE_1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_writebits</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">INT32_5</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">==</span> <span class="n">BYTE_2</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">code</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mode21</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_writebits</span><span class="p">(</span><span class="n">INT32_1</span><span class="p">,</span> <span class="n">INT32_1</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_writebits</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">INT32_6</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">==</span> <span class="n">BYTE_3</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">code</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mode31</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_writebits</span><span class="p">(</span><span class="n">INT32_1</span><span class="p">,</span> <span class="n">INT32_1</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">code</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mode301</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_writebits</span><span class="p">(</span><span class="n">INT32_1</span><span class="p">,</span> <span class="n">INT32_2</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_writebits</span><span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">INT32_7</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">==</span> <span class="n">BYTE_4</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">code</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mode41</span><span class="p">):</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_writebits</span><span class="p">(</span><span class="n">INT32_1</span><span class="p">,</span> <span class="n">INT32_1</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">code</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mode401</span><span class="p">):</span>
@@ -208,21 +205,21 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_update_codestatistics</span><span class="p">(</span><span class="n">code</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="PointMetadata.read_code"><a class="viewcode-back" href="../../../../sttp.transport.tssc.html#sttp.transport.tssc.pointmetadata.PointMetadata.read_code">[docs]</a>    <span class="k">def</span> <span class="nf">read_code</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>  <span class="c1"># sourcery skip: assign-if-exp</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">==</span> <span class="n">BYTE_1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readbits5</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">==</span> <span class="n">BYTE_2</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readbit</span><span class="p">()</span> <span class="o">==</span> <span class="n">INT32_1</span><span class="p">:</span>
                 <span class="n">code</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mode21</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readbits5</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">==</span> <span class="n">BYTE_3</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readbit</span><span class="p">()</span> <span class="o">==</span> <span class="n">INT32_1</span><span class="p">:</span>
                 <span class="n">code</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mode31</span><span class="p">)</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readbit</span><span class="p">()</span> <span class="o">==</span> <span class="n">INT32_1</span><span class="p">:</span>
                 <span class="n">code</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mode301</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">code</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readbits5</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">==</span> <span class="n">BYTE_4</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readbit</span><span class="p">()</span> <span class="o">==</span> <span class="n">INT32_1</span><span class="p">:</span>
                 <span class="n">code</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_mode41</span><span class="p">)</span>
             <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readbit</span><span class="p">()</span> <span class="o">==</span> <span class="n">INT32_1</span><span class="p">:</span>
@@ -256,18 +253,18 @@
 
     <span class="k">def</span> <span class="nf">_adapt_commands</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]:</span>
         <span class="n">code1</span> <span class="o">=</span> <span class="n">BYTE_0</span>
-        <span class="n">count1</span> <span class="o">=</span> <span class="n">INT32_0</span>
+        <span class="n">count1</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="n">code2</span> <span class="o">=</span> <span class="n">BYTE_1</span>
-        <span class="n">count2</span> <span class="o">=</span> <span class="n">INT32_0</span>
+        <span class="n">count2</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="n">code3</span> <span class="o">=</span> <span class="n">BYTE_2</span>
-        <span class="n">count3</span> <span class="o">=</span> <span class="n">INT32_0</span>
+        <span class="n">count3</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="n">total</span> <span class="o">=</span> <span class="n">INT32_0</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_commandstats</span><span class="p">)):</span>
-            <span class="n">count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_commandstats</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">count</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_commandstats</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_commandstats</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">BYTE_0</span>
 
             <span class="n">total</span> <span class="o">+=</span> <span class="n">count</span>
@@ -292,28 +289,28 @@
                     <span class="n">code3</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">byte</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
                     <span class="n">count3</span> <span class="o">=</span> <span class="n">count</span>
 
-        <span class="n">mode1size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">total</span> <span class="o">*</span> <span class="mi">5</span><span class="p">)</span>
-        <span class="n">mode2size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">count1</span> <span class="o">+</span> <span class="p">(</span><span class="n">total</span> <span class="o">-</span> <span class="n">count1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">6</span><span class="p">)</span>
-        <span class="n">mode3size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">count1</span> <span class="o">+</span> <span class="n">count2</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">total</span> <span class="o">-</span> <span class="n">count1</span> <span class="o">-</span> <span class="n">count2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">7</span><span class="p">)</span>
-        <span class="n">mode4size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">count1</span> <span class="o">+</span> <span class="n">count2</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">count3</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">(</span><span class="n">total</span> <span class="o">-</span> <span class="n">count1</span> <span class="o">-</span> <span class="n">count2</span> <span class="o">-</span> <span class="n">count3</span><span class="p">)</span> <span class="o">*</span> <span class="mi">8</span><span class="p">)</span>
+        <span class="n">mode1size</span> <span class="o">=</span> <span class="n">total</span> <span class="o">*</span> <span class="mi">5</span>
+        <span class="n">mode2size</span> <span class="o">=</span> <span class="n">count1</span> <span class="o">+</span> <span class="p">(</span><span class="n">total</span> <span class="o">-</span> <span class="n">count1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">6</span>
+        <span class="n">mode3size</span> <span class="o">=</span> <span class="n">count1</span> <span class="o">+</span> <span class="n">count2</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">total</span> <span class="o">-</span> <span class="n">count1</span> <span class="o">-</span> <span class="n">count2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">7</span>
+        <span class="n">mode4size</span> <span class="o">=</span> <span class="n">count1</span> <span class="o">+</span> <span class="n">count2</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">count3</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">(</span><span class="n">total</span> <span class="o">-</span> <span class="n">count1</span> <span class="o">-</span> <span class="n">count2</span> <span class="o">-</span> <span class="n">count3</span><span class="p">)</span> <span class="o">*</span> <span class="mi">8</span>
 
-        <span class="n">minsize</span> <span class="o">=</span> <span class="n">INT32_MAX</span>
+        <span class="n">minsize</span> <span class="o">=</span> <span class="n">Limits</span><span class="o">.</span><span class="n">MAXINT32</span>
         <span class="n">minsize</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">minsize</span><span class="p">,</span> <span class="n">mode1size</span><span class="p">)</span>
         <span class="n">minsize</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">minsize</span><span class="p">,</span> <span class="n">mode2size</span><span class="p">)</span>
         <span class="n">minsize</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">minsize</span><span class="p">,</span> <span class="n">mode3size</span><span class="p">)</span>
         <span class="n">minsize</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">minsize</span><span class="p">,</span> <span class="n">mode4size</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">minsize</span> <span class="o">==</span> <span class="n">mode1size</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="n">BYTE_1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">elif</span> <span class="n">minsize</span> <span class="o">==</span> <span class="n">mode2size</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="n">BYTE_2</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="mi">2</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mode21</span> <span class="o">=</span> <span class="n">code1</span>
         <span class="k">elif</span> <span class="n">minsize</span> <span class="o">==</span> <span class="n">mode3size</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="n">BYTE_3</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="mi">3</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mode31</span> <span class="o">=</span> <span class="n">code1</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mode301</span> <span class="o">=</span> <span class="n">code2</span>
         <span class="k">elif</span> <span class="n">minsize</span> <span class="o">==</span> <span class="n">mode4size</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="n">BYTE_4</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mode</span> <span class="o">=</span> <span class="mi">4</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mode41</span> <span class="o">=</span> <span class="n">code1</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mode401</span> <span class="o">=</span> <span class="n">code2</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_mode4001</span> <span class="o">=</span> <span class="n">code3</span>

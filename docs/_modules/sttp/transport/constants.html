@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.constants &mdash; sttp/pyapi 0.3.0 documentation</title>
+  <title>sttp.transport.constants &mdash; sttp/pyapi 0.4.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
@@ -87,8 +87,141 @@
 <span class="c1">#</span>
 <span class="c1"># ******************************************************************************************************</span>
 
+<span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">Empty</span>
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">IntEnum</span><span class="p">,</span> <span class="n">IntFlag</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+
+<div class="viewcode-block" id="Defaults"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.constants.Defaults">[docs]</a><span class="k">class</span> <span class="nc">Defaults</span><span class="p">:</span>
+    <span class="n">MAXRETRIES</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for maximum number of retries for a connection attempt.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">RETRYINTERVAL</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for retry interval in seconds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">MAXRETRYINTERVAL</span> <span class="o">=</span> <span class="mf">30.0</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for maximum retry interval in seconds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">AUTORECONNECT</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for auto-reconnect flag.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">AUTOREQUESTMETADATA</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for auto-request metadata flag.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">AUTOSUBSCRIBE</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for auto-subscribe flag.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">COMPRESS_PAYLOADDATA</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for compress payload data flag.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">COMPRESS_METADATA</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for compress metadata flag.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">COMPRESS_SIGNALINDEXCACHE</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for compress signal index cache flag.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">METADATAFILTERS</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for metadata filters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SOCKET_TIMEOUT</span> <span class="o">=</span> <span class="mf">2.0</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for socket timeout in seconds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">VERSION</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">byte</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for STTP version.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">FILTEREXPRESSION</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for filter expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">THROTTLED</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for throttled flag.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">PUBLISHINTERVAL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for publish interval in seconds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">UDPDATACHANNEL</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for UDP data channel flag.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DATACHANNEL_LOCALPORT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for local port for data channel.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DATACHANNEL_INTERFACE</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for interface for data channel.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">INCLUDETIME</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for include time flag.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">USE_MILLISECONDRESOLUTION</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for use millisecond resolution flag.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">REQUEST_NANVALUEFILTER</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for request nan-value filter flag.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">STARTTIME</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for start time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">STOPTIME</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for stop time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CONSTRAINTPARAMETERS</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for constraint parameters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">PROCESSINGINTERVAL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for processing interval in seconds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">EXTRA_CONNECTIONSTRING_PARAMETERS</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Default for extra connection string parameters.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 
 <div class="viewcode-block" id="StateFlags"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.constants.StateFlags">[docs]</a><span class="k">class</span> <span class="nc">StateFlags</span><span class="p">(</span><span class="n">IntFlag</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>

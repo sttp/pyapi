@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.subscriptioninfo &mdash; STTP 0.1.0 documentation</title>
+  <title>sttp.transport.subscriptioninfo &mdash; sttp/pyapi 0.4.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -25,7 +26,8 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> STTP
+            <a href="../../../index.html" class="icon icon-home"> sttp/pyapi
+            <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -43,7 +45,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../../index.html">STTP</a>
+          <a href="../../../index.html">sttp/pyapi</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -85,7 +87,7 @@
 <span class="c1">#</span>
 <span class="c1">#******************************************************************************************************</span>
 
-<span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">Empty</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">Defaults</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
@@ -94,19 +96,20 @@
 <span class="sd">    Defines subscription related settings for a `DataSubscriber` instance.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">DEFAULT_FILTEREXPRESSION</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
-    <span class="n">DEFAULT_THROTTLED</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">DEFAULT_PUBLISHINTERVAL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
-    <span class="n">DEFAULT_UDPDATACHANNEL</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">DEFAULT_DATACHANNEL_LOCALPORT</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">DEFAULT_INCLUDETIME</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="n">DEFAULT_USE_MILLISECONDRESOLUTION</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">DEFAULT_REQUEST_NANVALUEFILTER</span> <span class="o">=</span> <span class="kc">False</span>
-    <span class="n">DEFAULT_STARTTIME</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
-    <span class="n">DEFAULT_STOPTIME</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
-    <span class="n">DEFAULT_CONSTRAINTPARAMETERS</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
-    <span class="n">DEFAULT_PROCESSINGINTERVAL</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">DEFAULT_EXTRA_CONNECTIONSTRING_PARAMETERS</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
+    <span class="n">DEFAULT_FILTEREXPRESSION</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">FILTEREXPRESSION</span>
+    <span class="n">DEFAULT_THROTTLED</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">THROTTLED</span>
+    <span class="n">DEFAULT_PUBLISHINTERVAL</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">PUBLISHINTERVAL</span>
+    <span class="n">DEFAULT_UDPDATACHANNEL</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">UDPDATACHANNEL</span>
+    <span class="n">DEFAULT_DATACHANNEL_LOCALPORT</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">DATACHANNEL_LOCALPORT</span>
+    <span class="n">DEFAULT_DATACHANNEL_INTERFACE</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">DATACHANNEL_INTERFACE</span>
+    <span class="n">DEFAULT_INCLUDETIME</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">INCLUDETIME</span>
+    <span class="n">DEFAULT_USE_MILLISECONDRESOLUTION</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">USE_MILLISECONDRESOLUTION</span>
+    <span class="n">DEFAULT_REQUEST_NANVALUEFILTER</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">REQUEST_NANVALUEFILTER</span>
+    <span class="n">DEFAULT_STARTTIME</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">STARTTIME</span>
+    <span class="n">DEFAULT_STOPTIME</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">STOPTIME</span>
+    <span class="n">DEFAULT_CONSTRAINTPARAMETERS</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">CONSTRAINTPARAMETERS</span>
+    <span class="n">DEFAULT_PROCESSINGINTERVAL</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">PROCESSINGINTERVAL</span>
+    <span class="n">DEFAULT_EXTRA_CONNECTIONSTRING_PARAMETERS</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">EXTRA_CONNECTIONSTRING_PARAMETERS</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
@@ -114,6 +117,7 @@
                  <span class="n">publishinterval</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="n">udpdatachannel</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="n">datachannel_localport</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">datachannel_interface</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="n">includetime</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="n">usemillisecondresolution</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="n">requestnanvaluefilter</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
@@ -158,6 +162,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">datachannel_localport</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_DATACHANNEL_LOCALPORT</span> <span class="k">if</span> <span class="n">datachannel_localport</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">datachannel_localport</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the desired UDP port to use for publication.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">datachannel_interface</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_DATACHANNEL_INTERFACE</span> <span class="k">if</span> <span class="n">datachannel_interface</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">datachannel_interface</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the desired network interface to use for UDP publication.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">includetime</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_INCLUDETIME</span> <span class="k">if</span> <span class="n">includetime</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">includetime</span>
@@ -216,13 +225,27 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+    <p></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+  
+ 
+<hr />
+<p>
+    <a href="https://github.com/sttp/pyapi">GitHub Home</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
+</p>
+<br /><br />
+Copyright © 2022, <a href="https://gridprotectionalliance.org/" target="_blank">Grid&nbsp;Protection&nbsp;Alliance</a>
+<a href="https://github.com/sttp/pyapi">
+    <img align="right" style="margin-top: -50px"
+        src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/LockPython_64High.png">
+</a>
+
 
 </footer>
         </div>

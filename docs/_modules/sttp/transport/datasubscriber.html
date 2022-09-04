@@ -96,7 +96,7 @@
 <span class="kn">from</span> <span class="nn">..metadata.record.measurement</span> <span class="kn">import</span> <span class="n">MeasurementRecord</span>
 <span class="kn">from</span> <span class="nn">..metadata.cache</span> <span class="kn">import</span> <span class="n">MetadataCache</span>
 <span class="kn">from</span> <span class="nn">.bufferblock</span> <span class="kn">import</span> <span class="n">BufferBlock</span>
-<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">OperationalModes</span><span class="p">,</span> <span class="n">OperationalEncoding</span><span class="p">,</span> <span class="n">CompressionModes</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">OperationalModes</span><span class="p">,</span> <span class="n">OperationalEncoding</span><span class="p">,</span> <span class="n">CompressionModes</span><span class="p">,</span> <span class="n">Defaults</span>
 <span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">DataPacketFlags</span><span class="p">,</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="n">ServerResponse</span><span class="p">,</span> <span class="n">StateFlags</span>
 <span class="kn">from</span> <span class="nn">.subscriptioninfo</span> <span class="kn">import</span> <span class="n">SubscriptionInfo</span>
 <span class="kn">from</span> <span class="nn">.subscriberconnector</span> <span class="kn">import</span> <span class="n">SubscriberConnector</span>
@@ -129,13 +129,14 @@
 <span class="sd">    Represents a client subscription for an STTP connection.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">DEFAULT_COMPRESS_PAYLOADDATA</span> <span class="o">=</span> <span class="kc">True</span>       <span class="c1"># Defaults to TSSC</span>
-    <span class="n">DEFAULT_COMPRESS_METADATA</span> <span class="o">=</span> <span class="kc">True</span>          <span class="c1"># Defaults to Gzip</span>
-    <span class="n">DEFAULT_COMPRESS_SIGNALINDEXCACHE</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Defaults to Gzip</span>
-    <span class="n">DEFAULT_VERSION</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">byte</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">DEFAULT_COMPRESS_PAYLOADDATA</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">COMPRESS_PAYLOADDATA</span>            <span class="c1"># Defaults to TSSC</span>
+    <span class="n">DEFAULT_COMPRESS_METADATA</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">COMPRESS_METADATA</span>                  <span class="c1"># Defaults to Gzip</span>
+    <span class="n">DEFAULT_COMPRESS_SIGNALINDEXCACHE</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">COMPRESS_SIGNALINDEXCACHE</span>  <span class="c1"># Defaults to Gzip</span>
+    <span class="n">DEFAULT_VERSION</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">VERSION</span>
     <span class="n">DEFAULT_STTP_SOURCEINFO</span> <span class="o">=</span> <span class="n">Version</span><span class="o">.</span><span class="n">STTP_SOURCE</span>
     <span class="n">DEFAULT_STTP_VERSIONINFO</span> <span class="o">=</span> <span class="n">Version</span><span class="o">.</span><span class="n">STTP_VERSION</span>
     <span class="n">DEFAULT_STTP_UPDATEDONINFO</span> <span class="o">=</span> <span class="n">Version</span><span class="o">.</span><span class="n">STTP_UPDATEDON</span>
+    <span class="n">DEFAULT_SOCKET_TIMEOUT</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">SOCKET_TIMEOUT</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
                  <span class="n">compress_payloaddata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
@@ -144,7 +145,8 @@
                  <span class="n">version</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">byte</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="n">sttp_sourceinfo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="n">sttp_versioninfo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
-                 <span class="n">sttp_updatedoninfo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span>
+                 <span class="n">sttp_updatedoninfo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">socket_timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">...</span>
                  <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Creates a new `DataSubscriber`.</span>
@@ -159,9 +161,6 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_socket</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_responsethread</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Thread</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_readbuffer</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">MAXPACKET_SIZE</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">BinaryStream</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_writebuffer</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">MAXPACKET_SIZE</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_responsethread</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Thread</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -278,6 +277,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">metadatacache</span> <span class="o">=</span> <span class="n">MetadataCache</span><span class="p">()</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the metadata cache associated with this `DataSubscriber`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">socket_timeout</span> <span class="o">=</span> <span class="n">DataSubscriber</span><span class="o">.</span><span class="n">DEFAULT_SOCKET_TIMEOUT</span> <span class="k">if</span> <span class="n">socket_timeout</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">socket_timeout</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the socket timeout in seconds for the `DataSubscriber` connection.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Measurement parsing</span>
@@ -432,6 +436,7 @@
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">IPPROTO_TCP</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_socket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">IPPROTO_TCP</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">TCP_NODELAY</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_socket</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">socket_timeout</span><span class="p">)</span>
 
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">hostendpoint</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">getaddrinfo</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">port</span><span class="p">),</span> <span class="n">family</span><span class="o">=</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">proto</span><span class="o">=</span><span class="n">socket</span><span class="o">.</span><span class="n">IPPROTO_TCP</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span>
@@ -487,7 +492,8 @@
 
             <span class="k">try</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_DGRAM</span><span class="p">)</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">udpport</span><span class="p">))</span>  <span class="c1"># lgtm [py/bind-socket-all-network-interfaces]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="n">subscription</span><span class="o">.</span><span class="n">datachannel_interface</span><span class="p">,</span> <span class="n">udpport</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">socket_timeout</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
                 <span class="k">return</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;failed to open UDP socket for port </span><span class="si">{</span><span class="n">udpport</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -540,6 +546,7 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SHUT_RDWR</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exception while disconnecting data subscriber UDP data channel: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -610,14 +617,14 @@
         <span class="c1"># Release queues and close sockets so that threads can shut down gracefully</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_socket</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_socket</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SHUT_RDWR</span><span class="p">)</span>  <span class="c1"># Important for _commandchannel_responsethread termination</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_socket</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SHUT_RDWR</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_socket</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exception while disconnecting data subscriber TCP command channel: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SHUT_RDWR</span><span class="p">)</span>  <span class="c1"># Important for _datachannel_responsethread termination</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">SHUT_RDWR</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exception while disconnecting data subscriber UDP data channel: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -679,60 +686,59 @@
 
     <span class="k">def</span> <span class="nf">_run_commandchannel_responsethread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">def</span> <span class="nf">recv_data</span><span class="p">(</span><span class="n">length</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_socket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">return</span> <span class="nb">bytes</span><span class="p">()</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_socket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span><span class="p">:</span>
+                    <span class="k">continue</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span> <span class="o">=</span> <span class="n">BinaryStream</span><span class="p">(</span><span class="n">StreamEncoder</span><span class="p">(</span><span class="n">recv_data</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="o">...</span><span class="p">))</span>
+        <span class="n">reader</span> <span class="o">=</span> <span class="n">BinaryStream</span><span class="p">(</span><span class="n">StreamEncoder</span><span class="p">(</span><span class="n">recv_data</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="o">...</span><span class="p">))</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">MAXPACKET_SIZE</span><span class="p">)</span>
 
         <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">read_all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_readbuffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">PAYLOADHEADER_SIZE</span><span class="p">)</span>
+                <span class="n">reader</span><span class="o">.</span><span class="n">read_all</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">PAYLOADHEADER_SIZE</span><span class="p">)</span>
 
                 <span class="c1"># Gather statistics</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_total_commandchannel_bytesreceived</span> <span class="o">+=</span> <span class="n">PAYLOADHEADER_SIZE</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">_read_payloadheader</span><span class="p">()</span>
+                <span class="n">packetsize</span> <span class="o">=</span> <span class="n">BigEndian</span><span class="o">.</span><span class="n">to_uint32</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">packetsize</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">buffer</span><span class="p">):</span>
+                    <span class="n">buffer</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">packetsize</span><span class="p">)</span>
+
+                <span class="c1"># Read packet (payload body)</span>
+                <span class="c1"># This read method is guaranteed not to return until the</span>
+                <span class="c1"># requested size has been read or an error has occurred.</span>
+                <span class="n">reader</span><span class="o">.</span><span class="n">read_all</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">packetsize</span><span class="p">)</span>
+
+                <span class="c1"># Gather statistics</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_total_commandchannel_bytesreceived</span> <span class="o">+=</span> <span class="n">packetsize</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="c1"># Read error, connection may have been closed by peer; terminate connection</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_connectionterminated</span><span class="p">()</span>
                 <span class="k">return</span>
 
-    <span class="k">def</span> <span class="nf">_read_payloadheader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_disconnecting</span><span class="p">:</span>
-            <span class="k">return</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_disconnecting</span><span class="p">:</span>
+                <span class="k">return</span>
 
-        <span class="n">packetsize</span> <span class="o">=</span> <span class="n">BigEndian</span><span class="o">.</span><span class="n">to_uint32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_readbuffer</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">packetsize</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_readbuffer</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_readbuffer</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">packetsize</span><span class="p">)</span>
-
-        <span class="c1"># Read packet (payload body)</span>
-        <span class="c1"># This read method is guaranteed not to return until the</span>
-        <span class="c1"># requested size has been read or an error has occurred.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="o">.</span><span class="n">read_all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_readbuffer</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">packetsize</span><span class="p">)</span>
-
-        <span class="c1"># Gather statistics</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_total_commandchannel_bytesreceived</span> <span class="o">+=</span> <span class="n">packetsize</span>
-
-        <span class="c1"># Process response</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_process_serverresponse</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_readbuffer</span><span class="p">[:</span><span class="n">packetsize</span><span class="p">]))</span>
-        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exception processing server response: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_connectionterminated</span><span class="p">()</span>
-            <span class="k">return</span>
-
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Process response</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_process_serverresponse</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">buffer</span><span class="p">[:</span><span class="n">packetsize</span><span class="p">]))</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exception processing server response: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_connectionterminated</span><span class="p">()</span>
+                <span class="k">return</span>
 
     <span class="c1"># If the user defines a separate UDP channel for their</span>
     <span class="c1"># subscription, data packets get handled from this thread.</span>
     <span class="k">def</span> <span class="nf">_run_datachannel_responsethread</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">def</span> <span class="nf">recv_data</span><span class="p">(</span><span class="n">length</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span><span class="o">.</span><span class="n">recvfrom</span><span class="p">(</span><span class="n">length</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="k">return</span> <span class="nb">bytes</span><span class="p">()</span>
+            <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span><span class="o">.</span><span class="n">recvfrom</span><span class="p">(</span><span class="n">length</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span><span class="p">:</span>
+                    <span class="k">continue</span>
 
         <span class="n">reader</span> <span class="o">=</span> <span class="n">StreamEncoder</span><span class="p">(</span><span class="n">recv_data</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">_</span><span class="p">:</span> <span class="o">...</span><span class="p">)</span>
         <span class="n">buffer</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">MAXPACKET_SIZE</span><span class="p">)</span>
@@ -743,11 +749,19 @@
 
                 <span class="c1"># Gather statistics</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_total_datachannel_bytesreceived</span> <span class="o">+=</span> <span class="n">length</span>
-
-                <span class="c1"># Process response</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_process_serverresponse</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">buffer</span><span class="p">[:</span><span class="n">length</span><span class="p">]))</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="c1"># Read error, connection may have been closed by peer; terminate connection</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_connectionterminated</span><span class="p">()</span>
+                <span class="k">return</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_disconnecting</span><span class="p">:</span>
+                <span class="k">return</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Process response</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_process_serverresponse</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">buffer</span><span class="p">[:</span><span class="n">length</span><span class="p">]))</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exception processing server response: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_connectionterminated</span><span class="p">()</span>
                 <span class="k">return</span>
 
@@ -1059,9 +1073,9 @@
 
             <span class="k">if</span> <span class="n">success</span><span class="p">:</span>
                 <span class="n">measurements</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">Measurement</span><span class="p">(</span>
-                    <span class="n">signalindexcache</span><span class="o">.</span><span class="n">signalid</span><span class="p">(</span><span class="n">pointid</span><span class="p">),</span> 
+                    <span class="n">signalindexcache</span><span class="o">.</span><span class="n">signalid</span><span class="p">(</span><span class="n">pointid</span><span class="p">),</span>
                     <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">value</span><span class="p">),</span>
-                    <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">timestamp</span><span class="p">),</span> 
+                    <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">timestamp</span><span class="p">),</span>
                     <span class="n">StateFlags</span><span class="p">(</span><span class="n">stateflags</span><span class="p">))</span>
 
                 <span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -1189,25 +1203,23 @@
 
         <span class="n">packetsize</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">commandbuffersize</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">packetsize</span> <span class="o">+</span> <span class="n">PAYLOADHEADER_SIZE</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">commandbuffersize</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_writebuffer</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_writebuffer</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">commandbuffersize</span><span class="p">)</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="n">commandbuffersize</span><span class="p">)</span>
 
         <span class="c1"># Insert packet size</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_writebuffer</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">BigEndian</span><span class="o">.</span><span class="n">from_uint32</span><span class="p">(</span><span class="n">packetsize</span><span class="p">)</span>
+        <span class="n">buffer</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">BigEndian</span><span class="o">.</span><span class="n">from_uint32</span><span class="p">(</span><span class="n">packetsize</span><span class="p">)</span>
 
         <span class="c1"># Insert command code</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_writebuffer</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">commandcode</span>
+        <span class="n">buffer</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">commandcode</span>
 
         <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">data</span><span class="p">:</span>  <span class="c1"># len &gt; 0</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_writebuffer</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="n">commandbuffersize</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+            <span class="n">buffer</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="n">commandbuffersize</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
 
         <span class="k">if</span> <span class="n">commandcode</span> <span class="o">==</span> <span class="n">ServerCommand</span><span class="o">.</span><span class="n">METADATAREFRESH</span><span class="p">:</span>
             <span class="c1"># Track start time of metadata request to calculate round-trip receive time</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_metadatarequested</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_socket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_writebuffer</span><span class="p">[:</span><span class="n">commandbuffersize</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_socket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
             <span class="c1"># Write error, connection may have been closed by peer; terminate connection</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to send server command - disconnecting: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>

@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.data.datatable &mdash; sttp/pyapi 0.3.0 documentation</title>
+  <title>sttp.data.datatable &mdash; sttp/pyapi 0.4.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
@@ -26,6 +27,7 @@
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
             <a href="../../../index.html" class="icon icon-home"> sttp/pyapi
+            <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
@@ -335,7 +337,7 @@
 
         <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DataTable.select"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.datatable.DataTable.select">[docs]</a>    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sortorder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">DataRow</span><span class="p">]],</span> <span class="ne">Exception</span><span class="p">]:</span>
+<div class="viewcode-block" id="DataTable.select"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.datatable.DataTable.select">[docs]</a>    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sortorder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">DataRow</span><span class="p">]],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the rows matching the filter expression criteria in the specified sort order. The `filterexpression`</span>
 <span class="sd">        parameter should be in the syntax of a SQL WHERE expression but should not include the WHERE keyword.</span>
@@ -372,7 +374,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, Grid Protection Alliance.</p>
+    <p></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
@@ -386,6 +388,12 @@
     &nbsp;&nbsp;•&nbsp;&nbsp;
     <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
 </p>
+<br /><br />
+Copyright © 2022, <a href="https://gridprotectionalliance.org/" target="_blank">Grid&nbsp;Protection&nbsp;Alliance</a>
+<a href="https://github.com/sttp/pyapi">
+    <img align="right" style="margin-top: -50px"
+        src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/LockPython_64High.png">
+</a>
 
 
 </footer>

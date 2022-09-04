@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.metadata.record.measurement &mdash; sttp/pyapi 0.3.0 documentation</title>
+  <title>sttp.metadata.record.measurement &mdash; sttp/pyapi 0.4.0 documentation</title>
       <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
@@ -122,7 +122,7 @@
     <span class="n">UNKN</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>   <span class="c1"># Unknown type, see `SignalTypeName`</span>
 
 <div class="viewcode-block" id="SignalType.parse"><a class="viewcode-back" href="../../../../sttp.metadata.record.html#sttp.metadata.record.measurement.SignalType.parse">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SignalType</span><span class="p">:</span>
         <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span></div></div>
 
 
