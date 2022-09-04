@@ -343,33 +343,25 @@ class ValueExpression(Expression):
         return self._convert_fromnumeric(value.timestamp(), "DateTime", target_typevalue)
 
     @staticmethod
-    def truevalue() -> "ValueExpression":
-        """
-        Gets a `ValueExpression` that represents `True`.
-        """
-
-        return ValueExpression(ExpressionValueType.BOOLEAN, True)
-
-    @staticmethod
-    def falsevalue() -> "ValueExpression":
-        """
-        Gets a `ValueExpression` that represents `False`.
-        """
-
-        return ValueExpression(ExpressionValueType.BOOLEAN, False)
-
-    @staticmethod
-    def emptystringvalue() -> "ValueExpression":
-        """
-        Gets a `ValueExpression` that represents an empty string.
-        """
-
-        return ValueExpression(ExpressionValueType.STRING, Empty.STRING)
-
-    @staticmethod
     def nullvalue(target_valuetype: ExpressionValueType) -> "ValueExpression":
         """
         Gets a `ValueExpression` that represents a null, i.e., `None`, value of the specified `ExpressionValueType`.
         """
 
         return ValueExpression(target_valuetype, None)
+
+
+TRUEVAUE = ValueExpression(ExpressionValueType.BOOLEAN, True)
+"""
+Defines a `ValueExpression` that represents `True`.
+"""
+
+FALSEVALUE = ValueExpression(ExpressionValueType.BOOLEAN, False)
+"""
+Defines a `ValueExpression` that represents `False`.
+"""
+
+EMPTYSTRINGVALUE = ValueExpression(ExpressionValueType.STRING, Empty.STRING)
+"""
+Defines a `ValueExpression` that represents an empty string.
+"""

@@ -271,7 +271,7 @@ class DataTable:
 
         return "".join(image)
 
-    def select(self, filterexpression: str, sortorder: str, limit: int) -> Tuple[Optional[List[DataRow]], Exception]:
+    def select(self, filterexpression: str, sortorder: str, limit: int) -> Tuple[Optional[List[DataRow]], Optional[Exception]]:
         """
         Returns the rows matching the filter expression criteria in the specified sort order. The `filterexpression`
         parameter should be in the syntax of a SQL WHERE expression but should not include the WHERE keyword.

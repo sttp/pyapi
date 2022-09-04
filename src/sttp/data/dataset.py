@@ -60,8 +60,8 @@ class DataSet:
     Represents an in-memory cache of records that is structured similarly to information
     defined in a database. The data set object consists of a collection of data table objects.
     See https://sttp.github.io/documentation/data-sets/ for more information.
-    Note that this implementation uses a case insensitive map for `DataTable` name lookups.
-    Internally, case insensitive lookups are accomplished using `str.upper()`.    
+    Note that this implementation uses a case-insensitive map for `DataTable` name lookups.
+    Internally, case-insensitive lookups are accomplished using `str.upper()`.    
     """
 
     DEFAULT_NAME = "DataSet"
@@ -83,10 +83,6 @@ class DataSet:
     # Case-insensitive get table by name; None returned when value does not exist
     def __getitem__(self, key: str) -> DataTable:
         return self.table(key)
-
-    # Case-insensitive set table by name
-    def __setitem__(self, key: str, value: DataTable):
-        self._tables[key.upper()] = value
 
     def __delitem__(self, key: str):
         del self._tables[key]
@@ -119,7 +115,7 @@ class DataSet:
     def table(self, tablename: str) -> Optional[DataTable]:
         """
         Gets the `DataTable` for the specified table name if it exists;
-        otherwise, None is returned. Lookup is if columntype ==-insensitive.
+        otherwise, None is returned. Lookup is case-insensitive.
         """
 
         return self._tables.get(tablename.upper())
@@ -158,7 +154,7 @@ class DataSet:
         """
         Removes the specified table name from the `DataSet`. Returns
         True if table was removed; otherwise, False if it did not exist.
-        Lookup is if columntype ==-insensitive.
+        Lookup is case-insensitive.
         """
 
         return self._tables.pop(tablename.upper()) is not None
@@ -180,6 +176,7 @@ class DataSet:
         """
         Creates a new `DataSet` as read from the XML in the specified buffer.
         """
+
         dataset = DataSet()
         err = dataset.parse_xml(buffer)
         return dataset, err

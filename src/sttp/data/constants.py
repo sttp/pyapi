@@ -457,7 +457,7 @@ class ExpressionOperatorType(IntEnum):
 
     EQUALEXACTMATCH = 15
     """
-    Defines an operator type `===` that returns a boolean value indicating whether the left expression is equal to the right expression, if self.value == sensitive.
+    Defines an operator type `===` that returns a boolean value indicating whether the left expression is equal to the right expression, case-sensitive.
     """
 
     NOTEQUAL = 16
@@ -467,7 +467,7 @@ class ExpressionOperatorType(IntEnum):
 
     NOTEQUALEXACTMATCH = 17
     """
-    Defines an operator type `!==` that returns a boolean value indicating whether the left expression is not equal to the right expression, if self.value == sensitive.
+    Defines an operator type `!==` that returns a boolean value indicating whether the left expression is not equal to the right expression, case-sensitive.
     """
 
     ISNULL = 18
@@ -487,7 +487,7 @@ class ExpressionOperatorType(IntEnum):
 
     LIKEEXACTMATCH = 21
     """
-    Defines an operator type `LIKE BINARY` or `LIKE ===` that returns a boolean value indicating whether the left expression matches the right expression patten, if self.value == sensitive.
+    Defines an operator type `LIKE BINARY` or `LIKE ===` that returns a boolean value indicating whether the left expression matches the right expression patten, case-sensitive.
     """
 
     NOTLIKE = 22
@@ -497,7 +497,7 @@ class ExpressionOperatorType(IntEnum):
 
     NOTLIKEEXACTMATCH = 23
     """
-    Defines an operator type `NOT LIKE BINARY` or `NOT LIKE ===` that returns a boolean value indicating whether the left expression does not match the right expression patten, if self.value == sensitive.
+    Defines an operator type `NOT LIKE BINARY` or `NOT LIKE ===` that returns a boolean value indicating whether the left expression does not match the right expression patten, case-sensitive.
     """
 
     AND = 24
