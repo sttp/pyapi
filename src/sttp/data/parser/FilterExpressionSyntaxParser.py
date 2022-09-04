@@ -1,4 +1,4 @@
-# Generated from FilterExpressionSyntax.g4 by ANTLR 4.10.1
+﻿# Generated from FilterExpressionSyntax.g4 by ANTLR 4.10.1
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -380,7 +380,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.state = 56
             localctx._UNEXPECTED_CHAR = self.match(FilterExpressionSyntaxParser.UNEXPECTED_CHAR)
 
-                 panic("Unexpected character: " + (None if localctx._UNEXPECTED_CHAR is None else localctx._UNEXPECTED_CHAR.text));
+            raise RuntimeError("Unexpected character: " + (None if localctx._UNEXPECTED_CHAR is None else localctx._UNEXPECTED_CHAR.text));
                
         except RecognitionException as re:
             localctx.exception = re
