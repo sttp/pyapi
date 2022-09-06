@@ -22,6 +22,7 @@
 # ******************************************************************************************************
 
 from gsf import normalize_enumname
+from .errors import EvaluateError
 from enum import IntEnum
 from typing import Optional, Tuple
 
@@ -113,11 +114,6 @@ class ExpressionValueType(IntEnum):
     """
     Undefined value type for an expression, i.e., `None`.
     """
-
-ZEROEXPRESSIONVALUETYPE = 0
-"""
-Defines the zero value for the `ExpressionValueType` enumeration.
-"""
 
 EXPRESSIONVALUETYPELEN = ExpressionValueType.UNDEFINED + 1
 """
@@ -677,7 +673,7 @@ def derive_arithmetic_operationvaluetype(operationtype: ExpressionOperatorType, 
     if leftvaluetype == ExpressionValueType.STRING and operationtype == ExpressionOperatorType.ADD:
         return ExpressionValueType.STRING, None
 
-    return ZEROEXPRESSIONVALUETYPE, RuntimeError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"{normalize_enumname(leftvaluetype)}\" and \"{normalize_enumname(rightvaluetype)}\"")
+    return ExpressionValueType.UNDEFINED, EvaluateError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"{normalize_enumname(leftvaluetype)}\" and \"{normalize_enumname(rightvaluetype)}\"")
 
 
 def derive_arithmetic_operationvaluetype_fromboolean(operationtype: ExpressionOperatorType, rightvaluetype: ExpressionValueType) -> Tuple[ExpressionValueType, Optional[Exception]]:  # sourcery skip
@@ -694,7 +690,7 @@ def derive_arithmetic_operationvaluetype_fromboolean(operationtype: ExpressionOp
     if rightvaluetype == ExpressionValueType.STRING and operationtype == ExpressionOperatorType.ADD:
         return ExpressionValueType.STRING, None
 
-    return ZEROEXPRESSIONVALUETYPE, RuntimeError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Boolean\" and \"{normalize_enumname(rightvaluetype)}\"")
+    return ExpressionValueType.UNDEFINED, EvaluateError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Boolean\" and \"{normalize_enumname(rightvaluetype)}\"")
 
 
 def derive_arithmetic_operationvaluetype_fromint32(operationtype: ExpressionOperatorType, rightvaluetype: ExpressionValueType) -> Tuple[ExpressionValueType, Optional[Exception]]:  # sourcery skip
@@ -709,7 +705,7 @@ def derive_arithmetic_operationvaluetype_fromint32(operationtype: ExpressionOper
     if rightvaluetype == ExpressionValueType.STRING and operationtype == ExpressionOperatorType.ADD:
         return ExpressionValueType.STRING, None
 
-    return ZEROEXPRESSIONVALUETYPE, RuntimeError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Int32\" and \"{normalize_enumname(rightvaluetype)}\"")
+    return ExpressionValueType.UNDEFINED, EvaluateError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Int32\" and \"{normalize_enumname(rightvaluetype)}\"")
 
 
 def derive_arithmetic_operationvaluetype_fromint64(operationtype: ExpressionOperatorType, rightvaluetype: ExpressionValueType) -> Tuple[ExpressionValueType, Optional[Exception]]:  # sourcery skip
@@ -722,7 +718,7 @@ def derive_arithmetic_operationvaluetype_fromint64(operationtype: ExpressionOper
     if rightvaluetype == ExpressionValueType.STRING and operationtype == ExpressionOperatorType.ADD:
         return ExpressionValueType.STRING, None
 
-    return ZEROEXPRESSIONVALUETYPE, RuntimeError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Int64\" and \"{normalize_enumname(rightvaluetype)}\"")
+    return ExpressionValueType.UNDEFINED, EvaluateError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Int64\" and \"{normalize_enumname(rightvaluetype)}\"")
 
 
 def derive_arithmetic_operationvaluetype_fromdecimal(operationtype: ExpressionOperatorType, rightvaluetype: ExpressionValueType) -> Tuple[ExpressionValueType, Optional[Exception]]:  # sourcery skip
@@ -733,7 +729,7 @@ def derive_arithmetic_operationvaluetype_fromdecimal(operationtype: ExpressionOp
     if rightvaluetype == ExpressionValueType.STRING and operationtype == ExpressionOperatorType.ADD:
         return ExpressionValueType.STRING, None
 
-    return ZEROEXPRESSIONVALUETYPE, RuntimeError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Decimal\" and \"{normalize_enumname(rightvaluetype)}\"")
+    return ExpressionValueType.UNDEFINED, EvaluateError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Decimal\" and \"{normalize_enumname(rightvaluetype)}\"")
 
 
 def derive_arithmetic_operationvaluetype_fromdouble(operationtype: ExpressionOperatorType, rightvaluetype: ExpressionValueType) -> Tuple[ExpressionValueType, Optional[Exception]]:  # sourcery skip
@@ -742,7 +738,7 @@ def derive_arithmetic_operationvaluetype_fromdouble(operationtype: ExpressionOpe
     if rightvaluetype == ExpressionValueType.STRING and operationtype == ExpressionOperatorType.ADD:
         return ExpressionValueType.STRING, None
 
-    return ZEROEXPRESSIONVALUETYPE, RuntimeError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Double\" and \"{normalize_enumname(rightvaluetype)}\"")
+    return ExpressionValueType.UNDEFINED, EvaluateError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Double\" and \"{normalize_enumname(rightvaluetype)}\"")
 
 
 # sourcery skip
@@ -754,7 +750,7 @@ def derive_integer_operationvaluetype(operationtype: ExpressionOperatorType, lef
     if leftvaluetype == ExpressionValueType.INT64:
         return derive_integer_operationvaluetype_fromint64(operationtype, rightvaluetype)
 
-    return ZEROEXPRESSIONVALUETYPE, RuntimeError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"{normalize_enumname(leftvaluetype)}\" and \"{normalize_enumname(rightvaluetype)}\"")
+    return ExpressionValueType.UNDEFINED, EvaluateError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"{normalize_enumname(leftvaluetype)}\" and \"{normalize_enumname(rightvaluetype)}\"")
 
 
 def derive_integer_operationvaluetype_fromboolean(operationtype: ExpressionOperatorType, rightvaluetype: ExpressionValueType) -> Tuple[ExpressionValueType, Optional[Exception]]:  # sourcery skip
@@ -765,7 +761,7 @@ def derive_integer_operationvaluetype_fromboolean(operationtype: ExpressionOpera
     if rightvaluetype == ExpressionValueType.INT64:
         return ExpressionValueType.INT64, None
 
-    return ZEROEXPRESSIONVALUETYPE, RuntimeError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Boolean\" and \"{normalize_enumname(rightvaluetype)}\"")
+    return ExpressionValueType.UNDEFINED, EvaluateError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Boolean\" and \"{normalize_enumname(rightvaluetype)}\"")
 
 
 def derive_integer_operationvaluetype_fromint32(operationtype: ExpressionOperatorType, rightvaluetype: ExpressionValueType) -> Tuple[ExpressionValueType, Optional[Exception]]:  # sourcery skip
@@ -774,14 +770,14 @@ def derive_integer_operationvaluetype_fromint32(operationtype: ExpressionOperato
     if rightvaluetype == ExpressionValueType.INT64:
         return ExpressionValueType.INT64, None
 
-    return ZEROEXPRESSIONVALUETYPE, RuntimeError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Int32\" and \"{normalize_enumname(rightvaluetype)}\"")
+    return ExpressionValueType.UNDEFINED, EvaluateError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Int32\" and \"{normalize_enumname(rightvaluetype)}\"")
 
 
 def derive_integer_operationvaluetype_fromint64(operationtype: ExpressionOperatorType, rightvaluetype: ExpressionValueType) -> Tuple[ExpressionValueType, Optional[Exception]]:  # sourcery skip
     if rightvaluetype in [ExpressionValueType.BOOLEAN, ExpressionValueType.INT32, ExpressionValueType.INT64]:
         return ExpressionValueType.INT64, None
 
-    return ZEROEXPRESSIONVALUETYPE, RuntimeError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Int64\" and \"{normalize_enumname(rightvaluetype)}\"")
+    return ExpressionValueType.UNDEFINED, EvaluateError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Int64\" and \"{normalize_enumname(rightvaluetype)}\"")
 
 
 # sourcery skip
@@ -816,7 +812,7 @@ def derive_comparison_operationvaluetype_fromboolean(operationtype: ExpressionOp
     if rightvaluetype == ExpressionValueType.DOUBLE:
         return ExpressionValueType.DOUBLE, None
 
-    return ZEROEXPRESSIONVALUETYPE, RuntimeError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Boolean\" and \"{normalize_enumname(rightvaluetype)}\"")
+    return ExpressionValueType.UNDEFINED, EvaluateError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Boolean\" and \"{normalize_enumname(rightvaluetype)}\"")
 
 
 def derive_comparison_operationvaluetype_fromint32(operationtype: ExpressionOperatorType, rightvaluetype: ExpressionValueType) -> Tuple[ExpressionValueType, Optional[Exception]]:  # sourcery skip
@@ -829,7 +825,7 @@ def derive_comparison_operationvaluetype_fromint32(operationtype: ExpressionOper
     if rightvaluetype == ExpressionValueType.DOUBLE:
         return ExpressionValueType.DOUBLE, None
 
-    return ZEROEXPRESSIONVALUETYPE, RuntimeError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Int32\" and \"{normalize_enumname(rightvaluetype)}\"")
+    return ExpressionValueType.UNDEFINED, EvaluateError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Int32\" and \"{normalize_enumname(rightvaluetype)}\"")
 
 
 def derive_comparison_operationvaluetype_fromint64(operationtype: ExpressionOperatorType, rightvaluetype: ExpressionValueType) -> Tuple[ExpressionValueType, Optional[Exception]]:  # sourcery skip
@@ -840,7 +836,7 @@ def derive_comparison_operationvaluetype_fromint64(operationtype: ExpressionOper
     if rightvaluetype == ExpressionValueType.DOUBLE:
         return ExpressionValueType.DOUBLE, None
 
-    return ZEROEXPRESSIONVALUETYPE, RuntimeError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Int64\" and \"{normalize_enumname(rightvaluetype)}\"")
+    return ExpressionValueType.UNDEFINED, EvaluateError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Int64\" and \"{normalize_enumname(rightvaluetype)}\"")
 
 
 def derive_comparison_operationvaluetype_fromdecimal(operationtype: ExpressionOperatorType, rightvaluetype: ExpressionValueType) -> Tuple[ExpressionValueType, Optional[Exception]]:  # sourcery skip
@@ -849,28 +845,28 @@ def derive_comparison_operationvaluetype_fromdecimal(operationtype: ExpressionOp
     if rightvaluetype == ExpressionValueType.DOUBLE:
         return ExpressionValueType.DOUBLE, None
 
-    return ZEROEXPRESSIONVALUETYPE, RuntimeError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Decimal\" and \"{normalize_enumname(rightvaluetype)}\"")
+    return ExpressionValueType.UNDEFINED, EvaluateError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Decimal\" and \"{normalize_enumname(rightvaluetype)}\"")
 
 
 def derive_comparison_operationvaluetype_fromdouble(operationtype: ExpressionOperatorType, rightvaluetype: ExpressionValueType) -> Tuple[ExpressionValueType, Optional[Exception]]:  # sourcery skip
     if rightvaluetype in [ExpressionValueType.BOOLEAN, ExpressionValueType.INT32, ExpressionValueType.INT64, ExpressionValueType.DECIMAL, ExpressionValueType.DOUBLE, ExpressionValueType.STRING]:
         return ExpressionValueType.DOUBLE, None
 
-    return ZEROEXPRESSIONVALUETYPE, RuntimeError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Double\" and \"{normalize_enumname(rightvaluetype)}\"")
+    return ExpressionValueType.UNDEFINED, EvaluateError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Double\" and \"{normalize_enumname(rightvaluetype)}\"")
 
 
 def derive_comparison_operationvaluetype_fromguid(operationtype: ExpressionOperatorType, rightvaluetype: ExpressionValueType) -> Tuple[ExpressionValueType, Optional[Exception]]:  # sourcery skip
     if rightvaluetype in [ExpressionValueType.GUID, ExpressionValueType.STRING]:
         return ExpressionValueType.GUID, None
 
-    return ZEROEXPRESSIONVALUETYPE, RuntimeError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Guid\" and \"{normalize_enumname(rightvaluetype)}\"")
+    return ExpressionValueType.UNDEFINED, EvaluateError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"Guid\" and \"{normalize_enumname(rightvaluetype)}\"")
 
 
 def derive_comparison_operationvaluetype_fromdatetime(operationtype: ExpressionOperatorType, rightvaluetype: ExpressionValueType) -> Tuple[ExpressionValueType, Optional[Exception]]:  # sourcery skip
     if rightvaluetype in [ExpressionValueType.DATETIME, ExpressionValueType.STRING]:
         return ExpressionValueType.DATETIME, None
 
-    return ZEROEXPRESSIONVALUETYPE, RuntimeError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"DateTime\" and \"{normalize_enumname(rightvaluetype)}\"")
+    return ExpressionValueType.UNDEFINED, EvaluateError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"DateTime\" and \"{normalize_enumname(rightvaluetype)}\"")
 
 
 # sourcery skip
@@ -878,4 +874,4 @@ def derive_boolean_operationvaluetype(operationtype: ExpressionOperatorType, lef
     if leftvaluetype == ExpressionValueType.BOOLEAN and rightvaluetype == ExpressionValueType.BOOLEAN:
         return ExpressionValueType.BOOLEAN, None
 
-    return ZEROEXPRESSIONVALUETYPE, RuntimeError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"{normalize_enumname(leftvaluetype)}\" and \"{normalize_enumname(rightvaluetype)}\"")
+    return ExpressionValueType.UNDEFINED, EvaluateError(f"cannot perform \"{normalize_enumname(operationtype)}\" operation on \"{normalize_enumname(leftvaluetype)}\" and \"{normalize_enumname(rightvaluetype)}\"")

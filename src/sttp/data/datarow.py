@@ -179,7 +179,7 @@ class DataRow:
             if targettype == DataType.UINT64:
                 return Convert.from_str(value, np.uint64), None
 
-            return None, ValueError("unexpected column data type encountered")
+            return None, TypeError("unexpected column data type encountered")
         except Exception as ex:
             return None, ValueError(f"failed to convert \"String\" expression value to \"{normalize_enumname(targettype)}\" column: {ex}")
 
@@ -195,7 +195,7 @@ class DataRow:
                               DataType.UINT32, DataType.UINT64]:
                 return None, ValueError(f'cannot convert \"Guid\" expression value to \"{normalize_enumname(targettype)}\" column')
 
-            return None, ValueError("unexpected column data type encountered")
+            return None, TypeError("unexpected column data type encountered")
         except Exception as ex:
             return None, ValueError(f'failed to convert \"Guid\" expression value to \"{normalize_enumname(targettype)}\" column: {ex}')
 
@@ -230,7 +230,7 @@ class DataRow:
             if targettype in [DataType.DATETIME, DataType.GUID]:
                 return None, ValueError(f"cannot convert \"{normalize_enumname(sourcetype)}\" expression value to \"{normalize_enumname(targettype)}\" column")
 
-            return None, ValueError("unexpected column data type encountered")
+            return None, TypeError("unexpected column data type encountered")
         except Exception as ex:
             return None, ValueError(f"failed to convert \"{normalize_enumname(sourcetype)}\" expression value to \"{normalize_enumname(targettype)}\" column: {ex}")
 
@@ -802,4 +802,4 @@ class DataRow:
         if lefttype == DataType.UINT64:
             return typecompare(leftrow.uint64value, rightrow.uint64value)
 
-        return 0, ValueError("unexpected column data type encountered")
+        return 0, TypeError("unexpected column data type encountered")

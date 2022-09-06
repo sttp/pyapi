@@ -25,10 +25,10 @@ from gsf import normalize_enumname
 from .expression import Expression
 from .valueexpression import ValueExpression
 from .constants import ExpressionType, ExpressionUnaryType, ExpressionValueType
+from .errors import EvaluateError
 from decimal import Decimal
-from typing import Optional, Tuple
+from typing import Optional, Tuple, TYPE_CHECKING
 import numpy as np
-
 
 class UnaryExpression(Expression):
     """
@@ -71,7 +71,7 @@ class UnaryExpression(Expression):
         if self._unarytype == ExpressionUnaryType.NOT:
             return ValueExpression(ExpressionValueType.BOOLEAN, not value), None
 
-        return None, ValueError(f"cannot apply unary type \"{normalize_enumname(self._unarytype)}\" to \"Boolean\" value")
+        return None, EvaluateError(f"cannot apply unary type \"{normalize_enumname(self._unarytype)}\" to \"Boolean\" value")
 
     def applyto_int32(self, value: np.int32) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         """
@@ -110,7 +110,7 @@ class UnaryExpression(Expression):
         if self._unarytype == ExpressionUnaryType.MINUS:
             return ValueExpression(ExpressionValueType.DECIMAL, -value), None
 
-        return None, ValueError(f"cannot apply unary type \"~\" to \"Decimal\" value")
+        return None, EvaluateError(f"cannot apply unary type \"~\" to \"Decimal\" value")
 
     def applyto_double(self, value: np.float64) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         """
@@ -123,4 +123,4 @@ class UnaryExpression(Expression):
         if self._unarytype == ExpressionUnaryType.MINUS:
             return ValueExpression(ExpressionValueType.DOUBLE, -value), None
 
-        return None, ValueError(f"cannot apply unary type \"~\" to \"Double\" value")
+        return None, EvaluateError(f"cannot apply unary type \"~\" to \"Double\" value")

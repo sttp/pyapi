@@ -92,7 +92,7 @@ class ValueExpression(Expression):
 
         return str(self._valuetype)
 
-    def isnull(self) -> bool:
+    def is_null(self) -> bool:
         """
         Gets a flag that determines if this `ValueExpression` is null, i.e., `None`.
         """
@@ -226,34 +226,36 @@ class ValueExpression(Expression):
         """
 
         # If source value is Null, result is Null, regardless of target type
-        if self.isnull():
+        if self.is_null():
             return ValueExpression.nullvalue(target_typevalue), None
 
-        if target_typevalue == ExpressionValueType.BOOLEAN:
+        valuetype = self._valuetype
+
+        if valuetype == ExpressionValueType.BOOLEAN:
             return self._convert_fromboolean(target_typevalue)
 
-        if target_typevalue == ExpressionValueType.INT32:
+        if valuetype == ExpressionValueType.INT32:
             return self._convert_fromint32(target_typevalue)
 
-        if target_typevalue == ExpressionValueType.INT64:
+        if valuetype == ExpressionValueType.INT64:
             return self._convert_fromint64(target_typevalue)
 
-        if target_typevalue == ExpressionValueType.DECIMAL:
+        if valuetype == ExpressionValueType.DECIMAL:
             return self._convert_fromdecimal(target_typevalue)
 
-        if target_typevalue == ExpressionValueType.DOUBLE:
+        if valuetype == ExpressionValueType.DOUBLE:
             return self._convert_fromboolean(target_typevalue)
 
-        if target_typevalue == ExpressionValueType.STRING:
+        if valuetype == ExpressionValueType.STRING:
             return self._convert_fromstring(target_typevalue)
 
-        if target_typevalue == ExpressionValueType.GUID:
+        if valuetype == ExpressionValueType.GUID:
             return self._convert_fromguid(target_typevalue)
 
-        if target_typevalue == ExpressionValueType.DATETIME:
+        if valuetype == ExpressionValueType.DATETIME:
             return self._convert_fromdatetime(target_typevalue)
 
-        return None, TypeError(f"unexpected expression value type encountered: \"{normalize_enumname(target_typevalue)}\"")
+        return None, TypeError("unexpected expression value type encountered")
 
     def _convert_fromnumeric(self, value: Union[int, float], from_typename: str, target_typevalue: ExpressionValueType) -> Tuple[Optional["ValueExpression"], Optional[Exception]]:
         if target_typevalue == ExpressionValueType.BOOLEAN:
@@ -351,7 +353,7 @@ class ValueExpression(Expression):
         return ValueExpression(target_valuetype, None)
 
 
-TRUEVAUE = ValueExpression(ExpressionValueType.BOOLEAN, True)
+TRUEVALUE = ValueExpression(ExpressionValueType.BOOLEAN, True)
 """
 Defines a `ValueExpression` that represents `True`.
 """
@@ -359,6 +361,26 @@ Defines a `ValueExpression` that represents `True`.
 FALSEVALUE = ValueExpression(ExpressionValueType.BOOLEAN, False)
 """
 Defines a `ValueExpression` that represents `False`.
+"""
+
+NULLBOOLVALUE = ValueExpression.nullvalue(ExpressionValueType.BOOLEAN)
+"""
+Defines a `ValueExpression` that represents a null, i.e., `None`, value of type `Boolean`.
+"""
+
+NULLINT32VALUE = ValueExpression.nullvalue(ExpressionValueType.INT32)
+"""
+Defines a `ValueExpression` that represents a null, i.e., `None`, value of type `Int32`.
+"""
+
+NULLDATETIMEVALUE = ValueExpression.nullvalue(ExpressionValueType.DATETIME)
+"""
+Defines a `ValueExpression` that represents a null, i.e., `None`, value of type `DateTime`.
+"""
+
+NULLSTRINGVALUE = ValueExpression.nullvalue(ExpressionValueType.STRING)
+"""
+Defines a `ValueExpression` that represents a null, i.e., `None`, value of type `String`.
 """
 
 EMPTYSTRINGVALUE = ValueExpression(ExpressionValueType.STRING, Empty.STRING)

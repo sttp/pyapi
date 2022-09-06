@@ -51,6 +51,7 @@
         "NOFLAGS",
         "nopep",
         "NTHINDEXOF",
+        "orderbyterm",
         "Phasor",
         "phasorrecord",
         "phasors",
@@ -80,6 +81,7 @@
         "udpdatachannel",
         "udpinterface",
         "udpport",
+        "UMAXINT",
         "unsynchronized",
         "valueas",
         "valueasint",
@@ -90,6 +92,7 @@
         "xsdformat",
         "xsdprefix",
         "xsdtypename",
+        "yday",
         "Δfreq",
         "Δtime"
     ],
