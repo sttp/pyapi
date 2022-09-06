@@ -40,6 +40,13 @@ def static_init(cls):
     return cls
 
 
+def virtual(self):
+    """
+    Marks a method as overridable (for documentation purposes).
+    """
+    return self
+
+
 def override(self):
     """
     Marks a method as an override (for documentation purposes).

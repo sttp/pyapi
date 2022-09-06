@@ -21,6 +21,7 @@
 #
 # ******************************************************************************************************
 
+from gsf import override
 from .expression import Expression
 from .datacolumn import DataColumn
 from .constants import ExpressionType
@@ -34,6 +35,7 @@ class ColumnExpression(Expression):
     def __init__(self, dataColumn: DataColumn):
         self._datacolumn = dataColumn
 
+    @override
     @property
     def expressiontype(self) -> ExpressionType:
         """

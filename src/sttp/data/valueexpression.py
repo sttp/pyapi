@@ -22,7 +22,7 @@
 # ******************************************************************************************************
 
 from typing import Optional, Tuple, Union
-from gsf import Convert, Empty, normalize_enumname
+from gsf import Convert, Empty, override, normalize_enumname
 from .expression import Expression
 from .dataset import xsdformat
 from .constants import ExpressionType, ExpressionValueType
@@ -62,6 +62,7 @@ class ValueExpression(Expression):
         else:
             raise TypeError(f"cannot create new value expression; unexpected expression value type: {normalize_enumname(valuetype)}")
 
+    @override
     @property
     def expressiontype(self) -> ExpressionType:
         """

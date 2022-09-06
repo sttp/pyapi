@@ -21,6 +21,7 @@
 #
 # ******************************************************************************************************
 
+from gsf import override
 from .expression import Expression
 from .constants import ExpressionType, ExpressionOperatorType
 
@@ -35,7 +36,7 @@ class OperatorExpression(Expression):
         self._leftvalue = leftvalue
         self._rightvalue = rightvalue
 
-
+    @override
     @property
     def expressiontype(self) -> ExpressionType:
         """

@@ -21,6 +21,7 @@
 #
 # ******************************************************************************************************
 
+from gsf import override
 from .expression import Expression
 from .constants import ExpressionFunctionType, ExpressionType
 
@@ -34,6 +35,7 @@ class FunctionExpression(Expression):
         self._functiontype = functiontype
         self._arguments = arguments
 
+    @override
     @property
     def expressiontype(self) -> ExpressionType:
         """

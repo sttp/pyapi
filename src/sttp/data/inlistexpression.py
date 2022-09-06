@@ -21,6 +21,7 @@
 #
 # ******************************************************************************************************
 
+from gsf import override
 from .expression import Expression
 from .constants import ExpressionType
 
@@ -36,6 +37,7 @@ class InListExpression(Expression):
         self._has_notkeyword = has_notkeyword
         self._exactmatch = exactmatch
 
+    @override
     @property
     def expressiontype(self) -> ExpressionType:
         """

@@ -21,7 +21,7 @@
 #
 # ******************************************************************************************************
 
-from gsf import override
+from gsf import virtual
 from .constants import ExpressionType
 
 
@@ -34,7 +34,7 @@ class Expression:
     This is the base class for all expression types.
     """
 
-    @override
+    @virtual
     @property
     def expressiontype(self) -> ExpressionType:
         """

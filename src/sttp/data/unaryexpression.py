@@ -21,7 +21,7 @@
 #
 # ******************************************************************************************************
 
-from gsf import normalize_enumname
+from gsf import override, normalize_enumname
 from .expression import Expression
 from .valueexpression import ValueExpression
 from .constants import ExpressionType, ExpressionUnaryType, ExpressionValueType
@@ -39,6 +39,7 @@ class UnaryExpression(Expression):
         self._unarytype = unarytype
         self._value = value
 
+    @override
     @property
     def expressiontype(self) -> ExpressionType:
         """
