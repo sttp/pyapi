@@ -35,9 +35,9 @@ from .columnexpression import ColumnExpression
 from .inlistexpression import InListExpression
 from .functionexpression import FunctionExpression
 from .operatorexpression import OperatorExpression
-from .constants import ExpressionType, ExpressionValueType, ExpressionFunctionType, ExpressionOperatorType, TimeInterval
-from .constants import is_integertype, is_numerictype, EXPRESSIONVALUETYPELEN
-from .constants import derive_operationvaluetype, derive_comparison_operationvaluetype 
+from .constants import ExpressionType, ExpressionValueType, ExpressionFunctionType, ExpressionOperatorType
+from .constants import TimeInterval, is_integertype, is_numerictype
+from .constants import derive_operationvaluetype, derive_comparison_operationvaluetype
 from .errors import EvaluateError
 from typing import Callable, List, Optional, Tuple, Union
 from dateutil import parser
@@ -1422,6 +1422,10 @@ class ExpressionTree:
             return ValueExpression(ExpressionValueType.INT32, sourcevalue._datetimevalue().minute), None
         if interval == TimeInterval.SECOND:
             return ValueExpression(ExpressionValueType.INT32, sourcevalue._datetimevalue().second), None
+        if interval == TimeInterval.MILLISECOND:
+            return ValueExpression(ExpressionValueType.INT32, sourcevalue._datetimevalue().microsecond / 1000), None
+
+        return None, TypeError("unexpected time interval encountered")
 
     def _endswith(self, sourcevalue: ValueExpression, testvalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
