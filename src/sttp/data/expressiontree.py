@@ -28,8 +28,8 @@ from .datatype import DataType
 from .orderbyterm import OrderByTerm
 from .expression import Expression
 from .valueexpression import ValueExpression
-from .valueexpression import TRUEVALUE, FALSEVALUE, NULLBOOLVALUE
-from .valueexpression import NULLINT32VALUE, NULLDATETIMEVALUE, NULLSTRINGVALUE
+from .valueexpression import TRUEVALUE, FALSEVALUE, EMPTYSTRINGVALUE
+from .valueexpression import NULLBOOLVALUE, NULLSTRINGVALUE, NULLINT32VALUE, NULLDATETIMEVALUE
 from .unaryexpression import UnaryExpression
 from .columnexpression import ColumnExpression
 from .inlistexpression import InListExpression
@@ -46,6 +46,7 @@ from dateutil.relativedelta import relativedelta
 from uuid import UUID
 import numpy as np
 import math
+import re
 import sys
 
 INTSIZE = 64 if sys.maxsize > 2**32 else 32
@@ -1763,7 +1764,25 @@ class ExpressionTree:
         return self._evaluateregex("RegExVal", regexvalue, testvalue, True)
 
     def _evaluateregex(self, functionname: str, regexvalue: ValueExpression, testvalue: ValueExpression, return_matchedvalue: bool) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        if regexvalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError(f"\"{functionname}\" function regular expression value, first argument, must be a \"String\"")
+
+        if testvalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError(f"\"{functionname}\" function test value, second argument, must be a \"String\"")
+
+        # If regular expression value or test value is Null, result is Null
+        if regexvalue.is_null() or testvalue.is_null():
+            return (NULLSTRINGVALUE, None) if return_matchedvalue else (NULLBOOLVALUE, None)
+
+        try:
+            match = re.search(regexvalue._stringvalue(), testvalue._stringvalue())
+
+            if return_matchedvalue:
+                return (EMPTYSTRINGVALUE, None) if match is None else (ValueExpression(ExpressionValueType.STRING, match[0]), None)
+
+            return (FALSEVALUE, None) if match is None else (TRUEVALUE, None)
+        except Exception as ex:
+            return None, EvaluateError(f"failed while evaluating \"{functionname}\" function expression value, first argument: {ex}")
 
     def _replace(self, sourcevalue: ValueExpression, searchvalue: ValueExpression, replacevalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         pass
