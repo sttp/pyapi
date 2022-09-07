@@ -301,16 +301,16 @@ class ValueExpression(Expression):
             return ValueExpression(target_typevalue, bool(value)), None
 
         if target_typevalue == ExpressionValueType.INT32:
-            return ValueExpression(target_typevalue, Convert.from_str(value, np.int32)), None
+            return ValueExpression(target_typevalue, np.int32(Decimal(value))), None
 
         if target_typevalue == ExpressionValueType.INT64:
-            return ValueExpression(target_typevalue, Convert.from_str(value, np.int64)), None
+            return ValueExpression(target_typevalue, np.int64(Decimal(value))), None
 
         if target_typevalue == ExpressionValueType.DECIMAL:
             return ValueExpression(target_typevalue, Decimal(value)), None
 
         if target_typevalue == ExpressionValueType.DOUBLE:
-            return ValueExpression(target_typevalue, Convert.from_str(value, np.float64)), None
+            return ValueExpression(target_typevalue, np.float64(value)), None
 
         if target_typevalue == ExpressionValueType.STRING:
             return ValueExpression(target_typevalue, value), None

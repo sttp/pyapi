@@ -37,9 +37,10 @@ from .functionexpression import FunctionExpression
 from .operatorexpression import OperatorExpression
 from .constants import ExpressionType, ExpressionValueType, ExpressionFunctionType, ExpressionOperatorType
 from .constants import TimeInterval, is_integertype, is_numerictype
-from .constants import derive_operationvaluetype, derive_comparison_operationvaluetype
+from .constants import derive_operationvaluetype, derive_comparison_operationvaluetype, derive_arithmetic_operationvaluetype
 from .errors import EvaluateError
 from typing import Callable, List, Optional, Tuple, Union
+from datetime import datetime
 from dateutil import parser
 from dateutil.relativedelta import relativedelta
 from uuid import UUID
@@ -159,6 +160,8 @@ class ExpressionTree:
                     # If last compare result was equal, continue sort based on next order-by term
                     if result != 0:
                         return result
+
+                return 0
 
             matchedrows.sort(key=compare_rows)
 
@@ -397,7 +400,7 @@ class ExpressionTree:
         if functiontype == ExpressionFunctionType.REGEXMATCH:
             return self._evaluate_regexmatch(arguments)
         if functiontype == ExpressionFunctionType.REGEXVAL:
-            return self._evaluate_regexvalue(arguments)
+            return self._evaluate_regexval(arguments)
         if functiontype == ExpressionFunctionType.REPLACE:
             return self._evaluate_replace(arguments)
         if functiontype == ExpressionFunctionType.REVERSE:
@@ -812,7 +815,7 @@ class ExpressionTree:
 
         return self._regexmatch(regexvalue, testvalue)
 
-    def _evaluate_regexvalue(self, arguments: List[Expression]) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
+    def _evaluate_regexval(self, arguments: List[Expression]) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if len(arguments) != 2:
             return None, ValueError(f"\"RegExValue\" function expects 2 arguments, received {len(arguments)}")
 
@@ -826,7 +829,7 @@ class ExpressionTree:
         if err is not None:
             return None, EvaluateError(f"failed while evaluating \"RegExValue\" function test value, second argument: {err}")
 
-        return self._regexvalue(regexvalue, testvalue)
+        return self._regexval(regexvalue, testvalue)
 
     def _evaluate_replace(self, arguments: List[Expression]) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if len(arguments) < 3 or len(arguments) > 4:
@@ -1183,7 +1186,7 @@ class ExpressionTree:
         
         return None, TypeError("unexpected expression value type encountered")
 
-    def _coalesce(self, arguments: List[ValueExpression]) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
+    def _coalesce(self, arguments: List[Expression]) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         testvalue, err = self._evaluate(arguments[0])
 
         if err is not None:
@@ -1228,19 +1231,19 @@ class ExpressionTree:
             # Handle a few common aliases
             if targettypename == "SINGLE" or targettypename.startswith("FLOAT"):
                 targetvaluetype = ExpressionValueType.DOUBLE
-                foundValueType = True
+                foundvaluetype = True
             elif targettypename == "BOOL":
                 targetvaluetype = ExpressionValueType.BOOLEAN
-                foundValueType = True
+                foundvaluetype = True
             elif targettypename.startswith("INT") or targettypename.startswith("UINT"):
                 targetvaluetype = ExpressionValueType.INT64
-                foundValueType = True
+                foundvaluetype = True
             elif targettypename in ["DATE", "TIME"]:
                 targetvaluetype = ExpressionValueType.DATETIME
-                foundValueType = True
+                foundvaluetype = True
             elif targettypename == "UUID":
                 targetvaluetype = ExpressionValueType.GUID
-                foundValueType = True
+                foundvaluetype = True
 
         if not foundvaluetype or targetvaluetype == ExpressionValueType.UNDEFINED:
             return None, EvaluateError(f"specified \"Convert\" function target type \"{targettype._stringvalue()}\", second argument, is not supported")
@@ -1321,7 +1324,7 @@ class ExpressionTree:
         if interval == TimeInterval.SECOND:
             return ValueExpression(ExpressionValueType.DATETIME, sourcevalue._datetimevalue() + relativedelta(seconds=value)), None
         if interval == TimeInterval.MILLISECOND:
-            return ValueExpression(ExpressionValueType.DATETIME, sourcevalue._datetimevalue() + relativedelta(seconds=value / 1000)), None
+            return ValueExpression(ExpressionValueType.DATETIME, sourcevalue._datetimevalue() + relativedelta(microseconds=value * 1000)), None
 
         return None, TypeError("unexpected time interval encountered")
 
@@ -1471,23 +1474,23 @@ class ExpressionTree:
 
         return None, TypeError("unexpected expression value type encountered")
 
-    def _iif(self, testvalue: ValueExpression, truevalue: ValueExpression, falsevalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:  # sourcery skip
+    def _iif(self, testvalue: ValueExpression, truevalue: Expression, falsevalue: Expression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:  # sourcery skip
         if testvalue.valuetype != ExpressionValueType.BOOLEAN:
-            return None, ValueError("\"Iif\" function test value, first argument, must be a \"Boolean\"")
+            return None, ValueError("\"IIf\" function test value, first argument, must be a \"Boolean\"")
 
         # Null test expression evaluates to false, that is, false value expression
         if testvalue._booleanvalue():
             result, err = self._evaluate(truevalue)
 
             if err is not None:
-                return None, EvaluateError(f"failed while evaluating \"Iif\" function true value, second argument: {err}")
+                return None, EvaluateError(f"failed while evaluating \"IIf\" function true value, second argument: {err}")
 
             return result, None
 
         result, err = self._evaluate(falsevalue)
 
         if err is not None:
-            return None, EvaluateError(f"failed while evaluating \"Iif\" function false value, third argument: {err}")
+            return None, EvaluateError(f"failed while evaluating \"IIf\" function false value, third argument: {err}")
 
         return result, None
 
@@ -1626,19 +1629,19 @@ class ExpressionTree:
 
         return ValueExpression(ExpressionValueType.STRING, sourcevalue._stringvalue().lower()), None
 
-    def _maxof(self, arguments: List[ValueExpression]) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
+    def _maxof(self, arguments: List[Expression]) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         testvalue, err = self._evaluate(arguments[0])
 
         if err is not None:
             return None, EvaluateError(f"failed while evaluating \"MaxOf\" function argument 0: {err}")
 
-        for i in range(len(arguments)):
+        for i in range(1, len(arguments)):
             nextvalue, err = self._evaluate(arguments[i])
 
             if err is not None:
                 return None, EvaluateError(f"failed while evaluating \"MaxOf\" function argument {i}: {err}")
 
-            valuetype, err = derive_comparison_operationvaluetype(ExpressionOperatorType.GREATER_THAN, testvalue.valuetype, nextvalue.valuetype)
+            valuetype, err = derive_comparison_operationvaluetype(ExpressionOperatorType.GREATERTHAN, testvalue.valuetype, nextvalue.valuetype)
 
             if err is not None:
                 return None, EvaluateError(f"failed while deriving \"MaxOf\" function greater than comparison operator value type: {err}")
@@ -1653,19 +1656,19 @@ class ExpressionTree:
 
         return testvalue, None
 
-    def _minof(self, arguments: List[ValueExpression]) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
+    def _minof(self, arguments: List[Expression]) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         testvalue, err = self._evaluate(arguments[0])
 
         if err is not None:
             return None, EvaluateError(f"failed while evaluating \"MinOf\" function argument 0: {err}")
 
-        for i in range(len(arguments)):
+        for i in range(1, len(arguments)):
             nextvalue, err = self._evaluate(arguments[i])
 
             if err is not None:
                 return None, EvaluateError(f"failed while evaluating \"MinOf\" function argument {i}: {err}")
 
-            valuetype, err = derive_comparison_operationvaluetype(ExpressionOperatorType.LESS_THAN, testvalue.valuetype, nextvalue.valuetype)
+            valuetype, err = derive_comparison_operationvaluetype(ExpressionOperatorType.LESSTHAN, testvalue.valuetype, nextvalue.valuetype)
 
             if err is not None:
                 return None, EvaluateError(f"failed while deriving \"MinOf\" function greater than comparison operator value type: {err}")
@@ -1681,19 +1684,83 @@ class ExpressionTree:
         return testvalue, None
 
     def _now(self) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        return ValueExpression(ExpressionValueType.DATETIME, datetime.now()), None
 
     def _nthindexof(self, sourcevalue: ValueExpression, testvalue: ValueExpression, indexvalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        if sourcevalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"NthIndexOf\" function source value, first argument, must be a \"String\"")
+
+        if testvalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"NthIndexOf\" function test value, second argument, must be a \"String\"")
+
+        if testvalue.is_null():
+            return None, ValueError("\"NthIndexOf\" function test value, second argument, is null")
+
+        if indexvalue.is_null():
+            return None, ValueError("\"NthIndexOf\" function index value, third argument, is null")
+
+        # If source value is Null, result is Null
+        if sourcevalue.is_null():
+            return NULLINT32VALUE, None
+
+        ignorecase, err = ignorecase.convert(ExpressionValueType.BOOLEAN)
+
+        if err is not None:
+            return None, EvaluateError(f"failed while converting \"NthIndexOf\" function ignore case, fourth argument, to a \"Boolean\": {err}")
+
+        if ignorecase._booleanvalue():
+            source = sourcevalue._stringvalue().upper()
+            test = testvalue._stringvalue().upper()
+        else:
+            source = sourcevalue._stringvalue()
+            test = testvalue._stringvalue()
+
+        return ValueExpression(ExpressionValueType.INT32, ExpressionTree._find_nthindex(source, test, indexvalue.integervalue(-1))), None
 
     def _power(self, sourcevalue: ValueExpression, exponentvalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        if not is_numerictype(sourcevalue.valuetype):
+            return None, ValueError("\"Power\" function source value, first argument, must be numeric")
+
+        if not is_numerictype(exponentvalue.valuetype):
+            return None, ValueError("\"Power\" function exponent value, second argument, must be numeric")
+
+        # If source value or exponent value is Null, result is Null
+        if sourcevalue.is_null() or exponentvalue.is_null():
+            return ValueExpression.nullvalue(sourcevalue.valuetype), None
+
+        valuetype, err = derive_arithmetic_operationvaluetype(ExpressionOperatorType.MULTIPLY, sourcevalue.valuetype, exponentvalue.valuetype)
+
+        if err is not None:
+            return None, EvaluateError(f"failed while deriving \"Power\" function multiplicative arithmetic operation value type: {err}")
+
+        sourcevalue, err = sourcevalue.convert(valuetype)
+
+        if err is not None:
+            return None, EvaluateError(f"failed while converting \"Power\" function source value, first argument, to \"{valuetype}\": {err}")
+
+        exponentvalue, err = exponentvalue.convert(valuetype)
+
+        if err is not None:
+            return None, EvaluateError(f"failed while converting \"Power\" function exponent value, second argument, to \"{valuetype}\": {err}")
+
+        if valuetype == ExpressionValueType.BOOLEAN:
+            return ValueExpression(ExpressionValueType.BOOLEAN, math.pow(sourcevalue._booleanvalue_asint(), exponentvalue._booleanvalue_asint()) != 0.0), None
+        if valuetype == ExpressionValueType.INT32:
+            return ValueExpression(ExpressionValueType.INT32, math.pow(sourcevalue._int32value(), exponentvalue._int32value())), None
+        if valuetype == ExpressionValueType.INT64:
+            return ValueExpression(ExpressionValueType.INT64, math.pow(sourcevalue._int64value(), exponentvalue._int64value())), None
+        if valuetype == ExpressionValueType.DECIMAL:
+            return ValueExpression(ExpressionValueType.DECIMAL, math.pow(sourcevalue._decimalvalue(), exponentvalue._decimalvalue())), None
+        if valuetype == ExpressionValueType.DOUBLE:
+            return ValueExpression(ExpressionValueType.DOUBLE, math.pow(sourcevalue._doublevalue(), exponentvalue._doublevalue())), None
+        
+        return None, TypeError("unexpected expression value type encountered")
 
     def _regexmatch(self, regexvalue: ValueExpression, testvalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        return self._evaluateregex("RegExMatch", regexvalue, testvalue, False)
 
-    def _regexvalue(self, regexvalue: ValueExpression, testvalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+    def _regexval(self, regexvalue: ValueExpression, testvalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
+        return self._evaluateregex("RegExVal", regexvalue, testvalue, True)
 
     def _evaluateregex(self, functionname: str, regexvalue: ValueExpression, testvalue: ValueExpression, return_matchedvalue: bool) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         pass
@@ -1813,8 +1880,28 @@ class ExpressionTree:
 
     @staticmethod
     def _find_nthindex(source: str, test: str, index: int) -> int:
-        pass
+        result = 0
+
+        for _ in range(index + 1):
+            location = source.find(test, result)
+
+            if location == -1:
+                result = 0
+                break
+
+            result = location + 1
+
+        return result - 1
 
     @staticmethod
-    def _split_nthindex(source: str, test: str, index: int) -> Optional[Tuple[int, int]]:
-        pass
+    def _split_nthindex(source: str, test: str, index: int) -> Tuple[int, int, bool]:
+        firstindex = ExpressionTree._find_nthindex(source, test, index - 1)
+        secondindex = ExpressionTree._find_nthindex(source, test, index)
+
+        if firstindex <= 0:
+            return (-1, -1, False) if secondindex <= 0 else (0, secondindex, True)
+
+        if secondindex <= 0:
+            return firstindex + len(test), len(source), True
+
+        return firstindex + len(test), secondindex, True

@@ -816,11 +816,11 @@ def derive_comparison_operationvaluetype_fromboolean(operationtype: ExpressionOp
 
 
 def derive_comparison_operationvaluetype_fromint32(operationtype: ExpressionOperatorType, rightvaluetype: ExpressionValueType) -> Tuple[ExpressionValueType, Optional[Exception]]:  # sourcery skip
-    if rightvaluetype in [ExpressionValueType.BOOLEAN, ExpressionValueType.INT32, ExpressionValueType.STRING]:
+    if rightvaluetype in [ExpressionValueType.BOOLEAN, ExpressionValueType.INT32]:
         return ExpressionValueType.INT32, None
     if rightvaluetype == ExpressionValueType.INT64:
         return ExpressionValueType.INT64, None
-    if rightvaluetype == ExpressionValueType.DECIMAL:
+    if rightvaluetype == [ExpressionValueType.STRING, ExpressionValueType.DECIMAL]:
         return ExpressionValueType.DECIMAL, None
     if rightvaluetype == ExpressionValueType.DOUBLE:
         return ExpressionValueType.DOUBLE, None
@@ -829,9 +829,9 @@ def derive_comparison_operationvaluetype_fromint32(operationtype: ExpressionOper
 
 
 def derive_comparison_operationvaluetype_fromint64(operationtype: ExpressionOperatorType, rightvaluetype: ExpressionValueType) -> Tuple[ExpressionValueType, Optional[Exception]]:  # sourcery skip
-    if rightvaluetype in [ExpressionValueType.BOOLEAN, ExpressionValueType.INT32, ExpressionValueType.INT64, ExpressionValueType.STRING]:
+    if rightvaluetype in [ExpressionValueType.BOOLEAN, ExpressionValueType.INT32, ExpressionValueType.INT64]:
         return ExpressionValueType.INT64, None
-    if rightvaluetype == ExpressionValueType.DECIMAL:
+    if rightvaluetype == [ExpressionValueType.STRING, ExpressionValueType.DECIMAL]:
         return ExpressionValueType.DECIMAL, None
     if rightvaluetype == ExpressionValueType.DOUBLE:
         return ExpressionValueType.DOUBLE, None
