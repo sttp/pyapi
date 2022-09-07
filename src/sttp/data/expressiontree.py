@@ -153,7 +153,7 @@ class ExpressionTree:
         """
 
         if table is None:
-            return [], ValueError("cannot execute select operation, table parameter cannot be None")
+            return [], TypeError("cannot execute select operation, table parameter cannot be None")
 
         matchedrows: List[DataRow] = []
 
@@ -265,12 +265,12 @@ class ExpressionTree:
 
     def _evaluate_column(self, column_expression: ColumnExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:  # sourcery skip
         if self._currentrow is None:
-            return None, ValueError("cannot evaluate column expression, current data row reference is not defined")
+            return None, TypeError("cannot evaluate column expression, current data row reference is not defined")
 
         column = column_expression.datacolumn
 
         if column is None:
-            return None, ValueError("cannot evaluate column expression, data column reference is not defined")
+            return None, TypeError("cannot evaluate column expression, data column reference is not defined")
 
         columnindex = column.index
         columndatatype = column.datatype
@@ -1182,7 +1182,7 @@ class ExpressionTree:
         sourcevaluetype = sourcevalue.valuetype
 
         if not is_numerictype(sourcevaluetype):
-            return None, ValueError("\"Abs\" function source value, first argument, must be a numeric type")
+            return None, TypeError("\"Abs\" function source value, first argument, must be a numeric type")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1205,7 +1205,7 @@ class ExpressionTree:
         sourcevaluetype = sourcevalue.valuetype
 
         if not is_numerictype(sourcevaluetype):
-            return None, ValueError("\"Ceiling\" function source value, first argument, must be a numeric type")
+            return None, TypeError("\"Ceiling\" function source value, first argument, must be a numeric type")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1243,10 +1243,10 @@ class ExpressionTree:
 
     def _convert(self, sourcevalue: ValueExpression, targettype: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if targettype.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"Convert\" function target type, second argument, must be a \"String\"")
+            return None, TypeError("\"Convert\" function target type, second argument, must be a \"String\"")
 
         if targettype.is_null():
-            return None, ValueError("\"Convert\" function target type, second argument, is null")
+            return None, TypeError("\"Convert\" function target type, second argument, is null")
 
         targettypename = targettype._stringvalue().upper()
 
@@ -1287,10 +1287,10 @@ class ExpressionTree:
 
     def _contains(self, sourcevalue: ValueExpression, testvalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"Contains\" function source value, first argument, must be a \"String\"")
+            return None, TypeError("\"Contains\" function source value, first argument, must be a \"String\"")
 
         if testvalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"Contains\" function test value, second argument, must be a \"String\"")
+            return None, TypeError("\"Contains\" function test value, second argument, must be a \"String\"")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1311,19 +1311,19 @@ class ExpressionTree:
 
     def _dateadd(self, sourcevalue: ValueExpression, addvalue: ValueExpression, intervaltype: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype not in [ExpressionValueType.DATETIME, ExpressionValueType.STRING]:
-            return None, ValueError("\"DateAdd\" function source value, first argument, must be a \"DateTime\" or a \"String\"")
+            return None, TypeError("\"DateAdd\" function source value, first argument, must be a \"DateTime\" or a \"String\"")
 
         if not is_integertype(addvalue.valuetype):
-            return None, ValueError("\"DateAdd\" function add value, second argument, must be an integer type")
+            return None, TypeError("\"DateAdd\" function add value, second argument, must be an integer type")
 
         if intervaltype.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"DateAdd\" function interval type, third argument, must be a \"String\"")
+            return None, TypeError("\"DateAdd\" function interval type, third argument, must be a \"String\"")
 
         if addvalue.is_null():
-            return None, ValueError("\"DateAdd\" function add value second argument, is null")
+            return None, TypeError("\"DateAdd\" function add value second argument, is null")
 
         if intervaltype.is_null():
-            return None, ValueError("\"DateAdd\" function interval type, third argument, is null")
+            return None, TypeError("\"DateAdd\" function interval type, third argument, is null")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1365,16 +1365,16 @@ class ExpressionTree:
 
     def _datediff(self, leftvalue: ValueExpression, rightvalue: ValueExpression, intervaltype: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if leftvalue.valuetype not in [ExpressionValueType.DATETIME, ExpressionValueType.STRING]:
-            return None, ValueError("\"DateDiff\" function left value, first argument, must be a \"DateTime\" or a \"String\"")
+            return None, TypeError("\"DateDiff\" function left value, first argument, must be a \"DateTime\" or a \"String\"")
 
         if rightvalue.valuetype not in [ExpressionValueType.DATETIME, ExpressionValueType.STRING]:
-            return None, ValueError("\"DateDiff\" function right value, second argument, must be a \"DateTime\" or a \"String\"")
+            return None, TypeError("\"DateDiff\" function right value, second argument, must be a \"DateTime\" or a \"String\"")
 
         if intervaltype.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"DateDiff\" function interval type, third argument, must be a \"String\"")
+            return None, TypeError("\"DateDiff\" function interval type, third argument, must be a \"String\"")
 
         if intervaltype.is_null():
-            return None, ValueError("\"DateDiff\" function interval type, third argument, is null")
+            return None, TypeError("\"DateDiff\" function interval type, third argument, is null")
 
         # If either test value is Null, result is Null
         if leftvalue.is_null() or rightvalue.is_null():
@@ -1419,13 +1419,13 @@ class ExpressionTree:
 
     def _datepart(self, sourcevalue: ValueExpression, intervaltype: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype not in [ExpressionValueType.DATETIME, ExpressionValueType.STRING]:
-            return None, ValueError("\"DatePart\" function source value, first argument, must be a \"DateTime\" or a \"String\"")
+            return None, TypeError("\"DatePart\" function source value, first argument, must be a \"DateTime\" or a \"String\"")
 
         if intervaltype.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"DatePart\" function interval type, second argument, must be a \"String\"")
+            return None, TypeError("\"DatePart\" function interval type, second argument, must be a \"String\"")
 
         if intervaltype.is_null():
-            return None, ValueError("\"DatePart\" function interval type, second argument, is null")
+            return None, TypeError("\"DatePart\" function interval type, second argument, is null")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1467,10 +1467,10 @@ class ExpressionTree:
 
     def _endswith(self, sourcevalue: ValueExpression, testvalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"EndsWith\" function source value, first argument, must be a \"String\"")
+            return None, TypeError("\"EndsWith\" function source value, first argument, must be a \"String\"")
 
         if testvalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"EndsWith\" function test value, second argument, must be a \"String\"")
+            return None, TypeError("\"EndsWith\" function test value, second argument, must be a \"String\"")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1493,7 +1493,7 @@ class ExpressionTree:
         sourcevaluetype = sourcevalue.valuetype
 
         if not is_numerictype(sourcevaluetype):
-            return None, ValueError("\"Floor\" function source value, first argument, must be a numeric type")
+            return None, TypeError("\"Floor\" function source value, first argument, must be a numeric type")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1511,7 +1511,7 @@ class ExpressionTree:
 
     def _iif(self, testvalue: ValueExpression, truevalue: Expression, falsevalue: Expression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:  # sourcery skip
         if testvalue.valuetype != ExpressionValueType.BOOLEAN:
-            return None, ValueError("\"IIf\" function test value, first argument, must be a \"Boolean\"")
+            return None, TypeError("\"IIf\" function test value, first argument, must be a \"Boolean\"")
 
         # Null test expression evaluates to false, that is, false value expression
         if testvalue._booleanvalue():
@@ -1531,13 +1531,13 @@ class ExpressionTree:
 
     def _indexof(self, sourcevalue: ValueExpression, testvalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"IndexOf\" function source value, first argument, must be a \"String\"")
+            return None, TypeError("\"IndexOf\" function source value, first argument, must be a \"String\"")
 
         if testvalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"IndexOf\" function test value, second argument, must be a \"String\"")
+            return None, TypeError("\"IndexOf\" function test value, second argument, must be a \"String\"")
 
         if testvalue.is_null():
-            return None, ValueError("\"IndexOf\" function test value, second argument, is null")
+            return None, TypeError("\"IndexOf\" function test value, second argument, is null")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1600,7 +1600,7 @@ class ExpressionTree:
 
     def _is_null(self, testvalue: ValueExpression, defaultvalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if defaultvalue.is_null():
-            return None, ValueError("\"IsNull\" function default value, second argument, is null")
+            return None, TypeError("\"IsNull\" function default value, second argument, is null")
 
         return (defaultvalue, None) if testvalue.is_null() else (testvalue, None)
 
@@ -1622,13 +1622,13 @@ class ExpressionTree:
 
     def _lastindexof(self, sourcevalue: ValueExpression, testvalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"LastIndexOf\" function source value, first argument, must be a \"String\"")
+            return None, TypeError("\"LastIndexOf\" function source value, first argument, must be a \"String\"")
 
         if testvalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"LastIndexOf\" function test value, second argument, must be a \"String\"")
+            return None, TypeError("\"LastIndexOf\" function test value, second argument, must be a \"String\"")
 
         if testvalue.is_null():
-            return None, ValueError("\"LastIndexOf\" function test value, second argument, is null")
+            return None, TypeError("\"LastIndexOf\" function test value, second argument, is null")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1646,7 +1646,7 @@ class ExpressionTree:
 
     def _len(self, sourcevalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"Len\" function source value, first argument, must be a \"String\"")
+            return None, TypeError("\"Len\" function source value, first argument, must be a \"String\"")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1656,7 +1656,7 @@ class ExpressionTree:
 
     def _lower(self, sourcevalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"Lower\" function source value, first argument, must be a \"String\"")
+            return None, TypeError("\"Lower\" function source value, first argument, must be a \"String\"")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1723,16 +1723,16 @@ class ExpressionTree:
 
     def _nthindexof(self, sourcevalue: ValueExpression, testvalue: ValueExpression, indexvalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"NthIndexOf\" function source value, first argument, must be a \"String\"")
+            return None, TypeError("\"NthIndexOf\" function source value, first argument, must be a \"String\"")
 
         if testvalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"NthIndexOf\" function test value, second argument, must be a \"String\"")
+            return None, TypeError("\"NthIndexOf\" function test value, second argument, must be a \"String\"")
 
         if testvalue.is_null():
-            return None, ValueError("\"NthIndexOf\" function test value, second argument, is null")
+            return None, TypeError("\"NthIndexOf\" function test value, second argument, is null")
 
         if indexvalue.is_null():
-            return None, ValueError("\"NthIndexOf\" function index value, third argument, is null")
+            return None, TypeError("\"NthIndexOf\" function index value, third argument, is null")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1754,10 +1754,10 @@ class ExpressionTree:
 
     def _power(self, sourcevalue: ValueExpression, exponentvalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if not is_numerictype(sourcevalue.valuetype):
-            return None, ValueError("\"Power\" function source value, first argument, must be a numeric type")
+            return None, TypeError("\"Power\" function source value, first argument, must be a numeric type")
 
         if not is_numerictype(exponentvalue.valuetype):
-            return None, ValueError("\"Power\" function exponent value, second argument, must be a numeric type")
+            return None, TypeError("\"Power\" function exponent value, second argument, must be a numeric type")
 
         # If source value or exponent value is Null, result is Null
         if sourcevalue.is_null() or exponentvalue.is_null():
@@ -1799,10 +1799,10 @@ class ExpressionTree:
 
     def _evaluateregex(self, functionname: str, regexvalue: ValueExpression, testvalue: ValueExpression, return_matchedvalue: bool) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if regexvalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError(f"\"{functionname}\" function regular expression value, first argument, must be a \"String\"")
+            return None, TypeError(f"\"{functionname}\" function regular expression value, first argument, must be a \"String\"")
 
         if testvalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError(f"\"{functionname}\" function test value, second argument, must be a \"String\"")
+            return None, TypeError(f"\"{functionname}\" function test value, second argument, must be a \"String\"")
 
         # If regular expression value or test value is Null, result is Null
         if regexvalue.is_null() or testvalue.is_null():
@@ -1820,19 +1820,19 @@ class ExpressionTree:
 
     def _replace(self, sourcevalue: ValueExpression, testvalue: ValueExpression, replacevalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"Replace\" function source value, first argument, must be a \"String\"")
+            return None, TypeError("\"Replace\" function source value, first argument, must be a \"String\"")
 
         if testvalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"Replace\" function test value, second argument, must be a \"String\"")
+            return None, TypeError("\"Replace\" function test value, second argument, must be a \"String\"")
 
         if replacevalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"Replace\" function replace value, third argument, must be a \"String\"")
+            return None, TypeError("\"Replace\" function replace value, third argument, must be a \"String\"")
 
         if testvalue.is_null():
-            return None, ValueError("\"Replace\" function test value, second argument, is null")
+            return None, TypeError("\"Replace\" function test value, second argument, is null")
 
         if replacevalue.is_null():
-            return None, ValueError("\"Replace\" function replace value, third argument, is null")
+            return None, TypeError("\"Replace\" function replace value, third argument, is null")
 
         # If source value, result is Null
         if sourcevalue.is_null():
@@ -1855,7 +1855,7 @@ class ExpressionTree:
 
     def _reverse(self, sourcevalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"Reverse\" function source value, first argument, must be a \"String\"")
+            return None, TypeError("\"Reverse\" function source value, first argument, must be a \"String\"")
 
         # If source value, result is Null
         if sourcevalue.is_null():
@@ -1867,7 +1867,7 @@ class ExpressionTree:
         sourcevaluetype = sourcevalue.valuetype
 
         if not is_numerictype(sourcevaluetype):
-            return None, ValueError("\"Round\" function source value, first argument, must be a numeric type")
+            return None, TypeError("\"Round\" function source value, first argument, must be a numeric type")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1885,19 +1885,19 @@ class ExpressionTree:
 
     def _split(self, sourcevalue: ValueExpression, delimitervalue: ValueExpression, indexvalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"Split\" function source value, first argument, must be a \"String\"")
+            return None, TypeError("\"Split\" function source value, first argument, must be a \"String\"")
 
         if delimitervalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"Split\" function delimiter value, second argument, must be a \"String\"")
+            return None, TypeError("\"Split\" function delimiter value, second argument, must be a \"String\"")
 
         if not is_integertype(indexvalue.valuetype):
-            return None, ValueError("\"Split\" function index value, third argument, must be an integer type")
+            return None, TypeError("\"Split\" function index value, third argument, must be an integer type")
 
         if delimitervalue.is_null():
-            return None, ValueError("\"Split\" function delimiter value, second argument, is null")
+            return None, TypeError("\"Split\" function delimiter value, second argument, is null")
 
         if indexvalue.is_null():
-            return None, ValueError("\"Split\" function index value, third argument, is null")
+            return None, TypeError("\"Split\" function index value, third argument, is null")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1922,7 +1922,7 @@ class ExpressionTree:
         sourcevaluetype = sourcevalue.valuetype
 
         if not is_numerictype(sourcevaluetype):
-            return None, ValueError("\"Sqrt\" function source value, first argument, must be a numeric type")
+            return None, TypeError("\"Sqrt\" function source value, first argument, must be a numeric type")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1940,10 +1940,10 @@ class ExpressionTree:
 
     def _startswith(self, sourcevalue: ValueExpression, testvalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"StartsWith\" function source value, first argument, must be a \"String\"")
+            return None, TypeError("\"StartsWith\" function source value, first argument, must be a \"String\"")
 
         if testvalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"StartsWith\" function test value, second argument, must be a \"String\"")
+            return None, TypeError("\"StartsWith\" function test value, second argument, must be a \"String\"")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1964,10 +1964,10 @@ class ExpressionTree:
 
     def _strcount(self, sourcevalue: ValueExpression, testvalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"StrCount\" function source value, first argument, must be a \"String\"")
+            return None, TypeError("\"StrCount\" function source value, first argument, must be a \"String\"")
 
         if testvalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"StrCount\" function test value, second argument, must be a \"String\"")
+            return None, TypeError("\"StrCount\" function test value, second argument, must be a \"String\"")
 
         if sourcevalue.is_null() or testvalue.is_null():
             return ValueExpression(ExpressionValueType.INT32, 0), None
@@ -1989,10 +1989,10 @@ class ExpressionTree:
 
     def _strcmp(self, leftvalue: ValueExpression, rightvalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if leftvalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"StrCmp\" function left value, first argument, must be a \"String\"")
+            return None, TypeError("\"StrCmp\" function left value, first argument, must be a \"String\"")
 
         if rightvalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"StrCmp\" function right value, second argument, must be a \"String\"")
+            return None, TypeError("\"StrCmp\" function right value, second argument, must be a \"String\"")
 
         if leftvalue.is_null() or rightvalue.is_null():
             return NULLSTRINGVALUE, None
@@ -2012,13 +2012,13 @@ class ExpressionTree:
 
     def _substr(self, sourcevalue: ValueExpression, indexvalue: ValueExpression, lengthvalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"SubStr\" function source value, first argument, must be a \"String\"")
+            return None, TypeError("\"SubStr\" function source value, first argument, must be a \"String\"")
 
         if not is_integertype(indexvalue.valuetype):
-            return None, ValueError("\"SubStr\" function index value, second argument, must be an integer type")
+            return None, TypeError("\"SubStr\" function index value, second argument, must be an integer type")
 
         if not is_integertype(lengthvalue.valuetype):
-            return None, ValueError("\"SubStr\" function length value, third argument, must be an  integer type")
+            return None, TypeError("\"SubStr\" function length value, third argument, must be an  integer type")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -2043,7 +2043,7 @@ class ExpressionTree:
 
     def _trim(self, sourcevalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"Trim\" function source value, first argument, must be a \"String\"")
+            return None, TypeError("\"Trim\" function source value, first argument, must be a \"String\"")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -2053,7 +2053,7 @@ class ExpressionTree:
 
     def _trimleft(self, sourcevalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"TrimLeft\" function source value, first argument, must be a \"String\"")
+            return None, TypeError("\"TrimLeft\" function source value, first argument, must be a \"String\"")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -2063,7 +2063,7 @@ class ExpressionTree:
 
     def _trimright(self, sourcevalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"TrimRight\" function source value, first argument, must be a \"String\"")
+            return None, TypeError("\"TrimRight\" function source value, first argument, must be a \"String\"")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -2073,7 +2073,7 @@ class ExpressionTree:
 
     def _upper(self, sourcevalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
-            return None, ValueError("\"Upper\" function source value, first argument, must be a \"String\"")
+            return None, TypeError("\"Upper\" function source value, first argument, must be a \"String\"")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -2218,10 +2218,10 @@ class ExpressionTree:
             return leftvalue, None
 
         if not is_integertype(rightvalue):
-            return None, EvaluateError(f"left bit-shift \"<<\" operator right operand, shift value, must be an integer")
+            return None, TypeError(f"left bit-shift \"<<\" operator right operand, shift value, must be an integer")
 
         if rightvalue.is_null():
-            return None, EvaluateError(f"left bit-shift \"<<\" operator right operand, shift value, is Null")
+            return None, TypeError(f"left bit-shift \"<<\" operator right operand, shift value, is Null")
 
         shiftamount = rightvalue.integervalue()
 
@@ -2249,10 +2249,10 @@ class ExpressionTree:
             return leftvalue, None
 
         if not is_integertype(rightvalue):
-            return None, EvaluateError(f"right bit-shift \">>\" operator right operand, shift value, must be an integer")
+            return None, TypeError(f"right bit-shift \">>\" operator right operand, shift value, must be an integer")
 
         if rightvalue.is_null():
-            return None, EvaluateError(f"right bit-shift \">>\" operator right operand, shift value, is Null")
+            return None, TypeError(f"right bit-shift \">>\" operator right operand, shift value, is Null")
 
         shiftamount = rightvalue.integervalue()
 
@@ -2283,6 +2283,7 @@ class ExpressionTree:
 
         if err is not None:
             return None, EvaluateError(f"bitwise \"&\" operator {err}")
+
         if valuetype == ExpressionValueType.BOOLEAN:
             return ValueExpression(ExpressionValueType.BOOLEAN, (leftvalue._booleanvalue_asint() & rightvalue._booleanvalue_asint()) != 0), None
         if valuetype == ExpressionValueType.INT32:
@@ -2301,6 +2302,7 @@ class ExpressionTree:
 
         if err is not None:
             return None, EvaluateError(f"bitwise \"|\" operator {err}")
+
         if valuetype == ExpressionValueType.BOOLEAN:
             return ValueExpression(ExpressionValueType.BOOLEAN, (leftvalue._booleanvalue_asint() | rightvalue._booleanvalue_asint()) != 0), None
         if valuetype == ExpressionValueType.INT32:
@@ -2319,6 +2321,7 @@ class ExpressionTree:
 
         if err is not None:
             return None, EvaluateError(f"bitwise \"^\" operator {err}")
+
         if valuetype == ExpressionValueType.BOOLEAN:
             return ValueExpression(ExpressionValueType.BOOLEAN, (leftvalue._booleanvalue_asint() ^ rightvalue._booleanvalue_asint()) != 0), None
         if valuetype == ExpressionValueType.INT32:
@@ -2525,7 +2528,7 @@ class ExpressionTree:
             return None, EvaluateError(f"cannot perform \"LIKE\" operation on \"{leftvalue.valuetype}\" and \"{rightvalue.valuetype}\"")
 
         if rightvalue.is_null():
-            return None, EvaluateError(f"right operand of \"LIKE\" operation is Null")
+            return None, TypeError(f"right operand of \"LIKE\" operation is Null")
 
         leftoperand = leftvalue._stringvalue()
         rightoperand = rightvalue._stringvalue()
