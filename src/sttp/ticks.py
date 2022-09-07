@@ -21,7 +21,7 @@
 #
 #******************************************************************************************************
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from gsf import Empty
 import numpy as np
 
@@ -129,11 +129,11 @@ class Ticks:
         return Ticks.from_datetime(datetime.now())
 
     @staticmethod
-    def utcnow() -> np.uint64:  # sourcery skip: aware-datetime-for-utc
+    def utcnow() -> np.uint64:
         """
         Gets the current time in UTC as a Ticks value.
         """
-        return Ticks.from_datetime(datetime.utcnow())
+        return Ticks.from_datetime(datetime.now(timezone.utc))
 
     @staticmethod
     def to_string(ticks: np.uint64, timespec: str = 'microseconds') -> str:

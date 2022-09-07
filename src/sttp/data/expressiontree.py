@@ -40,7 +40,8 @@ from .constants import TimeInterval, is_integertype, is_numerictype
 from .constants import derive_operationvaluetype, derive_comparison_operationvaluetype, derive_arithmetic_operationvaluetype
 from .errors import EvaluateError
 from typing import Callable, List, Optional, Tuple, Union
-from datetime import datetime
+from functools import cmp_to_key
+from datetime import datetime, timezone
 from dateutil import parser
 from dateutil.relativedelta import relativedelta
 from uuid import UUID
@@ -52,6 +53,34 @@ import sys
 INTSIZE = 64 if sys.maxsize > 2**32 else 32
 
 UMAXINT64 = np.uint64(Limits.MAXINT64)
+
+
+def _find_nthindex(source: str, test: str, index: int) -> int:
+    result = 0
+
+    for _ in range(index + 1):
+        location = source.find(test, result)
+
+        if location == -1:
+            result = 0
+            break
+
+        result = location + 1
+
+    return result - 1
+
+
+def _split_nthindex(source: str, test: str, index: int) -> Tuple[int, int, bool]:
+    firstindex = _find_nthindex(source, test, index - 1)
+    secondindex = _find_nthindex(source, test, index)
+
+    if firstindex <= 0:
+        return (-1, -1, False) if secondindex <= 0 else (0, secondindex, True)
+
+    if secondindex <= 0:
+        return firstindex + len(test), len(source), True
+
+    return firstindex + len(test), secondindex, True
 
 class ExpressionTree:
     """
@@ -108,7 +137,6 @@ class ExpressionTree:
 
         return self.selectwhere(table, predicate, True, True)
 
-
     def selectwhere(self, table: DataTable, predicate: Callable[[ValueExpression], Tuple[bool, Optional[Exception]]], applylimit: bool, applysort: bool) -> Tuple[List[DataRow], Optional[Exception]]:
         """
         Returns each table row evaluated from the `ExpressionTree` that matches the specified predicate.
@@ -164,7 +192,7 @@ class ExpressionTree:
 
                 return 0
 
-            matchedrows.sort(key=compare_rows)
+            matchedrows.sort(key=cmp_to_key(compare_rows))
 
         return matchedrows, None
 
@@ -226,10 +254,10 @@ class ExpressionTree:
             return unary_expression.applyto_decimal(unary_value._decimalvalue())
         if unary_valuetype == ExpressionValueType.DOUBLE:
             return unary_expression.applyto_double(unary_value._doublevalue())
-        
-        return None, EvaluateError(f"cannot apply unary \"{normalize_enumname(unary_expression.unarytype)}\" operator to \"{normalize_enumname(unary_valuetype)}\"")       
 
-    def _evaluate_column(self, column_expression: ColumnExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]: # sourcery skip
+        return None, EvaluateError(f"cannot apply unary \"{normalize_enumname(unary_expression.unarytype)}\" operator to \"{normalize_enumname(unary_valuetype)}\"")
+
+    def _evaluate_column(self, column_expression: ColumnExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:  # sourcery skip
         if self._currentrow is None:
             return None, ValueError("cannot evaluate column expression, current data row reference is not defined")
 
@@ -430,7 +458,7 @@ class ExpressionTree:
             return self._evaluate_upper(arguments)
         if functiontype == ExpressionFunctionType.UTCNOW:
             return self._evaluate_utcnow(arguments)
-        
+
         return None, TypeError("unexpected function type encountered")
 
     def _evaluate_abs(self, arguments: List[Expression]) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
@@ -859,7 +887,7 @@ class ExpressionTree:
         if err is not None:
             return None, EvaluateError(f"failed while evaluating \"Replace\" function optional ignore case value, fourth argument: {err}")
 
-        return self._replace(sourcevalue, testvalue, replacevalue, ignorecase)        
+        return self._replace(sourcevalue, testvalue, replacevalue, ignorecase)
 
     def _evaluate_reverse(self, arguments: List[Expression]) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if len(arguments) != 1:
@@ -1071,7 +1099,7 @@ class ExpressionTree:
 
     def _evaluate_operator(self, operator_expression: OperatorExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         operatortype = operator_expression.operatortype
-        
+
         leftvalue, err = self._evaluate(operator_expression.leftvalue)
 
         if err is not None:
@@ -1139,8 +1167,8 @@ class ExpressionTree:
             return self._and_op(leftvalue, rightvalue)
         if operatortype == ExpressionOperatorType.OR:
             return self._or_op(leftvalue, rightvalue)
-        
-        return None, TypeError("unexpected operator type encountered")        
+
+        return None, TypeError("unexpected operator type encountered")
 
     # Filter Expression Function Implementations
 
@@ -1148,7 +1176,7 @@ class ExpressionTree:
         sourcevaluetype = sourcevalue.valuetype
 
         if not is_numerictype(sourcevaluetype):
-            return None, ValueError("\"Abs\" function source value, first argument, must be numeric")
+            return None, ValueError("\"Abs\" function source value, first argument, must be a numeric type")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1164,14 +1192,14 @@ class ExpressionTree:
             return ValueExpression(ExpressionValueType.DECIMAL, abs(sourcevalue._decimalvalue())), None
         if sourcevaluetype == ExpressionValueType.DOUBLE:
             return ValueExpression(ExpressionValueType.DOUBLE, abs(sourcevalue._doublevalue())), None
-        
-        return None, TypeError("unexpected expression value type encountered")        
+
+        return None, TypeError("unexpected expression value type encountered")
 
     def _ceiling(self, sourcevalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         sourcevaluetype = sourcevalue.valuetype
 
         if not is_numerictype(sourcevaluetype):
-            return None, ValueError("\"Ceiling\" function source value, first argument, must be numeric")
+            return None, ValueError("\"Ceiling\" function source value, first argument, must be a numeric type")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1184,7 +1212,7 @@ class ExpressionTree:
             return ValueExpression(ExpressionValueType.DECIMAL, math.ceil(sourcevalue._decimalvalue())), None
         if sourcevaluetype == ExpressionValueType.DOUBLE:
             return ValueExpression(ExpressionValueType.DOUBLE, math.ceil(sourcevalue._doublevalue())), None
-        
+
         return None, TypeError("unexpected expression value type encountered")
 
     def _coalesce(self, arguments: List[Expression]) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
@@ -1249,7 +1277,7 @@ class ExpressionTree:
         if not foundvaluetype or targetvaluetype == ExpressionValueType.UNDEFINED:
             return None, EvaluateError(f"specified \"Convert\" function target type \"{targettype._stringvalue()}\", second argument, is not supported")
 
-        return sourcevalue.convert(targetvaluetype)        
+        return sourcevalue.convert(targetvaluetype)
 
     def _contains(self, sourcevalue: ValueExpression, testvalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
@@ -1368,7 +1396,7 @@ class ExpressionTree:
             return ValueExpression(ExpressionValueType.INT32, delta.years), None
         if interval == TimeInterval.MONTH:
             return ValueExpression(ExpressionValueType.INT32, delta.months), None
-        if interval in [TimeInterval.DAYOFYEAR, TimeInterval.DAY, TimeInterval.WEEKDAY]:            
+        if interval in [TimeInterval.DAYOFYEAR, TimeInterval.DAY, TimeInterval.WEEKDAY]:
             return ValueExpression(ExpressionValueType.INT32, delta.days), None
         if interval == TimeInterval.WEEK:
             return ValueExpression(ExpressionValueType.INT32, delta.weeks), None
@@ -1459,7 +1487,7 @@ class ExpressionTree:
         sourcevaluetype = sourcevalue.valuetype
 
         if not is_numerictype(sourcevaluetype):
-            return None, ValueError("\"Floor\" function source value, first argument, must be numeric")
+            return None, ValueError("\"Floor\" function source value, first argument, must be a numeric type")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -1720,10 +1748,10 @@ class ExpressionTree:
 
     def _power(self, sourcevalue: ValueExpression, exponentvalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if not is_numerictype(sourcevalue.valuetype):
-            return None, ValueError("\"Power\" function source value, first argument, must be numeric")
+            return None, ValueError("\"Power\" function source value, first argument, must be a numeric type")
 
         if not is_numerictype(exponentvalue.valuetype):
-            return None, ValueError("\"Power\" function exponent value, second argument, must be numeric")
+            return None, ValueError("\"Power\" function exponent value, second argument, must be a numeric type")
 
         # If source value or exponent value is Null, result is Null
         if sourcevalue.is_null() or exponentvalue.is_null():
@@ -1754,7 +1782,7 @@ class ExpressionTree:
             return ValueExpression(ExpressionValueType.DECIMAL, math.pow(sourcevalue._decimalvalue(), exponentvalue._decimalvalue())), None
         if valuetype == ExpressionValueType.DOUBLE:
             return ValueExpression(ExpressionValueType.DOUBLE, math.pow(sourcevalue._doublevalue(), exponentvalue._doublevalue())), None
-        
+
         return None, TypeError("unexpected expression value type encountered")
 
     def _regexmatch(self, regexvalue: ValueExpression, testvalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
@@ -1784,47 +1812,271 @@ class ExpressionTree:
         except Exception as ex:
             return None, EvaluateError(f"failed while evaluating \"{functionname}\" function expression value, first argument: {ex}")
 
-    def _replace(self, sourcevalue: ValueExpression, searchvalue: ValueExpression, replacevalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+    def _replace(self, sourcevalue: ValueExpression, testvalue: ValueExpression, replacevalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
+        if sourcevalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"Replace\" function source value, first argument, must be a \"String\"")
+
+        if testvalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"Replace\" function test value, second argument, must be a \"String\"")
+
+        if replacevalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"Replace\" function replace value, third argument, must be a \"String\"")
+
+        if testvalue.is_null():
+            return None, ValueError("\"Replace\" function test value, second argument, is null")
+
+        if replacevalue.is_null():
+            return None, ValueError("\"Replace\" function replace value, third argument, is null")
+
+        # If source value, result is Null
+        if sourcevalue.is_null():
+            return NULLSTRINGVALUE, None
+
+        ignorecase, err = ignorecase.convert(ExpressionValueType.BOOLEAN)
+
+        if err is not None:
+            return None, EvaluateError(f"failed while converting \"Replace\" function ignore case value, fourth argument, to \"Boolean\": {err}")
+
+        if ignorecase._booleanvalue():
+            try:
+                regex = re.compile(re.escape(testvalue._stringvalue()), re.IGNORECASE)
+            except Exception as ex:
+                return None, EvaluateError(f"failed while compiling \"Replace\" function case-insensitive RegEx replace expression for test value, second argument: {ex}")
+
+            return ValueExpression(ExpressionValueType.STRING, regex.sub(replacevalue._stringvalue(), sourcevalue._stringvalue())), None
+
+        return ValueExpression(ExpressionValueType.STRING, sourcevalue._stringvalue().replace(testvalue._stringvalue(), replacevalue._stringvalue())), None
 
     def _reverse(self, sourcevalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        if sourcevalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"Reverse\" function source value, first argument, must be a \"String\"")
+
+        # If source value, result is Null
+        if sourcevalue.is_null():
+            return NULLSTRINGVALUE, None
+
+        return ValueExpression(ExpressionValueType.STRING, sourcevalue._stringvalue()[::-1]), None
 
     def _round(self, sourcevalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        sourcevaluetype = sourcevalue.valuetype
+
+        if not is_numerictype(sourcevaluetype):
+            return None, ValueError("\"Round\" function source value, first argument, must be a numeric type")
+
+        # If source value is Null, result is Null
+        if sourcevalue.is_null():
+            return ValueExpression.nullvalue(sourcevaluetype), None
+
+        if is_integertype(sourcevaluetype):
+            return sourcevalue, None
+
+        if sourcevaluetype == ExpressionValueType.DECIMAL:
+            return ValueExpression(ExpressionValueType.DECIMAL, sourcevalue._decimalvalue().quantize(0)), None
+        if sourcevaluetype == ExpressionValueType.DOUBLE:
+            return ValueExpression(ExpressionValueType.DOUBLE, round(sourcevalue._doublevalue())), None
+
+        return None, TypeError("unexpected expression value type encountered")
 
     def _split(self, sourcevalue: ValueExpression, delimitervalue: ValueExpression, indexvalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        if sourcevalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"Split\" function source value, first argument, must be a \"String\"")
+
+        if delimitervalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"Split\" function delimiter value, second argument, must be a \"String\"")
+
+        if not is_integertype(indexvalue.valuetype):
+            return None, ValueError("\"Split\" function index value, third argument, must be an integer type")
+
+        if delimitervalue.is_null():
+            return None, ValueError("\"Split\" function delimiter value, second argument, is null")
+
+        if indexvalue.is_null():
+            return None, ValueError("\"Split\" function index value, third argument, is null")
+
+        # If source value is Null, result is Null
+        if sourcevalue.is_null():
+            return NULLSTRINGVALUE, None
+
+        ignorecase, err = ignorecase.convert(ExpressionValueType.BOOLEAN)
+
+        if err is not None:
+            return None, EvaluateError(f"failed while converting \"Split\" function ignore case value, fourth argument, to \"Boolean\": {err}")
+
+        sourcevalue = sourcevalue._stringvalue()
+        index = indexvalue._integervalue()
+
+        if ignorecase._booleanvalue():
+            start, stop, success = _split_nthindex(sourcevalue.upper(), delimitervalue._stringvalue().upper(), index)
+        else:
+            start, stop, success = _split_nthindex(sourcevalue, delimitervalue._stringvalue(), index)
+
+        return (ValueExpression(ExpressionValueType.STRING, sourcevalue[start:stop]), None) if success else (EMPTYSTRINGVALUE, None)
 
     def _sqrt(self, sourcevalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        sourcevaluetype = sourcevalue.valuetype
+
+        if not is_numerictype(sourcevaluetype):
+            return None, ValueError("\"Sqrt\" function source value, first argument, must be a numeric type")
+
+        # If source value is Null, result is Null
+        if sourcevalue.is_null():
+            return ValueExpression.nullvalue(sourcevaluetype), None
+
+        if is_integertype(sourcevaluetype):
+            return ValueExpression(ExpressionValueType.DOUBLE, math.sqrt(sourcevalue.integervalue())), None
+
+        if sourcevaluetype == ExpressionValueType.DECIMAL:
+            return ValueExpression(ExpressionValueType.DECIMAL, sourcevalue._decimalvalue().sqrt()), None
+        if sourcevaluetype == ExpressionValueType.DOUBLE:
+            return ValueExpression(ExpressionValueType.DOUBLE, math.sqrt(sourcevalue._doublevalue())), None
+
+        return None, TypeError("unexpected expression value type encountered")
 
     def _startswith(self, sourcevalue: ValueExpression, testvalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        if sourcevalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"StartsWith\" function source value, first argument, must be a \"String\"")
+
+        if testvalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"StartsWith\" function test value, second argument, must be a \"String\"")
+
+        # If source value is Null, result is Null
+        if sourcevalue.is_null():
+            return NULLSTRINGVALUE, None
+
+        if testvalue.is_null():
+            return FALSEVALUE, None
+
+        ignorecase, err = ignorecase.convert(ExpressionValueType.BOOLEAN)
+
+        if err is not None:
+            return None, EvaluateError(f"failed while converting \"StartsWith\" function ignore case value, third argument, to \"Boolean\": {err}")
+
+        if ignorecase._booleanvalue():
+            return ValueExpression(ExpressionValueType.BOOLEAN, sourcevalue._stringvalue().upper().startswith(testvalue._stringvalue().upper())), None
+
+        return ValueExpression(ExpressionValueType.BOOLEAN, sourcevalue._stringvalue().startswith(testvalue._stringvalue())), None
 
     def _strcount(self, sourcevalue: ValueExpression, testvalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        if sourcevalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"StrCount\" function source value, first argument, must be a \"String\"")
+
+        if testvalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"StrCount\" function test value, second argument, must be a \"String\"")
+
+        if sourcevalue.is_null() or testvalue.is_null():
+            return ValueExpression(ExpressionValueType.INT32, 0), None
+
+        findvalue = testvalue._stringvalue()
+
+        if len(findvalue) == 0:
+            return ValueExpression(ExpressionValueType.INT32, 0), None
+
+        ignorecase, err = ignorecase.convert(ExpressionValueType.BOOLEAN)
+
+        if err is not None:
+            return None, EvaluateError(f"failed while converting \"StrCount\" function ignore case value, third argument, to \"Boolean\": {err}")
+
+        if ignorecase._booleanvalue():
+            return ValueExpression(ExpressionValueType.INT32, sourcevalue._stringvalue().upper().count(findvalue.upper())), None
+
+        return ValueExpression(ExpressionValueType.INT32, sourcevalue._stringvalue().count(findvalue)), None
 
     def _strcmp(self, leftvalue: ValueExpression, rightvalue: ValueExpression, ignorecase: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        if leftvalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"StrCmp\" function left value, first argument, must be a \"String\"")
+
+        if rightvalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"StrCmp\" function right value, second argument, must be a \"String\"")
+
+        if leftvalue.is_null() or rightvalue.is_null():
+            return NULLSTRINGVALUE, None
+
+        ignorecase, err = ignorecase.convert(ExpressionValueType.BOOLEAN)
+
+        if err is not None:
+            return None, EvaluateError(f"failed while converting \"StrCmp\" function ignore case value, third argument, to \"Boolean\": {err}")
+
+        def compare_str(left: str, right: str) -> int:
+            return -1 if left < right else 1 if left > right else 0
+
+        if ignorecase._booleanvalue():
+            return ValueExpression(ExpressionValueType.INT32, compare_str(leftvalue._stringvalue().upper(), rightvalue._stringvalue().upper())), None
+
+        return ValueExpression(ExpressionValueType.INT32, compare_str(leftvalue._stringvalue(), rightvalue._stringvalue())), None
 
     def _substr(self, sourcevalue: ValueExpression, indexvalue: ValueExpression, lengthvalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        if sourcevalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"SubStr\" function source value, first argument, must be a \"String\"")
+
+        if not is_integertype(indexvalue.valuetype):
+            return None, ValueError("\"SubStr\" function index value, second argument, must be an integer type")
+
+        if not is_integertype(lengthvalue.valuetype):
+            return None, ValueError("\"SubStr\" function length value, third argument, must be an  integer type")
+
+        # If source value is Null, result is Null
+        if sourcevalue.is_null():
+            return NULLSTRINGVALUE, None
+
+        sourcetext = sourcevalue._stringvalue()
+        index = indexvalue.integervalue()
+
+        if index < 0 or index >= len(sourcetext):
+            return EMPTYSTRINGVALUE, None
+
+        if not lengthvalue.is_null():
+            length = lengthvalue.integervalue()
+
+            if length <= 0:
+                return EMPTYSTRINGVALUE, None
+
+            if index + length < len(sourcetext):
+                return ValueExpression(ExpressionValueType.STRING, sourcetext[index:index + length]), None
+
+        return ValueExpression(ExpressionValueType.STRING, sourcetext[index:]), None
 
     def _trim(self, sourcevalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        if sourcevalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"Trim\" function source value, first argument, must be a \"String\"")
+
+        # If source value is Null, result is Null
+        if sourcevalue.is_null():
+            return NULLSTRINGVALUE, None
+
+        return ValueExpression(ExpressionValueType.STRING, sourcevalue._stringvalue().strip()), None
 
     def _trimleft(self, sourcevalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        if sourcevalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"TrimLeft\" function source value, first argument, must be a \"String\"")
 
+        # If source value is Null, result is Null
+        if sourcevalue.is_null():
+            return NULLSTRINGVALUE, None
+
+        return ValueExpression(ExpressionValueType.STRING, sourcevalue._stringvalue().lstrip()), None
+        
     def _trimright(self, sourcevalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        if sourcevalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"TrimRight\" function source value, first argument, must be a \"String\"")
+
+        # If source value is Null, result is Null
+        if sourcevalue.is_null():
+            return NULLSTRINGVALUE, None
+
+        return ValueExpression(ExpressionValueType.STRING, sourcevalue._stringvalue().rstrip()), None
 
     def _upper(self, sourcevalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        if sourcevalue.valuetype != ExpressionValueType.STRING:
+            return None, ValueError("\"Upper\" function source value, first argument, must be a \"String\"")
+
+        # If source value is Null, result is Null
+        if sourcevalue.is_null():
+            return NULLSTRINGVALUE, None
+
+        return ValueExpression(ExpressionValueType.STRING, sourcevalue._stringvalue().upper()), None
 
     def _utcnow(self) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        return ValueExpression(ExpressionValueType.DATETIME, datetime.now(timezone.utc)), None
 
     # Filter Expression Operator Implementations
 
@@ -1896,31 +2148,3 @@ class ExpressionTree:
 
     def _or_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         pass
-
-    @staticmethod
-    def _find_nthindex(source: str, test: str, index: int) -> int:
-        result = 0
-
-        for _ in range(index + 1):
-            location = source.find(test, result)
-
-            if location == -1:
-                result = 0
-                break
-
-            result = location + 1
-
-        return result - 1
-
-    @staticmethod
-    def _split_nthindex(source: str, test: str, index: int) -> Tuple[int, int, bool]:
-        firstindex = ExpressionTree._find_nthindex(source, test, index - 1)
-        secondindex = ExpressionTree._find_nthindex(source, test, index)
-
-        if firstindex <= 0:
-            return (-1, -1, False) if secondindex <= 0 else (0, secondindex, True)
-
-        if secondindex <= 0:
-            return firstindex + len(test), len(source), True
-
-        return firstindex + len(test), secondindex, True
