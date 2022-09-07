@@ -27,17 +27,22 @@ from .datatable import DataTable
 from .datatype import DataType
 from .orderbyterm import OrderByTerm
 from .expression import Expression
-from .valueexpression import ValueExpression
-from .valueexpression import TRUEVALUE, FALSEVALUE, EMPTYSTRINGVALUE
-from .valueexpression import NULLBOOLVALUE, NULLSTRINGVALUE, NULLINT32VALUE, NULLDATETIMEVALUE
+from .valueexpression import ValueExpression, \
+    TRUEVALUE, FALSEVALUE, EMPTYSTRINGVALUE, \
+    NULLBOOLVALUE, NULLSTRINGVALUE, \
+    NULLINT32VALUE, NULLDATETIMEVALUE
 from .unaryexpression import UnaryExpression
 from .columnexpression import ColumnExpression
 from .inlistexpression import InListExpression
 from .functionexpression import FunctionExpression
 from .operatorexpression import OperatorExpression
-from .constants import ExpressionType, ExpressionValueType, ExpressionFunctionType, ExpressionOperatorType
-from .constants import TimeInterval, is_integertype, is_numerictype
-from .constants import derive_operationvaluetype, derive_comparison_operationvaluetype, derive_arithmetic_operationvaluetype
+from .constants import ExpressionType, \
+    ExpressionValueType, ExpressionFunctionType, \
+    ExpressionOperatorType, TimeInterval, \
+    is_integertype, is_numerictype, \
+    derive_operationvaluetype, \
+    derive_comparison_operationvaluetype, \
+    derive_arithmetic_operationvaluetype
 from .errors import EvaluateError
 from typing import Callable, List, Optional, Tuple, Union
 from functools import cmp_to_key
@@ -82,6 +87,7 @@ def _split_nthindex(source: str, test: str, index: int) -> Tuple[int, int, bool]
 
     return firstindex + len(test), secondindex, True
 
+
 class ExpressionTree:
     """
     Represents a tree of expressions for evaluation.
@@ -119,7 +125,7 @@ class ExpressionTree:
     def select(self, table: DataTable) -> Tuple[List[DataRow], Optional[Exception]]:
         """
         Returns the rows matching the the `ExpressionTree`.
-        
+
         The expression tree result type is expected to be a boolean for this filtering operation.
         This works like the "WHERE" clause of a SQL expression. Any "TOP" limit and "ORDER BY"
         sorting clauses found in filter expressions will be respected. An error will be returned
@@ -140,7 +146,7 @@ class ExpressionTree:
     def selectwhere(self, table: DataTable, predicate: Callable[[ValueExpression], Tuple[bool, Optional[Exception]]], applylimit: bool, applysort: bool) -> Tuple[List[DataRow], Optional[Exception]]:
         """
         Returns each table row evaluated from the `ExpressionTree` that matches the specified predicate.
-        
+
         The `applylimit` and `applysort` parameters determine if any encountered "TOP" limit and "ORDER BY"
         sorting clauses will be respected. An error will be returned if the table parameter is nil or any
         row expresssion evaluation fails.
@@ -2054,7 +2060,7 @@ class ExpressionTree:
             return NULLSTRINGVALUE, None
 
         return ValueExpression(ExpressionValueType.STRING, sourcevalue._stringvalue().lstrip()), None
-        
+
     def _trimright(self, sourcevalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.valuetype != ExpressionValueType.STRING:
             return None, ValueError("\"TrimRight\" function source value, first argument, must be a \"String\"")
@@ -2081,70 +2087,512 @@ class ExpressionTree:
     # Filter Expression Operator Implementations
 
     def _convert_operands(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType) -> Tuple[Optional[ValueExpression], Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # sourcery skip
+
+        leftvalue, err = leftvalue.convert(valuetype)
+
+        if err is not None:
+            return None, None, err
+
+        rightvalue, err = rightvalue.convert(valuetype)
+
+        if err is not None:
+            return None, None, err
+
+        return leftvalue, rightvalue, None
 
     def _multiply_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # If left or right value is Null, result is Null
+        if leftvalue.is_null() or rightvalue.is_null():
+            return ValueExpression.nullvalue(valuetype), None
+
+        leftvalue, rightvalue, err = self._convert_operands(leftvalue, rightvalue, valuetype)
+
+        if err is not None:
+            return None, EvaluateError(f"multiplication \"*\" operator {err}")
+
+        if valuetype == ExpressionValueType.INT32:
+            return ValueExpression(ExpressionValueType.INT32, leftvalue._int32value() * rightvalue._int32value()), None
+        if valuetype == ExpressionValueType.INT64:
+            return ValueExpression(ExpressionValueType.INT64, leftvalue._int64value() * rightvalue._int64value()), None
+        if valuetype == ExpressionValueType.DECIMAL:
+            return ValueExpression(ExpressionValueType.DECIMAL, leftvalue._decimalvalue() * rightvalue._decimalvalue()), None
+        if valuetype == ExpressionValueType.DOUBLE:
+            return ValueExpression(ExpressionValueType.DOUBLE, leftvalue._doublevalue() * rightvalue._doublevalue()), None
+
+        return None, EvaluateError(f"cannot apply multiplication \"*\" operator to \"{valuetype}\"")
 
     def _divide_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # If left or right value is Null, result is Null
+        if leftvalue.is_null() or rightvalue.is_null():
+            return ValueExpression.nullvalue(valuetype), None
+
+        leftvalue, rightvalue, err = self._convert_operands(leftvalue, rightvalue, valuetype)
+
+        if err is not None:
+            return None, EvaluateError(f"division \"/\" operator {err}")
+
+        if valuetype == ExpressionValueType.INT32:
+            return ValueExpression(ExpressionValueType.INT32, leftvalue._int32value() / rightvalue._int32value()), None
+        if valuetype == ExpressionValueType.INT64:
+            return ValueExpression(ExpressionValueType.INT64, leftvalue._int64value() / rightvalue._int64value()), None
+        if valuetype == ExpressionValueType.DECIMAL:
+            return ValueExpression(ExpressionValueType.DECIMAL, leftvalue._decimalvalue() / rightvalue._decimalvalue()), None
+        if valuetype == ExpressionValueType.DOUBLE:
+            return ValueExpression(ExpressionValueType.DOUBLE, leftvalue._doublevalue() / rightvalue._doublevalue()), None
+
+        return None, EvaluateError(f"cannot apply division \"/\" operator to \"{valuetype}\"")
 
     def _modulus_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # If left or right value is Null, result is Null
+        if leftvalue.is_null() or rightvalue.is_null():
+            return ValueExpression.nullvalue(valuetype), None
+
+        leftvalue, rightvalue, err = self._convert_operands(leftvalue, rightvalue, valuetype)
+
+        if err is not None:
+            return None, EvaluateError(f"modulus \"%\" operator {err}")
+
+        if valuetype == ExpressionValueType.INT32:
+            return ValueExpression(ExpressionValueType.INT32, leftvalue._int32value() % rightvalue._int32value()), None
+        if valuetype == ExpressionValueType.INT64:
+            return ValueExpression(ExpressionValueType.INT64, leftvalue._int64value() % rightvalue._int64value()), None
+        if valuetype == ExpressionValueType.DECIMAL:
+            return ValueExpression(ExpressionValueType.DECIMAL, leftvalue._decimalvalue() % rightvalue._decimalvalue()), None
+        if valuetype == ExpressionValueType.DOUBLE:
+            return ValueExpression(ExpressionValueType.DOUBLE, leftvalue._doublevalue() % rightvalue._doublevalue()), None
+
+        return None, EvaluateError(f"cannot apply modulus \"%\" operator to \"{valuetype}\"")
 
     def _add_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # If left or right value is Null, result is Null
+        if leftvalue.is_null() or rightvalue.is_null():
+            return ValueExpression.nullvalue(valuetype), None
+
+        leftvalue, rightvalue, err = self._convert_operands(leftvalue, rightvalue, valuetype)
+
+        if err is not None:
+            return None, EvaluateError(f"addition \"+\" operator {err}")
+
+        if valuetype == ExpressionValueType.BOOLEAN:
+            return ValueExpression(ExpressionValueType.BOOLEAN, (leftvalue._booleanvalue_asint() + rightvalue._booleanvalue_asint()) != 0), None
+        if valuetype == ExpressionValueType.INT32:
+            return ValueExpression(ExpressionValueType.INT32, leftvalue._int32value() + rightvalue._int32value()), None
+        if valuetype == ExpressionValueType.INT64:
+            return ValueExpression(ExpressionValueType.INT64, leftvalue._int64value() + rightvalue._int64value()), None
+        if valuetype == ExpressionValueType.DECIMAL:
+            return ValueExpression(ExpressionValueType.DECIMAL, leftvalue._decimalvalue() + rightvalue._decimalvalue()), None
+        if valuetype == ExpressionValueType.DOUBLE:
+            return ValueExpression(ExpressionValueType.DOUBLE, leftvalue._doublevalue() + rightvalue._doublevalue()), None
+        if valuetype == ExpressionValueType.STRING:
+            return ValueExpression(ExpressionValueType.STRING, leftvalue._stringvalue() + rightvalue._stringvalue()), None
+
+        return None, EvaluateError(f"cannot apply addition \"+\" operator to \"{valuetype}\"")
 
     def _subtract_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # If left or right value is Null, result is Null
+        if leftvalue.is_null() or rightvalue.is_null():
+            return ValueExpression.nullvalue(valuetype), None
 
-    def _bitshiftleft_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        leftvalue, rightvalue, err = self._convert_operands(leftvalue, rightvalue, valuetype)
 
-    def _bitshiftright_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        if err is not None:
+            return None, EvaluateError(f"subtraction \"-\" operator {err}")
+
+        if valuetype == ExpressionValueType.BOOLEAN:
+            return ValueExpression(ExpressionValueType.BOOLEAN, (leftvalue._booleanvalue_asint() - rightvalue._booleanvalue_asint()) != 0), None
+        if valuetype == ExpressionValueType.INT32:
+            return ValueExpression(ExpressionValueType.INT32, leftvalue._int32value() - rightvalue._int32value()), None
+        if valuetype == ExpressionValueType.INT64:
+            return ValueExpression(ExpressionValueType.INT64, leftvalue._int64value() - rightvalue._int64value()), None
+        if valuetype == ExpressionValueType.DECIMAL:
+            return ValueExpression(ExpressionValueType.DECIMAL, leftvalue._decimalvalue() - rightvalue._decimalvalue()), None
+        if valuetype == ExpressionValueType.DOUBLE:
+            return ValueExpression(ExpressionValueType.DOUBLE, leftvalue._doublevalue() - rightvalue._doublevalue()), None
+
+        return None, EvaluateError(f"cannot apply subtraction \"-\" operator to \"{valuetype}\"")
+
+    def _bitshiftleft_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
+        # If left is Null, result is Null
+        if leftvalue.is_null():
+            return leftvalue, None
+
+        if not is_integertype(rightvalue):
+            return None, EvaluateError(f"left bit-shift \"<<\" operator right operand, shift value, must be an integer")
+
+        if rightvalue.is_null():
+            return None, EvaluateError(f"left bit-shift \"<<\" operator right operand, shift value, is Null")
+
+        shiftamount = rightvalue.integervalue()
+
+        if leftvalue.valuetype == ExpressionValueType.BOOLEAN:
+            if shiftamount < 0:
+                shiftamount = INTSIZE - (abs(shiftamount) % INTSIZE)
+
+            return ValueExpression(ExpressionValueType.BOOLEAN, (leftvalue._booleanvalue_asint() << shiftamount) != 0), None
+        if leftvalue.valuetype == ExpressionValueType.INT32:
+            if shiftamount < 0:
+                shiftamount = 32 - (abs(shiftamount) % 32)
+
+            return ValueExpression(ExpressionValueType.INT32, leftvalue._int32value() << shiftamount), None
+        if leftvalue.valuetype == ExpressionValueType.INT64:
+            if shiftamount < 0:
+                shiftamount = 64 - (abs(shiftamount) % 64)
+
+            return ValueExpression(ExpressionValueType.INT64, leftvalue._int64value() << shiftamount), None
+
+        return None, EvaluateError(f"cannot apply left bit-shift \"<<\" operator to \"{leftvalue.valuetype}\"")
+
+    def _bitshiftright_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
+        # If left is Null, result is Null
+        if leftvalue.is_null():
+            return leftvalue, None
+
+        if not is_integertype(rightvalue):
+            return None, EvaluateError(f"right bit-shift \">>\" operator right operand, shift value, must be an integer")
+
+        if rightvalue.is_null():
+            return None, EvaluateError(f"right bit-shift \">>\" operator right operand, shift value, is Null")
+
+        shiftamount = rightvalue.integervalue()
+
+        if leftvalue.valuetype == ExpressionValueType.BOOLEAN:
+            if shiftamount < 0:
+                shiftamount = INTSIZE - (abs(shiftamount) % INTSIZE)
+
+            return ValueExpression(ExpressionValueType.BOOLEAN, (leftvalue._booleanvalue_asint() >> shiftamount) != 0), None
+        if leftvalue.valuetype == ExpressionValueType.INT32:
+            if shiftamount < 0:
+                shiftamount = 32 - (abs(shiftamount) % 32)
+
+            return ValueExpression(ExpressionValueType.INT32, leftvalue._int32value() >> shiftamount), None
+        if leftvalue.valuetype == ExpressionValueType.INT64:
+            if shiftamount < 0:
+                shiftamount = 64 - (abs(shiftamount) % 64)
+
+            return ValueExpression(ExpressionValueType.INT64, leftvalue._int64value() >> shiftamount), None
+
+        return None, EvaluateError(f"cannot apply right bit-shift \">>\" operator to \"{leftvalue.valuetype}\"")
 
     def _bitwiseand_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # If left or right value is Null, result is Null
+        if leftvalue.is_null() or rightvalue.is_null():
+            return ValueExpression.nullvalue(valuetype), None
+
+        leftvalue, rightvalue, err = self._convert_operands(leftvalue, rightvalue, valuetype)
+
+        if err is not None:
+            return None, EvaluateError(f"bitwise \"&\" operator {err}")
+        if valuetype == ExpressionValueType.BOOLEAN:
+            return ValueExpression(ExpressionValueType.BOOLEAN, (leftvalue._booleanvalue_asint() & rightvalue._booleanvalue_asint()) != 0), None
+        if valuetype == ExpressionValueType.INT32:
+            return ValueExpression(ExpressionValueType.INT32, leftvalue._int32value() & rightvalue._int32value()), None
+        if valuetype == ExpressionValueType.INT64:
+            return ValueExpression(ExpressionValueType.INT64, leftvalue._int64value() & rightvalue._int64value()), None
+
+        return None, EvaluateError(f"cannot apply bitwise \"&\" operator to \"{valuetype}\"")
 
     def _bitwiseor_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # If left or right value is Null, result is Null
+        if leftvalue.is_null() or rightvalue.is_null():
+            return ValueExpression.nullvalue(valuetype), None
+
+        leftvalue, rightvalue, err = self._convert_operands(leftvalue, rightvalue, valuetype)
+
+        if err is not None:
+            return None, EvaluateError(f"bitwise \"|\" operator {err}")
+        if valuetype == ExpressionValueType.BOOLEAN:
+            return ValueExpression(ExpressionValueType.BOOLEAN, (leftvalue._booleanvalue_asint() | rightvalue._booleanvalue_asint()) != 0), None
+        if valuetype == ExpressionValueType.INT32:
+            return ValueExpression(ExpressionValueType.INT32, leftvalue._int32value() | rightvalue._int32value()), None
+        if valuetype == ExpressionValueType.INT64:
+            return ValueExpression(ExpressionValueType.INT64, leftvalue._int64value() | rightvalue._int64value()), None
+
+        return None, EvaluateError(f"cannot apply bitwise \"|\" operator to \"{valuetype}\"")
 
     def _bitwisexor_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # If left or right value is Null, result is Null
+        if leftvalue.is_null() or rightvalue.is_null():
+            return ValueExpression.nullvalue(valuetype), None
+
+        leftvalue, rightvalue, err = self._convert_operands(leftvalue, rightvalue, valuetype)
+
+        if err is not None:
+            return None, EvaluateError(f"bitwise \"^\" operator {err}")
+        if valuetype == ExpressionValueType.BOOLEAN:
+            return ValueExpression(ExpressionValueType.BOOLEAN, (leftvalue._booleanvalue_asint() ^ rightvalue._booleanvalue_asint()) != 0), None
+        if valuetype == ExpressionValueType.INT32:
+            return ValueExpression(ExpressionValueType.INT32, leftvalue._int32value() ^ rightvalue._int32value()), None
+        if valuetype == ExpressionValueType.INT64:
+            return ValueExpression(ExpressionValueType.INT64, leftvalue._int64value() ^ rightvalue._int64value()), None
+
+        return None, EvaluateError(f"cannot apply bitwise \"^\" operator to \"{valuetype}\"")
 
     def _lessthan_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # If left or right value is Null, result is Null
+        if leftvalue.is_null() or rightvalue.is_null():
+            return ValueExpression.nullvalue(ExpressionValueType.BOOLEAN), None
+
+        leftvalue, rightvalue, err = self._convert_operands(leftvalue, rightvalue, valuetype)
+
+        if err is not None:
+            return None, EvaluateError(f"less-than \"<\" operator {err}")
+
+        if valuetype == ExpressionValueType.BOOLEAN:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._booleanvalue_asint() < rightvalue._booleanvalue_asint()), None
+        if valuetype == ExpressionValueType.INT32:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._int32value() < rightvalue._int32value()), None
+        if valuetype == ExpressionValueType.INT64:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._int64value() < rightvalue._int64value()), None
+        if valuetype == ExpressionValueType.DECIMAL:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._decimalvalue() < rightvalue._decimalvalue()), None
+        if valuetype == ExpressionValueType.DOUBLE:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._doublevalue() < rightvalue._doublevalue()), None
+        if valuetype == ExpressionValueType.STRING:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._stringvalue().upper() < rightvalue._stringvalue().upper()), None
+        if valuetype == ExpressionValueType.GUID:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._guidvalue() < rightvalue._guidvalue()), None
+        if valuetype == ExpressionValueType.DATETIME:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._datetimevalue() < rightvalue._datetimevalue()), None
+
+        return None, EvaluateError(f"cannot apply less-than \"<\" operator to \"{valuetype}\"")
 
     def _lessthanorequal_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # If left or right value is Null, result is Null
+        if leftvalue.is_null() or rightvalue.is_null():
+            return ValueExpression.nullvalue(ExpressionValueType.BOOLEAN), None
+
+        leftvalue, rightvalue, err = self._convert_operands(leftvalue, rightvalue, valuetype)
+
+        if err is not None:
+            return None, EvaluateError(f"less-than-or-equal \"<=\" operator {err}")
+
+        if valuetype == ExpressionValueType.BOOLEAN:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._booleanvalue_asint() <= rightvalue._booleanvalue_asint()), None
+        if valuetype == ExpressionValueType.INT32:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._int32value() <= rightvalue._int32value()), None
+        if valuetype == ExpressionValueType.INT64:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._int64value() <= rightvalue._int64value()), None
+        if valuetype == ExpressionValueType.DECIMAL:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._decimalvalue() <= rightvalue._decimalvalue()), None
+        if valuetype == ExpressionValueType.DOUBLE:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._doublevalue() <= rightvalue._doublevalue()), None
+        if valuetype == ExpressionValueType.STRING:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._stringvalue().upper() <= rightvalue._stringvalue().upper()), None
+        if valuetype == ExpressionValueType.GUID:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._guidvalue() <= rightvalue._guidvalue()), None
+        if valuetype == ExpressionValueType.DATETIME:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._datetimevalue() <= rightvalue._datetimevalue()), None
+
+        return None, EvaluateError(f"cannot apply less-than-or-equal \"<=\" operator to \"{valuetype}\"")
 
     def _greaterthan_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # If left or right value is Null, result is Null
+        if leftvalue.is_null() or rightvalue.is_null():
+            return ValueExpression.nullvalue(ExpressionValueType.BOOLEAN), None
+
+        leftvalue, rightvalue, err = self._convert_operands(leftvalue, rightvalue, valuetype)
+
+        if err is not None:
+            return None, EvaluateError(f"greater-than \">\" operator {err}")
+
+        if valuetype == ExpressionValueType.BOOLEAN:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._booleanvalue_asint() > rightvalue._booleanvalue_asint()), None
+        if valuetype == ExpressionValueType.INT32:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._int32value() > rightvalue._int32value()), None
+        if valuetype == ExpressionValueType.INT64:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._int64value() > rightvalue._int64value()), None
+        if valuetype == ExpressionValueType.DECIMAL:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._decimalvalue() > rightvalue._decimalvalue()), None
+        if valuetype == ExpressionValueType.DOUBLE:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._doublevalue() > rightvalue._doublevalue()), None
+        if valuetype == ExpressionValueType.STRING:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._stringvalue().upper() > rightvalue._stringvalue().upper()), None
+        if valuetype == ExpressionValueType.GUID:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._guidvalue() > rightvalue._guidvalue()), None
+        if valuetype == ExpressionValueType.DATETIME:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._datetimevalue() > rightvalue._datetimevalue()), None
+
+        return None, EvaluateError(f"cannot apply greater-than \">\" operator to \"{valuetype}\"")
 
     def _greaterthanorequal_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # If left or right value is Null, result is Null
+        if leftvalue.is_null() or rightvalue.is_null():
+            return ValueExpression.nullvalue(ExpressionValueType.BOOLEAN), None
+
+        leftvalue, rightvalue, err = self._convert_operands(leftvalue, rightvalue, valuetype)
+
+        if err is not None:
+            return None, EvaluateError(f"greater-than-or-equal \">=\" operator {err}")
+
+        if valuetype == ExpressionValueType.BOOLEAN:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._booleanvalue_asint() >= rightvalue._booleanvalue_asint()), None
+        if valuetype == ExpressionValueType.INT32:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._int32value() >= rightvalue._int32value()), None
+        if valuetype == ExpressionValueType.INT64:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._int64value() >= rightvalue._int64value()), None
+        if valuetype == ExpressionValueType.DECIMAL:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._decimalvalue() >= rightvalue._decimalvalue()), None
+        if valuetype == ExpressionValueType.DOUBLE:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._doublevalue() >= rightvalue._doublevalue()), None
+        if valuetype == ExpressionValueType.STRING:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._stringvalue().upper() >= rightvalue._stringvalue().upper()), None
+        if valuetype == ExpressionValueType.GUID:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._guidvalue() >= rightvalue._guidvalue()), None
+        if valuetype == ExpressionValueType.DATETIME:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._datetimevalue() >= rightvalue._datetimevalue()), None
+
+        return None, EvaluateError(f"cannot apply greater-than-or-equal \">=\" operator to \"{valuetype}\"")
 
     def _equal_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType, exactmatch: bool) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # If left or right value is Null, result is Null
+        if leftvalue.is_null() or rightvalue.is_null():
+            return ValueExpression.nullvalue(ExpressionValueType.BOOLEAN), None
+
+        leftvalue, rightvalue, err = self._convert_operands(leftvalue, rightvalue, valuetype)
+
+        if err is not None:
+            return None, EvaluateError(f"equal \"=\" operator {err}")
+
+        if valuetype == ExpressionValueType.BOOLEAN:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._booleanvalue_asint() == rightvalue._booleanvalue_asint()), None
+        if valuetype == ExpressionValueType.INT32:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._int32value() == rightvalue._int32value()), None
+        if valuetype == ExpressionValueType.INT64:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._int64value() == rightvalue._int64value()), None
+        if valuetype == ExpressionValueType.DECIMAL:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._decimalvalue() == rightvalue._decimalvalue()), None
+        if valuetype == ExpressionValueType.DOUBLE:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._doublevalue() == rightvalue._doublevalue()), None
+        if valuetype == ExpressionValueType.STRING:
+            if exactmatch:
+                return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._stringvalue() == rightvalue._stringvalue()), None
+
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._stringvalue().upper() == rightvalue._stringvalue().upper()), None
+        if valuetype == ExpressionValueType.GUID:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._guidvalue() == rightvalue._guidvalue()), None
+        if valuetype == ExpressionValueType.DATETIME:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._datetimevalue() == rightvalue._datetimevalue()), None
+
+        return None, EvaluateError(f"cannot apply equal \"=\" operator to \"{valuetype}\"")
 
     def _notequal_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType, exactmatch: bool) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # If left or right value is Null, result is Null
+        if leftvalue.is_null() or rightvalue.is_null():
+            return ValueExpression.nullvalue(ExpressionValueType.BOOLEAN), None
+
+        leftvalue, rightvalue, err = self._convert_operands(leftvalue, rightvalue, valuetype)
+
+        if err is not None:
+            return None, EvaluateError(f"not-equal \"!=\" operator {err}")
+
+        if valuetype == ExpressionValueType.BOOLEAN:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._booleanvalue_asint() != rightvalue._booleanvalue_asint()), None
+        if valuetype == ExpressionValueType.INT32:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._int32value() != rightvalue._int32value()), None
+        if valuetype == ExpressionValueType.INT64:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._int64value() != rightvalue._int64value()), None
+        if valuetype == ExpressionValueType.DECIMAL:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._decimalvalue() != rightvalue._decimalvalue()), None
+        if valuetype == ExpressionValueType.DOUBLE:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._doublevalue() != rightvalue._doublevalue()), None
+        if valuetype == ExpressionValueType.STRING:
+            if exactmatch:
+                return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._stringvalue() != rightvalue._stringvalue()), None
+
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._stringvalue().upper() != rightvalue._stringvalue().upper()), None
+        if valuetype == ExpressionValueType.GUID:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._guidvalue() != rightvalue._guidvalue()), None
+        if valuetype == ExpressionValueType.DATETIME:
+            return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._datetimevalue() != rightvalue._datetimevalue()), None
+
+        return None, EvaluateError(f"cannot apply not-equal \"!=\" operator to \"{valuetype}\"")
 
     def _isnull_op(self, value: ValueExpression) -> Optional[ValueExpression]:
-        pass
+        return ValueExpression(ExpressionValueType.BOOLEAN, value.is_null())
 
     def _isnotnull_op(self, value: ValueExpression) -> Optional[ValueExpression]:
-        pass
+        return ValueExpression(ExpressionValueType.BOOLEAN, not value.is_null())
 
     def _like_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType, exactmatch: bool) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # sourcery skip
+
+        # If left is Null, result is Null
+        if leftvalue.is_null():
+            return NULLBOOLVALUE, None
+
+        if leftvalue.valuetype != ExpressionValueType.STRING or rightvalue.valuetype != ExpressionValueType.STRING:
+            return None, EvaluateError(f"cannot perform \"LIKE\" operation on \"{leftvalue.valuetype}\" and \"{rightvalue.valuetype}\"")
+
+        if rightvalue.is_null():
+            return None, EvaluateError(f"right operand of \"LIKE\" operation is Null")
+
+        leftoperand = leftvalue._stringvalue()
+        rightoperand = rightvalue._stringvalue()
+        testexpression = rightoperand.replace("%", "*")
+        startswith_wildcard = testexpression.startswith("*")
+        endswith_wildcard = testexpression.endswith("*")
+
+        if startswith_wildcard:
+            testexpression = testexpression[1:]
+
+        if endswith_wildcard and len(testexpression) > 0:
+            testexpression = testexpression[:-1]
+
+        # "*" or "**" expression means match everything
+        if len(testexpression) == 0:
+            return TRUEVALUE, None
+
+        # Wild cards in the middle of the string are not supported
+        if "*" in testexpression:
+            return None, EvaluateError(f"right operand of \"LIKE\" expression \"{rightoperand}\" has an invalid pattern")
+
+        if startswith_wildcard:
+            if exactmatch:
+                if leftoperand.endswith(testexpression):
+                    return TRUEVALUE, None
+            else:
+                if leftoperand.upper().endswith(testexpression.upper()):
+                    return TRUEVALUE, None
+
+        if endswith_wildcard:
+            if exactmatch:
+                if leftoperand.startswith(testexpression):
+                    return TRUEVALUE, None
+            else:
+                if leftoperand.upper().startswith(testexpression.upper()):
+                    return TRUEVALUE, None
+
+        return FALSEVALUE, None
 
     def _notlike_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType, exactmatch: bool) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # If left is Null, result is Null
+        if leftvalue.is_null():
+            return NULLBOOLVALUE, None
+
+        likeresult, err = self._like_op(leftvalue, rightvalue, valuetype, exactmatch)
+
+        if err is not None:
+            return None, err
+
+        return (FALSEVALUE, None) if likeresult._booleanvalue() else (TRUEVALUE, None)
 
     def _and_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # If left or right value is Null, result is Null
+        if leftvalue.is_null() or rightvalue.is_null():
+            return NULLBOOLVALUE, None
+
+        if leftvalue.valuetype != ExpressionValueType.BOOLEAN or rightvalue.valuetype != ExpressionValueType.BOOLEAN:
+            return None, EvaluateError(f"cannot perform \"AND\" operation on \"{leftvalue.valuetype}\" and \"{rightvalue.valuetype}\"")
+
+        return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._booleanvalue() and rightvalue._booleanvalue()), None
 
     def _or_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
-        pass
+        # If left or right value is Null, result is Null
+        if leftvalue.is_null() or rightvalue.is_null():
+            return NULLBOOLVALUE, None
+
+        if leftvalue.valuetype != ExpressionValueType.BOOLEAN or rightvalue.valuetype != ExpressionValueType.BOOLEAN:
+            return None, EvaluateError(f"cannot perform \"OR\" operation on \"{leftvalue.valuetype}\" and \"{rightvalue.valuetype}\"")
+
+        return ValueExpression(ExpressionValueType.BOOLEAN, leftvalue._booleanvalue() or rightvalue._booleanvalue()), None

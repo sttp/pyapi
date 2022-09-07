@@ -100,7 +100,7 @@ class ValueExpression(Expression):
 
         return self._value is None
 
-    def integervalue(self, defaultvalue: int) -> int:
+    def integervalue(self, defaultvalue: int = 0) -> int:
         """
         Gets the `ValueExpression` as an integer value or specified default value if not possible.
         """
