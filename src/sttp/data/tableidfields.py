@@ -46,3 +46,9 @@ class TableIDFields:
         Defines the name of the point tag field, type string.
         Common value is "PointTag".
         """
+
+
+DEFAULT_TABLEIDFIELDS = TableIDFields()
+"""
+Defines the common default table ID field names.
+"""
