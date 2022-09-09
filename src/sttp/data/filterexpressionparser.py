@@ -1306,7 +1306,7 @@ class FilterExpressionParser(ExpressionListener):
 
         Filter expressions can contain multiple statements, separated by semi-colons, where each statement results
         in a unique expression tree; this function returns the combined results of each encountered filter expression
-        statement. Returned `DataRow` set will contain only unique rows, in arbitrary order. Any encountered "TOP" limit
+        statement. Returned `UUID` set will contain only unique values, in arbitrary order. Any encountered "TOP" limit
         clauses for individual filter expression statements will be respected, but "ORDER BY" clauses will be ignored.
         An error will be returned if `dataset` parameter is None, the `filterexpression` is empty, expression fails to
         parse or any row expression evaluation fails.
@@ -1331,7 +1331,7 @@ class FilterExpressionParser(ExpressionListener):
 
         Filter expressions can contain multiple statements, separated by semi-colons, where each statement results
         in a unique expression tree; this function returns the combined results of each encountered filter expression
-        statement. Returned `DataRow` set will contain only unique rows, in arbitrary order. Any encountered "TOP" limit
+        statement. Returned `UUID` set will contain only unique values, in arbitrary order. Any encountered "TOP" limit
         clauses for individual filter expression statements will be respected, but "ORDER BY" clauses will be ignored.
         An error will be returned if `datatable` parameter (or its parent DataSet) is None, the `filterexpression` is
         empty, expression fails to parse or any row expression evaluation fails.
