@@ -29,19 +29,19 @@ class TableIDFields:
     """
 
     def __init__(self):
-        self.signalid_fieldname: str = "SignalID"
+        self.signalid_fieldname = "SignalID"
         """
         Defines the field name of the signal ID field, type Guid.
         Common value is "SignalID".
         """
 
-        self.measurementkey_fieldname: str = "ID"
+        self.measurementkey_fieldname = "ID"
         """
         Defines the name of the measurement key field (format like "instance:id"),
         type string. Common value is "ID".
         """
 
-        self.pointtag_fieldname: str = "PointTag"
+        self.pointtag_fieldname = "PointTag"
         """
         Defines the name of the point tag field, type string.
         Common value is "PointTag".

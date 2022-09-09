@@ -74,13 +74,16 @@ class Empty:
 
 class Limits(IntEnum):
     MAXTICKS = 3155378975999999999
-    MAXBYTE = 255
-    MAXINT16 = 32767
-    MAXUINT16 = 65535
-    MAXINT32 = 2147483647
-    MAXUINT32 = 4294967295
-    MAXINT64 = 9223372036854775807
-    MAXUINT64 = 18446744073709551615
+    MAXBYTE = np.iinfo(np.byte).max
+    MININT16 = np.iinfo(np.int16).min
+    MAXINT16 = np.iinfo(np.int16).max
+    MAXUINT16 = np.iinfo(np.uint16).max
+    MININT32 = np.iinfo(np.int32).min
+    MAXINT32 = np.iinfo(np.int32).max
+    MAXUINT32 = np.iinfo(np.uint32).max
+    MININT64 = np.iinfo(np.int64).min
+    MAXINT64 = np.iinfo(np.int64).max
+    MAXUINT64 = np.iinfo(np.uint64).max
 
 
 class ByteSize(IntEnum):

@@ -364,6 +364,11 @@ FALSEVALUE = ValueExpression(ExpressionValueType.BOOLEAN, False)
 Defines a `ValueExpression` that represents `False`.
 """
 
+NULLVALUE = ValueExpression.nullvalue(ExpressionValueType.UNDEFINED)
+"""
+Defines a `ValueExpression` that represents a null, i.e., `None`, value, value type `Undefined`.
+"""
+
 NULLBOOLVALUE = ValueExpression.nullvalue(ExpressionValueType.BOOLEAN)
 """
 Defines a `ValueExpression` that represents a null, i.e., `None`, value of type `Boolean`.

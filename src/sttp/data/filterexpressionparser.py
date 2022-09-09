@@ -21,21 +21,34 @@
 #
 # ******************************************************************************************************
 
-from gsf import Empty
+from gsf import Empty, Limits
 from dataset import DataSet
 from datatable import DataTable
 from datarow import DataRow
 from .tableidfields import TableIDFields, DEFAULT_TABLEIDFIELDS
 from .expressiontree import ExpressionTree
 from .callbackerrorlistener import CallbackErrorListener
+from .expression import Expression
+from .inlistexpression import InListExpression
+from .operatorexpression import OperatorExpression
+from .unaryexpression import UnaryExpression
+from .valueexpression import ValueExpression, TRUEVALUE, FALSEVALUE, NULLVALUE
+from .constants import ExpressionType, ExpressionUnaryType, \
+    ExpressionValueType, ExpressionFunctionType, \
+    ExpressionOperatorType, TimeInterval
+from .orderbyterm import OrderByTerm
+from .errors import EvaluateError
 from .parser.FilterExpressionSyntaxListener import FilterExpressionSyntaxListener
 from .parser.FilterExpressionSyntaxLexer import FilterExpressionSyntaxLexer
 from .parser.FilterExpressionSyntaxParser import FilterExpressionSyntaxParser
 from antlr4 import CommonTokenStream, InputStream, ParseTreeWalker
 from antlr4.ParserRuleContext import ParserRuleContext
 from typing import Callable, Dict, List, Optional, Set, Tuple, Union
-from datetime import datetime, timedelta, timezone
+from decimal import Decimal
+from datetime import datetime, timezone
+from dateutil import parser
 from uuid import UUID
+import contextlib
 import numpy as np
 
 
@@ -46,7 +59,7 @@ class FilterExpressionParser(FilterExpressionSyntaxListener):
 
     def __init__(self,
                  filterexpression: str,
-                 suppress_consoleerroroutput: bool = False,
+                 suppress_console_erroroutput: bool = False,
                  ):
         self._inputstream = InputStream(filterexpression)
         self._lexer = FilterExpressionSyntaxLexer(self._inputstream)
@@ -55,23 +68,23 @@ class FilterExpressionParser(FilterExpressionSyntaxListener):
         self._errorlistener: CallbackErrorListener = CallbackErrorListener()
 
         self._filtered_rows: List[DataRow] = []
-        self._filtered_rowset: Set[DataRow] = {}
+        self._filtered_rowset: Optional[Set[DataRow]] = None
 
         self._filtered_signalids: List[UUID] = []
-        self._filtered_signalidset: Set[UUID] = {}
+        self._filtered_signalidset: Optional[Set[UUID]] = None
 
         self._filterexpression_statementcount: int = 0
 
         self._active_expressiontree: Optional[ExpressionTree] = None
         self._expressiontrees: List[ExpressionTree] = []
-        self._expressions: Dict[ParserRuleContext, ExpressionTree] = {}
+        self._expressions: Dict[ParserRuleContext, Expression] = {}
 
         self.dataset: DataSet = None
         """
         Defines the source metadata used for parsing the filter expression.
         """
 
-        self.primarytablename: str = Empty.STRING
+        self.primary_tablename: str = Empty.STRING
         """
         Defines the name of the table to use in the DataSet when filter expressions do not specify
         a table name, e.g., direct signal identification. See:
@@ -95,17 +108,17 @@ class FilterExpressionParser(FilterExpressionSyntaxListener):
         Defines a flag that enables tracking of matching signal IDs during filter expression evaluation.
         """
 
-        if suppress_consoleerroroutput:
+        if suppress_console_erroroutput:
             self._parser.removeErrorListeners()
 
         self._parser.addErrorListener(self._errorlistener)
 
     @staticmethod
-    def FromDataSet(dataset: DataSet,
-                    filterexpression: str,
-                    primarytable: str,
-                    tableidfields: Dict[str, TableIDFields],
-                    suppress_consoleerroroutput: bool = False,
+    def from_dataset(dataset: DataSet,
+                     filterexpression: str,
+                     primary_table: str,
+                     tableidfields: TableIDFields,
+                     suppress_console_erroroutput: bool = False,
                     ) -> Tuple["FilterExpressionParser", Optional[Exception]]:
         """
         Creates a new filter expression parser associated with the provided dataSet
@@ -114,21 +127,21 @@ class FilterExpressionParser(FilterExpressionSyntaxListener):
         """
 
         if dataset is None:
-            return None, ValueError("DataSet in None")
+            return None, ValueError("dataset parameter is None")
 
         if not filterexpression:
             return None, ValueError("Filter expression is empty")
 
-        parser = FilterExpressionParser(filterexpression, suppress_consoleerroroutput)
+        parser = FilterExpressionParser(filterexpression, suppress_console_erroroutput)
         parser.dataset = dataset
 
-        if primarytable:
-            parser.primarytablename = primarytable
+        if primary_table:
+            parser.primary_tablename = primary_table
 
             if tableidfields is None:
-                parser.tableidfields[primarytable] = DEFAULT_TABLEIDFIELDS
+                parser.tableidfields[primary_table] = DEFAULT_TABLEIDFIELDS
             else:
-                parser.tableidfields[primarytable] = tableidfields
+                parser.tableidfields[primary_table] = tableidfields
 
         return parser, None
 
@@ -139,19 +152,21 @@ class FilterExpressionParser(FilterExpressionSyntaxListener):
 
         self._errorlistener.parsingexception_callback = callback
 
+    @property
     def expressiontrees(self) -> Tuple[List[ExpressionTree], Optional[Exception]]:
         """
         Returns the list of expression trees parsed from the filter expression.
         """
 
         if len(self._expressiontrees) == 0:
-            err = self.visit_parsetreenodes()
+            err = self._visit_parsetreenodes()
 
             if err is not None:
                 return None, err
 
         return self._expressiontrees
 
+    @property
     def filtered_rows(self) -> List[DataRow]:
         """
         Gets the rows matching the parsed filter expression.
@@ -160,13 +175,16 @@ class FilterExpressionParser(FilterExpressionSyntaxListener):
 
         return self._filtered_rows
 
+    @property
     def filtered_rowset(self) -> Set[DataRow]:
         """
         Gets the unique row set matching the parsed filter expression.
         """
 
+        self._initialize_set_operations()
         return self._filtered_rowset
 
+    @property
     def filtered_signalids(self) -> List[UUID]:
         """
         Gets the Guid-based signal IDs matching the parsed filter expression.
@@ -175,15 +193,16 @@ class FilterExpressionParser(FilterExpressionSyntaxListener):
 
         return self._filtered_signalids
 
+    @property
     def filtered_signalidset(self) -> Set[UUID]:
         """
         Gets the unique Guid-based signal ID set matching the parsed filter expression.
         """
 
         self._initialize_set_operations()
-
         return self._filtered_signalidset
 
+    @property
     def filterexpression_statementcount(self) -> int:
         """
         Gets the number of filter expression statements encountered while parsing.
@@ -210,6 +229,7 @@ class FilterExpressionParser(FilterExpressionSyntaxListener):
     def evaluate(self, applylimit: bool, applysort: bool) -> Optional[Exception]:
         """
         Evaluate parses each statement in the filter expression and tracks the results.
+        
         Filter expressions can contain multiple statements, separated by semi-colons,
         where each statement results in a unique expression tree; this function returns
         the combined results of each encountered filter expression statement, yielding
@@ -228,14 +248,14 @@ class FilterExpressionParser(FilterExpressionSyntaxListener):
 
         self._filterexpression_statementcount = 0
         self._filtered_rows = []
-        self._filtered_rowset = {}
+        self._filtered_rowset = None
         self._filtered_signalids = []
-        self._filtered_signalidset = {}
+        self._filtered_signalidset = None
         self._expressiontrees = []
         self._expressions = {}
 
         # Visiting tree nodes will automatically add literals to the the filtered results
-        err = self.visit_parsetreenodes()
+        err = self._visit_parsetreenodes()
 
         if err is not None:
             return err
@@ -245,14 +265,720 @@ class FilterExpressionParser(FilterExpressionSyntaxListener):
             tablename = expressiontree.tablename
 
             if len(tablename) == 0:
-                if len(self.primarytablename) == 0:
+                if len(self.primary_tablename) == 0:
                     return ValueError("no table name defined for expression tree nor is any PrimaryTableName defined")
 
-                tablename = self.primarytablename
+                tablename = self.primary_tablename
 
             table, err = self.table(tablename)
 
             if err is not None:
                 return err
 
+            def where_predicate(result_expression: ValueExpression) -> Tuple[bool, Optional[Exception]]:
+                if result_expression.valuetype == ExpressionValueType.BOOLEAN:
+                    return result_expression._booleanvalue(), None
+
+                # Filtered results will already have any matched literals
+                return FALSEVALUE._booleanvalue(), None
+
+            # Select all matching boolean results from expression tree evaluated for each table row
+            matchedrows, err = expressiontree.selectwhere(table, where_predicate, applylimit, applysort)
+
             signalid_columnindex = -1
+
+            if self.track_filteredsignalids:
+                primary_tableidfields = self.tableidfields.get(table.name)
+
+                if primary_tableidfields is None:
+                    return EvaluateError(f"failed to find ID fields record for table \"{table.name}\"")
+
+                signalid_column = table.column_byname(primary_tableidfields.signalid_fieldname)
+
+                if signalid_column is None:
+                    return EvaluateError(f"failed to find signal ID column \"{primary_tableidfields.signalid_fieldname}\" in table \"{table.name}\"")
+
+                signalid_columnindex = signalid_column.index
+
+            for matchedrow in matchedrows:
+                self._add_matchedrow(matchedrow, signalid_columnindex)
+
+        return None
+
+    def _visit_parsetreenodes(self) -> Optional[Exception]:
+        err: Optional[Exception] = None
+
+        try:
+            # Create a parse tree and start visiting listener methods
+            walker = ParseTreeWalker()
+            parsetree = self._parser.parse()
+            walker.walk(self, parsetree)
+        except Exception as ex:
+            err = ex
+
+        return err
+
+    def _initialize_set_operations(self):
+        # As an optimization, set operations are not engaged until second filter expression statement
+        # is encountered, only then will duplicate results be a concern. Note that only using a set
+        # is not an option because results can be sorted with the "ORDER BY" clause.
+
+        if self.track_filteredrows and self._filtered_rowset is None:
+            self._filtered_rowset = set(self._filtered_rows)
+
+        if self.track_filteredsignalids and self._filtered_signalidset is None:
+            self._filtered_signalidset = set(self._filtered_signalids)
+
+    def _add_matchedrow(self, matchedrow: DataRow, signalid_columnindex: int):
+        if self._filterexpression_statementcount > 1:
+            # Set operations
+            if self.track_filteredrows:
+                startlen = len(self._filtered_rowset)
+                self._filtered_rowset.add(matchedrow)
+
+                if len(self._filtered_rowset) > startlen:
+                    self._filtered_rows.append(matchedrow)
+
+            if self.track_filteredsignalids:
+                signalidfield, null, err = matchedrow.guidvalue(signalid_columnindex)
+
+                if not null and err is None and signalidfield != Empty.GUID:
+                    startlen = len(self._filtered_signalidset)
+                    self._filtered_signalidset.add(signalidfield)
+
+                    if len(self._filtered_signalidset) > startlen:
+                        self._filtered_signalids.append(signalidfield)
+        else:
+            # Vector only operations
+            if self.track_filteredrows:
+                self._filtered_rows.append(matchedrow)
+
+            if self.track_filteredsignalids:
+                signalidfield, null, err = matchedrow.guidvalue(signalid_columnindex)
+
+                if not null and err is None and signalidfield != Empty.GUID:
+                    self._filtered_signalids.append(signalidfield)
+
+    def _map_matchedfieldrow(self, primarytable: DataTable, columnname: str, matchvalue: str, signalid_columnindex: int):
+        column = primarytable.column_byname(columnname)
+
+        if column is None:
+            return
+
+        matchvalue = matchvalue.upper()
+        columnindex = column.index
+
+        for row in primarytable:
+            if row is None:
+                continue
+
+            value, null, err = row.stringvalue(columnindex)
+
+            if not null and err is None and value.upper() == matchvalue:
+                self._add_matchedrow(row, signalid_columnindex)
+                return
+
+    def _try_get_expr(self, ctx: ParserRuleContext, expression: Expression) -> Optional[Expression]:
+        return self._expressions.get(ctx)
+
+    def _add_expr(self, ctx: ParserRuleContext, expression: Expression):
+        # Track expression in parser rule context map
+        self._expressions[ctx] = expression
+
+        # Update active expression tree root
+        self._active_expressiontree = expression
+
+    #    filterExpressionStatement
+    #     : identifierStatement
+    #     | filterStatement
+    #     | expression
+    #     ;
+    def enterFilterExpressionStatement(self, ctx: FilterExpressionSyntaxParser.FilterExpressionStatementContext):
+        # One filter expression can contain multiple filter statements separated by semi-colon,
+        # so we track each as an independent expression tree
+
+        self._expressions = {}
+        self._active_expressiontree = None
+        self._filterexpression_statementcount += 1
+
+        # Encountering second filter expression statement necessitates the use of set operations
+        # to prevent possible result duplications
+        if self._filterexpression_statementcount == 2:
+            self._initialize_set_operations()
+
+    #    filterStatement
+    #     : K_FILTER ( K_TOP topLimit )? tableName K_WHERE expression ( K_ORDER K_BY orderingTerm ( ',' orderingTerm )* )?
+    #     ;
+
+    #    topLimit
+    #     : ( '-' | '+' )? INTEGER_LITERAL
+    #     ;
+
+    #    orderingTerm
+    #     : exactMatchModifier? columnName ( K_ASC | K_DESC )?
+    #     ;
+    def enterFilterStatement(self, ctx: FilterExpressionSyntaxParser.FilterStatementContext):
+        tablename = ctx.tableName().getText()
+
+        table, err = self.table(tablename)
+
+        if err is not None:
+            raise EvaluateError(f"cannot parse filter expression statement, {err}")
+
+        self._active_expressiontree = ExpressionTree()
+        self._active_expressiontree.tablename = tablename
+        self._expressiontrees.append(self._active_expressiontree)
+
+        if ctx.K_TOP() is not None:
+            self._active_expressiontree.toplimit = int(ctx.topLimit().getText())
+
+        if ctx.K_ORDER() is not None and ctx.K_BY() is not None:
+            orderingterms = ctx.orderingTerm()
+
+            for i in range(len(orderingterms)):
+                orderingterm: FilterExpressionSyntaxParser.OrderingTermContext = orderingterms[i]
+                orderby_columnname = orderingterm.orderByColumnName().getText()
+                orderby_column = table.column_byname(orderby_columnname)
+
+                if orderby_column is None:
+                    raise EvaluateError(f"cannot parse filter expression statement, failed to find order by field \"{orderby_columnname}\" for table \"{table.name}\"")
+
+                self._active_expressiontree.orderbyterms.append(OrderByTerm(
+                    orderby_column,
+                    orderingterm.K_DESC() is not None,
+                    orderingterm.exactMatchModifier() is not None))
+
+    #    identifierStatement
+    #     : GUID_LITERAL
+    #     | MEASUREMENT_KEY_LITERAL
+    #     | POINT_TAG_LITERAL
+    #     ;
+    def exitIdentifierStatement(self, ctx: FilterExpressionSyntaxParser.IdentifierStatementContext):
+        # sourcery skip
+        signalid = Empty.GUID
+
+        if ctx.GUID_LITERAL() is not None:
+            signalid = UUID(ctx.GUID_LITERAL().getText())
+
+            if not self.track_filteredrows and not self.track_filteredsignalids:
+                # Handle edge case of encountering standalone Guid when not tracking rows or table identifiers.
+                # In this scenario the filter expression parser would only be used to generate expression trees
+                # for general expression parsing, e.g., for a DataColumn expression, so here the Guid should be
+                # treated as a literal expression value instead of an identifier to track:
+                self.enterExpression(None)
+                self._active_expressiontree.root = ValueExpression(ExpressionValueType.GUID, signalid)
+                return
+
+            if self.track_filteredsignalids and signalid != Empty.GUID:
+                if self._filterexpression_statementcount > 1:
+                    startlen = len(self._filtered_signalidset)
+                    self._filtered_signalidset.add(signalid)
+
+                    if len(self._filtered_signalidset) > startlen:
+                        self._filtered_signalids.append(signalid)
+                else:
+                    self._filtered_signalids.append(signalid)
+
+            if not self.track_filteredrows:
+                return
+
+        if self.dataset is None:
+            return
+
+        primary_table = self.dataset[self.primary_tablename]
+
+        if primary_table is None:
+            return
+
+        primary_tableidfields = self.tableidfields.get(self.primary_tablename)
+
+        if primary_tableidfields is None:
+            return
+
+        signalidcolumn = primary_table.column_byname(primary_tableidfields.signalid_fieldname)
+
+        if signalidcolumn is None:
+            return
+
+        signalid_columnindex = signalidcolumn.index
+
+        if self.track_filteredrows and signalid != Empty.GUID:
+            # Map matching row for manually specified Guid
+            for row in primary_table:
+                if row is None:
+                    continue
+
+                value, null, err = row.guidvalue(signalid_columnindex)
+
+                if not null and err is None and value == signalid:
+                    if self.filterexpression_statementcount > 1:
+                        startlen = len(self._filtered_rowset)
+                        self._filtered_rowset.add(row)
+
+                        if len(self._filtered_rowset) > startlen:
+                            self._filtered_rows.append(row)
+                    else:
+                        self._filtered_rows.append(row)
+
+                    return
+
+            return
+
+        if ctx.MEASUREMENT_KEY_LITERAL() is not None:
+            self._map_matchedfieldrow(primary_table, primary_tableidfields.measurementkey_fieldname, ctx.MEASUREMENT_KEY_LITERAL().getText(), signalid_columnindex)
+            return
+
+        if ctx.POINT_TAG_LITERAL() is not None:
+            self._map_matchedfieldrow(primary_table, primary_tableidfields.pointtag_fieldname, ctx.POINT_TAG_LITERAL().getText(), signalid_columnindex)
+            return
+
+    #    expression
+    #     : notOperator expression
+    #     | expression logicalOperator expression
+    #     | predicateExpression
+    #     ;
+    def enterExpression(self, ctx: FilterExpressionSyntaxParser.ExpressionContext):
+        # Handle case of encountering a standalone expression, i.e., an expression not
+        # within a filter statement context
+        if self._active_expressiontree is None:
+            self._active_expressiontree = ExpressionTree()
+            self._expressiontrees.append(self._active_expressiontree)
+
+    #    expression
+    #     : notOperator expression
+    #     | expression logicalOperator expression
+    #     | predicateExpression
+    #     ;
+    def exitExpression(self, ctx: FilterExpressionSyntaxParser.ExpressionContext):
+        value: Optional[Expression] = None
+
+        # Check for predicate expressions (see explicit visit function)
+        predicate_expression = ctx.predicateExpression()
+
+        if predicate_expression is not None:
+            value = self._try_get_expr(predicate_expression)
+
+            if value is None:
+                self._add_expr(ctx, value)
+                return
+
+            raise EvaluateError(f"failed to parse predicate expression \"{predicate_expression.getText()}\"")
+
+        # Check for not operator expressions
+        not_operator = ctx.notOperator()
+
+        if not_operator is not None:
+            expressions = ctx.expression()
+
+            if len(expressions) != 1:
+                raise EvaluateError(f"not operator expression is malformed \"{ctx.getText()}\"")
+
+            value = self._try_get_expr(expressions[0])
+
+            if value is None:
+                raise EvaluateError(f"failed to find not operator expression \"{ctx.getText()}\"")
+
+            self._add_expr(ctx, UnaryExpression(ExpressionUnaryType.NOT, value))
+            return
+
+        # Check for logical operator expressions
+        logical_operator = ctx.logicalOperator()
+
+        if logical_operator is not None:
+            expressions = ctx.expression()
+
+            if len(expressions) != 2:
+                raise EvaluateError(f"operator expression, in logical operator expression context, is malformed \"{ctx.getText()}\"")
+
+            left = self._try_get_expr(expressions[0])
+
+            if left is None:
+                raise EvaluateError(f"failed to find left logical operator expression \"{ctx.getText()}\"")
+
+            right = self._try_get_expr(expressions[1])
+
+            if right is None:
+                raise EvaluateError(f"failed to find right logical operator expression \"{ctx.getText()}\"")
+
+            operator_symbol = logical_operator.getText()
+
+            if logical_operator.K_AND() is not None or operator_symbol == "&&":
+                operatortype = ExpressionOperatorType.AND
+            elif logical_operator.K_OR() is not None or operator_symbol == "||":
+                operatortype = ExpressionOperatorType.OR
+            else:
+                raise EvaluateError(f"unexpected logical operator \"{operator_symbol}\"")
+
+            self._add_expr(ctx, OperatorExpression(operatortype, left, right))
+            return
+
+        raise EvaluateError(f"unexpected expression \"{ctx.getText()}\"")
+
+    #    predicateExpression
+    #     : predicateExpression notOperator? K_IN exactMatchModifier? '(' expressionList ')'
+    #     | predicateExpression K_IS notOperator? K_NULL
+    #     | predicateExpression comparisonOperator predicateExpression
+    #     | predicateExpression notOperator? K_LIKE exactMatchModifier? predicateExpression
+    #     | valueExpression
+    #     ;
+    def exitPredicateExpression(self, ctx: FilterExpressionSyntaxParser.PredicateExpressionContext):
+        # sourcery skip
+        value_expression = ctx.valueExpression()
+
+        # Check for value expressions (see explicit visit function)
+        if value_expression is not None:
+            value = self._try_get_expr(value_expression)
+
+            if value is None:
+                self._add_expr(ctx, value)
+                return
+
+            raise EvaluateError(f"failed to find value expression \"{value_expression.getText()}\"")
+
+        not_operator = ctx.notOperator()
+        exactmatch_modifier = ctx.exactMatchModifier()
+
+        # Check for IN expressions
+        if ctx.K_IN() is not None:
+            predicates = ctx.predicateExpression()
+
+            # IN expression expects one predicate
+            if len(predicates) != 1:
+                raise EvaluateError(f"\"IN\" expression is malformed \"{ctx.getText()}\"")
+
+            value = self._try_get_expr(predicates[0])
+
+            if value is None:
+                raise EvaluateError(f"failed to find \"IN\" predicate expression \"{ctx.getText()}\"")
+
+            expressionlist: FilterExpressionSyntaxParser.ExpressionListContext = ctx.expressionList()
+            expressions: List[FilterExpressionSyntaxParser.ExpressionContext] = expressionlist.expression()
+            argumentcount = len(expressions)
+
+            if argumentcount < 1:
+                raise EvaluateError("not enough expressions found for \"IN\" operation")
+
+            arguments: List[Expression] = []
+
+            for i in range(argumentcount):
+                argument = self._try_get_expr(expressions[i])
+
+                if argument is None:
+                    raise EvaluateError(f"failed to find argument expression {i} \"{expressions[i].getText()}\" for \"IN\" operation")
+
+                arguments.append(argument)
+
+            self._add_expr(ctx, InListExpression(value, arguments, exactmatch_modifier is not None))
+            return
+
+        # Check for IS NULL expressions
+        if ctx.K_IS() is not None and ctx.K_NULL() is not None:
+            if not_operator is None:
+                operatortype = ExpressionOperatorType.ISNULL
+            else:
+                operatortype = ExpressionOperatorType.ISNOTNULL
+
+            predicates = ctx.predicateExpression()
+
+            # IS NULL expression expects one predicate
+            if len(predicates) != 1:
+                raise EvaluateError(f"\"IS NULL\" expression is malformed \"{ctx.getText()}\"")
+
+            value = self._try_get_expr(predicates[0])
+
+            if value is None:
+                raise EvaluateError(f"failed to find \"IS NULL\" predicate expression \"{ctx.getText()}\"")
+
+            self._add_expr(ctx, OperatorExpression(operatortype, value, None))
+            return
+
+        # Remaining operators require two predicate expressions
+        predicates = ctx.predicateExpression()
+
+        if len(predicates) != 2:
+            raise EvaluateError(f"operator expression, in predicate expression context, is malformed \"{ctx.getText()}\"")
+
+        left = self._try_get_expr(predicates[0])
+
+        if left is None:
+            raise EvaluateError(f"failed to find left operator predicate expression \"{ctx.getText()}\"")
+
+        right = self._try_get_expr(predicates[1])
+
+        if right is None:
+            raise EvaluateError(f"failed to find right operator predicate expression \"{ctx.getText()}\"")
+
+        # Check for comparison operator expressions
+        comparison_operator: FilterExpressionSyntaxParser.ComparisonOperatorContext = ctx.comparisonOperator()
+
+        if comparison_operator is not None:
+            operatorsymbol = comparison_operator.getText()
+
+            if operatorsymbol == "<":
+                operatortype = ExpressionOperatorType.LESSTHAN
+            elif operatorsymbol == "<=":
+                operatortype = ExpressionOperatorType.LESSTHANOREQUAL
+            elif operatorsymbol == ">":
+                operatortype = ExpressionOperatorType.GREATERTHAN
+            elif operatorsymbol == ">=":
+                operatortype = ExpressionOperatorType.GREATERTHANOREQUAL
+            elif operatorsymbol in ["=", "=="]:
+                operatortype = ExpressionOperatorType.EQUAL
+            elif operatorsymbol == "===":
+                operatortype = ExpressionOperatorType.EQUALEXACTMATCH
+            elif operatorsymbol in ["!=", "<>"]:
+                operatortype = ExpressionOperatorType.NOTEQUAL
+            elif operatorsymbol == "!==":
+                operatortype = ExpressionOperatorType.NOTEQUALEXACTMATCH
+            else:
+                raise EvaluateError(f"unexpected comparison operator \"{operatorsymbol}\"")
+
+            self._add_expr(ctx, OperatorExpression(operatortype, left, right))
+            return
+
+        # Check for LIKE expressions
+        if ctx.K_LIKE() is not None:
+            if exactmatch_modifier is None:
+                operatortype = ExpressionOperatorType.LIKE if not_operator is None else ExpressionOperatorType.NOTLIKE
+            else:
+                operatortype = ExpressionOperatorType.LIKEEXACTMATCH if not_operator is None else ExpressionOperatorType.NOTLIKEEXACTMATCH
+
+            self._add_expr(ctx, OperatorExpression(operatortype, left, right))
+
+        raise EvaluateError(f"unexpected predicate expression \"{ctx.getText()}\"")
+
+    #    valueExpression
+    #     : literalValue
+    #     | columnName
+    #     | functionExpression
+    #     | unaryOperator valueExpression
+    #     | '(' expression ')'
+    #     | valueExpression mathOperator valueExpression
+    #     | valueExpression bitwiseOperator valueExpression
+    # 	  ;
+    def exitValueExpression(self, ctx: FilterExpressionSyntaxParser.ValueExpressionContext):
+        # sourcery skip
+        literal_value = ctx.literalValue()
+
+        # Check for literal values (see explicit visit function)
+        if literal_value is not None:
+            value = self._try_get_expr(literal_value)
+
+            if value is None:
+                self._add_expr(ctx, value)
+                return
+
+            raise EvaluateError(f"failed to find literal value \"{literal_value.getText()}\"")
+
+        # Check for column names (see explicit visit function)
+        columnname = ctx.columnName()
+
+        if columnname is not None:
+            value = self._try_get_expr(columnname)
+
+            if value is None:
+                raise EvaluateError(f"failed to find column name \"{columnname.getText()}\"")
+
+            self._add_expr(ctx, value)
+            return
+
+        # Check for function expressions (see explicit visit function)
+        function_expression = ctx.functionExpression()
+
+        if function_expression is not None:
+            value = self._try_get_expr(function_expression)
+
+            if value is None:
+                raise EvaluateError(f"failed to find function expression \"{function_expression.getText()}\"")
+
+            self._add_expr(ctx, value)
+            return
+
+        # Check for unary operators
+        unary_operator = ctx.unaryOperator()
+
+        if unary_operator is not None:
+            values = ctx.valueExpression()
+
+            # Unary operator expects one value expression
+            if len(values) != 1:
+                raise EvaluateError(f"unary operator value expression is malformed \"{ctx.getText()}\"")
+
+            value = self._try_get_expr(values[0])
+
+            if value is None:
+                raise EvaluateError(f"failed to find unary operator value expression \"{ctx.getText()}\"")
+
+            if unary_operator.K_NOT() is not None:
+                operatorsymbol = unary_operator.getText()
+
+                if operatorsymbol == "+":
+                    unarytype = ExpressionUnaryType.PLUS
+                elif operatorsymbol == "-":
+                    unarytype = ExpressionUnaryType.MINUS
+                elif operatorsymbol in ["~", "!"]:
+                    unarytype = ExpressionUnaryType.NOT
+                else:
+                    raise EvaluateError(f"unexpected unary type \"{operatorsymbol}\"")
+            else:
+                unarytype = ExpressionUnaryType.NOT
+
+            self._add_expr(ctx, OperatorExpression(unarytype, value, None))
+            return
+
+        # Check for sub-expressions, i.e., "(" expression ")"
+        expression = ctx.expression()
+
+        if expression is not None:
+            value = self._try_get_expr(expression[0])
+
+            if value is None:
+                raise EvaluateError(f"failed to find sub-expression \"{ctx.getText()}\"")
+
+            self._add_expr(ctx, value)
+            return
+
+        # Remaining operators require two value expressions
+        values = ctx.valueExpression()
+
+        if len(values) != 2:
+            raise EvaluateError(f"operator expression, in value expression context, is malformed \"{ctx.getText()}\"")
+
+        left = self._try_get_expr(values[0])
+
+        if left is None:
+            raise EvaluateError(f"failed to find left operator value expression \"{ctx.getText()}\"")
+
+        right = self._try_get_expr(values[1])
+
+        if right is None:
+            raise EvaluateError(f"failed to find right operator value expression \"{ctx.getText()}\"")
+
+        # Check for math operator expressions
+        math_operator: FilterExpressionSyntaxParser.MathOperatorContext = ctx.mathOperator()
+
+        if math_operator is not None:
+            operatorsymbol = math_operator.getText()
+
+            if operatorsymbol == "+":
+                operatortype = ExpressionOperatorType.ADD
+            elif operatorsymbol == "-":
+                operatortype = ExpressionOperatorType.SUBTRACT
+            elif operatorsymbol == "*":
+                operatortype = ExpressionOperatorType.MULTIPLY
+            elif operatorsymbol == "/":
+                operatortype = ExpressionOperatorType.DIVIDE
+            elif operatorsymbol == "%":
+                operatortype = ExpressionOperatorType.MODULUS
+            else:
+                raise EvaluateError(f"unexpected math operator \"{operatorsymbol}\"")
+
+            self._add_expr(ctx, OperatorExpression(operatortype, left, right))
+            return
+
+        # Check for bitwise operator expressions
+        bitwise_operator: FilterExpressionSyntaxParser.BitwiseOperatorContext = ctx.bitwiseOperator()
+
+        if bitwise_operator is not None:
+            operatorsymbol = bitwise_operator.getText()
+
+            if operatorsymbol == "&":
+                operatortype = ExpressionOperatorType.BITWISEAND
+            elif operatorsymbol == "|":
+                operatortype = ExpressionOperatorType.BITWISEOR
+            elif operatorsymbol == "^":
+                operatortype = ExpressionOperatorType.BITWISEXOR
+            elif operatorsymbol == "<<":
+                operatortype = ExpressionOperatorType.BITSHIFTLEFT
+            elif operatorsymbol == ">>":
+                operatortype = ExpressionOperatorType.BITSHIFTRIGHT
+            else:
+                raise EvaluateError(f"unexpected bitwise operator \"{operatorsymbol}\"")
+
+            self._add_expr(ctx, OperatorExpression(operatortype, left, right))
+            return
+
+        raise EvaluateError(f"unexpected value expression \"{ctx.getText()}\"")
+
+    #    literalValue
+    #     : INTEGER_LITERAL
+    #     | NUMERIC_LITERAL
+    #     | STRING_LITERAL
+    #     | DATETIME_LITERAL
+    #     | GUID_LITERAL
+    #     | BOOLEAN_LITERAL
+    #     | K_NULL
+    #     ;
+    def exitLiteralValue(self, ctx: FilterExpressionSyntaxParser.LiteralValueContext):
+        result: Optional[ValueExpression] = None
+
+        if ctx.INTEGER_LITERAL() is not None:
+            literal = ctx.INTEGER_LITERAL().getText()
+
+            try:
+                value = int(literal)
+
+                if value < Limits.MININT32 or value > Limits.MAXINT32:
+                    if value >= Limits.MININT64 and value <= Limits.MAXINT64:
+                        result = ValueExpression(ExpressionValueType.INT64, value)
+                    else:
+                        result = self._parse_numericliteral(literal)
+                else:
+                    result = ValueExpression(ExpressionValueType.INT32, value)
+            except Exception:
+                result = self._parse_numericliteral(literal)
+        elif ctx.NUMERIC_LITERAL() is not None:
+            literal = ctx.NUMERIC_LITERAL().getText()
+
+            try:
+                # Real literals using scientific notation are parsed as double
+                if "E" in literal.upper():
+                    result = ValueExpression(ExpressionValueType.DOUBLE, float(value))
+                else:
+                    result = self._parse_numericliteral(literal)
+            except Exception:
+                result = self._parse_numericliteral(literal)
+        elif ctx.STRING_LITERAL() is not None:
+            result = ValueExpression(ExpressionValueType.STRING, self._parse_stringliteral(ctx.STRING_LITERAL().getText()))
+        elif ctx.DATETIME_LITERAL() is not None:
+            result = ValueExpression(ExpressionValueType.DATETIME, self._parse_datetimeliteral(ctx.DATETIME_LITERAL().getText()))
+        elif ctx.GUID_LITERAL() is not None:
+            result = ValueExpression(ExpressionValueType.GUID, self._parse_guidliteral(ctx.GUID_LITERAL().getText()))
+        elif ctx.BOOLEAN_LITERAL() is not None:
+            result = TRUEVALUE if ctx.BOOLEAN_LITERAL().getText().upper() == "TRUE" else FALSEVALUE
+        elif ctx.K_NULL() is not None:
+            result = NULLVALUE
+
+        if result is not None:
+            self._add_expr(ctx, result)
+
+    def _parse_numericliteral(self, literal: str) -> ValueExpression:
+        try:
+            value = Decimal(literal)
+            return ValueExpression(ExpressionValueType.DECIMAL, value)
+        except Exception:
+            try:
+                value = float(literal)
+                return ValueExpression(ExpressionValueType.DOUBLE, value)
+            except Exception:
+                return ValueExpression(ExpressionValueType.STRING, literal)
+
+    def _parse_stringliteral(self, literal: str) -> str:
+        # Remove any surrounding quotes from string, ANTLR grammar already
+        # ensures strings starting with quote also ends with one
+        return literal[1:-1] if literal[0] == "'" else literal
+
+    def _parse_guidliteral(self, literal: str) -> UUID:
+        # Remove any quotes from GUID (boost currently only handles optional braces),
+        # ANTLR grammar already ensures GUID starting with quote also ends with one
+        return UUID(literal[1:-1] if literal[0] == "{" else literal)
+
+    def _parse_datetimeliteral(self, literal: str) -> datetime:
+        # Remove any surrounding '#' symbols from date/time, ANTLR grammar already
+        # ensures date/time starting with '#' symbol will also end with one
+        literal = literal[1:-1] if literal[0] == "#" else literal
+
+        try:
+            return parser.parse(literal).astimezone(timezone.utc)
+        except Exception as ex:
+            raise EvaluateError(f"failed to parse datetime literal #{literal}#: {ex}") from ex
