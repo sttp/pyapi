@@ -21,7 +21,7 @@
 #
 # ******************************************************************************************************
 
-from enum import Enum, IntEnum
+from enum import Enum
 from decimal import Decimal
 from datetime import datetime
 from uuid import UUID
@@ -72,7 +72,7 @@ class Empty:
     UINT64 = np.uint64(0)
 
 
-class Limits(IntEnum):
+class Limits:
     MAXTICKS = 3155378975999999999
     MAXBYTE = np.iinfo(np.uint8).max
     MININT16 = np.iinfo(np.int16).min
@@ -86,7 +86,7 @@ class Limits(IntEnum):
     MAXUINT64 = np.iinfo(np.uint64).max
 
 
-class ByteSize(IntEnum):
+class ByteSize:
     INT8 = 1
     UINT8 = 1
     INT16 = 2

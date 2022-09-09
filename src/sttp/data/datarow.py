@@ -545,7 +545,7 @@ class DataRow:
         An error will be returned if column type is not `DataType.GUID`.
         """
 
-        return self._typevalue(columnindex, DataType.DECIMAL)
+        return self._typevalue(columnindex, DataType.GUID)
 
     def guidvalue_byname(self, columnname: str) -> Tuple[UUID, bool, Optional[Exception]]:
         """
@@ -743,9 +743,9 @@ class DataRow:
 
         def nullcompare(lefthasvalue: bool, righthasvalue: bool) -> int:
             if not lefthasvalue and not righthasvalue:
-                return 0
+                return 0, None
 
-            return 1 if lefthasvalue else -1
+            return 1 if lefthasvalue else -1, None
 
         def typecompare(
                 leftrow_getvalue: Callable[[int], Tuple[object, bool, Optional[Exception]]],

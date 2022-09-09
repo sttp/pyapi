@@ -53,12 +53,8 @@ class ValueExpression(Expression):
             self._value = Decimal(value)
         elif valuetype == ExpressionValueType.DOUBLE:
             self._value = np.float64(value)
-        elif valuetype == ExpressionValueType.STRING:
-            self._value = str(value)
-        elif valuetype == ExpressionValueType.GUID:
-            self._value = UUID(value)
-        elif valuetype == ExpressionValueType.DATETIME:
-            self._value = datetime(value)
+        elif valuetype in [ExpressionValueType.STRING, ExpressionValueType.GUID, ExpressionValueType.DATETIME]:
+            self._value = value
         else:
             raise TypeError(f"cannot create new value expression; unexpected expression value type: {normalize_enumname(valuetype)}")
 
@@ -195,7 +191,7 @@ class ValueExpression(Expression):
         return (self._stringvalue(), None) if err is None else (Empty.STRING, err)
 
     def _stringvalue(self) -> str:
-        return Empty.STRING if self._value is None else str(self._value)
+        return Empty.STRING if self._value is None else self._value
 
     def guidvalue(self) -> Tuple[UUID, Optional[Exception]]:
         """
@@ -207,7 +203,7 @@ class ValueExpression(Expression):
         return (self._guidvalue(), None) if err is None else (Empty.GUID, err)
 
     def _guidvalue(self) -> UUID:
-        return Empty.GUID if self._value is None else UUID(self._value)
+        return Empty.GUID if self._value is None else self._value
 
     def datetimevalue(self) -> Tuple[datetime, Optional[Exception]]:
         """
@@ -219,7 +215,7 @@ class ValueExpression(Expression):
         return (self._datetimevalue(), None) if err is None else (Empty.DATETIME, err)
 
     def _datetimevalue(self) -> datetime:
-        return Empty.DATETIME if self._value is None else datetime(self._value)
+        return Empty.DATETIME if self._value is None else self._value
 
     def convert(self, target_typevalue: ExpressionValueType) -> Tuple[Optional["ValueExpression"], Optional[Exception]]:
         """

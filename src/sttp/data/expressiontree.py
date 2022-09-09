@@ -190,7 +190,10 @@ class ExpressionTree:
                         leftrow = rightmatchedrow
                         rightrow = leftmatchedrow
 
-                    result = DataRow.compare_datarowcolumns(leftrow, rightrow, orderbyterm.column.index, orderbyterm.extactmatch)
+                    result, err = DataRow.compare_datarowcolumns(leftrow, rightrow, orderbyterm.column.index, orderbyterm.extactmatch)
+
+                    if err is not None:
+                        raise EvaluateError(f"cannot execute select operation, failed while comparing rows for sorting: {err}")
 
                     # If last compare result was equal, continue sort based on next order-by term
                     if result != 0:
@@ -202,7 +205,7 @@ class ExpressionTree:
 
         return matchedrows, None
 
-    def evaluate(self, row: DataRow) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
+    def evaluate(self, row: Optional[DataRow] = None) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         """
         Traverses the the `ExpressionTree` for the provided data row to produce a `ValueExpression`.
         Root expression should be assigned before calling `evaluate`; otherwise result will be a Null

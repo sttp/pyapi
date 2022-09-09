@@ -22,9 +22,9 @@
 # ******************************************************************************************************
 
 from gsf import Empty, Limits
-from dataset import DataSet
-from datatable import DataTable
-from datarow import DataRow
+from .dataset import DataSet
+from .datatable import DataTable
+from .datarow import DataRow
 from .tableidfields import TableIDFields, DEFAULT_TABLEIDFIELDS
 from .expressiontree import ExpressionTree
 from .callbackerrorlistener import CallbackErrorListener
@@ -380,7 +380,7 @@ class FilterExpressionParser(ExpressionListener):
                 self._add_matchedrow(row, signalid_columnindex)
                 return
 
-    def _try_get_expr(self, ctx: ParserRuleContext) -> Optional[Expression]:
+    def _get_expr(self, ctx: ParserRuleContext) -> Optional[Expression]:
         return self._expressions.get(ctx)
 
     def _add_expr(self, ctx: ParserRuleContext, expression: Expression):
@@ -447,7 +447,7 @@ class FilterExpressionParser(ExpressionListener):
 
                 self._active_expressiontree.orderbyterms.append(OrderByTerm(
                     orderby_column,
-                    orderingterm.K_DESC() is not None,
+                    orderingterm.K_DESC() is None,
                     orderingterm.exactMatchModifier() is not None))
 
     #    identifierStatement
@@ -558,13 +558,13 @@ class FilterExpressionParser(ExpressionListener):
         predicate_expression: ExpressionParser.PredicateExpressionContext = ctx.predicateExpression()
 
         if predicate_expression is not None:
-            value = self._try_get_expr(predicate_expression)
+            value = self._get_expr(predicate_expression)
 
             if value is None:
-                self._add_expr(ctx, value)
-                return
+                raise EvaluateError(f"failed to parse predicate expression \"{predicate_expression.getText()}\"")
 
-            raise EvaluateError(f"failed to parse predicate expression \"{predicate_expression.getText()}\"")
+            self._add_expr(ctx, value)
+            return
 
         # Check for not operator expressions
         not_operator = ctx.notOperator()
@@ -575,7 +575,7 @@ class FilterExpressionParser(ExpressionListener):
             if len(expressions) != 1:
                 raise EvaluateError(f"not operator expression is malformed: \"{ctx.getText()}\"")
 
-            value = self._try_get_expr(expressions[0])
+            value = self._get_expr(expressions[0])
 
             if value is None:
                 raise EvaluateError(f"failed to find not operator expression \"{ctx.getText()}\"")
@@ -592,12 +592,12 @@ class FilterExpressionParser(ExpressionListener):
             if len(expressions) != 2:
                 raise EvaluateError(f"operator expression, in logical operator expression context, is malformed: \"{ctx.getText()}\"")
 
-            left = self._try_get_expr(expressions[0])
+            left = self._get_expr(expressions[0])
 
             if left is None:
                 raise EvaluateError(f"failed to find left logical operator expression \"{ctx.getText()}\"")
 
-            right = self._try_get_expr(expressions[1])
+            right = self._get_expr(expressions[1])
 
             if right is None:
                 raise EvaluateError(f"failed to find right logical operator expression \"{ctx.getText()}\"")
@@ -629,13 +629,13 @@ class FilterExpressionParser(ExpressionListener):
 
         # Check for value expressions (see explicit visit function)
         if value_expression is not None:
-            value = self._try_get_expr(value_expression)
+            value = self._get_expr(value_expression)
 
             if value is None:
-                self._add_expr(ctx, value)
-                return
+                raise EvaluateError(f"failed to find value expression \"{value_expression.getText()}\"")
 
-            raise EvaluateError(f"failed to find value expression \"{value_expression.getText()}\"")
+            self._add_expr(ctx, value)
+            return
 
         has_notkeyword = ctx.notOperator() is not None
         exactmatch = ctx.exactMatchModifier() is not None
@@ -648,7 +648,7 @@ class FilterExpressionParser(ExpressionListener):
             if len(predicates) != 1:
                 raise EvaluateError(f"\"IN\" expression is malformed: \"{ctx.getText()}\"")
 
-            value = self._try_get_expr(predicates[0])
+            value = self._get_expr(predicates[0])
 
             if value is None:
                 raise EvaluateError(f"failed to find \"IN\" predicate expression \"{ctx.getText()}\"")
@@ -663,7 +663,7 @@ class FilterExpressionParser(ExpressionListener):
             arguments: List[Expression] = []
 
             for i in range(argumentcount):
-                argument = self._try_get_expr(expressions[i])
+                argument = self._get_expr(expressions[i])
 
                 if argument is None:
                     raise EvaluateError(f"failed to find argument expression {i} \"{expressions[i].getText()}\" for \"IN\" operation")
@@ -686,7 +686,7 @@ class FilterExpressionParser(ExpressionListener):
             if len(predicates) != 1:
                 raise EvaluateError(f"\"IS NULL\" expression is malformed: \"{ctx.getText()}\"")
 
-            value = self._try_get_expr(predicates[0])
+            value = self._get_expr(predicates[0])
 
             if value is None:
                 raise EvaluateError(f"failed to find \"IS NULL\" predicate expression \"{ctx.getText()}\"")
@@ -700,12 +700,12 @@ class FilterExpressionParser(ExpressionListener):
         if len(predicates) != 2:
             raise EvaluateError(f"operator expression, in predicate expression context, is malformed: \"{ctx.getText()}\"")
 
-        left = self._try_get_expr(predicates[0])
+        left = self._get_expr(predicates[0])
 
         if left is None:
             raise EvaluateError(f"failed to find left operator predicate expression \"{ctx.getText()}\"")
 
-        right = self._try_get_expr(predicates[1])
+        right = self._get_expr(predicates[1])
 
         if right is None:
             raise EvaluateError(f"failed to find right operator predicate expression \"{ctx.getText()}\"")
@@ -764,19 +764,19 @@ class FilterExpressionParser(ExpressionListener):
 
         # Check for literal values (see explicit visit function)
         if literal_value is not None:
-            value = self._try_get_expr(literal_value)
+            value = self._get_expr(literal_value)
 
             if value is None:
-                self._add_expr(ctx, value)
-                return
+                raise EvaluateError(f"failed to find literal value \"{literal_value.getText()}\"")
 
-            raise EvaluateError(f"failed to find literal value \"{literal_value.getText()}\"")
+            self._add_expr(ctx, value)
+            return
 
         # Check for column names (see explicit visit function)
         columnname: ExpressionParser.ColumnNameContext = ctx.columnName()
 
         if columnname is not None:
-            value = self._try_get_expr(columnname)
+            value = self._get_expr(columnname)
 
             if value is None:
                 raise EvaluateError(f"failed to find column name \"{columnname.getText()}\"")
@@ -788,7 +788,7 @@ class FilterExpressionParser(ExpressionListener):
         function_expression: ExpressionParser.FunctionExpressionContext = ctx.functionExpression()
 
         if function_expression is not None:
-            value = self._try_get_expr(function_expression)
+            value = self._get_expr(function_expression)
 
             if value is None:
                 raise EvaluateError(f"failed to find function expression \"{function_expression.getText()}\"")
@@ -806,12 +806,12 @@ class FilterExpressionParser(ExpressionListener):
             if len(values) != 1:
                 raise EvaluateError(f"unary operator value expression is malformed: \"{ctx.getText()}\"")
 
-            value = self._try_get_expr(values[0])
+            value = self._get_expr(values[0])
 
             if value is None:
                 raise EvaluateError(f"failed to find unary operator value expression \"{ctx.getText()}\"")
 
-            if unary_operator.K_NOT() is not None:
+            if unary_operator.K_NOT() is None:
                 operatorsymbol = unary_operator.getText()
 
                 if operatorsymbol == "+":
@@ -825,14 +825,14 @@ class FilterExpressionParser(ExpressionListener):
             else:
                 unarytype = ExpressionUnaryType.NOT
 
-            self._add_expr(ctx, OperatorExpression(unarytype, value, None))
+            self._add_expr(ctx, UnaryExpression(unarytype, value))
             return
 
         # Check for sub-expressions, i.e., "(" expression ")"
         expression: ExpressionParser.ExpressionContext = ctx.expression()
 
         if expression is not None:
-            value = self._try_get_expr(expression[0])
+            value = self._get_expr(expression[0])
 
             if value is None:
                 raise EvaluateError(f"failed to find sub-expression \"{ctx.getText()}\"")
@@ -846,12 +846,12 @@ class FilterExpressionParser(ExpressionListener):
         if len(values) != 2:
             raise EvaluateError(f"operator expression, in value expression context, is malformed: \"{ctx.getText()}\"")
 
-        left = self._try_get_expr(values[0])
+        left = self._get_expr(values[0])
 
         if left is None:
             raise EvaluateError(f"failed to find left operator value expression \"{ctx.getText()}\"")
 
-        right = self._try_get_expr(values[1])
+        right = self._get_expr(values[1])
 
         if right is None:
             raise EvaluateError(f"failed to find right operator value expression \"{ctx.getText()}\"")
@@ -914,14 +914,15 @@ class FilterExpressionParser(ExpressionListener):
     def exitLiteralValue(self, ctx: ExpressionParser.LiteralValueContext):
         result: Optional[ValueExpression] = None
 
+        # Literal numeric values will not be negative, unary operators will handle negative values
         if ctx.INTEGER_LITERAL() is not None:
             literal: str = ctx.INTEGER_LITERAL().getText()
 
             try:
                 value = int(literal)
 
-                if value < Limits.MININT32 or value > Limits.MAXINT32:
-                    if value < Limits.MININT64 or value > Limits.MAXINT64:
+                if value > Limits.MAXINT32:
+                    if value > Limits.MAXINT64:
                         result = self._parse_numericliteral(literal)
                     else:
                         result = ValueExpression(ExpressionValueType.INT64, value)
@@ -935,7 +936,7 @@ class FilterExpressionParser(ExpressionListener):
             try:
                 # Real literals using scientific notation are parsed as double
                 if "E" in literal.upper():
-                    result = ValueExpression(ExpressionValueType.DOUBLE, float(value))
+                    result = ValueExpression(ExpressionValueType.DOUBLE, float(literal))
                 else:
                     result = self._parse_numericliteral(literal)
             except Exception:
@@ -974,7 +975,7 @@ class FilterExpressionParser(ExpressionListener):
     def _parse_guidliteral(self, literal: str) -> UUID:
         # Remove any quotes from GUID (boost currently only handles optional braces),
         # ANTLR grammar already ensures GUID starting with quote also ends with one
-        return UUID(literal[1:-1] if literal[0] == "{" else literal)
+        return UUID(literal[1:-1] if literal[0] in ["{", "'"] else literal)
 
     def _parse_datetimeliteral(self, literal: str) -> datetime:
         # Remove any surrounding '#' symbols from date/time, ANTLR grammar already
@@ -1111,7 +1112,7 @@ class FilterExpressionParser(ExpressionListener):
             argumentcount = len(expressions)
 
             for i in range(argumentcount):
-                argument = self._try_get_expr(expressions[i])
+                argument = self._get_expr(expressions[i])
 
                 if argument is None:
                     raise EvaluateError(f"failed to find argument expression {i} \"{expressions[i].getText()}\" for function \"{functionname.getText()}\"")

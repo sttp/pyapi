@@ -31,6 +31,7 @@
         "guidliteral",
         "guidvalue",
         "idlist",
+        "idset",
         "iinfo",
         "INLIST",
         "inlistexpression",
@@ -108,5 +109,14 @@
     ],
     "python.formatting.autopep8Args": [
         "--max-line-length=200"
-    ]
+    ],
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./test",
+        "-p",
+        "test_*.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": true
 }
