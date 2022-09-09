@@ -74,7 +74,7 @@ class Empty:
 
 class Limits(IntEnum):
     MAXTICKS = 3155378975999999999
-    MAXBYTE = 255
+    MAXBYTE = np.iinfo(np.uint8).max
     MININT16 = np.iinfo(np.int16).min
     MAXINT16 = np.iinfo(np.int16).max
     MAXUINT16 = np.iinfo(np.uint16).max
