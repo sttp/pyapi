@@ -90,7 +90,7 @@ class FilterExpressionParser(ExpressionListener):
         https://sttp.github.io/documentation/filter-expressions/#direct-signal-identification
         """
 
-        self.tableidfields: Dict[str, TableIDFields] = {}
+        self.tableidfields_map: Dict[str, TableIDFields] = {}
         """
         Defines a map of table ID fields associated with table names.
         """
@@ -138,9 +138,9 @@ class FilterExpressionParser(ExpressionListener):
             parser.primary_tablename = primary_table
 
             if tableidfields is None:
-                parser.tableidfields[primary_table] = DEFAULT_TABLEIDFIELDS
+                parser.tableidfields_map[primary_table] = DEFAULT_TABLEIDFIELDS
             else:
-                parser.tableidfields[primary_table] = tableidfields
+                parser.tableidfields_map[primary_table] = tableidfields
 
         return parser, None
 
@@ -290,7 +290,7 @@ class FilterExpressionParser(ExpressionListener):
             signalid_columnindex = -1
 
             if self.track_filteredsignalids:
-                primary_tableidfields = self.tableidfields.get(table.name)
+                primary_tableidfields = self.tableidfields_map.get(table.name)
 
                 if primary_tableidfields is None:
                     return EvaluateError(f"failed to find ID fields record for table \"{table.name}\"")
@@ -420,7 +420,7 @@ class FilterExpressionParser(ExpressionListener):
     #     : exactMatchModifier? columnName ( K_ASC | K_DESC )?
     #     ;
     def enterFilterStatement(self, ctx: ExpressionParser.FilterStatementContext):
-        tablename = ctx.tableName().getText()
+        tablename: str = ctx.tableName().getText()
 
         table, err = self.table(tablename)
 
@@ -439,7 +439,7 @@ class FilterExpressionParser(ExpressionListener):
 
             for i in range(len(orderingterms)):
                 orderingterm: ExpressionParser.OrderingTermContext = orderingterms[i]
-                orderby_columnname = orderingterm.orderByColumnName().getText()
+                orderby_columnname: str = orderingterm.orderByColumnName().getText()
                 orderby_column = table.column_byname(orderby_columnname)
 
                 if orderby_column is None:
@@ -492,7 +492,7 @@ class FilterExpressionParser(ExpressionListener):
         if primary_table is None:
             return
 
-        primary_tableidfields = self.tableidfields.get(self.primary_tablename)
+        primary_tableidfields = self.tableidfields_map.get(self.primary_tablename)
 
         if primary_tableidfields is None:
             return
