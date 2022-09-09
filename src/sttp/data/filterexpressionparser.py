@@ -118,18 +118,18 @@ class FilterExpressionParser(ExpressionListener):
                      primary_table: str,
                      tableidfields: Optional[TableIDFields] = None,
                      suppress_console_erroroutput: bool = False,
-                     ) -> Tuple["FilterExpressionParser", Optional[Exception]]:
+                     ) -> Tuple[Optional["FilterExpressionParser"], Optional[Exception]]:
         """
-        Creates a new filter expression parser associated with the provided dataSet
-        and provided table details. Error will be returned if dataSet parameter is
-        None or the filterExpression is empty.
+        Creates a new filter expression parser associated with the provided `dataSet`
+        and provided table details. Error will be returned if `dataset` parameter is
+        None or the `filterexpression` is empty.
         """
 
         if dataset is None:
             return None, ValueError("dataset parameter is None")
 
         if not filterexpression:
-            return None, ValueError("Filter expression is empty")
+            return None, ValueError("filterexpression parameter is empty")
 
         parser = FilterExpressionParser(filterexpression, suppress_console_erroroutput)
         parser.dataset = dataset
@@ -1173,7 +1173,7 @@ class FilterExpressionParser(ExpressionListener):
         return None, EvaluateError(f"no expression trees generated with filter expression \"{filterexpression}\" for table \"{datatable.name}\"")
 
     @staticmethod
-    def evaluate_expression(filterexpression: str, suppress_console_erroroutput: bool = False) -> Tuple[Optional[ValueExpression], Optional[bool]]:
+    def evaluate_expression(filterexpression: str, suppress_console_erroroutput: bool = False) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         """
         Returns the result of the evaluated `filterexpression`.
 
@@ -1195,12 +1195,12 @@ class FilterExpressionParser(ExpressionListener):
             return None, err
 
         if expressiontrees is not None and len(expressiontrees) > 0:
-            return expressiontrees[0].evaluate(), None
+            return expressiontrees[0].evaluate()
 
         return None, EvaluateError(f"no expression trees generated with filter expression \"{filterexpression}\"")
 
     @staticmethod
-    def evaluate_datarowexpression(datarow: DataRow, filterexpression: str, suppress_console_erroroutput: bool = False) -> Tuple[Optional[ValueExpression], Optional[bool]]:
+    def evaluate_datarowexpression(datarow: DataRow, filterexpression: str, suppress_console_erroroutput: bool = False) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         """
         Returns the result of the evaluated `filterexpression` using the specified `datarow`.
 
@@ -1220,7 +1220,7 @@ class FilterExpressionParser(ExpressionListener):
         return (None, err) if err is not None else expressiontree.evaluate(datarow)
 
     @staticmethod
-    def select_datarows(dataset: DataSet, filterexpression: str, primarytable: str, tableidfields: Optional[TableIDFields], suppress_console_erroroutput: bool = False) -> Tuple[Optional[List[DataRow]], Optional[Exception]]:
+    def select_datarows(dataset: DataSet, filterexpression: str, primarytable: str, tableidfields: Optional[TableIDFields] = None, suppress_console_erroroutput: bool = False) -> Tuple[Optional[List[DataRow]], Optional[Exception]]:
         """
         Returns all rows matching the provided `filterexpression` and `dataset`.
 
@@ -1242,7 +1242,7 @@ class FilterExpressionParser(ExpressionListener):
         return (None, err) if err is not None else (parser.filtered_rows, None)
 
     @staticmethod
-    def select_datarows_fromtable(datatable: DataTable, filterexpression: str, tableidfields: Optional[TableIDFields], suppress_console_erroroutput: bool = False) -> Tuple[Optional[List[DataRow]], Optional[Exception]]:
+    def select_datarows_fromtable(datatable: DataTable, filterexpression: str, tableidfields: Optional[TableIDFields] = None, suppress_console_erroroutput: bool = False) -> Tuple[Optional[List[DataRow]], Optional[Exception]]:
         """
         Returns all rows matching the provided `filterexpression` and `datatable`.
 
@@ -1260,7 +1260,7 @@ class FilterExpressionParser(ExpressionListener):
         return FilterExpressionParser.select_datarows(datatable.parent, filterexpression, datatable.name, tableidfields, suppress_console_erroroutput)
 
     @staticmethod
-    def select_datarowset(dataset: DataSet, filterexpression: str, primarytable: str, tableidfields: Optional[TableIDFields], suppress_console_erroroutput: bool = False) -> Tuple[Optional[Set[DataRow]], Optional[Exception]]:
+    def select_datarowset(dataset: DataSet, filterexpression: str, primarytable: str, tableidfields: Optional[TableIDFields] = None, suppress_console_erroroutput: bool = False) -> Tuple[Optional[Set[DataRow]], Optional[Exception]]:
         """
         Returns all unique rows matching the provided `filterexpression` and `dataset`.
 
@@ -1282,7 +1282,7 @@ class FilterExpressionParser(ExpressionListener):
         return (None, err) if err is not None else (parser.filtered_rowset, None)
 
     @staticmethod
-    def select_datarowset_fromtable(datatable: DataTable, filterexpression: str, tableidfields: Optional[TableIDFields], suppress_console_erroroutput: bool = False) -> Tuple[Optional[Set[DataRow]], Optional[Exception]]:
+    def select_datarowset_fromtable(datatable: DataTable, filterexpression: str, tableidfields: Optional[TableIDFields] = None, suppress_console_erroroutput: bool = False) -> Tuple[Optional[Set[DataRow]], Optional[Exception]]:
         """
         Returns all unique rows matching the provided `filterexpression` and `datatable`.
 
@@ -1300,7 +1300,7 @@ class FilterExpressionParser(ExpressionListener):
         return FilterExpressionParser.select_datarowset(datatable.parent, filterexpression, datatable.name, tableidfields, suppress_console_erroroutput)
 
     @staticmethod
-    def select_signalidset(dataset: DataSet, filterexpression: str, primarytable: str, tableidfields: Optional[TableIDFields], suppress_console_erroroutput: bool = False) -> Tuple[Optional[Set[UUID]], Optional[Exception]]:
+    def select_signalidset(dataset: DataSet, filterexpression: str, primarytable: str, tableidfields: Optional[TableIDFields] = None, suppress_console_erroroutput: bool = False) -> Tuple[Optional[Set[UUID]], Optional[Exception]]:
         """
         Returns all unique signal IDs matching the provided `filterexpression` and `dataset`.
 
@@ -1325,7 +1325,7 @@ class FilterExpressionParser(ExpressionListener):
         return (None, err) if err is not None else (parser.filtered_signalidset, None)
 
     @staticmethod
-    def select_signalidset_fromtable(datatable: DataTable, filterexpression: str, tableidfields: Optional[TableIDFields], suppress_console_erroroutput: bool = False) -> Tuple[Optional[Set[UUID]], Optional[Exception]]:
+    def select_signalidset_fromtable(datatable: DataTable, filterexpression: str, tableidfields: Optional[TableIDFields] = None, suppress_console_erroroutput: bool = False) -> Tuple[Optional[Set[UUID]], Optional[Exception]]:
         """
         Returns all unique signal IDs matching the provided `filterexpression` and `datatable`.
 
