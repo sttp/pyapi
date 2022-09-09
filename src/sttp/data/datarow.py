@@ -35,6 +35,10 @@ import numpy as np
 if TYPE_CHECKING:
     from .dataset import xsdformat
     from .datatable import DataTable
+    from .constants import ExpressionValueType
+    from .expressiontree import ExpressionTree
+    from .filterexpressionparser import FilterExpressionParser
+    from .errors import EvaluateError
 
 
 class DataRow:
@@ -115,36 +119,57 @@ class DataRow:
 
         return column, None
 
-    # TODO: Uncomment when filter expression engine is implemented
-    def _expressiontree(self, column: DataColumn):  # -> Tuple[Optional[ExpressionTree], Optional[Exception]]:
-        return None, NotImplementedError()
+    def _expressiontree(self, column: DataColumn) -> Tuple[Optional[ExpressionTree], Optional[Exception]]:
+        columnindex = column.index
+        value = self._values[columnindex]
 
-    # columnindex = column.index
-    # value = self._values[columnindex]
+        if value is None:
+            datatable = column.parent
+            expressiontree, err = FilterExpressionParser.generate_expressiontree(datatable, column.expression, True)
 
-    # if value is None:
-    #     datatable = column.parent
-    #     (expressiontree, err) = GenerateExpressionTree(datatable, column.expression, True)
+            if err is not None:
+                return None, EvaluateError(f"failed to parse expression defined for computed DataColumn \"{column.name}\" for table \"{self._parent.name}\": {err}")
 
-    #     if err is not None:
-    #         return None, ValueError(f"failed to parse expression defined for computed DataColumn \"{column.name}\" for table \"{self._parent.name}\": {err}")
+            self._values[columnindex] = expressiontree
+            return expressiontree, None
 
-    #     self._values[columnindex] = expressiontree
-    #     return expressiontree, None
-
-    # return value, None
+        return value, None
 
     def _get_computedvalue(self, column: DataColumn) -> Tuple[Optional[object], Optional[Exception]]:
-        # sourcery skip: assign-if-exp, reintroduce-else
-        (expressiontree, err) = self._expressiontree(column)
+        expressiontree, err = self._expressiontree(column)
 
         if err is not None:
             return None, err
 
-        return None, NotImplementedError()
+        try:
+            sourcevalue, err = expressiontree.evaluate(self)
+        except Exception as ex:
+            err = ex
 
-        # (sourcevalue, err) = expressiontree.evaluate(self)
-        # TODO: Add remaining code when filter expression engine is implemented
+        if err is not None:
+            return None, EvaluateError(f"failed to evaluate expression defined for computed DataColumn \"{column.name}\" for table \"{self._parent.name}\": {err}")
+
+        sourcetype = sourcevalue.valuetype
+        targettype = column.datatype
+
+        if sourcetype == ExpressionValueType.BOOLEAN:
+            return self._convert_frombool(sourcevalue._booleanvalue(), targettype)
+        if sourcetype == ExpressionValueType.INT32:
+            return self._convert_fromint32(sourcevalue._int32value(), targettype)
+        if sourcetype == ExpressionValueType.INT64:
+            return self._convert_fromint64(sourcevalue._int64value(), targettype)
+        if sourcetype == ExpressionValueType.DECIMAL:
+            return self._convert_fromdecimal(sourcevalue._decimalvalue(), targettype)
+        if sourcetype == ExpressionValueType.DOUBLE:
+            return self._convert_fromdouble(sourcevalue._doublevalue(), targettype)
+        if sourcetype == ExpressionValueType.STRING:
+            return self._convert_fromstring(sourcevalue._stringvalue(), targettype)
+        if sourcetype == ExpressionValueType.GUID:
+            return self._convert_fromguid(sourcevalue._guidvalue(), targettype)
+        if sourcetype == ExpressionValueType.DATETIME:
+            return self._convert_fromdatetime(sourcevalue._datetimevalue(), targettype)
+
+        return None, TypeError("unexpected expression value type encountered")
 
     def _convert_fromstring(self, value: str, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
         try:

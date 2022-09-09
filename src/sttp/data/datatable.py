@@ -30,6 +30,7 @@ from typing import Callable, Dict, Iterator, List, Optional, Tuple, TYPE_CHECKIN
 
 if TYPE_CHECKING:
     from .dataset import DataSet
+    from .filterexpressionparser import FilterExpressionParser
 
 class DataTable:
     """
@@ -271,31 +272,31 @@ class DataTable:
 
         return "".join(image)
 
-    def select(self, filterexpression: str, sortorder: str, limit: int) -> Tuple[Optional[List[DataRow]], Optional[Exception]]:
+    def select(self, filterexpression: str, sortorder: Optional[str] = None, limit: int = -1) -> Tuple[Optional[List[DataRow]], Optional[Exception]]:
         """
-        Returns the rows matching the filter expression criteria in the specified sort order. The `filterexpression`
-        parameter should be in the syntax of a SQL WHERE expression but should not include the WHERE keyword.
-        The `sortorder` parameter defines field names, separated by commas, that exist in the `DataTable` used to
-        order the results. Each field specified in the `sortorder` can have an `ASC` or `DESC` suffix; defaults to
-        `ASC` when no suffix is provided. When `sortorder` is an empty string, records will be returned in natural
-        order. Set limit parameter to -1 for all matching rows. When `filterexpression` is an empty string, all
-        records will be returned; any specified sort order and limit will still be respected.
+        Returns the rows matching the filter expression criteria in the specified sort order.
+        
+        The `filterexpression` parameter should be in the syntax of a SQL WHERE expression but
+        should not include the WHERE keyword. The `sortorder` parameter defines field names,
+        separated by commas, that exist in the `DataTable` used to order the results. Each
+        field specified in the `sortorder` can have an `ASC` or `DESC` suffix; defaults to
+        `ASC` when no suffix is provided. When `sortorder` is an empty string, records will
+        be returned in natural order. Set limit parameter to -1 for all matching rows. When
+        `filterexpression` is an empty string, all records will be returned; any specified
+        sort order and limit will still be respected.
         """
 
-        return None, NotImplementedError()
+        if filterexpression is None or not filterexpression:
+            filterexpression = "True"  # Return all records
 
-        # TODO: Uncomment when filter expression engine is implemented
-        # if len(filterexpression) == 0:
-        #     filterexpression = "True" # Return all records
+        if limit > 0:
+            filterexpression = f"FILTER TOP {limit} {self.name} WHERE {filterexpression}"
+        else:
+            filterexpression = f"FILTER {self.name} WHERE {filterexpression}"
 
-        # if limit > 0:
-        #     filterexpression = f"FILTER TOP {limit} {self.name} WHERE {filterexpression}"
-        # else:
-        #     filterexpression = f"FILTER {self.name} WHERE {filterexpression}"
+        if sortorder is not None and sortorder:
+            filterexpression += f" ORDER BY {sortorder}"
 
-        # (expressiontree, err) = generate_expressiontree(self, filterexpression, True)
+        expressiontree, err = FilterExpressionParser.generate_expressiontree(self, filterexpression, True)
 
-        # if err is not None:
-        #     return None, err
-
-        # return expressiontree.select(self)
+        return (None, err) if err is not None else expressiontree.select(self)
