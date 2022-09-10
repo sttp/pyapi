@@ -30,7 +30,6 @@ from typing import Callable, Dict, Iterator, List, Optional, Tuple, TYPE_CHECKIN
 
 if TYPE_CHECKING:
     from .dataset import DataSet
-    from .filterexpressionparser import FilterExpressionParser
 
 class DataTable:
     """
@@ -296,6 +295,8 @@ class DataTable:
 
         if sortorder is not None and sortorder:
             filterexpression += f" ORDER BY {sortorder}"
+
+        from .filterexpressionparser import FilterExpressionParser
 
         expressiontree, err = FilterExpressionParser.generate_expressiontree(self, filterexpression, True)
 

@@ -219,7 +219,7 @@ class TestExpressionTree(unittest.TestCase):
         if err is None:
             self.fail(f"test_signalidset_expressions: error expected, received none")
 
-        _, err = FilterExpressionParser.select_signalidset(dataset, "bad expression", "ActiveMeasurements")
+        _, err = FilterExpressionParser.select_signalidset(dataset, "BAD-expression", "ActiveMeasurements")
 
         if err is None:
             self.fail(f"test_signalidset_expressions: error expected, received none")
@@ -860,10 +860,18 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_basic_expressions: error loading DataSet from XML document: {err}")
 
-        # datarows, err = dataset["MeasurementDetail"].select("SignalAcronym = 'STAT'")
+        datarows, err = dataset["MeasurementDetail"].select("SignalAcronym = 'STAT'")
 
-        # if err is not None:
-        #     self.fail(f"test_basic_expressions: error executing select: {err}")
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing table select: {err}")
 
-        # if len(datarows) != 116:
-        #     self.fail(f"test_basic_expressions: expected 116 results, received {len(datarows)}")
+        if len(datarows) != 116:
+            self.fail(f"test_basic_expressions: expected 116 results, received {len(datarows)}")
+
+        datarows, err = dataset["PhasorDetail"].select("Type = 'V'")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing table select: {err}")
+
+        if len(datarows) != 2:
+            self.fail(f"test_basic_expressions: expected 2 results, received {len(datarows)}")

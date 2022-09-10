@@ -25,6 +25,8 @@ from __future__ import annotations
 from gsf import Convert, Empty, normalize_enumname
 from .datatype import DataType, default_datatype
 from .datacolumn import DataColumn
+from .constants import ExpressionValueType
+from .errors import EvaluateError
 from decimal import Decimal
 from datetime import datetime
 from dateutil import parser
@@ -35,10 +37,7 @@ import numpy as np
 if TYPE_CHECKING:
     from .dataset import xsdformat
     from .datatable import DataTable
-    from .constants import ExpressionValueType
     from .expressiontree import ExpressionTree
-    from .filterexpressionparser import FilterExpressionParser
-    from .errors import EvaluateError
 
 
 class DataRow:
@@ -124,8 +123,9 @@ class DataRow:
         value = self._values[columnindex]
 
         if value is None:
-            datatable = column.parent
-            expressiontree, err = FilterExpressionParser.generate_expressiontree(datatable, column.expression, True)
+            from .filterexpressionparser import FilterExpressionParser
+
+            expressiontree, err = FilterExpressionParser.generate_expressiontree(column.parent, column.expression, True)
 
             if err is not None:
                 return None, EvaluateError(f"failed to parse expression defined for computed DataColumn \"{column.name}\" for table \"{self._parent.name}\": {err}")
