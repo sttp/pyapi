@@ -820,7 +820,7 @@ def derive_comparison_operationvaluetype_fromint32(operationtype: ExpressionOper
         return ExpressionValueType.INT32, None
     if rightvaluetype == ExpressionValueType.INT64:
         return ExpressionValueType.INT64, None
-    if rightvaluetype == [ExpressionValueType.STRING, ExpressionValueType.DECIMAL]:
+    if rightvaluetype in [ExpressionValueType.STRING, ExpressionValueType.DECIMAL]:
         return ExpressionValueType.DECIMAL, None
     if rightvaluetype == ExpressionValueType.DOUBLE:
         return ExpressionValueType.DOUBLE, None
@@ -831,7 +831,7 @@ def derive_comparison_operationvaluetype_fromint32(operationtype: ExpressionOper
 def derive_comparison_operationvaluetype_fromint64(operationtype: ExpressionOperatorType, rightvaluetype: ExpressionValueType) -> Tuple[ExpressionValueType, Optional[Exception]]:  # sourcery skip
     if rightvaluetype in [ExpressionValueType.BOOLEAN, ExpressionValueType.INT32, ExpressionValueType.INT64]:
         return ExpressionValueType.INT64, None
-    if rightvaluetype == [ExpressionValueType.STRING, ExpressionValueType.DECIMAL]:
+    if rightvaluetype in [ExpressionValueType.STRING, ExpressionValueType.DECIMAL]:
         return ExpressionValueType.DECIMAL, None
     if rightvaluetype == ExpressionValueType.DOUBLE:
         return ExpressionValueType.DOUBLE, None

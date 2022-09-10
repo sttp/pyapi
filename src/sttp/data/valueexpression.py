@@ -241,7 +241,7 @@ class ValueExpression(Expression):
             return self._convert_fromdecimal(target_typevalue)
 
         if valuetype == ExpressionValueType.DOUBLE:
-            return self._convert_fromboolean(target_typevalue)
+            return self._convert_fromdouble(target_typevalue)
 
         if valuetype == ExpressionValueType.STRING:
             return self._convert_fromstring(target_typevalue)
@@ -279,16 +279,16 @@ class ValueExpression(Expression):
         return self._convert_fromnumeric(self._booleanvalue_asint(), "Boolean", target_typevalue)
 
     def _convert_fromint32(self, target_typevalue: ExpressionValueType) -> Tuple[Optional["ValueExpression"], Optional[Exception]]:
-        return self._convert_fromnumeric(self._int32value(), "Int32", target_typevalue)
+        return self._convert_fromnumeric(self._int32value().item(), "Int32", target_typevalue)
 
     def _convert_fromint64(self, target_typevalue: ExpressionValueType) -> Tuple[Optional["ValueExpression"], Optional[Exception]]:
-        return self._convert_fromnumeric(self._int64value(), "Int64", target_typevalue)
+        return self._convert_fromnumeric(self._int64value().item(), "Int64", target_typevalue)
 
     def _convert_fromdecimal(self, target_typevalue: ExpressionValueType) -> Tuple[Optional["ValueExpression"], Optional[Exception]]:
         return self._convert_fromnumeric(self._decimalvalue(), "Decimal", target_typevalue)
 
     def _convert_fromdouble(self, target_typevalue: ExpressionValueType) -> Tuple[Optional["ValueExpression"], Optional[Exception]]:
-        return self._convert_fromnumeric(self._doublevalue(), "Double", target_typevalue)
+        return self._convert_fromnumeric(self._doublevalue().item(), "Double", target_typevalue)
 
     def _convert_fromstring(self, target_typevalue: ExpressionValueType) -> Tuple[Optional["ValueExpression"], Optional[Exception]]:
         value = self._stringvalue()

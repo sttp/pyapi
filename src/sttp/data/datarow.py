@@ -263,16 +263,16 @@ class DataRow:
         return self._convert_fromvalue(1 if value else 0, DataType.BOOLEAN, targettype)
 
     def _convert_fromint32(self, value: np.int32, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
-        return self._convert_fromvalue(value, DataType.INT32, targettype)
+        return self._convert_fromvalue(value.item(), DataType.INT32, targettype)
 
     def _convert_fromint64(self, value: np.int64, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
-        return self._convert_fromvalue(value, DataType.INT64, targettype)
+        return self._convert_fromvalue(value.item(), DataType.INT64, targettype)
 
     def _convert_fromdecimal(self, value: Decimal, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
         return self._convert_fromvalue(value, DataType.DECIMAL, targettype)
 
     def _convert_fromdouble(self, value: np.float64, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
-        return self._convert_fromvalue(value, DataType.DOUBLE, targettype)
+        return self._convert_fromvalue(value.item(), DataType.DOUBLE, targettype)
 
     def _convert_fromdatetime(self, value: datetime, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
         try:

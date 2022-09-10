@@ -201,7 +201,8 @@ class DataSet:
         namespaces: Dict[str, str] = dict(
             [node for _, node in ElementTree.iterparse(bufferio, events=["start-ns"])])
 
-        del namespaces[Empty.STRING]
+        if namespaces.get(Empty.STRING) is not None:
+            del namespaces[Empty.STRING]
 
         return self.parse_xmldoc(doc, namespaces)
 

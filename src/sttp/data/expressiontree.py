@@ -1254,7 +1254,7 @@ class ExpressionTree:
         targettypename = targettype._stringvalue().upper()
 
         # Remove any "System." prefix:
-        targettypename.removeprefix("SYSTEM.")
+        targettypename = targettypename.removeprefix("SYSTEM.")
 
         targetvaluetype = ExpressionValueType.UNDEFINED
         foundvaluetype = False
@@ -2021,7 +2021,7 @@ class ExpressionTree:
             return None, TypeError("\"SubStr\" function index value, second argument, must be an integer type")
 
         if not is_integertype(lengthvalue.valuetype):
-            return None, TypeError("\"SubStr\" function length value, third argument, must be an  integer type")
+            return None, TypeError("\"SubStr\" function length value, third argument, must be an integer type")
 
         # If source value is Null, result is Null
         if sourcevalue.is_null():
@@ -2520,7 +2520,7 @@ class ExpressionTree:
     def _isnotnull_op(self, value: ValueExpression) -> Optional[ValueExpression]:
         return ValueExpression(ExpressionValueType.BOOLEAN, not value.is_null())
 
-    def _like_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, valuetype: ExpressionValueType, exactmatch: bool) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
+    def _like_op(self, leftvalue: ValueExpression, rightvalue: ValueExpression, exactmatch: bool) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         # sourcery skip
 
         # If left is Null, result is Null
@@ -2567,6 +2567,14 @@ class ExpressionTree:
                     return TRUEVALUE, None
             else:
                 if leftoperand.upper().startswith(testexpression.upper()):
+                    return TRUEVALUE, None
+
+        if startswith_wildcard and endswith_wildcard:
+            if exactmatch:
+                if testexpression in leftoperand:
+                    return TRUEVALUE, None
+            else:
+                if testexpression.upper() in leftoperand.upper():
                     return TRUEVALUE, None
 
         return FALSEVALUE, None

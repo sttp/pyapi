@@ -287,6 +287,9 @@ class FilterExpressionParser(ExpressionListener):
             # Select all matching boolean results from expression tree evaluated for each table row
             matchedrows, err = expressiontree.selectwhere(table, where_predicate, applylimit, applysort)
 
+            if err is not None:
+                return err
+
             signalid_columnindex = -1
 
             if self.track_filteredsignalids:
@@ -746,6 +749,7 @@ class FilterExpressionParser(ExpressionListener):
                 operatortype = ExpressionOperatorType.NOTLIKE if has_notkeyword is None else ExpressionOperatorType.LIKE
 
             self._add_expr(ctx, OperatorExpression(operatortype, left, right))
+            return
 
         raise EvaluateError(f"unexpected predicate expression \"{ctx.getText()}\"")
 
@@ -832,7 +836,7 @@ class FilterExpressionParser(ExpressionListener):
         expression: ExpressionParser.ExpressionContext = ctx.expression()
 
         if expression is not None:
-            value = self._get_expr(expression[0])
+            value = self._get_expr(expression)
 
             if value is None:
                 raise EvaluateError(f"failed to find sub-expression \"{ctx.getText()}\"")
@@ -916,10 +920,10 @@ class FilterExpressionParser(ExpressionListener):
 
         # Literal numeric values will not be negative, unary operators will handle negative values
         if ctx.INTEGER_LITERAL() is not None:
-            literal: str = ctx.INTEGER_LITERAL().getText()
+            literal: str = ctx.INTEGER_LITERAL().getText().upper()
 
             try:
-                value = int(literal)
+                value = int(literal, base=16) if "X" in literal else int(literal)
 
                 if value > Limits.MAXINT32:
                     if value > Limits.MAXINT64:

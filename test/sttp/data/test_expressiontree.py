@@ -25,13 +25,15 @@ import unittest
 from gsf import Limits, normalize_enumname
 from src.sttp.data.filterexpressionparser import FilterExpressionParser
 from src.sttp.data.constants import ExpressionValueType
-from src.sttp.data.dataset import xsdformat
+from src.sttp.data.dataset import DataSet, xsdformat
 from src.sttp.data.datarow import DataRow
-from .test_dataset import TestDataSet
+from src.sttp.data.datatype import DataType
+from src.sttp.data.tableidfields import TableIDFields
 from decimal import Decimal
 from uuid import UUID, uuid1
 from dateutil import parser
 from datetime import datetime, timezone
+from .test_dataset import TestDataSet
 
 
 class TestExpressionTree(unittest.TestCase):
@@ -313,3 +315,555 @@ class TestExpressionTree(unittest.TestCase):
 
         if self._get_row_guid(rows[1], signalidfield) != freqid:
             self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            f"FILTER ActiveMeasurements WHERE SignalID = {{{statid}}} OR SignalID = '{freqid}' ORDER BY SignalType",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 2:
+            self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
+
+        # FREQ should sort before STAT with order by
+        if self._get_row_guid(rows[0], signalidfield) != freqid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        if self._get_row_guid(rows[1], signalidfield) != statid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            f"FILTER ActiveMeasurements WHERE SignalID = {statid} OR SignalID = '{freqid}' ORDER BY SignalType;{statid}",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 2:
+            self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
+
+        #  Because expression includes Guid statID as a literal (at the end), it will parse first
+        #  regardless of order by in filter statement
+        if self._get_row_guid(rows[0], signalidfield) != statid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        if self._get_row_guid(rows[1], signalidfield) != freqid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            "FILTER ActiveMeasurements WHERE True",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 2:
+            self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
+
+        if self._get_row_guid(rows[0], signalidfield) != statid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        if self._get_row_guid(rows[1], signalidfield) != freqid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            "FILTER ActiveMeasurements WHERE IsNull(NULL, False) OR Coalesce(Null, true)",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 2:
+            self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
+
+        if self._get_row_guid(rows[0], signalidfield) != statid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        if self._get_row_guid(rows[1], signalidfield) != freqid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            "FILTER ActiveMeasurements WHERE IIf(IsNull(NULL, False) OR Coalesce(Null, true), Len(SignalType) == 4, false)",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 2:
+            self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
+
+        if self._get_row_guid(rows[0], signalidfield) != statid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        if self._get_row_guid(rows[1], signalidfield) != freqid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            "FILTER ActiveMeasurements WHERE SignalType IS !NULL",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 2:
+            self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
+
+        if self._get_row_guid(rows[0], signalidfield) != statid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        if self._get_row_guid(rows[1], signalidfield) != freqid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            "FILTER ActiveMeasurements WHERE Len(SubStr(Coalesce(Trim(SignalType), 'OTHER'), 0, 0X2)) = 2",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 2:
+            self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
+
+        if self._get_row_guid(rows[0], signalidfield) != statid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        if self._get_row_guid(rows[1], signalidfield) != freqid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            "FILTER ActiveMeasurements WHERE LEN(SignalTYPE) > 3.5",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 2:
+            self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
+
+        if self._get_row_guid(rows[0], signalidfield) != statid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        if self._get_row_guid(rows[1], signalidfield) != freqid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            "FILTER ActiveMeasurements WHERE Len(SignalType) & 0x4 == 4",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 2:
+            self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
+
+        if self._get_row_guid(rows[0], signalidfield) != statid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        if self._get_row_guid(rows[1], signalidfield) != freqid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            "FILTER ActiveMeasurements WHERE RegExVal('ST.+', SignalType) == 'STAT'",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 1:
+            self.fail(f"test_selectdatarows_expressions: expected 1 result, received {len(rows)}")
+
+        if self._get_row_guid(rows[0], signalidfield) != statid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            "FILTER ActiveMeasurements WHERE RegExMatch('FR.+', SignalType)",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 1:
+            self.fail(f"test_selectdatarows_expressions: expected 1 result, received {len(rows)}")
+
+        if self._get_row_guid(rows[0], signalidfield) != freqid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            "FILTER ActiveMeasurements WHERE SignalType IN ('FREQ', 'STAT') ORDER BY SignalType",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 2:
+            self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
+
+        if self._get_row_guid(rows[0], signalidfield) != freqid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        if self._get_row_guid(rows[1], signalidfield) != statid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            f"FILTER ActiveMeasurements WHERE SignalID IN ({statid}, {freqid})",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 2:
+            self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
+
+        if self._get_row_guid(rows[0], signalidfield) != statid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        if self._get_row_guid(rows[1], signalidfield) != freqid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            "FILTER ActiveMeasurements WHERE SignalType LIKE 'ST%'",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 1:
+            self.fail(f"test_selectdatarows_expressions: expected 1 result, received {len(rows)}")
+
+        if self._get_row_guid(rows[0], signalidfield) != statid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            "FILTER ActiveMeasurements WHERE SignalType LIKE '*EQ'",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 1:
+            self.fail(f"test_selectdatarows_expressions: expected 1 result, received {len(rows)}")
+
+        if self._get_row_guid(rows[0], signalidfield) != freqid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            "FILTER ActiveMeasurements WHERE SignalType LIKE '*TA%'",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 1:
+            self.fail(f"test_selectdatarows_expressions: expected 1 result, received {len(rows)}")
+
+        if self._get_row_guid(rows[0], signalidfield) != statid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            "FILTER ActiveMeasurements WHERE -Len(SignalType) <= 0",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 2:
+            self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
+
+        if self._get_row_guid(rows[0], signalidfield) != statid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        if self._get_row_guid(rows[1], signalidfield) != freqid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        # number converted to string and compared
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            "FILTER ActiveMeasurements WHERE SignalType == 0",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 0:
+            self.fail(f"test_selectdatarows_expressions: expected 0 results, received {len(rows)}")
+
+        # number converted to string and compared
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            "FILTER ActiveMeasurements WHERE SignalType > 99",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 2:
+            self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
+
+        if self._get_row_guid(rows[0], signalidfield) != statid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        if self._get_row_guid(rows[1], signalidfield) != freqid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        rows, err = FilterExpressionParser.select_datarows(
+            dataset,
+            "FILTER ActiveMeasurements WHERE Len(SignalType) / 0x2 = 2",
+            "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        if len(rows) != 2:
+            self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
+
+        if self._get_row_guid(rows[0], signalidfield) != statid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        if self._get_row_guid(rows[1], signalidfield) != freqid:
+            self.fail(f"test_selectdatarows_expressions: retrieve Guid value does not match source")
+
+        if self._get_row_string(rows[0], signaltypefield) != "STAT":
+            self.fail(f"test_selectdatarows_expressions: retrieve SignalType value does not match source")
+
+        if self._get_row_string(rows[1], signaltypefield) != "FREQ":
+            self.fail(f"test_selectdatarows_expressions: retrieve SignalType value does not match source")
+
+    def test_metadata_expressions(self):  # sourcery skip
+        # Two sample metadata files exist, test both
+        for i in range(2):
+            with open(f"test/MetadataSample{i + 1}.xml", "rb") as binary_file:
+                data = binary_file.read()
+
+            dataset, err = DataSet.from_xml(data)
+
+            if err is not None:
+                self.fail(f"test_metadata_expressions: error loading DataSet from XML document: {err}")
+
+            if dataset.tablecount != 4:
+                self.fail(f"test_metadata_expressions: expected 4 tables, received {dataset.tablecount}")
+
+            table = dataset.table("MeasurementDetail")
+
+            if table is None:
+                self.fail("test_metadata_expressions: table not found in DataSet")
+
+            if table.columncount != 11:
+                self.fail(f"test_metadata_expressions: expected 11 columns, received {table.columncount}")
+
+            if table.column_byname("ID") is None:
+                self.fail("test_metadata_expressions: missing expected table column")
+
+            if table.column_byname("id").datatype != DataType.STRING:
+                self.fail("test_metadata_expressions: column type does not match expected")
+
+            if table.column_byname("SignalID") is None:
+                self.fail("test_metadata_expressions: missing expected table column")
+
+            if table.column_byname("signalID").datatype != DataType.GUID:
+                self.fail("test_metadata_expressions: column type does not match expected")
+
+            if table.rowcount == 0:
+                self.fail("test_metadata_expressions: unexpected empty table")
+
+            table = dataset.table("DeviceDetail")
+
+            if table is None:
+                self.fail("test_metadata_expressions: table not found in DataSet")
+
+            if table.columncount != 19 + i:  # Second test adds a computed column
+                self.fail(f"test_metadata_expressions: expected {19 + i} columns, received {table.columncount}")
+
+            if table.column_byname("ACRONYM") is None:
+                self.fail("test_metadata_expressions: missing expected table column")
+
+            if table.column_byname("Acronym").datatype != DataType.STRING:
+                self.fail("test_metadata_expressions: column type does not match expected")
+
+            if table.column_byname("Name") is None:
+                self.fail("test_metadata_expressions: missing expected table column")
+
+            if table.column_byname("Name").datatype != DataType.STRING:
+                self.fail("test_metadata_expressions: column type does not match expected")
+
+            if table.rowcount != 1:
+                self.fail("test_metadata_expressions: unexpected empty table")
+
+            datarow = table[0]
+
+            acronym, null, err = datarow.stringvalue_byname("Acronym")
+
+            if null or err is not None:
+                self.fail("test_metadata_expressions: unexpected NULL column value in row")
+
+            name, null, err = datarow.stringvalue_byname("Name")
+
+            if null or err is not None:
+                self.fail("test_metadata_expressions: unexpected NULL column value in row")
+
+            if acronym.upper() != name.upper():
+                self.fail("test_metadata_expressions: unexpected column value in row")
+
+            # In test data set, DeviceDetail.OriginalSource is null
+            _, null, _ = datarow.stringvalue_byname("OriginalSource")
+
+            if not null:
+                self.fail("test_metadata_expressions: unexpected non-NULL column value in row")
+
+            # In test data set, DeviceDetail.ParentAcronym is not null, but is an empty string
+            parent_acronym, null, _ = datarow.stringvalue_byname("ParentAcronym")
+
+            if null or parent_acronym != "":
+                self.fail("test_metadata_expressions: unexpected NULL or non-empty column value in row")
+
+            idset, err = FilterExpressionParser.select_signalidset(dataset, "FILTER MeasurementDetail WHERE SignalAcronym = 'FREQ'", "MeasurementDetail")
+
+            if err is not None:
+                self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            if len(idset) != 1:
+                self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
+
+            idset, err = FilterExpressionParser.select_signalidset(dataset, "FILTER TOP 8 MeasurementDetail WHERE SignalAcronym = 'STAT'", "MeasurementDetail")
+
+            if err is not None:
+                self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            if len(idset) != 8:
+                self.fail(f"test_metadata_expressions: expected 8 results, received {len(idset)}")
+
+            idset, err = FilterExpressionParser.select_signalidset(dataset, "FILTER TOP 0 MeasurementDetail WHERE SignalAcronym = 'STAT'", "MeasurementDetail")
+
+            if err is not None:
+                self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            if len(idset) != 0:
+                self.fail(f"test_metadata_expressions: expected 0 results, received {len(idset)}")
+
+            idset, err = FilterExpressionParser.select_signalidset(dataset, "FILTER TOP -1 MeasurementDetail WHERE SignalAcronym = 'STAT'", "MeasurementDetail")
+
+            if err is not None:
+                self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            if len(idset) == 0:
+                self.fail(f"test_metadata_expressions: expected non-zero result set, received {len(idset)}")
+
+            devicedetail_id_fields = TableIDFields()
+            devicedetail_id_fields.signalid_fieldname = "UniqueID"
+            devicedetail_id_fields.measurementkey_fieldname = "Name"
+            devicedetail_id_fields.pointtag_fieldname = "Acronym"
+
+            idset, err = FilterExpressionParser.select_signalidset(dataset, "FILTER DeviceDetail WHERE Convert(Longitude, 'System.Int32') = -89", "DeviceDetail", devicedetail_id_fields)
+
+            if err is not None:
+                self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            if len(idset) != 1:
+                self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
+
+            idset, err = FilterExpressionParser.select_signalidset(dataset, "FILTER DeviceDetail WHERE Convert(latitude, 'int16') = 35", "DeviceDetail", devicedetail_id_fields)
+
+            if err is not None:
+                self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            if len(idset) != 1:
+                self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
+
+            idset, err = FilterExpressionParser.select_signalidset(dataset, "FILTER DeviceDetail WHERE Convert(Convert(Latitude, 'Int32'), 'String') = 35", "DeviceDetail", devicedetail_id_fields)
+
+            if err is not None:
+                self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            if len(idset) != 1:
+                self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
+
+            idset, err = FilterExpressionParser.select_signalidset(dataset, "FILTER DeviceDetail WHERE Convert(Latitude, 'Single') > 35", "DeviceDetail", devicedetail_id_fields)
+
+            if err is not None:
+                self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            if len(idset) != 1:
+                self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
+
+            idset, err = FilterExpressionParser.select_signalidset(dataset, "FILTER DeviceDetail WHERE Longitude < 0.0", "DeviceDetail", devicedetail_id_fields)
+
+            if err is not None:
+                self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            if len(idset) != 1:
+                self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
+
+            idset, err = FilterExpressionParser.select_signalidset(dataset, "FILTER DeviceDetail WHERE Acronym IN ('Test', 'Shelby')", "DeviceDetail", devicedetail_id_fields)
+
+            if err is not None:
+                self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            if len(idset) != 1:
+                self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
+
+            idset, err = FilterExpressionParser.select_signalidset(dataset, "FILTER DeviceDetail WHERE Acronym not IN ('Test', 'Apple')", "DeviceDetail", devicedetail_id_fields)
+
+            if err is not None:
+                self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            if len(idset) != 1:
+                self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
+
+            idset, err = FilterExpressionParser.select_signalidset(dataset, "FILTER DeviceDetail WHERE NOT (Acronym IN ('Test', 'Apple'))", "DeviceDetail", devicedetail_id_fields)
+
+            if err is not None:
+                self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            if len(idset) != 1:
+                self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
+
+            idset, err = FilterExpressionParser.select_signalidset(dataset, "FILTER DeviceDetail WHERE NOT Acronym !IN ('Shelby', 'Apple')", "DeviceDetail", devicedetail_id_fields)
+
+            if err is not None:
+                self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            if len(idset) != 1:
+                self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
+
+            rows, err = FilterExpressionParser.select_datarows(dataset, "Acronym LIKE 'Shel%'", "DeviceDetail", devicedetail_id_fields)
+
+            if err is not None:
+                self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+            if len(rows) != 1:
+                self.fail(f"test_metadata_expressions: expected 1 result, received {len(rows)}")
+
+    def test_basic_expressions(self):
+        # sourcery skip
+        with open("test/MetadataSample2.xml", "rb") as binary_file:
+            data = binary_file.read()
+
+        dataset, err = DataSet.from_xml(data)
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error loading DataSet from XML document: {err}")
+
+        # datarows, err = dataset["MeasurementDetail"].select("SignalAcronym = 'STAT'")
+
+        # if err is not None:
+        #     self.fail(f"test_basic_expressions: error executing select: {err}")
+
+        # if len(datarows) != 116:
+        #     self.fail(f"test_basic_expressions: expected 116 results, received {len(datarows)}")
