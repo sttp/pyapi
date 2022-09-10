@@ -1,4 +1,4 @@
-﻿# Generated from FilterExpressionSyntax.g4 by ANTLR 4.10.1
+﻿# Generated from FilterExpressionSyntax.g4 by ANTLR 4.11.1
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -276,7 +276,7 @@ class FilterExpressionSyntaxParser ( Parser ):
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
-        self.checkVersion("4.10.1")
+        self.checkVersion("4.11.1")
         self._interp = ParserATNSimulator(self, self.atn, self.decisionsToDFA, self.sharedContextCache)
         self._predicates = None
 
@@ -324,11 +324,11 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.state = 52
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [FilterExpressionSyntaxParser.T__0, FilterExpressionSyntaxParser.T__2, FilterExpressionSyntaxParser.T__3, FilterExpressionSyntaxParser.T__4, FilterExpressionSyntaxParser.T__6, FilterExpressionSyntaxParser.T__7, FilterExpressionSyntaxParser.K_ABS, FilterExpressionSyntaxParser.K_CEILING, FilterExpressionSyntaxParser.K_COALESCE, FilterExpressionSyntaxParser.K_CONVERT, FilterExpressionSyntaxParser.K_CONTAINS, FilterExpressionSyntaxParser.K_DATEADD, FilterExpressionSyntaxParser.K_DATEDIFF, FilterExpressionSyntaxParser.K_DATEPART, FilterExpressionSyntaxParser.K_ENDSWITH, FilterExpressionSyntaxParser.K_FILTER, FilterExpressionSyntaxParser.K_FLOOR, FilterExpressionSyntaxParser.K_IIF, FilterExpressionSyntaxParser.K_INDEXOF, FilterExpressionSyntaxParser.K_ISDATE, FilterExpressionSyntaxParser.K_ISINTEGER, FilterExpressionSyntaxParser.K_ISGUID, FilterExpressionSyntaxParser.K_ISNULL, FilterExpressionSyntaxParser.K_ISNUMERIC, FilterExpressionSyntaxParser.K_LASTINDEXOF, FilterExpressionSyntaxParser.K_LEN, FilterExpressionSyntaxParser.K_LOWER, FilterExpressionSyntaxParser.K_MAXOF, FilterExpressionSyntaxParser.K_MINOF, FilterExpressionSyntaxParser.K_NOT, FilterExpressionSyntaxParser.K_NOW, FilterExpressionSyntaxParser.K_NTHINDEXOF, FilterExpressionSyntaxParser.K_NULL, FilterExpressionSyntaxParser.K_POWER, FilterExpressionSyntaxParser.K_REGEXMATCH, FilterExpressionSyntaxParser.K_REGEXVAL, FilterExpressionSyntaxParser.K_REPLACE, FilterExpressionSyntaxParser.K_REVERSE, FilterExpressionSyntaxParser.K_ROUND, FilterExpressionSyntaxParser.K_SQRT, FilterExpressionSyntaxParser.K_SPLIT, FilterExpressionSyntaxParser.K_STARTSWITH, FilterExpressionSyntaxParser.K_STRCOUNT, FilterExpressionSyntaxParser.K_STRCMP, FilterExpressionSyntaxParser.K_SUBSTR, FilterExpressionSyntaxParser.K_TRIM, FilterExpressionSyntaxParser.K_TRIMLEFT, FilterExpressionSyntaxParser.K_TRIMRIGHT, FilterExpressionSyntaxParser.K_UPPER, FilterExpressionSyntaxParser.K_UTCNOW, FilterExpressionSyntaxParser.BOOLEAN_LITERAL, FilterExpressionSyntaxParser.IDENTIFIER, FilterExpressionSyntaxParser.INTEGER_LITERAL, FilterExpressionSyntaxParser.NUMERIC_LITERAL, FilterExpressionSyntaxParser.GUID_LITERAL, FilterExpressionSyntaxParser.MEASUREMENT_KEY_LITERAL, FilterExpressionSyntaxParser.POINT_TAG_LITERAL, FilterExpressionSyntaxParser.STRING_LITERAL, FilterExpressionSyntaxParser.DATETIME_LITERAL]:
+            if token in [1, 3, 4, 5, 7, 8, 29, 34, 35, 36, 37, 38, 39, 40, 42, 43, 44, 45, 47, 49, 50, 51, 52, 53, 54, 55, 57, 58, 59, 60, 61, 62, 63, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 79, 80, 81, 82, 83, 86, 87, 88, 89, 90, 91, 92, 93, 94]:
                 self.state = 50
                 self.filterExpressionStatementList()
                 pass
-            elif token in [FilterExpressionSyntaxParser.UNEXPECTED_CHAR]:
+            elif token in [98]:
                 self.state = 51
                 self.err()
                 pass
@@ -429,7 +429,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.state = 62
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==FilterExpressionSyntaxParser.T__0:
+            while _la==1:
                 self.state = 59
                 self.match(FilterExpressionSyntaxParser.T__0)
                 self.state = 64
@@ -452,7 +452,7 @@ class FilterExpressionSyntaxParser ( Parser ):
                         self.state = 69 
                         self._errHandler.sync(self)
                         _la = self._input.LA(1)
-                        if not (_la==FilterExpressionSyntaxParser.T__0):
+                        if not (_la==1):
                             break
 
                     self.state = 71
@@ -464,7 +464,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.state = 80
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==FilterExpressionSyntaxParser.T__0:
+            while _la==1:
                 self.state = 77
                 self.match(FilterExpressionSyntaxParser.T__0)
                 self.state = 82
@@ -588,7 +588,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 88
             _la = self._input.LA(1)
-            if not(((((_la - 90)) & ~0x3f) == 0 and ((1 << (_la - 90)) & ((1 << (FilterExpressionSyntaxParser.GUID_LITERAL - 90)) | (1 << (FilterExpressionSyntaxParser.MEASUREMENT_KEY_LITERAL - 90)) | (1 << (FilterExpressionSyntaxParser.POINT_TAG_LITERAL - 90)))) != 0)):
+            if not((((_la - 90)) & ~0x3f) == 0 and ((1 << (_la - 90)) & 7) != 0):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -669,7 +669,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.state = 93
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==FilterExpressionSyntaxParser.K_TOP:
+            if _la==78:
                 self.state = 91
                 self.match(FilterExpressionSyntaxParser.K_TOP)
                 self.state = 92
@@ -685,7 +685,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.state = 108
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==FilterExpressionSyntaxParser.K_ORDER:
+            if _la==65:
                 self.state = 98
                 self.match(FilterExpressionSyntaxParser.K_ORDER)
                 self.state = 99
@@ -695,7 +695,7 @@ class FilterExpressionSyntaxParser ( Parser ):
                 self.state = 105
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
-                while _la==FilterExpressionSyntaxParser.T__1:
+                while _la==2:
                     self.state = 101
                     self.match(FilterExpressionSyntaxParser.T__1)
                     self.state = 102
@@ -749,10 +749,10 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.state = 111
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==FilterExpressionSyntaxParser.T__2 or _la==FilterExpressionSyntaxParser.T__3:
+            if _la==3 or _la==4:
                 self.state = 110
                 _la = self._input.LA(1)
-                if not(_la==FilterExpressionSyntaxParser.T__2 or _la==FilterExpressionSyntaxParser.T__3):
+                if not(_la==3 or _la==4):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
@@ -815,7 +815,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.state = 116
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==FilterExpressionSyntaxParser.T__8 or _la==FilterExpressionSyntaxParser.K_BINARY:
+            if _la==9 or _la==32:
                 self.state = 115
                 self.exactMatchModifier()
 
@@ -825,10 +825,10 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.state = 120
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if _la==FilterExpressionSyntaxParser.K_ASC or _la==FilterExpressionSyntaxParser.K_DESC:
+            if _la==31 or _la==41:
                 self.state = 119
                 _la = self._input.LA(1)
-                if not(_la==FilterExpressionSyntaxParser.K_ASC or _la==FilterExpressionSyntaxParser.K_DESC):
+                if not(_la==31 or _la==41):
                     self._errHandler.recoverInline(self)
                 else:
                     self._errHandler.reportMatch(self)
@@ -884,7 +884,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.state = 127
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while _la==FilterExpressionSyntaxParser.T__1:
+            while _la==2:
                 self.state = 123
                 self.match(FilterExpressionSyntaxParser.T__1)
                 self.state = 124
@@ -1104,7 +1104,7 @@ class FilterExpressionSyntaxParser ( Parser ):
                         self.state = 155
                         self._errHandler.sync(self)
                         _la = self._input.LA(1)
-                        if _la==FilterExpressionSyntaxParser.T__6 or _la==FilterExpressionSyntaxParser.K_NOT:
+                        if _la==7 or _la==60:
                             self.state = 154
                             self.notOperator()
 
@@ -1114,7 +1114,7 @@ class FilterExpressionSyntaxParser ( Parser ):
                         self.state = 159
                         self._errHandler.sync(self)
                         _la = self._input.LA(1)
-                        if _la==FilterExpressionSyntaxParser.T__8 or _la==FilterExpressionSyntaxParser.K_BINARY:
+                        if _la==9 or _la==32:
                             self.state = 158
                             self.exactMatchModifier()
 
@@ -1133,7 +1133,7 @@ class FilterExpressionSyntaxParser ( Parser ):
                         self.state = 164
                         self._errHandler.sync(self)
                         _la = self._input.LA(1)
-                        if _la==FilterExpressionSyntaxParser.T__6 or _la==FilterExpressionSyntaxParser.K_NOT:
+                        if _la==7 or _la==60:
                             self.state = 163
                             self.notOperator()
 
@@ -1143,7 +1143,7 @@ class FilterExpressionSyntaxParser ( Parser ):
                         self.state = 168
                         self._errHandler.sync(self)
                         _la = self._input.LA(1)
-                        if _la==FilterExpressionSyntaxParser.T__8 or _la==FilterExpressionSyntaxParser.K_BINARY:
+                        if _la==9 or _la==32:
                             self.state = 167
                             self.exactMatchModifier()
 
@@ -1168,7 +1168,7 @@ class FilterExpressionSyntaxParser ( Parser ):
                         self.state = 177
                         self._errHandler.sync(self)
                         _la = self._input.LA(1)
-                        if _la==FilterExpressionSyntaxParser.T__6 or _la==FilterExpressionSyntaxParser.K_NOT:
+                        if _la==7 or _la==60:
                             self.state = 176
                             self.notOperator()
 
@@ -1258,25 +1258,25 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.state = 196
             self._errHandler.sync(self)
             token = self._input.LA(1)
-            if token in [FilterExpressionSyntaxParser.K_NULL, FilterExpressionSyntaxParser.BOOLEAN_LITERAL, FilterExpressionSyntaxParser.INTEGER_LITERAL, FilterExpressionSyntaxParser.NUMERIC_LITERAL, FilterExpressionSyntaxParser.GUID_LITERAL, FilterExpressionSyntaxParser.STRING_LITERAL, FilterExpressionSyntaxParser.DATETIME_LITERAL]:
+            if token in [63, 86, 88, 89, 90, 93, 94]:
                 self.state = 186
                 self.literalValue()
                 pass
-            elif token in [FilterExpressionSyntaxParser.IDENTIFIER]:
+            elif token in [87]:
                 self.state = 187
                 self.columnName()
                 pass
-            elif token in [FilterExpressionSyntaxParser.K_ABS, FilterExpressionSyntaxParser.K_CEILING, FilterExpressionSyntaxParser.K_COALESCE, FilterExpressionSyntaxParser.K_CONVERT, FilterExpressionSyntaxParser.K_CONTAINS, FilterExpressionSyntaxParser.K_DATEADD, FilterExpressionSyntaxParser.K_DATEDIFF, FilterExpressionSyntaxParser.K_DATEPART, FilterExpressionSyntaxParser.K_ENDSWITH, FilterExpressionSyntaxParser.K_FLOOR, FilterExpressionSyntaxParser.K_IIF, FilterExpressionSyntaxParser.K_INDEXOF, FilterExpressionSyntaxParser.K_ISDATE, FilterExpressionSyntaxParser.K_ISINTEGER, FilterExpressionSyntaxParser.K_ISGUID, FilterExpressionSyntaxParser.K_ISNULL, FilterExpressionSyntaxParser.K_ISNUMERIC, FilterExpressionSyntaxParser.K_LASTINDEXOF, FilterExpressionSyntaxParser.K_LEN, FilterExpressionSyntaxParser.K_LOWER, FilterExpressionSyntaxParser.K_MAXOF, FilterExpressionSyntaxParser.K_MINOF, FilterExpressionSyntaxParser.K_NOW, FilterExpressionSyntaxParser.K_NTHINDEXOF, FilterExpressionSyntaxParser.K_POWER, FilterExpressionSyntaxParser.K_REGEXMATCH, FilterExpressionSyntaxParser.K_REGEXVAL, FilterExpressionSyntaxParser.K_REPLACE, FilterExpressionSyntaxParser.K_REVERSE, FilterExpressionSyntaxParser.K_ROUND, FilterExpressionSyntaxParser.K_SQRT, FilterExpressionSyntaxParser.K_SPLIT, FilterExpressionSyntaxParser.K_STARTSWITH, FilterExpressionSyntaxParser.K_STRCOUNT, FilterExpressionSyntaxParser.K_STRCMP, FilterExpressionSyntaxParser.K_SUBSTR, FilterExpressionSyntaxParser.K_TRIM, FilterExpressionSyntaxParser.K_TRIMLEFT, FilterExpressionSyntaxParser.K_TRIMRIGHT, FilterExpressionSyntaxParser.K_UPPER, FilterExpressionSyntaxParser.K_UTCNOW]:
+            elif token in [29, 34, 35, 36, 37, 38, 39, 40, 42, 44, 45, 47, 49, 50, 51, 52, 53, 54, 55, 57, 58, 59, 61, 62, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 79, 80, 81, 82, 83]:
                 self.state = 188
                 self.functionExpression()
                 pass
-            elif token in [FilterExpressionSyntaxParser.T__2, FilterExpressionSyntaxParser.T__3, FilterExpressionSyntaxParser.T__6, FilterExpressionSyntaxParser.T__7, FilterExpressionSyntaxParser.K_NOT]:
+            elif token in [3, 4, 7, 8, 60]:
                 self.state = 189
                 self.unaryOperator()
                 self.state = 190
                 self.valueExpression(4)
                 pass
-            elif token in [FilterExpressionSyntaxParser.T__4]:
+            elif token in [5]:
                 self.state = 192
                 self.match(FilterExpressionSyntaxParser.T__4)
                 self.state = 193
@@ -1372,7 +1372,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 211
             _la = self._input.LA(1)
-            if not(_la==FilterExpressionSyntaxParser.T__6 or _la==FilterExpressionSyntaxParser.K_NOT):
+            if not(_la==7 or _la==60):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1419,7 +1419,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 213
             _la = self._input.LA(1)
-            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FilterExpressionSyntaxParser.T__2) | (1 << FilterExpressionSyntaxParser.T__3) | (1 << FilterExpressionSyntaxParser.T__6) | (1 << FilterExpressionSyntaxParser.T__7) | (1 << FilterExpressionSyntaxParser.K_NOT))) != 0)):
+            if not(((_la) & ~0x3f) == 0 and ((1 << _la) & 1152921504606847384) != 0):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1466,7 +1466,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 215
             _la = self._input.LA(1)
-            if not(_la==FilterExpressionSyntaxParser.T__8 or _la==FilterExpressionSyntaxParser.K_BINARY):
+            if not(_la==9 or _la==32):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1511,7 +1511,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 217
             _la = self._input.LA(1)
-            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FilterExpressionSyntaxParser.T__8) | (1 << FilterExpressionSyntaxParser.T__9) | (1 << FilterExpressionSyntaxParser.T__10) | (1 << FilterExpressionSyntaxParser.T__11) | (1 << FilterExpressionSyntaxParser.T__12) | (1 << FilterExpressionSyntaxParser.T__13) | (1 << FilterExpressionSyntaxParser.T__14) | (1 << FilterExpressionSyntaxParser.T__15) | (1 << FilterExpressionSyntaxParser.T__16) | (1 << FilterExpressionSyntaxParser.T__17))) != 0)):
+            if not(((_la) & ~0x3f) == 0 and ((1 << _la) & 523776) != 0):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1561,7 +1561,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 219
             _la = self._input.LA(1)
-            if not(((((_la - 19)) & ~0x3f) == 0 and ((1 << (_la - 19)) & ((1 << (FilterExpressionSyntaxParser.T__18 - 19)) | (1 << (FilterExpressionSyntaxParser.T__19 - 19)) | (1 << (FilterExpressionSyntaxParser.K_AND - 19)) | (1 << (FilterExpressionSyntaxParser.K_OR - 19)))) != 0)):
+            if not((((_la - 19)) & ~0x3f) == 0 and ((1 << (_la - 19)) & 35184372090883) != 0):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1608,7 +1608,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 221
             _la = self._input.LA(1)
-            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FilterExpressionSyntaxParser.T__20) | (1 << FilterExpressionSyntaxParser.T__21) | (1 << FilterExpressionSyntaxParser.T__22) | (1 << FilterExpressionSyntaxParser.T__23) | (1 << FilterExpressionSyntaxParser.T__24))) != 0) or _la==FilterExpressionSyntaxParser.K_XOR):
+            if not(((_la) & ~0x3f) == 0 and ((1 << _la) & 65011712) != 0 or _la==85):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1653,7 +1653,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 223
             _la = self._input.LA(1)
-            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FilterExpressionSyntaxParser.T__2) | (1 << FilterExpressionSyntaxParser.T__3) | (1 << FilterExpressionSyntaxParser.T__25) | (1 << FilterExpressionSyntaxParser.T__26) | (1 << FilterExpressionSyntaxParser.T__27))) != 0)):
+            if not(((_la) & ~0x3f) == 0 and ((1 << _la) & 469762072) != 0):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1820,7 +1820,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 225
             _la = self._input.LA(1)
-            if not(((((_la - 29)) & ~0x3f) == 0 and ((1 << (_la - 29)) & ((1 << (FilterExpressionSyntaxParser.K_ABS - 29)) | (1 << (FilterExpressionSyntaxParser.K_CEILING - 29)) | (1 << (FilterExpressionSyntaxParser.K_COALESCE - 29)) | (1 << (FilterExpressionSyntaxParser.K_CONVERT - 29)) | (1 << (FilterExpressionSyntaxParser.K_CONTAINS - 29)) | (1 << (FilterExpressionSyntaxParser.K_DATEADD - 29)) | (1 << (FilterExpressionSyntaxParser.K_DATEDIFF - 29)) | (1 << (FilterExpressionSyntaxParser.K_DATEPART - 29)) | (1 << (FilterExpressionSyntaxParser.K_ENDSWITH - 29)) | (1 << (FilterExpressionSyntaxParser.K_FLOOR - 29)) | (1 << (FilterExpressionSyntaxParser.K_IIF - 29)) | (1 << (FilterExpressionSyntaxParser.K_INDEXOF - 29)) | (1 << (FilterExpressionSyntaxParser.K_ISDATE - 29)) | (1 << (FilterExpressionSyntaxParser.K_ISINTEGER - 29)) | (1 << (FilterExpressionSyntaxParser.K_ISGUID - 29)) | (1 << (FilterExpressionSyntaxParser.K_ISNULL - 29)) | (1 << (FilterExpressionSyntaxParser.K_ISNUMERIC - 29)) | (1 << (FilterExpressionSyntaxParser.K_LASTINDEXOF - 29)) | (1 << (FilterExpressionSyntaxParser.K_LEN - 29)) | (1 << (FilterExpressionSyntaxParser.K_LOWER - 29)) | (1 << (FilterExpressionSyntaxParser.K_MAXOF - 29)) | (1 << (FilterExpressionSyntaxParser.K_MINOF - 29)) | (1 << (FilterExpressionSyntaxParser.K_NOW - 29)) | (1 << (FilterExpressionSyntaxParser.K_NTHINDEXOF - 29)) | (1 << (FilterExpressionSyntaxParser.K_POWER - 29)) | (1 << (FilterExpressionSyntaxParser.K_REGEXMATCH - 29)) | (1 << (FilterExpressionSyntaxParser.K_REGEXVAL - 29)) | (1 << (FilterExpressionSyntaxParser.K_REPLACE - 29)) | (1 << (FilterExpressionSyntaxParser.K_REVERSE - 29)) | (1 << (FilterExpressionSyntaxParser.K_ROUND - 29)) | (1 << (FilterExpressionSyntaxParser.K_SQRT - 29)) | (1 << (FilterExpressionSyntaxParser.K_SPLIT - 29)) | (1 << (FilterExpressionSyntaxParser.K_STARTSWITH - 29)) | (1 << (FilterExpressionSyntaxParser.K_STRCOUNT - 29)) | (1 << (FilterExpressionSyntaxParser.K_STRCMP - 29)) | (1 << (FilterExpressionSyntaxParser.K_SUBSTR - 29)) | (1 << (FilterExpressionSyntaxParser.K_TRIM - 29)) | (1 << (FilterExpressionSyntaxParser.K_TRIMLEFT - 29)) | (1 << (FilterExpressionSyntaxParser.K_TRIMRIGHT - 29)) | (1 << (FilterExpressionSyntaxParser.K_UPPER - 29)) | (1 << (FilterExpressionSyntaxParser.K_UTCNOW - 29)))) != 0)):
+            if not((((_la - 29)) & ~0x3f) == 0 and ((1 << (_la - 29)) & 35465724524081121) != 0):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1877,7 +1877,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.state = 230
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if (((_la) & ~0x3f) == 0 and ((1 << _la) & ((1 << FilterExpressionSyntaxParser.T__2) | (1 << FilterExpressionSyntaxParser.T__3) | (1 << FilterExpressionSyntaxParser.T__4) | (1 << FilterExpressionSyntaxParser.T__6) | (1 << FilterExpressionSyntaxParser.T__7) | (1 << FilterExpressionSyntaxParser.K_ABS) | (1 << FilterExpressionSyntaxParser.K_CEILING) | (1 << FilterExpressionSyntaxParser.K_COALESCE) | (1 << FilterExpressionSyntaxParser.K_CONVERT) | (1 << FilterExpressionSyntaxParser.K_CONTAINS) | (1 << FilterExpressionSyntaxParser.K_DATEADD) | (1 << FilterExpressionSyntaxParser.K_DATEDIFF) | (1 << FilterExpressionSyntaxParser.K_DATEPART) | (1 << FilterExpressionSyntaxParser.K_ENDSWITH) | (1 << FilterExpressionSyntaxParser.K_FLOOR) | (1 << FilterExpressionSyntaxParser.K_IIF) | (1 << FilterExpressionSyntaxParser.K_INDEXOF) | (1 << FilterExpressionSyntaxParser.K_ISDATE) | (1 << FilterExpressionSyntaxParser.K_ISINTEGER) | (1 << FilterExpressionSyntaxParser.K_ISGUID) | (1 << FilterExpressionSyntaxParser.K_ISNULL) | (1 << FilterExpressionSyntaxParser.K_ISNUMERIC) | (1 << FilterExpressionSyntaxParser.K_LASTINDEXOF) | (1 << FilterExpressionSyntaxParser.K_LEN) | (1 << FilterExpressionSyntaxParser.K_LOWER) | (1 << FilterExpressionSyntaxParser.K_MAXOF) | (1 << FilterExpressionSyntaxParser.K_MINOF) | (1 << FilterExpressionSyntaxParser.K_NOT) | (1 << FilterExpressionSyntaxParser.K_NOW) | (1 << FilterExpressionSyntaxParser.K_NTHINDEXOF) | (1 << FilterExpressionSyntaxParser.K_NULL))) != 0) or ((((_la - 66)) & ~0x3f) == 0 and ((1 << (_la - 66)) & ((1 << (FilterExpressionSyntaxParser.K_POWER - 66)) | (1 << (FilterExpressionSyntaxParser.K_REGEXMATCH - 66)) | (1 << (FilterExpressionSyntaxParser.K_REGEXVAL - 66)) | (1 << (FilterExpressionSyntaxParser.K_REPLACE - 66)) | (1 << (FilterExpressionSyntaxParser.K_REVERSE - 66)) | (1 << (FilterExpressionSyntaxParser.K_ROUND - 66)) | (1 << (FilterExpressionSyntaxParser.K_SQRT - 66)) | (1 << (FilterExpressionSyntaxParser.K_SPLIT - 66)) | (1 << (FilterExpressionSyntaxParser.K_STARTSWITH - 66)) | (1 << (FilterExpressionSyntaxParser.K_STRCOUNT - 66)) | (1 << (FilterExpressionSyntaxParser.K_STRCMP - 66)) | (1 << (FilterExpressionSyntaxParser.K_SUBSTR - 66)) | (1 << (FilterExpressionSyntaxParser.K_TRIM - 66)) | (1 << (FilterExpressionSyntaxParser.K_TRIMLEFT - 66)) | (1 << (FilterExpressionSyntaxParser.K_TRIMRIGHT - 66)) | (1 << (FilterExpressionSyntaxParser.K_UPPER - 66)) | (1 << (FilterExpressionSyntaxParser.K_UTCNOW - 66)) | (1 << (FilterExpressionSyntaxParser.BOOLEAN_LITERAL - 66)) | (1 << (FilterExpressionSyntaxParser.IDENTIFIER - 66)) | (1 << (FilterExpressionSyntaxParser.INTEGER_LITERAL - 66)) | (1 << (FilterExpressionSyntaxParser.NUMERIC_LITERAL - 66)) | (1 << (FilterExpressionSyntaxParser.GUID_LITERAL - 66)) | (1 << (FilterExpressionSyntaxParser.STRING_LITERAL - 66)) | (1 << (FilterExpressionSyntaxParser.DATETIME_LITERAL - 66)))) != 0):
+            if ((_la) & ~0x3f) == 0 and ((1 << _la) & -72420449518091848) != 0 or (((_la - 66)) & ~0x3f) == 0 and ((1 << (_la - 66)) & 435417087) != 0:
                 self.state = 229
                 self.expressionList()
 
@@ -1944,7 +1944,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 234
             _la = self._input.LA(1)
-            if not(((((_la - 63)) & ~0x3f) == 0 and ((1 << (_la - 63)) & ((1 << (FilterExpressionSyntaxParser.K_NULL - 63)) | (1 << (FilterExpressionSyntaxParser.BOOLEAN_LITERAL - 63)) | (1 << (FilterExpressionSyntaxParser.INTEGER_LITERAL - 63)) | (1 << (FilterExpressionSyntaxParser.NUMERIC_LITERAL - 63)) | (1 << (FilterExpressionSyntaxParser.GUID_LITERAL - 63)) | (1 << (FilterExpressionSyntaxParser.STRING_LITERAL - 63)) | (1 << (FilterExpressionSyntaxParser.DATETIME_LITERAL - 63)))) != 0)):
+            if not((((_la - 63)) & ~0x3f) == 0 and ((1 << (_la - 63)) & 3464495105) != 0):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
