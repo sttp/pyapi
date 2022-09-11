@@ -885,20 +885,24 @@ class FilterExpressionParser(ExpressionListener):
         bitwise_operator: ExpressionParser.BitwiseOperatorContext = ctx.bitwiseOperator()
 
         if bitwise_operator is not None:
-            operatorsymbol = bitwise_operator.getText()
+            # Check for bitwise operators
+            if bitwise_operator.K_XOR() is None:
+                operatorsymbol = bitwise_operator.getText()
 
-            if operatorsymbol == "&":
-                operatortype = ExpressionOperatorType.BITWISEAND
-            elif operatorsymbol == "|":
-                operatortype = ExpressionOperatorType.BITWISEOR
-            elif operatorsymbol == "^":
-                operatortype = ExpressionOperatorType.BITWISEXOR
-            elif operatorsymbol == "<<":
-                operatortype = ExpressionOperatorType.BITSHIFTLEFT
-            elif operatorsymbol == ">>":
-                operatortype = ExpressionOperatorType.BITSHIFTRIGHT
+                if operatorsymbol == "&":
+                    operatortype = ExpressionOperatorType.BITWISEAND
+                elif operatorsymbol == "|":
+                    operatortype = ExpressionOperatorType.BITWISEOR
+                elif operatorsymbol == "^":
+                    operatortype = ExpressionOperatorType.BITWISEXOR
+                elif operatorsymbol == "<<":
+                    operatortype = ExpressionOperatorType.BITSHIFTLEFT
+                elif operatorsymbol == ">>":
+                    operatortype = ExpressionOperatorType.BITSHIFTRIGHT
+                else:
+                    raise EvaluateError(f"unexpected bitwise operator \"{operatorsymbol}\"")
             else:
-                raise EvaluateError(f"unexpected bitwise operator \"{operatorsymbol}\"")
+                operatortype = ExpressionOperatorType.BITWISEXOR
 
             self._add_expr(ctx, OperatorExpression(operatortype, left, right))
             return
