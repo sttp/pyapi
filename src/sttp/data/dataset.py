@@ -28,7 +28,6 @@ from .datatype import DataType, parse_xsddatatype
 from typing import Dict, Iterator, List, Tuple, Union, Optional
 from decimal import Decimal
 from datetime import datetime
-from dateutil import parser
 from uuid import UUID
 from io import BytesIO, StringIO
 from xml.etree import ElementTree
@@ -312,7 +311,7 @@ class DataSet:
                 elif datatype == DataType.GUID:
                     datarow[index] = Empty.GUID if value is None else UUID(value)
                 elif datatype == DataType.DATETIME:
-                    datarow[index] = Empty.DATETIME if value is None else parser.parse(value)
+                    datarow[index] = Empty.DATETIME if value is None else Convert.from_str(value, datetime)
                 elif datatype == DataType.BOOLEAN:
                     datarow[index] = False if value is None else bool(value)
                 elif datatype == DataType.SINGLE:

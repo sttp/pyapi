@@ -24,6 +24,8 @@
 from enum import Enum
 from decimal import Decimal
 from datetime import datetime
+from dateutil import parser
+from dateutil.tz import tzoffset
 from uuid import UUID
 from typing import Sequence
 import numpy as np
@@ -132,4 +134,30 @@ class Convert:
         Converts a string value to the specified type.
         """
 
-        return np.array([value]).astype(dtype)[0]
+        if dtype == datetime:
+            dt = parser.parse(value)
+
+            if dt.tzinfo is not None and dt.tzinfo.utcoffset(dt).seconds != 0:
+                dt = dt.astimezone(tzoffset(None, 0))
+
+            return dt.replace(tzinfo=None)
+
+        if dtype in [float, np.float32, np.float64]:
+            return np.float64(value).astype(dtype)
+
+        if dtype in [int, np.int8, np.int16, np.int32, np.int64, np.uint8, np.uint16, np.uint32, np.uint64]:
+            if "X" in value.upper():
+                return np.uint64(int(value, base=16)).astype(dtype)
+
+            if dtype == int:
+                return int(value)
+
+            if "-" in value:
+                return np.int64(value).astype(dtype)
+
+            return np.uint64(value).astype(dtype)
+
+        if dtype == str:
+            return value
+
+        raise TypeError(f"Unsupported target conversion type: {dtype}")

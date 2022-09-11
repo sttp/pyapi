@@ -616,7 +616,7 @@ class TimeInterval(IntEnum):
     """
 
     @classmethod
-    def parse(cls, name: str) -> "TimeInterval":
+    def parse(cls, name: str) -> Optional["TimeInterval"]:
         return getattr(cls, name.upper(), None)
 
 

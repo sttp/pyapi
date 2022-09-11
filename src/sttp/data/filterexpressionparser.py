@@ -21,7 +21,7 @@
 #
 # ******************************************************************************************************
 
-from gsf import Empty, Limits
+from gsf import Convert, Empty, Limits
 from .dataset import DataSet
 from .datatable import DataTable
 from .datarow import DataRow
@@ -46,8 +46,7 @@ from antlr4 import CommonTokenStream, InputStream, ParseTreeWalker
 from antlr4.ParserRuleContext import ParserRuleContext
 from typing import Callable, Dict, List, Optional, Set, Tuple
 from decimal import Decimal
-from datetime import datetime, timezone
-from dateutil import parser
+from datetime import datetime
 from uuid import UUID
 
 
@@ -920,10 +919,10 @@ class FilterExpressionParser(ExpressionListener):
 
         # Literal numeric values will not be negative, unary operators will handle negative values
         if ctx.INTEGER_LITERAL() is not None:
-            literal: str = ctx.INTEGER_LITERAL().getText().upper()
+            literal: str = ctx.INTEGER_LITERAL().getText()
 
             try:
-                value = int(literal, base=16) if "X" in literal else int(literal)
+                value = Convert.from_str(literal, int)
 
                 if value > Limits.MAXINT32:
                     if value > Limits.MAXINT64:
@@ -987,7 +986,7 @@ class FilterExpressionParser(ExpressionListener):
         literal = literal[1:-1] if literal[0] == "#" else literal
 
         try:
-            return parser.parse(literal).astimezone(timezone.utc)
+            return Convert.from_str(literal, datetime)
         except Exception as ex:
             raise EvaluateError(f"failed to parse datetime literal #{literal}#: {ex}") from ex
 

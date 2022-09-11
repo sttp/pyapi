@@ -86,6 +86,8 @@
         "TRUEVAUE",
         "TSSC",
         "tsscdecoder",
+        "tzlocal",
+        "tzoffset",
         "tzparts",
         "udpdatachannel",
         "udpinterface",

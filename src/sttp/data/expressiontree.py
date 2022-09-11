@@ -1338,10 +1338,10 @@ class ExpressionTree:
         if err is not None:
             return None, EvaluateError(f"failed while converting \"DateAdd\" function source value, first argument, to a \"DateTime\": {err}")
 
-        interval, err = TimeInterval.parse(intervaltype._stringvalue())
+        interval = TimeInterval.parse(intervaltype._stringvalue())
 
-        if err is not None:
-            return None, EvaluateError(f"failed while parsing \"DateAdd\" function interval type, third argument, as a valid time interval: {err}")
+        if interval is None:
+            return None, EvaluateError("failed while parsing \"DateAdd\" function interval type, third argument, as a valid time interval")
 
         value: int = addvalue.integervalue()
 
@@ -1394,10 +1394,10 @@ class ExpressionTree:
         if err is not None:
             return None, EvaluateError(f"failed while converting \"DateDiff\" function right value, second argument, to a \"DateTime\": {err}")
 
-        interval, err = TimeInterval.parse(intervaltype._stringvalue())
+        interval = TimeInterval.parse(intervaltype._stringvalue())
 
-        if err is not None:
-            return None, EvaluateError(f"failed while parsing \"DateDiff\" function interval type, third argument, as a valid time interval: {err}")
+        if interval is None:
+            return None, EvaluateError("failed while parsing \"DateDiff\" function interval type, third argument, as a valid time interval")
 
         delta = relativedelta(rightvalue._datetimevalue(), leftvalue._datetimevalue())
 
@@ -1440,10 +1440,10 @@ class ExpressionTree:
         if err is not None:
             return None, EvaluateError(f"failed while converting \"DatePart\" function source value, first argument, to a \"DateTime\": {err}")
 
-        interval, err = TimeInterval.parse(intervaltype._stringvalue())
+        interval = TimeInterval.parse(intervaltype._stringvalue())
 
-        if err is not None:
-            return None, EvaluateError(f"failed while parsing \"DatePart\" function interval type, second argument, as a valid time interval: {err}")
+        if interval is None:
+            return None, EvaluateError(f"failed while parsing \"DatePart\" function interval type, second argument, as a valid time interval")
 
         if interval == TimeInterval.YEAR:
             return ValueExpression(ExpressionValueType.INT32, sourcevalue._datetimevalue().year), None
@@ -1580,8 +1580,18 @@ class ExpressionTree:
             return TRUEVALUE, None
 
         if sourcevalue.valuetype == ExpressionValueType.STRING:
+            value = sourcevalue._stringvalue()
+
+            # Shortcut for unsigned ints
+            if value.isnumeric():
+                return TRUEVALUE, None
+
             try:
-                int(sourcevalue._stringvalue())
+                if "X" in value.upper():
+                    int(value, base=16)
+                    return TRUEVALUE, None
+
+                int(value)
                 return TRUEVALUE, None
             except Exception:
                 return FALSEVALUE, None
@@ -2220,7 +2230,7 @@ class ExpressionTree:
         if leftvalue.is_null():
             return leftvalue, None
 
-        if not is_integertype(rightvalue):
+        if not is_integertype(rightvalue.valuetype):
             return None, TypeError(f"left bit-shift \"<<\" operator right operand, shift value, must be an integer")
 
         if rightvalue.is_null():
@@ -2251,7 +2261,7 @@ class ExpressionTree:
         if leftvalue.is_null():
             return leftvalue, None
 
-        if not is_integertype(rightvalue):
+        if not is_integertype(rightvalue.valuetype):
             return None, TypeError(f"right bit-shift \">>\" operator right operand, shift value, must be an integer")
 
         if rightvalue.is_null():

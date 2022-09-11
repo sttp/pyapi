@@ -22,7 +22,7 @@
 # ******************************************************************************************************
 
 import unittest
-from gsf import Limits, normalize_enumname
+from gsf import Limits, Convert, normalize_enumname
 from src.sttp.data.filterexpressionparser import FilterExpressionParser
 from src.sttp.data.constants import ExpressionValueType
 from src.sttp.data.dataset import DataSet, xsdformat
@@ -31,7 +31,6 @@ from src.sttp.data.datatype import DataType
 from src.sttp.data.tableidfields import TableIDFields
 from decimal import Decimal
 from uuid import UUID, uuid1
-from dateutil import parser
 from datetime import datetime, timezone
 from .test_dataset import TestDataSet
 
@@ -93,23 +92,20 @@ class TestExpressionTree(unittest.TestCase):
         self._test_evaluate_literal_expression("guid", uuid1())
 
     def test_evaluate_datetime_literal_expression(self):
-        def get_datetime(literal: str) -> datetime:
-            return parser.parse(literal).astimezone(timezone.utc)
-
         value = "2021-09-09T12:34:56.789Z"
-        self._test_evaluate_literal_expression("datetime", get_datetime(value), f"#{value}#")
+        self._test_evaluate_literal_expression("datetime", Convert.from_str(value, datetime), f"#{value}#")
 
         value = "2006-01-01 00:00:00"
-        self._test_evaluate_literal_expression("datetime", get_datetime(value), f"#{value}#")
+        self._test_evaluate_literal_expression("datetime", Convert.from_str(value, datetime), f"#{value}#")
 
         value = "2019-01-1 00:00:59.999"
-        self._test_evaluate_literal_expression("datetime", get_datetime(value), f"#{value}#")
+        self._test_evaluate_literal_expression("datetime", Convert.from_str(value, datetime), f"#{value}#")
 
-        value = get_datetime(xsdformat(datetime.now()))
-        self._test_evaluate_literal_expression("datetime", value, f"#{xsdformat(value)}#")
+        value = Convert.from_str(datetime.now().isoformat(), datetime)
+        self._test_evaluate_literal_expression("datetime", value, f"#{value.isoformat()}#")
 
-        value = get_datetime(xsdformat(datetime.now(timezone.utc)))
-        self._test_evaluate_literal_expression("datetime", value, f"#{xsdformat(value)}#")
+        value = Convert.from_str(datetime.now(timezone.utc).isoformat(), datetime)
+        self._test_evaluate_literal_expression("datetime", value, f"#{value.isoformat()}#")
 
     def test_signalidset_expressions(self):
         # sourcery skip
@@ -875,3 +871,665 @@ class TestExpressionTree(unittest.TestCase):
 
         if len(datarows) != 2:
             self.fail(f"test_basic_expressions: expected 2 results, received {len(datarows)}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(dataset["SchemaVersion"][0], "VersionNumber > 0")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        datarow = dataset["DeviceDetail"][0]
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "AccessID % 2 = 0 AND FramesPerSecond % 4 <> 2 OR AccessID % 1 = 0")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "AccessID % 2 = 0 AND (FramesPerSecond % 4 <> 2 OR -AccessID % 1 = 0)")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "AccessID % 2 = 0 AND (FramesPerSecond % 4 <> 2 AND AccessID % 1 = 0)")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected false, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "AccessID % 2 >= 0 || (FramesPerSecond % 4 <> 2 AND AccessID % 1 = 0)")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "AccessID % 2 = 0 OR FramesPerSecond % 4 != 2 && AccessID % 1 == 0")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "!AccessID % 2 = 0 || FramesPerSecond % 4 = 0x2 && AccessID % 1 == 0")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "NOT AccessID % 2 = 0 OR FramesPerSecond % 4 >> 0x1 = 1 && AccessID % 1 == 0x0")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "!AccessID % 2 = 0 OR FramesPerSecond % 4 >> 1 = 1 && AccessID % 3 << 1 & 4 >= 4")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "OriginalSource IS NULL")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "ParentAcronym IS NOT NULL")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "NOT ParentAcronym IS NULL && Len(parentAcronym) == 0")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "-FramesPerSecond")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.INT32:
+            self.fail(f"test_basic_expressions: expected value type of int32, received {value_expression.valuetype}")
+
+        result, err = value_expression.int32value()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.int32value: {err}")
+
+        if result != -30:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected -30, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "~FramesPerSecond")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.INT32:
+            self.fail(f"test_basic_expressions: expected value type of int32, received {value_expression.valuetype}")
+
+        result, err = value_expression.int32value()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.int32value: {err}")
+
+        if result != -31:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected -31, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "~FramesPerSecond * -1 - 1 << -2")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.INT32:
+            self.fail(f"test_basic_expressions: expected value type of int32, received {value_expression.valuetype}")
+
+        result, err = value_expression.int32value()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.int32value: {err}")
+
+        if result != -2147483648:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected -31, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "NOT True")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected false, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "!True")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected false, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "~True")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected false, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "Len(IsNull(OriginalSource, 'A')) = 1")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "RegExMatch('SH', Acronym)")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "RegExMatch('SH', Name)")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected false, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "RegExMatch('S[hH]', Name) && RegExMatch('S[hH]', Acronym)")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "RegExVal('Sh\\w+', Name)")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.STRING:
+            self.fail(f"test_basic_expressions: expected value type of string, received {value_expression.valuetype}")
+
+        result, err = value_expression.stringvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.stringvalue: {err}")
+
+        if result != "Shelby":
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected 'Shelby', received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "SubStr(RegExVal('Sh\\w+', Name), 2) == 'ElbY'")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "SubStr(RegExVal('Sh\\w+', Name), 3, 2) == 'lB'")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "RegExVal('Sh\\w+', Name) IN ('NT', Acronym, 'NT')")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "RegExVal('Sh\\w+', Name) IN ===('NT', Acronym, 'NT')")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected false, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "RegExVal('Sh\\w+', Name) IN BINARY ('NT', Acronym, 3.05)")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected false, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "Name IN===(0x9F, Acronym, 'Shelby')")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "Acronym LIKE === 'Sh*'")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected false, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "name LiKe binaRY 'SH%'")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected false, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "Name === 'Shelby' && Name== 'SHelBy' && Name !=='SHelBy'")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.BOOLEAN:
+            self.fail(f"test_basic_expressions: expected value type of boolean, received {value_expression.valuetype}")
+
+        result, err = value_expression.booleanvalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.booleanvalue: {err}")
+
+        if not result:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected true, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "Now()")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.DATETIME:
+            self.fail(f"test_basic_expressions: expected value type of datetime, received {value_expression.valuetype}")
+
+        result, err = value_expression.datetimevalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.datetimevalue: {err}")
+
+        now = datetime.now()
+
+        if result != now and not result < now:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected {now}, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "UtcNow()")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.DATETIME:
+            self.fail(f"test_basic_expressions: expected value type of datetime, received {value_expression.valuetype}")
+
+        result, err = value_expression.datetimevalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.datetimevalue: {err}")
+
+        now = datetime.now(timezone.utc)
+
+        if result != now and not result < now:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected {now}, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "#2019-02-04T03:00:52.73-05:00#")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.DATETIME:
+            self.fail(f"test_basic_expressions: expected value type of datetime, received {value_expression.valuetype}")
+
+        result, err = value_expression.datetimevalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.datetimevalue: {err}")
+
+        if result.month != 2:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected 2, received {result.month}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "#2019-02-04T03:00:52.73-05:00#")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.DATETIME:
+            self.fail(f"test_basic_expressions: expected value type of datetime, received {value_expression.valuetype}")
+
+        result, err = value_expression.datetimevalue()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.datetimevalue: {err}")
+
+        if result.day != 4:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected 4, received {result.day}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "DatePart(#2019-02-04T03:00:52.73-05:00#, 'Year')")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.INT32:
+            self.fail(f"test_basic_expressions: expected value type of int32, received {value_expression.valuetype}")
+
+        result, err = value_expression.int32value()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.int32value: {err}")
+
+        if result != 2019:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected 2019, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "DatePart(#2019/02/04 03:00:52.73-05:00#, 'Month')")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.INT32:
+            self.fail(f"test_basic_expressions: expected value type of int32, received {value_expression.valuetype}")
+
+        result, err = value_expression.int32value()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.int32value: {err}")
+
+        if result != 2:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected 2, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "DatePart(#2019-02-04 03:00:52.73-05:00#, 'Day')")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.INT32:
+            self.fail(f"test_basic_expressions: expected value type of int32, received {value_expression.valuetype}")
+
+        result, err = value_expression.int32value()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.int32value: {err}")
+
+        if result != 4:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected 4, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "DatePart(#2019-02-04 03:00#, 'Hour')")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.INT32:
+            self.fail(f"test_basic_expressions: expected value type of int32, received {value_expression.valuetype}")
+
+        result, err = value_expression.int32value()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.int32value: {err}")
+
+        if result != 3:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected 3, received {result}")
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "DatePart(#2019-02-04 03:00:52.73-05:00#, 'Hour')")
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.INT32:
+            self.fail(f"test_basic_expressions: expected value type of int32, received {value_expression.valuetype}")
+
+        result, err = value_expression.int32value()
+
+        if err is not None:
+            self.fail(f"test_basic_expressions: error executing value_expression.int32value: {err}")
+
+        if result != 8:
+            self.fail(f"test_basic_expressions: unexpected value expression result, expected 8, received {result}")

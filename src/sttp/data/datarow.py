@@ -29,7 +29,6 @@ from .constants import ExpressionValueType
 from .errors import EvaluateError
 from decimal import Decimal
 from datetime import datetime
-from dateutil import parser
 from uuid import UUID
 from typing import Callable, Iterator, Optional, Tuple, Union, TYPE_CHECKING
 import numpy as np
@@ -178,7 +177,7 @@ class DataRow:
             if targettype == DataType.BOOLEAN:
                 return bool(value), None
             if targettype == DataType.DATETIME:
-                return parser.parse(value)
+                return Convert.from_str(value, datetime)
             if targettype == DataType.GUID:
                 return UUID(value), None
             if targettype == DataType.SINGLE:
