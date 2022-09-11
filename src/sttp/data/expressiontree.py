@@ -1367,6 +1367,7 @@ class ExpressionTree:
         return None, TypeError("unexpected time interval encountered")
 
     def _datediff(self, leftvalue: ValueExpression, rightvalue: ValueExpression, intervaltype: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
+        # sourcery skip
         if leftvalue.valuetype not in [ExpressionValueType.DATETIME, ExpressionValueType.STRING]:
             return None, TypeError("\"DateDiff\" function left value, first argument, must be a \"DateTime\" or a \"String\"")
 
@@ -1399,24 +1400,28 @@ class ExpressionTree:
         if interval is None:
             return None, EvaluateError("failed while parsing \"DateDiff\" function interval type, third argument, as a valid time interval")
 
-        delta = relativedelta(rightvalue._datetimevalue(), leftvalue._datetimevalue())
+        if interval in [TimeInterval.YEAR, TimeInterval.MONTH]:
+            delta = relativedelta(rightvalue._datetimevalue(), leftvalue._datetimevalue())
 
-        if interval == TimeInterval.YEAR:
-            return ValueExpression(ExpressionValueType.INT32, delta.years), None
-        if interval == TimeInterval.MONTH:
-            return ValueExpression(ExpressionValueType.INT32, delta.months), None
+            if interval == TimeInterval.YEAR:
+                return ValueExpression(ExpressionValueType.INT32, delta.years), None
+
+            return ValueExpression(ExpressionValueType.INT32, delta.months + (12 * delta.years)), None
+
+        delta = rightvalue._datetimevalue() - leftvalue._datetimevalue()
+
         if interval in [TimeInterval.DAYOFYEAR, TimeInterval.DAY, TimeInterval.WEEKDAY]:
             return ValueExpression(ExpressionValueType.INT32, delta.days), None
         if interval == TimeInterval.WEEK:
-            return ValueExpression(ExpressionValueType.INT32, delta.weeks), None
+            return ValueExpression(ExpressionValueType.INT32, delta.days // 7), None
         if interval == TimeInterval.HOUR:
-            return ValueExpression(ExpressionValueType.INT32, delta.hours), None
+            return ValueExpression(ExpressionValueType.INT32, round(delta.total_seconds()) // 3600), None
         if interval == TimeInterval.MINUTE:
-            return ValueExpression(ExpressionValueType.INT32, delta.minutes), None
+            return ValueExpression(ExpressionValueType.INT32, round(delta.total_seconds()) // 60), None
         if interval == TimeInterval.SECOND:
-            return ValueExpression(ExpressionValueType.INT32, delta.seconds), None
+            return ValueExpression(ExpressionValueType.INT32, round(delta.total_seconds())), None
         if interval == TimeInterval.MILLISECOND:
-            return ValueExpression(ExpressionValueType.INT32, delta.microseconds / 1000), None
+            return ValueExpression(ExpressionValueType.INT32, int(delta.total_seconds()) * 1000 + delta.microseconds // 1000), None
 
         return None, TypeError("unexpected time interval encountered")
 
@@ -1454,7 +1459,7 @@ class ExpressionTree:
         if interval == TimeInterval.DAY:
             return ValueExpression(ExpressionValueType.INT32, sourcevalue._datetimevalue().day), None
         if interval == TimeInterval.WEEKDAY:
-            return ValueExpression(ExpressionValueType.INT32, sourcevalue._datetimevalue().weekday()), None
+            return ValueExpression(ExpressionValueType.INT32, sourcevalue._datetimevalue().weekday() + 2), None  # Starts on Monday at zero
         if interval == TimeInterval.WEEK:
             return ValueExpression(ExpressionValueType.INT32, sourcevalue._datetimevalue().isocalendar()[1]), None
         if interval == TimeInterval.HOUR:
@@ -1601,6 +1606,9 @@ class ExpressionTree:
     def _is_guid(self, sourcevalue: ValueExpression) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
         if sourcevalue.is_null():
             return FALSEVALUE, None
+
+        if sourcevalue.valuetype == ExpressionValueType.GUID:
+            return TRUEVALUE, None
 
         if sourcevalue.valuetype == ExpressionValueType.STRING:
             try:
