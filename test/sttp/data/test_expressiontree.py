@@ -2012,3 +2012,65 @@ class TestExpressionTree(unittest.TestCase):
 
         if err is None:
             self.fail("test_negative_expressions: expected error executing FilterExpressionParser.evaluate_expression")
+
+    def test_misc_expressions(self):
+        with open("test/MetadataSample2.xml", "rb") as binary_file:
+            data = binary_file.read()
+
+        dataset, err = DataSet.from_xml(data)
+
+        if err is not None:
+            self.fail(f"test_misc_expressions: error executing DataSet.from_xml: {err}")
+
+        datarow = dataset["DeviceDetail"][0]
+
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "AccessID ^ 2 + FramesPerSecond XOR 4")
+
+        if err is not None:
+            self.fail(f"test_misc_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.INT32:
+            self.fail(f"test_misc_expressions: expected value type of int32, received {value_expression.valuetype}")
+
+        result, err = value_expression.int32value()
+
+        if err is not None:
+            self.fail(f"test_misc_expressions: error executing value_expression.int32value: {err}")
+
+        if result != 38:
+            self.fail(f"test_misc_expressions: unexpected value expression result, expected 38, received {result}")
+
+        # test edge case of evaluating standalone Guid not used as a row identifier
+        g = uuid1()
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, str(g))
+
+        if err is not None:
+            self.fail(f"test_misc_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.GUID:
+            self.fail(f"test_misc_expressions: expected value type of guid, received {value_expression.valuetype}")
+
+        result, err = value_expression.guidvalue()
+
+        if err is not None:
+            self.fail(f"test_misc_expressions: error executing value_expression.guidvalue: {err}")
+
+        if result != g:
+            self.fail(f"test_misc_expressions: unexpected value expression result, expected {g}, received {result}")
+
+        # test computed column with expression defined in schema
+        value_expression, err = FilterExpressionParser.evaluate_datarowexpression(datarow, "ComputedCol")
+
+        if err is not None:
+            self.fail(f"test_misc_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
+
+        if value_expression.valuetype != ExpressionValueType.INT32:
+            self.fail(f"test_misc_expressions: expected value type of int32, received {value_expression.valuetype}")
+
+        result, err = value_expression.int32value()
+
+        if err is not None:
+            self.fail(f"test_misc_expressions: error executing value_expression.int32value: {err}")
+
+        if result != 32:
+            self.fail(f"test_misc_expressions: unexpected value expression result, expected 32, received {result}")
