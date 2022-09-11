@@ -2001,3 +2001,14 @@ class TestExpressionTree(unittest.TestCase):
 
         if result != 99.99:
             self.fail(f"test_basic_expressions: unexpected value expression result, expected 99.99, received {result}")
+
+    def test_negative_expressions(self):
+        _, err = FilterExpressionParser.evaluate_expression("Convert(123, 'unknown')")
+
+        if err is None:
+            self.fail("test_negative_expressions: expected error executing FilterExpressionParser.evaluate_expression")
+
+        _, err = FilterExpressionParser.evaluate_expression("I-Am-A-bad-Expression")
+
+        if err is None:
+            self.fail("test_negative_expressions: expected error executing FilterExpressionParser.evaluate_expression")
