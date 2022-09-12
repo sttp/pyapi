@@ -127,7 +127,7 @@ class DataRow:
             expressiontree, err = FilterExpressionParser.generate_expressiontree(column.parent, column.expression, True)
 
             if err is not None:
-                return None, EvaluateError(f"failed to parse expression defined for computed DataColumn \"{column.name}\" for table \"{self._parent.name}\": {err}")
+                return None, EvaluateError(f"failed to parse expression \"{column.expression}\" defined for computed DataColumn \"{column.name}\" for table \"{self._parent.name}\": {err}")
 
             self._values[columnindex] = expressiontree
             return expressiontree, None
@@ -146,7 +146,7 @@ class DataRow:
             err = ex
 
         if err is not None:
-            return None, EvaluateError(f"failed to evaluate expression defined for computed DataColumn \"{column.name}\" for table \"{self._parent.name}\": {err}")
+            return None, EvaluateError(f"failed to evaluate expression \"{column.expression}\" defined for computed DataColumn \"{column.name}\" for table \"{self._parent.name}\": {err}")
 
         sourcetype = sourcevalue.valuetype
         targettype = column.datatype
