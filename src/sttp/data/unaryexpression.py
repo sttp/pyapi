@@ -27,7 +27,7 @@ from .valueexpression import ValueExpression
 from .constants import ExpressionType, ExpressionUnaryType, ExpressionValueType
 from .errors import EvaluateError
 from decimal import Decimal
-from typing import Optional, Tuple, TYPE_CHECKING
+from typing import Optional, Tuple
 import numpy as np
 
 class UnaryExpression(Expression):
