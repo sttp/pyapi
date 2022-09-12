@@ -462,7 +462,7 @@ class FilterExpressionParser(ExpressionListener):
         signalid = Empty.GUID
 
         if ctx.GUID_LITERAL() is not None:
-            signalid = UUID(ctx.GUID_LITERAL().getText())
+            signalid = FilterExpressionParser._parse_guidliteral(ctx.GUID_LITERAL().getText())
 
             if not self.track_filteredrows and not self.track_filteredsignalids:
                 # Handle edge case of encountering standalone Guid when not tracking rows or table identifiers.
@@ -930,13 +930,13 @@ class FilterExpressionParser(ExpressionListener):
 
                 if value > Limits.MAXINT32:
                     if value > Limits.MAXINT64:
-                        result = self._parse_numericliteral(literal)
+                        result = FilterExpressionParser._parse_numericliteral(literal)
                     else:
                         result = ValueExpression(ExpressionValueType.INT64, value)
                 else:
                     result = ValueExpression(ExpressionValueType.INT32, value)
             except Exception:
-                result = self._parse_numericliteral(literal)
+                result = FilterExpressionParser._parse_numericliteral(literal)
         elif ctx.NUMERIC_LITERAL() is not None:
             literal: str = ctx.NUMERIC_LITERAL().getText()
 
@@ -945,15 +945,15 @@ class FilterExpressionParser(ExpressionListener):
                 if "E" in literal.upper():
                     result = ValueExpression(ExpressionValueType.DOUBLE, float(literal))
                 else:
-                    result = self._parse_numericliteral(literal)
+                    result = FilterExpressionParser._parse_numericliteral(literal)
             except Exception:
-                result = self._parse_numericliteral(literal)
+                result = FilterExpressionParser._parse_numericliteral(literal)
         elif ctx.STRING_LITERAL() is not None:
-            result = ValueExpression(ExpressionValueType.STRING, self._parse_stringliteral(ctx.STRING_LITERAL().getText()))
+            result = ValueExpression(ExpressionValueType.STRING, FilterExpressionParser._parse_stringliteral(ctx.STRING_LITERAL().getText()))
         elif ctx.DATETIME_LITERAL() is not None:
-            result = ValueExpression(ExpressionValueType.DATETIME, self._parse_datetimeliteral(ctx.DATETIME_LITERAL().getText()))
+            result = ValueExpression(ExpressionValueType.DATETIME, FilterExpressionParser._parse_datetimeliteral(ctx.DATETIME_LITERAL().getText()))
         elif ctx.GUID_LITERAL() is not None:
-            result = ValueExpression(ExpressionValueType.GUID, self._parse_guidliteral(ctx.GUID_LITERAL().getText()))
+            result = ValueExpression(ExpressionValueType.GUID, FilterExpressionParser._parse_guidliteral(ctx.GUID_LITERAL().getText()))
         elif ctx.BOOLEAN_LITERAL() is not None:
             literal: str = ctx.BOOLEAN_LITERAL().getText()
             result = TRUEVALUE if literal.upper() == "TRUE" else FALSEVALUE
@@ -963,7 +963,8 @@ class FilterExpressionParser(ExpressionListener):
         if result is not None:
             self._add_expr(ctx, result)
 
-    def _parse_numericliteral(self, literal: str) -> ValueExpression:
+    @staticmethod
+    def _parse_numericliteral(literal: str) -> ValueExpression:
         try:
             value = Decimal(literal)
             return ValueExpression(ExpressionValueType.DECIMAL, value)
@@ -974,17 +975,20 @@ class FilterExpressionParser(ExpressionListener):
             except Exception:
                 return ValueExpression(ExpressionValueType.STRING, literal)
 
-    def _parse_stringliteral(self, literal: str) -> str:
+    @staticmethod
+    def _parse_stringliteral(literal: str) -> str:
         # Remove any surrounding quotes from string, ANTLR grammar already
         # ensures strings starting with quote also ends with one
         return literal[1:-1] if literal[0] == "'" else literal
 
-    def _parse_guidliteral(self, literal: str) -> UUID:
+    @staticmethod
+    def _parse_guidliteral(literal: str) -> UUID:
         # Remove any quotes from GUID (boost currently only handles optional braces),
         # ANTLR grammar already ensures GUID starting with quote also ends with one
         return UUID(literal[1:-1] if literal[0] in ["{", "'"] else literal)
 
-    def _parse_datetimeliteral(self, literal: str) -> datetime:
+    @staticmethod
+    def _parse_datetimeliteral(literal: str) -> datetime:
         # Remove any surrounding '#' symbols from date/time, ANTLR grammar already
         # ensures date/time starting with '#' symbol will also end with one
         literal = literal[1:-1] if literal[0] == "#" else literal

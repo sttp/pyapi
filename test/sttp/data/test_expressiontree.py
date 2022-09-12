@@ -2074,3 +2074,30 @@ class TestExpressionTree(unittest.TestCase):
 
         if result != 32:
             self.fail(f"test_misc_expressions: unexpected value expression result, expected 32, received {result}")
+
+    def test_filterexpression_statement_count(self):
+        dataset, _, _, statid, freqid = TestDataSet._create_dataset()
+
+        parser, err = FilterExpressionParser.from_dataset(dataset, f"{statid}; {{{freqid}}};'{statid}';Filter ActiveMeasurements Where True", "ActiveMeasurements")
+
+        if err is not None:
+            self.fail(f"test_filterexpression_statement_count: error executing FilterExpressionParser.from_dataset: {err}")
+
+        parser.track_filteredrows = False
+        parser.track_filteredsignalids = True
+
+        err = parser.evaluate(True, False)
+
+        if err is not None:
+            self.fail(f"test_filterexpression_statement_count: error executing parser.evaluate: {err}")
+
+        idset = parser.filtered_signalidset
+
+        if len(idset) != 2:
+            self.fail(f"test_filterexpression_statement_count: expected 2 signal IDs, received {len(idset)}")
+
+        if statid not in idset or freqid not in idset:
+            self.fail(f"test_filterexpression_statement_count: expected signal IDs {statid} and {freqid}, received {idset}")
+
+        if parser.filterexpression_statementcount != 4:
+            self.fail(f"test_filterexpression_statement_count: expected 4 statements, received {parser.filterexpression_statementcount}")
