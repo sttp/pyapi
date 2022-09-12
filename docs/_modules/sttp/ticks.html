@@ -87,7 +87,7 @@
 <span class="c1">#</span>
 <span class="c1">#******************************************************************************************************</span>
 
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span><span class="p">,</span> <span class="n">timezone</span>
 <span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">Empty</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -195,11 +195,11 @@
         <span class="k">return</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">from_datetime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="Ticks.utcnow"><a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.utcnow">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">utcnow</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>  <span class="c1"># sourcery skip: aware-datetime-for-utc</span>
+    <span class="k">def</span> <span class="nf">utcnow</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the current time in UTC as a Ticks value.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">from_datetime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">())</span></div>
+        <span class="k">return</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">from_datetime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">))</span></div>
 
 <div class="viewcode-block" id="Ticks.to_string"><a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.to_string">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">to_string</span><span class="p">(</span><span class="n">ticks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">,</span> <span class="n">timespec</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;microseconds&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>

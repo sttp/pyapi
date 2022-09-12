@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gsf package &mdash; sttp/pyapi 0.5.0 documentation</title>
+  <title>gsf package &mdash; sttp/pyapi 0.6.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
@@ -747,9 +747,8 @@ handle input and output as bytes, e.g., a <cite>bytearray</cite> or a <cite>sock
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-gsf" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="gsf.ByteSize">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gsf.</span></span><span class="sig-name descname"><span class="pre">ByteSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsf.html#ByteSize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gsf.ByteSize" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
-<p>An enumeration.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gsf.</span></span><span class="sig-name descname"><span class="pre">ByteSize</span></span><a class="reference internal" href="_modules/gsf.html#ByteSize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gsf.ByteSize" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gsf.ByteSize.FLOAT16">
 <span class="sig-name descname"><span class="pre">FLOAT16</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#gsf.ByteSize.FLOAT16" title="Permalink to this definition"></a></dt>
@@ -902,9 +901,8 @@ handle input and output as bytes, e.g., a <cite>bytearray</cite> or a <cite>sock
 
 <dl class="py class">
 <dt class="sig sig-object py" id="gsf.Limits">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gsf.</span></span><span class="sig-name descname"><span class="pre">Limits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsf.html#Limits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gsf.Limits" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
-<p>An enumeration.</p>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">gsf.</span></span><span class="sig-name descname"><span class="pre">Limits</span></span><a class="reference internal" href="_modules/gsf.html#Limits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gsf.Limits" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="gsf.Limits.MAXBYTE">
 <span class="sig-name descname"><span class="pre">MAXBYTE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">255</span></em><a class="headerlink" href="#gsf.Limits.MAXBYTE" title="Permalink to this definition"></a></dt>
@@ -945,6 +943,21 @@ handle input and output as bytes, e.g., a <cite>bytearray</cite> or a <cite>sock
 <span class="sig-name descname"><span class="pre">MAXUINT64</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">18446744073709551615</span></em><a class="headerlink" href="#gsf.Limits.MAXUINT64" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gsf.Limits.MININT16">
+<span class="sig-name descname"><span class="pre">MININT16</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-32768</span></em><a class="headerlink" href="#gsf.Limits.MININT16" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gsf.Limits.MININT32">
+<span class="sig-name descname"><span class="pre">MININT32</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-2147483648</span></em><a class="headerlink" href="#gsf.Limits.MININT32" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="gsf.Limits.MININT64">
+<span class="sig-name descname"><span class="pre">MININT64</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-9223372036854775808</span></em><a class="headerlink" href="#gsf.Limits.MININT64" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 <dl class="py class">
@@ -975,6 +988,12 @@ handle input and output as bytes, e.g., a <cite>bytearray</cite> or a <cite>sock
 <span class="sig-prename descclassname"><span class="pre">gsf.</span></span><span class="sig-name descname"><span class="pre">static_init</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cls</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsf.html#static_init"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gsf.static_init" title="Permalink to this definition"></a></dt>
 <dd><p>Marks a class as having a static initialization function and
 executes the function when class is statically constructed.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="gsf.virtual">
+<span class="sig-prename descclassname"><span class="pre">gsf.</span></span><span class="sig-name descname"><span class="pre">virtual</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gsf.html#virtual"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#gsf.virtual" title="Permalink to this definition"></a></dt>
+<dd><p>Marks a method as overridable (for documentation purposes).</p>
 </dd></dl>
 
 </section>

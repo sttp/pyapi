@@ -337,34 +337,36 @@
 
         <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DataTable.select"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.datatable.DataTable.select">[docs]</a>    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sortorder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">DataRow</span><span class="p">]],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+<div class="viewcode-block" id="DataTable.select"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.datatable.DataTable.select">[docs]</a>    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sortorder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">limit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">DataRow</span><span class="p">]],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns the rows matching the filter expression criteria in the specified sort order. The `filterexpression`</span>
-<span class="sd">        parameter should be in the syntax of a SQL WHERE expression but should not include the WHERE keyword.</span>
-<span class="sd">        The `sortorder` parameter defines field names, separated by commas, that exist in the `DataTable` used to</span>
-<span class="sd">        order the results. Each field specified in the `sortorder` can have an `ASC` or `DESC` suffix; defaults to</span>
-<span class="sd">        `ASC` when no suffix is provided. When `sortorder` is an empty string, records will be returned in natural</span>
-<span class="sd">        order. Set limit parameter to -1 for all matching rows. When `filterexpression` is an empty string, all</span>
-<span class="sd">        records will be returned; any specified sort order and limit will still be respected.</span>
+<span class="sd">        Returns the rows matching the filter expression criteria in the specified sort order.</span>
+<span class="sd">        </span>
+<span class="sd">        The `filterexpression` parameter should be in the syntax of a SQL WHERE expression but</span>
+<span class="sd">        should not include the WHERE keyword. The `sortorder` parameter defines field names,</span>
+<span class="sd">        separated by commas, that exist in the `DataTable` used to order the results. Each</span>
+<span class="sd">        field specified in the `sortorder` can have an `ASC` or `DESC` suffix; defaults to</span>
+<span class="sd">        `ASC` when no suffix is provided. When `sortorder` is an empty string, records will</span>
+<span class="sd">        be returned in natural order. Set limit parameter to -1 for all matching rows. When</span>
+<span class="sd">        `filterexpression` is an empty string, all records will be returned; any specified</span>
+<span class="sd">        sort order and limit will still be respected.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="ne">NotImplementedError</span><span class="p">()</span></div></div>
+        <span class="k">if</span> <span class="n">filterexpression</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">filterexpression</span><span class="p">:</span>
+            <span class="n">filterexpression</span> <span class="o">=</span> <span class="s2">&quot;True&quot;</span>  <span class="c1"># Return all records</span>
 
-        <span class="c1"># TODO: Uncomment when filter expression engine is implemented</span>
-        <span class="c1"># if len(filterexpression) == 0:</span>
-        <span class="c1">#     filterexpression = &quot;True&quot; # Return all records</span>
+        <span class="k">if</span> <span class="n">limit</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">filterexpression</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;FILTER TOP </span><span class="si">{</span><span class="n">limit</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> WHERE </span><span class="si">{</span><span class="n">filterexpression</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">filterexpression</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;FILTER </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> WHERE </span><span class="si">{</span><span class="n">filterexpression</span><span class="si">}</span><span class="s2">&quot;</span>
 
-        <span class="c1"># if limit &gt; 0:</span>
-        <span class="c1">#     filterexpression = f&quot;FILTER TOP {limit} {self.name} WHERE {filterexpression}&quot;</span>
-        <span class="c1"># else:</span>
-        <span class="c1">#     filterexpression = f&quot;FILTER {self.name} WHERE {filterexpression}&quot;</span>
+        <span class="k">if</span> <span class="n">sortorder</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">sortorder</span><span class="p">:</span>
+            <span class="n">filterexpression</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot; ORDER BY </span><span class="si">{</span><span class="n">sortorder</span><span class="si">}</span><span class="s2">&quot;</span>
 
-        <span class="c1"># (expressiontree, err) = generate_expressiontree(self, filterexpression, True)</span>
+        <span class="kn">from</span> <span class="nn">.filterexpressionparser</span> <span class="kn">import</span> <span class="n">FilterExpressionParser</span>
 
-        <span class="c1"># if err is not None:</span>
-        <span class="c1">#     return None, err</span>
+        <span class="n">expressiontree</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">FilterExpressionParser</span><span class="o">.</span><span class="n">generate_expressiontree</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
 
-        <span class="c1"># return expressiontree.select(self)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span> <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">expressiontree</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>

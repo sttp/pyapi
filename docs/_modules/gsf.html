@@ -87,9 +87,11 @@
 <span class="c1">#</span>
 <span class="c1"># ******************************************************************************************************</span>
 
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">IntEnum</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">dateutil</span> <span class="kn">import</span> <span class="n">parser</span>
+<span class="kn">from</span> <span class="nn">dateutil.tz</span> <span class="kn">import</span> <span class="n">tzoffset</span>
 <span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Sequence</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -104,6 +106,13 @@
         <span class="bp">cls</span><span class="o">.</span><span class="n">static_init</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="bp">cls</span></div>
+
+
+<div class="viewcode-block" id="virtual"><a class="viewcode-back" href="../gsf.html#gsf.virtual">[docs]</a><span class="k">def</span> <span class="nf">virtual</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Marks a method as overridable (for documentation purposes).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span></div>
 
 
 <div class="viewcode-block" id="override"><a class="viewcode-back" href="../gsf.html#gsf.override">[docs]</a><span class="k">def</span> <span class="nf">override</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -131,18 +140,21 @@
     <span class="n">UINT64</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Limits"><a class="viewcode-back" href="../gsf.html#gsf.Limits">[docs]</a><span class="k">class</span> <span class="nc">Limits</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+<div class="viewcode-block" id="Limits"><a class="viewcode-back" href="../gsf.html#gsf.Limits">[docs]</a><span class="k">class</span> <span class="nc">Limits</span><span class="p">:</span>
     <span class="n">MAXTICKS</span> <span class="o">=</span> <span class="mi">3155378975999999999</span>
-    <span class="n">MAXBYTE</span> <span class="o">=</span> <span class="mi">255</span>
-    <span class="n">MAXINT16</span> <span class="o">=</span> <span class="mi">32767</span>
-    <span class="n">MAXUINT16</span> <span class="o">=</span> <span class="mi">65535</span>
-    <span class="n">MAXINT32</span> <span class="o">=</span> <span class="mi">2147483647</span>
-    <span class="n">MAXUINT32</span> <span class="o">=</span> <span class="mi">4294967295</span>
-    <span class="n">MAXINT64</span> <span class="o">=</span> <span class="mi">9223372036854775807</span>
-    <span class="n">MAXUINT64</span> <span class="o">=</span> <span class="mi">18446744073709551615</span></div>
+    <span class="n">MAXBYTE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span><span class="o">.</span><span class="n">max</span>
+    <span class="n">MININT16</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span><span class="o">.</span><span class="n">min</span>
+    <span class="n">MAXINT16</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span><span class="o">.</span><span class="n">max</span>
+    <span class="n">MAXUINT16</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span><span class="o">.</span><span class="n">max</span>
+    <span class="n">MININT32</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span><span class="o">.</span><span class="n">min</span>
+    <span class="n">MAXINT32</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span><span class="o">.</span><span class="n">max</span>
+    <span class="n">MAXUINT32</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span><span class="o">.</span><span class="n">max</span>
+    <span class="n">MININT64</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span><span class="o">.</span><span class="n">min</span>
+    <span class="n">MAXINT64</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span><span class="o">.</span><span class="n">max</span>
+    <span class="n">MAXUINT64</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span><span class="o">.</span><span class="n">max</span></div>
 
 
-<div class="viewcode-block" id="ByteSize"><a class="viewcode-back" href="../gsf.html#gsf.ByteSize">[docs]</a><span class="k">class</span> <span class="nc">ByteSize</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+<div class="viewcode-block" id="ByteSize"><a class="viewcode-back" href="../gsf.html#gsf.ByteSize">[docs]</a><span class="k">class</span> <span class="nc">ByteSize</span><span class="p">:</span>
     <span class="n">INT8</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">UINT8</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="n">INT16</span> <span class="o">=</span> <span class="mi">2</span>
@@ -188,7 +200,33 @@
 <span class="sd">        Converts a string value to the specified type.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">value</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div></div>
+        <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">datetime</span><span class="p">:</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">dt</span><span class="o">.</span><span class="n">tzinfo</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">dt</span><span class="o">.</span><span class="n">tzinfo</span><span class="o">.</span><span class="n">utcoffset</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span><span class="o">.</span><span class="n">seconds</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">dt</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="n">tzoffset</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="n">dt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">dtype</span> <span class="ow">in</span> <span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="s2">&quot;X&quot;</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">upper</span><span class="p">():</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">16</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="nb">int</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="s2">&quot;-&quot;</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">dtype</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">value</span>
+
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unsupported target conversion type: </span><span class="si">{</span><span class="n">dtype</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>
