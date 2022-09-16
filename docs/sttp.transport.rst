@@ -1,6 +1,14 @@
 sttp.transport package
 ======================
 
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   sttp.transport.tssc
+
 Submodules
 ----------
 

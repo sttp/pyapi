@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sttp.data.valueexpression &mdash; sttp/pyapi 0.6.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> sttp/pyapi
+            <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sttp/pyapi</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>sttp.data.valueexpression</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sttp.data.valueexpression</h1><div class="highlight"><pre>
+<span></span><span class="c1"># ******************************************************************************************************</span>
+<span class="c1">#  valueexpression.py - Gbtc</span>
+<span class="c1">#</span>
+<span class="c1">#  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See</span>
+<span class="c1">#  the NOTICE file distributed with this work for additional information regarding copyright ownership.</span>
+<span class="c1">#  The GPA licenses this file to you under the MIT License (MIT), the &quot;License&quot;; you may not use this</span>
+<span class="c1">#  file except in compliance with the License. You may obtain a copy of the License at:</span>
+<span class="c1">#</span>
+<span class="c1">#      http://opensource.org/licenses/MIT</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless agreed to in writing, the subject software distributed under the License is distributed on an</span>
+<span class="c1">#  &quot;AS-IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. Refer to the</span>
+<span class="c1">#  License for the specific language governing permissions and limitations.</span>
+<span class="c1">#</span>
+<span class="c1">#  Code Modification History:</span>
+<span class="c1">#  ----------------------------------------------------------------------------------------------------</span>
+<span class="c1">#  09/03/2022 - J. Ritchie Carroll</span>
+<span class="c1">#       Generated original version of source code.</span>
+<span class="c1">#</span>
+<span class="c1"># ******************************************************************************************************</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">Convert</span><span class="p">,</span> <span class="n">Empty</span><span class="p">,</span> <span class="n">override</span><span class="p">,</span> <span class="n">normalize_enumname</span>
+<span class="kn">from</span> <span class="nn">.expression</span> <span class="kn">import</span> <span class="n">Expression</span>
+<span class="kn">from</span> <span class="nn">.dataset</span> <span class="kn">import</span> <span class="n">xsdformat</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">ExpressionType</span><span class="p">,</span> <span class="n">ExpressionValueType</span>
+<span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="ValueExpression"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.valueexpression.ValueExpression">[docs]</a><span class="k">class</span> <span class="nc">ValueExpression</span><span class="p">(</span><span class="n">Expression</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents a value expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">valuetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">object</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_valuetype</span> <span class="o">=</span> <span class="n">valuetype</span>
+
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="n">valuetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">valuetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">valuetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">valuetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">valuetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">valuetype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">GUID</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DATETIME</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot create new value expression; unexpected expression value type: </span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">valuetype</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nd">@override</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">expressiontype</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExpressionType</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the type of this `ValueExpression`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">ExpressionType</span><span class="o">.</span><span class="n">VALUE</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">valuetype</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ExpressionValueType</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the value type of this `ValueExpression`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valuetype</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">object</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the value of this `ValueExpression`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valuetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DATETIME</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">xsdformat</span><span class="p">(</span><span class="n">datetime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_valuetype</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ValueExpression.is_null"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.valueexpression.ValueExpression.is_null">[docs]</a>    <span class="k">def</span> <span class="nf">is_null</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets a flag that determines if this `ValueExpression` is null, i.e., `None`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="ValueExpression.integervalue"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.valueexpression.ValueExpression.integervalue">[docs]</a>    <span class="k">def</span> <span class="nf">integervalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">defaultvalue</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the `ValueExpression` as an integer value or specified default value if not possible.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valuetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_booleanvalue_asint</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valuetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_int32value</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valuetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_int64value</span><span class="p">())</span>
+
+        <span class="k">return</span> <span class="n">defaultvalue</span></div>
+
+    <span class="k">def</span> <span class="nf">_validate_valuetype</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">valuetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">valuetype</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valuetype</span><span class="p">:</span>
+            <span class="k">return</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot read expression value expression as </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">valuetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">, type is </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_valuetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="ValueExpression.booleanvalue"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.valueexpression.ValueExpression.booleanvalue">[docs]</a>    <span class="k">def</span> <span class="nf">booleanvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the `ValueExpression` as a boolean value.</span>
+<span class="sd">        An error will be returned if value type is not `ExpressionValueType.BOOLEAN`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_valuetype</span><span class="p">(</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_booleanvalue</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_booleanvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_booleanvalue_asint</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_booleanvalue</span><span class="p">()</span> <span class="k">else</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="ValueExpression.int32value"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.valueexpression.ValueExpression.int32value">[docs]</a>    <span class="k">def</span> <span class="nf">int32value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the `ValueExpression` as a 32-bit integer value.</span>
+<span class="sd">        An error will be returned if value type is not `ExpressionValueType.INT32`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_valuetype</span><span class="p">(</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_int32value</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">Empty</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_int32value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Empty</span><span class="o">.</span><span class="n">INT32</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ValueExpression.int64value"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.valueexpression.ValueExpression.int64value">[docs]</a>    <span class="k">def</span> <span class="nf">int64value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the `ValueExpression` as a 64-bit integer value.</span>
+<span class="sd">        An error will be returned if value type is not `ExpressionValueType.INT64`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_valuetype</span><span class="p">(</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_int64value</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">Empty</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_int64value</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Empty</span><span class="o">.</span><span class="n">INT64</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ValueExpression.decimalvalue"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.valueexpression.ValueExpression.decimalvalue">[docs]</a>    <span class="k">def</span> <span class="nf">decimalvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Decimal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the `ValueExpression` as a Decimal value.</span>
+<span class="sd">        An error will be returned if value type is not `ExpressionValueType.DECIMAL`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_valuetype</span><span class="p">(</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_decimalvalue</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">Empty</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_decimalvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Decimal</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Empty</span><span class="o">.</span><span class="n">DECIMAL</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">Decimal</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ValueExpression.doublevalue"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.valueexpression.ValueExpression.doublevalue">[docs]</a>    <span class="k">def</span> <span class="nf">doublevalue</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the `ValueExpression` as a double value.</span>
+<span class="sd">        An error will be returned if value type is not `ExpressionValueType.DOUBLE`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_valuetype</span><span class="p">(</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_doublevalue</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">Empty</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_doublevalue</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Empty</span><span class="o">.</span><span class="n">DOUBLE</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_value</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ValueExpression.stringvalue"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.valueexpression.ValueExpression.stringvalue">[docs]</a>    <span class="k">def</span> <span class="nf">stringvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the `ValueExpression` as a string value.</span>
+<span class="sd">        An error will be returned if value type is not `ExpressionValueType.STRING`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_valuetype</span><span class="p">(</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_stringvalue</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_stringvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
+
+<div class="viewcode-block" id="ValueExpression.guidvalue"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.valueexpression.ValueExpression.guidvalue">[docs]</a>    <span class="k">def</span> <span class="nf">guidvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">UUID</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the `ValueExpression` as a GUID value.</span>
+<span class="sd">        An error will be returned if value type is not `ExpressionValueType.GUID`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_valuetype</span><span class="p">(</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">GUID</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_guidvalue</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">Empty</span><span class="o">.</span><span class="n">GUID</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_guidvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UUID</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Empty</span><span class="o">.</span><span class="n">GUID</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
+
+<div class="viewcode-block" id="ValueExpression.datetimevalue"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.valueexpression.ValueExpression.datetimevalue">[docs]</a>    <span class="k">def</span> <span class="nf">datetimevalue</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">datetime</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the `ValueExpression` as a datetime value.</span>
+<span class="sd">        An error will be returned if value type is not `ExpressionValueType.DATETIME`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_validate_valuetype</span><span class="p">(</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DATETIME</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_datetimevalue</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">Empty</span><span class="o">.</span><span class="n">DATETIME</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_datetimevalue</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Empty</span><span class="o">.</span><span class="n">DATETIME</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value</span>
+
+<div class="viewcode-block" id="ValueExpression.convert"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.valueexpression.ValueExpression.convert">[docs]</a>    <span class="k">def</span> <span class="nf">convert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_typevalue</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;ValueExpression&quot;</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Attempts to convert the `ValueExpression` to the specified type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># If source value is Null, result is Null, regardless of target type</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_null</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">ValueExpression</span><span class="o">.</span><span class="n">nullvalue</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">),</span> <span class="kc">None</span>
+
+        <span class="n">valuetype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valuetype</span>
+
+        <span class="k">if</span> <span class="n">valuetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_fromboolean</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">valuetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_fromint32</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">valuetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_fromint64</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">valuetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_fromdecimal</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">valuetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_fromdouble</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">valuetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_fromstring</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">valuetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">GUID</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_fromguid</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">valuetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DATETIME</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_fromdatetime</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;unexpected expression value type encountered&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_convert_fromnumeric</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span> <span class="n">from_typename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">target_typevalue</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;ValueExpression&quot;</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">target_typevalue</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">,</span> <span class="n">value</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">),</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="n">target_typevalue</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="n">target_typevalue</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="n">target_typevalue</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">,</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="n">target_typevalue</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="n">target_typevalue</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="kc">None</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;failed while attempting to convert from </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">from_typename</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> value (</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">) to </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">target_typevalue</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot convert </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">from_typename</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> value (</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">) to </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_convert_fromboolean</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_typevalue</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;ValueExpression&quot;</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_fromnumeric</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_booleanvalue_asint</span><span class="p">(),</span> <span class="s2">&quot;Boolean&quot;</span><span class="p">,</span> <span class="n">target_typevalue</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_convert_fromint32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_typevalue</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;ValueExpression&quot;</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_fromnumeric</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_int32value</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="s2">&quot;Int32&quot;</span><span class="p">,</span> <span class="n">target_typevalue</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_convert_fromint64</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_typevalue</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;ValueExpression&quot;</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_fromnumeric</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_int64value</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="s2">&quot;Int64&quot;</span><span class="p">,</span> <span class="n">target_typevalue</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_convert_fromdecimal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_typevalue</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;ValueExpression&quot;</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_fromnumeric</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_decimalvalue</span><span class="p">(),</span> <span class="s2">&quot;Decimal&quot;</span><span class="p">,</span> <span class="n">target_typevalue</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_convert_fromdouble</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_typevalue</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;ValueExpression&quot;</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_fromnumeric</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_doublevalue</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="s2">&quot;Double&quot;</span><span class="p">,</span> <span class="n">target_typevalue</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_convert_fromstring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_typevalue</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;ValueExpression&quot;</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stringvalue</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">target_typevalue</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">,</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="n">target_typevalue</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="n">value</span><span class="p">))),</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="n">target_typevalue</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="n">value</span><span class="p">))),</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="n">target_typevalue</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">,</span> <span class="n">Decimal</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="n">target_typevalue</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="n">target_typevalue</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">,</span> <span class="n">value</span><span class="p">),</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="n">target_typevalue</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">GUID</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">,</span> <span class="n">UUID</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="kc">None</span>
+
+            <span class="k">if</span> <span class="n">target_typevalue</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DATETIME</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">,</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">datetime</span><span class="p">)),</span> <span class="kc">None</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;failed while attempting to convert </span><span class="se">\&quot;</span><span class="s2">String</span><span class="se">\&quot;</span><span class="s2"> value (&#39;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&#39;) to </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot convert </span><span class="se">\&quot;</span><span class="s2">String</span><span class="se">\&quot;</span><span class="s2"> value (&#39;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&#39;) to </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_convert_fromguid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_typevalue</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;ValueExpression&quot;</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_guidvalue</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">target_typevalue</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">target_typevalue</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">GUID</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">,</span> <span class="n">value</span><span class="p">),</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot convert </span><span class="se">\&quot;</span><span class="s2">Guid</span><span class="se">\&quot;</span><span class="s2"> to </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_convert_fromdatetime</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">target_typevalue</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;ValueExpression&quot;</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datetimevalue</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">target_typevalue</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">,</span> <span class="n">xsdformat</span><span class="p">(</span><span class="n">value</span><span class="p">)),</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">target_typevalue</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DATETIME</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_typevalue</span><span class="p">,</span> <span class="n">value</span><span class="p">),</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_fromnumeric</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(),</span> <span class="s2">&quot;DateTime&quot;</span><span class="p">,</span> <span class="n">target_typevalue</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ValueExpression.nullvalue"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.valueexpression.ValueExpression.nullvalue">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">nullvalue</span><span class="p">(</span><span class="n">target_valuetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ValueExpression&quot;</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets a `ValueExpression` that represents a null, i.e., `None`, value of the specified `ExpressionValueType`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">target_valuetype</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div></div>
+
+
+<span class="n">TRUEVALUE</span> <span class="o">=</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Defines a `ValueExpression` that represents `True`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">FALSEVALUE</span> <span class="o">=</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Defines a `ValueExpression` that represents `False`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">NULLVALUE</span> <span class="o">=</span> <span class="n">ValueExpression</span><span class="o">.</span><span class="n">nullvalue</span><span class="p">(</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Defines a `ValueExpression` that represents a null, i.e., `None`, value, value type `Undefined`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">NULLBOOLVALUE</span> <span class="o">=</span> <span class="n">ValueExpression</span><span class="o">.</span><span class="n">nullvalue</span><span class="p">(</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Defines a `ValueExpression` that represents a null, i.e., `None`, value of type `Boolean`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">NULLINT32VALUE</span> <span class="o">=</span> <span class="n">ValueExpression</span><span class="o">.</span><span class="n">nullvalue</span><span class="p">(</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Defines a `ValueExpression` that represents a null, i.e., `None`, value of type `Int32`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">NULLDATETIMEVALUE</span> <span class="o">=</span> <span class="n">ValueExpression</span><span class="o">.</span><span class="n">nullvalue</span><span class="p">(</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DATETIME</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Defines a `ValueExpression` that represents a null, i.e., `None`, value of type `DateTime`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">NULLSTRINGVALUE</span> <span class="o">=</span> <span class="n">ValueExpression</span><span class="o">.</span><span class="n">nullvalue</span><span class="p">(</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Defines a `ValueExpression` that represents a null, i.e., `None`, value of type `String`.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">EMPTYSTRINGVALUE</span> <span class="o">=</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Defines a `ValueExpression` that represents an empty string.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+ 
+<hr />
+<p>
+    <a href="https://github.com/sttp/pyapi">GitHub Home</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
+</p>
+<br /><br />
+Copyright © 2022, <a href="https://gridprotectionalliance.org/" target="_blank">Grid&nbsp;Protection&nbsp;Alliance</a>
+<a href="https://github.com/sttp/pyapi">
+    <img align="right" style="margin-top: -50px"
+        src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/LockPython_64High.png">
+</a>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

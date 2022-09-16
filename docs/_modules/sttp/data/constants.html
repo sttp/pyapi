@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>sttp.data.constants &mdash; sttp/pyapi 0.6.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> sttp/pyapi
+            <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">sttp/pyapi</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>sttp.data.constants</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for sttp.data.constants</h1><div class="highlight"><pre>
+<span></span><span class="c1"># ******************************************************************************************************</span>
+<span class="c1">#  constants.py - Gbtc</span>
+<span class="c1">#</span>
+<span class="c1">#  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See</span>
+<span class="c1">#  the NOTICE file distributed with this work for additional information regarding copyright ownership.</span>
+<span class="c1">#  The GPA licenses this file to you under the MIT License (MIT), the &quot;License&quot;; you may not use this</span>
+<span class="c1">#  file except in compliance with the License. You may obtain a copy of the License at:</span>
+<span class="c1">#</span>
+<span class="c1">#      http://opensource.org/licenses/MIT</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless agreed to in writing, the subject software distributed under the License is distributed on an</span>
+<span class="c1">#  &quot;AS-IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. Refer to the</span>
+<span class="c1">#  License for the specific language governing permissions and limitations.</span>
+<span class="c1">#</span>
+<span class="c1">#  Code Modification History:</span>
+<span class="c1">#  ----------------------------------------------------------------------------------------------------</span>
+<span class="c1">#  09/03/2022 - J. Ritchie Carroll</span>
+<span class="c1">#       Generated original version of source code.</span>
+<span class="c1">#</span>
+<span class="c1"># ******************************************************************************************************</span>
+
+<span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">normalize_enumname</span>
+<span class="kn">from</span> <span class="nn">.errors</span> <span class="kn">import</span> <span class="n">EvaluateError</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">IntEnum</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+
+<div class="viewcode-block" id="ExpressionType"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.ExpressionType">[docs]</a><span class="k">class</span> <span class="nc">ExpressionType</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an enumeration of possible expression types.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">VALUE</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Value expression type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">UNARY</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Unary expression type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">COLUMN</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Column expression type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">INLIST</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    In-list expression type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">FUNCTION</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function expression type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">OPERATOR</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Operator expression type.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="ExpressionValueType"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.ExpressionValueType">[docs]</a><span class="k">class</span> <span class="nc">ExpressionValueType</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an enumeration of possible expression value data types. These expression value</span>
+<span class="sd">    data types are reduced to a reasonable set of possible types that can be represented in</span>
+<span class="sd">    a filter expression. All data table column values will be mapped to these types.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">BOOLEAN</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Boolean value type for an expression, i.e., `bool`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">INT32</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    32-bit integer value type for an expression, i.e., `numpy.int32`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">INT64</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    64-bit integer value type for an expression, i.e., `numpy.int64`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DECIMAL</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decimal value type for an expression, i.e., `decimal.Decimal`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DOUBLE</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Double value type for an expression, i.e., `numpy.float64`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">STRING</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    String value type for an expression, i.e., `str`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">GUID</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    GUID value type for an expression, i.e., `uuid.UUID`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">DATETIME</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    DateTime value type for an expression, i.e., `datetime.datetime`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">UNDEFINED</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Undefined value type for an expression, i.e., `None`.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+<span class="n">EXPRESSIONVALUETYPELEN</span> <span class="o">=</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Defines the number of elements in the `ExpressionValueType` enumeration.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="is_integertype"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.is_integertype">[docs]</a><span class="k">def</span> <span class="nf">is_integertype</span><span class="p">(</span><span class="nb">type</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines if the specified expression value type is an integer type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="nb">type</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="is_numerictype"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.is_numerictype">[docs]</a><span class="k">def</span> <span class="nf">is_numerictype</span><span class="p">(</span><span class="nb">type</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determines if the specified expression value type is a numeric type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="nb">type</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="ExpressionUnaryType"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.ExpressionUnaryType">[docs]</a><span class="k">class</span> <span class="nc">ExpressionUnaryType</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an enumeration of possible unary expression types.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">PLUS</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Positive unary expression type, i.e., `+`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="n">MINUS</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Negative unary expression type, i.e., `-`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NOT</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Not unary expression type, i.e., `~` or `!`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;+&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> \
+               <span class="s2">&quot;-&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;~&quot;</span></div>
+
+
+<div class="viewcode-block" id="ExpressionFunctionType"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.ExpressionFunctionType">[docs]</a><span class="k">class</span> <span class="nc">ExpressionFunctionType</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an enumeration of possible expression function types.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ABS</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the absolute value of the specified numeric expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CEILING</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the smallest integer greater than or equal to the specified numeric expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">COALESCE</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the first non-null value from the specified expression list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CONVERT</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that converts the specified expression to the specified data type.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">CONTAINS</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns a boolean value indicating whether the specified string expression contains the specified substring.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DATEADD</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that adds the specified number of specified `TimeInterval` units to the specified date expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DATEDIFF</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the number of specified `TimeInterval` units between the specified date expressions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DATEPART</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the specified `TimeInterval` unit from the specified date expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ENDSWITH</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns a boolean value indicating whether the specified string expression ends with the specified substring.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">FLOOR</span> <span class="o">=</span> <span class="mi">9</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the largest integer less than or equal to the specified numeric expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">IIF</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the first expression if the specified boolean expression is true, otherwise returns the second expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">INDEXOF</span> <span class="o">=</span> <span class="mi">11</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the zero-based index of the first occurrence of the specified substring in the specified string expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ISDATE</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns a boolean value indicating whether the specified string expression is a valid date.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ISINTEGER</span> <span class="o">=</span> <span class="mi">13</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns a boolean value indicating whether the specified string expression is a valid integer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ISGUID</span> <span class="o">=</span> <span class="mi">14</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns a boolean value indicating whether the specified string expression is a valid GUID.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ISNULL</span> <span class="o">=</span> <span class="mi">15</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns a boolean value indicating whether the specified expression is null.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ISNUMERIC</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns a boolean value indicating whether the specified string expression is a valid numeric value.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">LASTINDEXOF</span> <span class="o">=</span> <span class="mi">17</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the zero-based index of the last occurrence of the specified substring in the specified string expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">LEN</span> <span class="o">=</span> <span class="mi">18</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the length of the specified string expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">LOWER</span> <span class="o">=</span> <span class="mi">19</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the specified string expression converted to lower if self.value ==.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">MAXOF</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the maximum value of the specified expression list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">MINOF</span> <span class="o">=</span> <span class="mi">21</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the minimum value of the specified expression list.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NOW</span> <span class="o">=</span> <span class="mi">22</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the current local date and time.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NTHINDEXOF</span> <span class="o">=</span> <span class="mi">23</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the zero-based index of the nth occurrence of the specified substring in the specified string expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">POWER</span> <span class="o">=</span> <span class="mi">24</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the specified numeric expression raised to the specified power.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">REGEXMATCH</span> <span class="o">=</span> <span class="mi">25</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns a boolean value indicating whether the specified string expression matches the specified regular expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">REGEXVAL</span> <span class="o">=</span> <span class="mi">26</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the first matching value of the specified regular expression in the specified string expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">REPLACE</span> <span class="o">=</span> <span class="mi">27</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the specified string expression with the specified substring replaced with the specified replacement string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">REVERSE</span> <span class="o">=</span> <span class="mi">28</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the specified string expression with the characters in reverse order.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ROUND</span> <span class="o">=</span> <span class="mi">29</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the specified numeric expression rounded to the specified number of decimal places.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SPLIT</span> <span class="o">=</span> <span class="mi">30</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the zero-based nth string value from the specified string expression split by the specified delimiter, or null if out of range.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SQRT</span> <span class="o">=</span> <span class="mi">31</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the square root of the specified numeric expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">STARTSWITH</span> <span class="o">=</span> <span class="mi">32</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns a boolean value indicating whether the specified string expression starts with the specified substring.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">STRCOUNT</span> <span class="o">=</span> <span class="mi">33</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the number of occurrences of the specified substring in the specified string expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">STRCMP</span> <span class="o">=</span> <span class="mi">34</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns an integer value representing the comparision of the specified left and right strings.</span>
+<span class="sd">    Returned value will be -1 if left is less-than right, 1 if left is greater-than right, or 0 if left equals right.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SUBSTR</span> <span class="o">=</span> <span class="mi">35</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns a substring of the specified string expression starting at the specified index and with the specified length.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">TRIM</span> <span class="o">=</span> <span class="mi">36</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the specified string expression with the specified characters trimmed from the beginning and end.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">TRIMLEFT</span> <span class="o">=</span> <span class="mi">37</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the specified string expression with the specified characters trimmed from the beginning.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">TRIMRIGHT</span> <span class="o">=</span> <span class="mi">38</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the specified string expression with the specified characters trimmed from the end.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">UPPER</span> <span class="o">=</span> <span class="mi">39</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the specified string expression converted to upper if self.value ==.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">UTCNOW</span> <span class="o">=</span> <span class="mi">40</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines a function type that returns the current date and time in UTC.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="ExpressionOperatorType"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.ExpressionOperatorType">[docs]</a><span class="k">class</span> <span class="nc">ExpressionOperatorType</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an enumeration of possible expression operator types.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">MULTIPLY</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `*` that multiplies the left and right expressions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DIVIDE</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `/` that divides the left and right expressions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">MODULUS</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `%` that returns the remainder of the left and right expressions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ADD</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `+` that adds the left and right expressions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SUBTRACT</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `-` that subtracts the right expression from the left expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">BITSHIFTLEFT</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `&lt;&lt;` that shifts the left expression left by the number of bits specified by the right expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">BITSHIFTRIGHT</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `&gt;&gt;` that shifts the left expression right by the number of bits specified by the right expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">BITWISEAND</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `&amp;` that performs a bitwise AND operation on the left and right expressions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">BITWISEOR</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `|` that performs a bitwise OR operation on the left and right expressions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">BITWISEXOR</span> <span class="o">=</span> <span class="mi">9</span>
+    <span class="sd">&quot;&quot;&quot;        </span>
+<span class="sd">    Defines an operator type `^` that performs a bitwise XOR operation on the left and right expressions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">LESSTHAN</span> <span class="o">=</span> <span class="mi">10</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `&lt;` that returns a boolean value indicating whether the left expression is less than the right expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">LESSTHANOREQUAL</span> <span class="o">=</span> <span class="mi">11</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `&lt;=` that returns a boolean value indicating whether the left expression is less than or equal to the right expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">GREATERTHAN</span> <span class="o">=</span> <span class="mi">12</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `&gt;` that returns a boolean value indicating whether the left expression is greater than the right expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">GREATERTHANOREQUAL</span> <span class="o">=</span> <span class="mi">13</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `&gt;=` that returns a boolean value indicating whether the left expression is greater than or equal to the right expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">EQUAL</span> <span class="o">=</span> <span class="mi">14</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `=` or `==` that returns a boolean value indicating whether the left expression is equal to the right expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">EQUALEXACTMATCH</span> <span class="o">=</span> <span class="mi">15</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `===` that returns a boolean value indicating whether the left expression is equal to the right expression, case-sensitive.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NOTEQUAL</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `&lt;&gt;` or `!=` that returns a boolean value indicating whether the left expression is not equal to the right expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NOTEQUALEXACTMATCH</span> <span class="o">=</span> <span class="mi">17</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `!==` that returns a boolean value indicating whether the left expression is not equal to the right expression, case-sensitive.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ISNULL</span> <span class="o">=</span> <span class="mi">18</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `IS NULL` that returns a boolean value indicating whether the left expression is null.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ISNOTNULL</span> <span class="o">=</span> <span class="mi">19</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `IS NOT NULL` that returns a boolean value indicating whether the left expression is not null.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">LIKE</span> <span class="o">=</span> <span class="mi">20</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `LIKE` that returns a boolean value indicating whether the left expression matches the right expression patten.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">LIKEEXACTMATCH</span> <span class="o">=</span> <span class="mi">21</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `LIKE BINARY` or `LIKE ===` that returns a boolean value indicating whether the left expression matches the right expression patten, case-sensitive.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NOTLIKE</span> <span class="o">=</span> <span class="mi">22</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `NOT LIKE` that returns a boolean value indicating whether the left expression does not match the right expression patten.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NOTLIKEEXACTMATCH</span> <span class="o">=</span> <span class="mi">23</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `NOT LIKE BINARY` or `NOT LIKE ===` that returns a boolean value indicating whether the left expression does not match the right expression patten, case-sensitive.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">AND</span> <span class="o">=</span> <span class="mi">24</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `AND` that returns a boolean value indicating whether the left expression and the right expression are both true.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">OR</span> <span class="o">=</span> <span class="mi">25</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines an operator type `OR` that returns a boolean value indicating whether the left expression or the right expression is true.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">MULTIPLY</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;*&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">DIVIDE</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;/&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">MODULUS</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;%&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">ADD</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;+&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">SUBTRACT</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;-&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">BITSHIFTLEFT</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&lt;&lt;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">BITSHIFTRIGHT</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&gt;&gt;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">BITWISEAND</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&amp;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">BITWISEOR</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;|&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">BITWISEXOR</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;^&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">LESSTHAN</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&lt;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">LESSTHANOREQUAL</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&lt;=&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">GREATERTHAN</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&gt;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">GREATERTHANOREQUAL</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&gt;=&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">EQUAL</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;=&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">EQUALEXACTMATCH</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;===&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">NOTEQUAL</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;&lt;&gt;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">NOTEQUALEXACTMATCH</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;!==&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">ISNULL</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;IS NULL&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">ISNOTNULL</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;IS NOT NULL&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">LIKE</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;LIKE&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">LIKEEXACTMATCH</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;LIKE BINARY&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">NOTLIKE</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;NOT LIKE&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">NOTLIKEEXACTMATCH</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;NOT LIKE BINARY&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">AND</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;AND&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">value</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">OR</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;OR&quot;</span></div>
+
+
+<div class="viewcode-block" id="TimeInterval"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.TimeInterval">[docs]</a><span class="k">class</span> <span class="nc">TimeInterval</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Defines enumeration of possible DateTime intervals.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">YEAR</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the year part of a DateTime expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">MONTH</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the month part (1-12) of a DateTime expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">DAYOFYEAR</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the day of the year (1-366) of a DateTime expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DAY</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the day part (1-31) of a DateTime expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">WEEK</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the week part (1-53) of a DateTime expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">WEEKDAY</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the weekday part (0-6) of a DateTime expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">HOUR</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the hour part (0-23) of a DateTime expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">MINUTE</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the minute part (0-59) of a DateTime expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SECOND</span> <span class="o">=</span> <span class="mi">8</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the second part (0-59) of a DateTime expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">MILLISECOND</span> <span class="o">=</span> <span class="mi">9</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents the millisecond part (0-999) of a DateTime expression.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="TimeInterval.parse"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.TimeInterval.parse">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;TimeInterval&quot;</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="kc">None</span><span class="p">)</span></div></div>
+
+
+<span class="c1"># Operation Value Type Selectors</span>
+
+
+<span class="c1"># sourcery skip</span>
+<div class="viewcode-block" id="derive_operationvaluetype"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_operationvaluetype">[docs]</a><span class="k">def</span> <span class="nf">derive_operationvaluetype</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">leftvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+    <span class="k">if</span> <span class="n">operationtype</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">MULTIPLY</span><span class="p">,</span>
+            <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">DIVIDE</span><span class="p">,</span>
+            <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">ADD</span><span class="p">,</span>
+            <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">SUBTRACT</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">derive_arithmetic_operationvaluetype</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">leftvaluetype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">operationtype</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">MODULUS</span><span class="p">,</span>
+            <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">BITWISEAND</span><span class="p">,</span>
+            <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">BITWISEOR</span><span class="p">,</span>
+            <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">BITWISEXOR</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">derive_integer_operationvaluetype</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">leftvaluetype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">operationtype</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">LESSTHAN</span><span class="p">,</span>
+            <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">LESSTHANOREQUAL</span><span class="p">,</span>
+            <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">GREATERTHAN</span><span class="p">,</span>
+            <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">GREATERTHANOREQUAL</span><span class="p">,</span>
+            <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">EQUAL</span><span class="p">,</span>
+            <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">EQUALEXACTMATCH</span><span class="p">,</span>
+            <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">NOTEQUAL</span><span class="p">,</span>
+            <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">NOTEQUALEXACTMATCH</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">derive_comparison_operationvaluetype</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">leftvaluetype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">operationtype</span> <span class="ow">in</span> <span class="p">[</span>
+            <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">AND</span><span class="p">,</span>
+            <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">OR</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">derive_boolean_operationvaluetype</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">leftvaluetype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">leftvaluetype</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<span class="c1"># sourcery skip</span>
+<div class="viewcode-block" id="derive_arithmetic_operationvaluetype"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_arithmetic_operationvaluetype">[docs]</a><span class="k">def</span> <span class="nf">derive_arithmetic_operationvaluetype</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">leftvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+    <span class="k">if</span> <span class="n">leftvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">derive_arithmetic_operationvaluetype_fromboolean</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">leftvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">derive_arithmetic_operationvaluetype_fromint32</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">leftvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">derive_arithmetic_operationvaluetype_fromint64</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">leftvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">derive_arithmetic_operationvaluetype_fromdecimal</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">leftvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">derive_arithmetic_operationvaluetype_fromdouble</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">leftvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span> <span class="ow">and</span> <span class="n">operationtype</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">ADD</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">operationtype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">leftvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">rightvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="derive_arithmetic_operationvaluetype_fromboolean"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_arithmetic_operationvaluetype_fromboolean">[docs]</a><span class="k">def</span> <span class="nf">derive_arithmetic_operationvaluetype_fromboolean</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>  <span class="c1"># sourcery skip</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span> <span class="ow">and</span> <span class="n">operationtype</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">ADD</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">operationtype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="s2">Boolean</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">rightvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="derive_arithmetic_operationvaluetype_fromint32"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_arithmetic_operationvaluetype_fromint32">[docs]</a><span class="k">def</span> <span class="nf">derive_arithmetic_operationvaluetype_fromint32</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>  <span class="c1"># sourcery skip</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span> <span class="ow">and</span> <span class="n">operationtype</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">ADD</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">operationtype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="s2">Int32</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">rightvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="derive_arithmetic_operationvaluetype_fromint64"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_arithmetic_operationvaluetype_fromint64">[docs]</a><span class="k">def</span> <span class="nf">derive_arithmetic_operationvaluetype_fromint64</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>  <span class="c1"># sourcery skip</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span> <span class="ow">and</span> <span class="n">operationtype</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">ADD</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">operationtype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="s2">Int64</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">rightvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="derive_arithmetic_operationvaluetype_fromdecimal"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_arithmetic_operationvaluetype_fromdecimal">[docs]</a><span class="k">def</span> <span class="nf">derive_arithmetic_operationvaluetype_fromdecimal</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>  <span class="c1"># sourcery skip</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span> <span class="ow">and</span> <span class="n">operationtype</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">ADD</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">operationtype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="s2">Decimal</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">rightvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="derive_arithmetic_operationvaluetype_fromdouble"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_arithmetic_operationvaluetype_fromdouble">[docs]</a><span class="k">def</span> <span class="nf">derive_arithmetic_operationvaluetype_fromdouble</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>  <span class="c1"># sourcery skip</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span> <span class="ow">and</span> <span class="n">operationtype</span> <span class="o">==</span> <span class="n">ExpressionOperatorType</span><span class="o">.</span><span class="n">ADD</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">operationtype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="s2">Double</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">rightvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1"># sourcery skip</span>
+<div class="viewcode-block" id="derive_integer_operationvaluetype"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_integer_operationvaluetype">[docs]</a><span class="k">def</span> <span class="nf">derive_integer_operationvaluetype</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">leftvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+    <span class="k">if</span> <span class="n">leftvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">derive_integer_operationvaluetype_fromboolean</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">leftvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">derive_integer_operationvaluetype_fromint32</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">leftvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">derive_integer_operationvaluetype_fromint64</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">operationtype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">leftvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">rightvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="derive_integer_operationvaluetype_fromboolean"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_integer_operationvaluetype_fromboolean">[docs]</a><span class="k">def</span> <span class="nf">derive_integer_operationvaluetype_fromboolean</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>  <span class="c1"># sourcery skip</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">operationtype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="s2">Boolean</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">rightvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="derive_integer_operationvaluetype_fromint32"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_integer_operationvaluetype_fromint32">[docs]</a><span class="k">def</span> <span class="nf">derive_integer_operationvaluetype_fromint32</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>  <span class="c1"># sourcery skip</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">operationtype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="s2">Int32</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">rightvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="derive_integer_operationvaluetype_fromint64"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_integer_operationvaluetype_fromint64">[docs]</a><span class="k">def</span> <span class="nf">derive_integer_operationvaluetype_fromint64</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>  <span class="c1"># sourcery skip</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">operationtype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="s2">Int64</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">rightvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1"># sourcery skip</span>
+<div class="viewcode-block" id="derive_comparison_operationvaluetype"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_comparison_operationvaluetype">[docs]</a><span class="k">def</span> <span class="nf">derive_comparison_operationvaluetype</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">leftvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+    <span class="k">if</span> <span class="n">leftvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">derive_comparison_operationvaluetype_fromboolean</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">leftvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">derive_comparison_operationvaluetype_fromint32</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">leftvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">derive_comparison_operationvaluetype_fromint64</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">leftvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">derive_comparison_operationvaluetype_fromdecimal</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">leftvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">derive_comparison_operationvaluetype_fromdouble</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">leftvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">leftvaluetype</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">leftvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">GUID</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">derive_comparison_operationvaluetype_fromguid</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">derive_comparison_operationvaluetype_fromdatetime</span><span class="p">(</span><span class="n">operationtype</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="derive_comparison_operationvaluetype_fromboolean"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_comparison_operationvaluetype_fromboolean">[docs]</a><span class="k">def</span> <span class="nf">derive_comparison_operationvaluetype_fromboolean</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>  <span class="c1"># sourcery skip</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">operationtype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="s2">Boolean</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">rightvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="derive_comparison_operationvaluetype_fromint32"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_comparison_operationvaluetype_fromint32">[docs]</a><span class="k">def</span> <span class="nf">derive_comparison_operationvaluetype_fromint32</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>  <span class="c1"># sourcery skip</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">operationtype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="s2">Int32</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">rightvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="derive_comparison_operationvaluetype_fromint64"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_comparison_operationvaluetype_fromint64">[docs]</a><span class="k">def</span> <span class="nf">derive_comparison_operationvaluetype_fromint64</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>  <span class="c1"># sourcery skip</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">operationtype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="s2">Int64</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">rightvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="derive_comparison_operationvaluetype_fromdecimal"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_comparison_operationvaluetype_fromdecimal">[docs]</a><span class="k">def</span> <span class="nf">derive_comparison_operationvaluetype_fromdecimal</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>  <span class="c1"># sourcery skip</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">,</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">operationtype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="s2">Decimal</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">rightvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="derive_comparison_operationvaluetype_fromdouble"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_comparison_operationvaluetype_fromdouble">[docs]</a><span class="k">def</span> <span class="nf">derive_comparison_operationvaluetype_fromdouble</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>  <span class="c1"># sourcery skip</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">operationtype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="s2">Double</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">rightvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="derive_comparison_operationvaluetype_fromguid"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_comparison_operationvaluetype_fromguid">[docs]</a><span class="k">def</span> <span class="nf">derive_comparison_operationvaluetype_fromguid</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>  <span class="c1"># sourcery skip</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">GUID</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">GUID</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">operationtype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="s2">Guid</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">rightvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="derive_comparison_operationvaluetype_fromdatetime"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_comparison_operationvaluetype_fromdatetime">[docs]</a><span class="k">def</span> <span class="nf">derive_comparison_operationvaluetype_fromdatetime</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>  <span class="c1"># sourcery skip</span>
+    <span class="k">if</span> <span class="n">rightvaluetype</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DATETIME</span><span class="p">,</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">STRING</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">DATETIME</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">operationtype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="s2">DateTime</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">rightvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+<span class="c1"># sourcery skip</span>
+<div class="viewcode-block" id="derive_boolean_operationvaluetype"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.constants.derive_boolean_operationvaluetype">[docs]</a><span class="k">def</span> <span class="nf">derive_boolean_operationvaluetype</span><span class="p">(</span><span class="n">operationtype</span><span class="p">:</span> <span class="n">ExpressionOperatorType</span><span class="p">,</span> <span class="n">leftvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">rightvaluetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ExpressionValueType</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+    <span class="k">if</span> <span class="n">leftvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span> <span class="ow">and</span> <span class="n">rightvaluetype</span> <span class="o">==</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">UNDEFINED</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">operationtype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">leftvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">normalize_enumname</span><span class="p">(</span><span class="n">rightvaluetype</span><span class="p">)</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p></p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+  
+ 
+<hr />
+<p>
+    <a href="https://github.com/sttp/pyapi">GitHub Home</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
+</p>
+<br /><br />
+Copyright © 2022, <a href="https://gridprotectionalliance.org/" target="_blank">Grid&nbsp;Protection&nbsp;Alliance</a>
+<a href="https://github.com/sttp/pyapi">
+    <img align="right" style="margin-top: -50px"
+        src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/LockPython_64High.png">
+</a>
+
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.bufferblock &mdash; sttp/pyapi 0.6.0 documentation</title>
+  <title>sttp.data.orderbyterm &mdash; sttp/pyapi 0.6.0 documentation</title>
       <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
@@ -54,7 +54,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>sttp.transport.bufferblock</li>
+      <li>sttp.data.orderbyterm</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -63,61 +63,52 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for sttp.transport.bufferblock</h1><div class="highlight"><pre>
+  <h1>Source code for sttp.data.orderbyterm</h1><div class="highlight"><pre>
 <span></span><span class="c1"># ******************************************************************************************************</span>
-<span class="c1">#  bufferblock.py - Gbtc</span>
+<span class="c1">#  expressiontree.py - Gbtc</span>
 <span class="c1">#</span>
 <span class="c1">#  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.</span>
 <span class="c1">#</span>
 <span class="c1">#  Licensed to the Grid Protection Alliance (GPA) under one or more contributor license agreements. See</span>
 <span class="c1">#  the NOTICE file distributed with this work for additional information regarding copyright ownership.</span>
 <span class="c1">#  The GPA licenses this file to you under the MIT License (MIT), the &quot;License&quot;; you may not use this</span>
-<span class="c1">#  file except in compliance with the License. You may obtain a copy of the License at =</span>
+<span class="c1">#  file except in compliance with the License. You may obtain a copy of the License at:</span>
 <span class="c1">#</span>
-<span class="c1">#      http =//opensource.org/licenses/MIT</span>
+<span class="c1">#      http://opensource.org/licenses/MIT</span>
 <span class="c1">#</span>
 <span class="c1">#  Unless agreed to in writing, the subject software distributed under the License is distributed on an</span>
 <span class="c1">#  &quot;AS-IS&quot; BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. Refer to the</span>
 <span class="c1">#  License for the specific language governing permissions and limitations.</span>
 <span class="c1">#</span>
-<span class="c1">#  Code Modification History =</span>
+<span class="c1">#  Code Modification History:</span>
 <span class="c1">#  ----------------------------------------------------------------------------------------------------</span>
-<span class="c1">#  08/15/2022 - J. Ritchie Carroll</span>
+<span class="c1">#  09/04/2022 - J. Ritchie Carroll</span>
 <span class="c1">#       Generated original version of source code.</span>
 <span class="c1">#</span>
 <span class="c1"># ******************************************************************************************************</span>
 
-<span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">Empty</span>
-<span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">.datacolumn</span> <span class="kn">import</span> <span class="n">DataColumn</span>
 
-<div class="viewcode-block" id="BufferBlock"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.bufferblock.BufferBlock">[docs]</a><span class="k">class</span> <span class="nc">BufferBlock</span><span class="p">:</span>
+<div class="viewcode-block" id="OrderByTerm"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.orderbyterm.OrderByTerm">[docs]</a><span class="k">class</span> <span class="nc">OrderByTerm</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    BufferBlock defines an atomic unit of data, i.e., a binary buffer, for transport in STTP.</span>
+<span class="sd">    Represents the elements parsed for a `DataColumn` specified in the &quot;ORDER BY&quot; keyword.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">DEFAULT_SIGNALID</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">GUID</span>
-    <span class="n">DEFAULT_BUFFER</span><span class="p">:</span>  <span class="n">Optional</span><span class="p">[</span><span class="nb">bytearray</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                 <span class="n">signalid</span><span class="p">:</span> <span class="n">UUID</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
-                 <span class="n">buffer</span><span class="p">:</span> <span class="nb">bytearray</span> <span class="o">=</span> <span class="o">...</span>
-                 <span class="p">):</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">signalid</span> <span class="o">=</span> <span class="n">BufferBlock</span><span class="o">.</span><span class="n">DEFAULT_SIGNALID</span> <span class="k">if</span> <span class="n">signalid</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">signalid</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">column</span><span class="p">:</span> <span class="n">DataColumn</span><span class="p">,</span> <span class="n">ascending</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">extactmatch</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">column</span><span class="p">:</span> <span class="n">DataColumn</span> <span class="o">=</span> <span class="n">column</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Defines measurement&#39;s globally unique identifier.</span>
+<span class="sd">        Defines the data column referenced from an &quot;ORDER BY&quot; statement.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span> <span class="o">=</span> <span class="n">BufferBlock</span><span class="o">.</span><span class="n">DEFAULT_BUFFER</span> <span class="k">if</span> <span class="n">buffer</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">buffer</span>
-
-    <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bytearray</span><span class="p">]:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ascending</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">ascending</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Gets measurement buffer as an atomic unit of data, i.e., a binary buffer.</span>
-<span class="sd">        This buffer typically represents a partial image of a larger whole.</span>
+<span class="sd">        Defines the sort direction parsed from &quot;ORDER BY&quot; statement.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_buffer</span></div>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">extactmatch</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">extactmatch</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the exact match flag parsed from &quot;ORDER BY&quot; statement.</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
 </pre></div>
 
            </div>
