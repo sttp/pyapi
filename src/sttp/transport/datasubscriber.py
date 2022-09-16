@@ -60,7 +60,7 @@ MISSINGCACHEWARNING_INTERVAL = 20.0
 
 class DataSubscriber:
     """
-    Represents a client subscription for an STTP connection.
+    Represents a subscription for an STTP connection.
     """
 
     DEFAULT_COMPRESS_PAYLOADDATA = Defaults.COMPRESS_PAYLOADDATA            # Defaults to TSSC

@@ -179,22 +179,22 @@ class StateFlags(IntFlag):
 
     OVERRANGEERROR = 0x4
     """
-    Measurement flag for a over range error, i.e., unreasonable high value.
+    Measurement flag for an over range error, i.e., unreasonable high value.
     """
 
     UNDERRANGEERROR = 0x8
     """
-    Measurement flag for a under range error, i.e., unreasonable low value.
+    Measurement flag for an under range error, i.e., unreasonable low value.
     """
 
     ALARMHIGH = 0x10
     """
-    Measurement flag for a alarm for high value.
+    Measurement flag for an alarm for high value.
     """
 
     ALARMLOW = 0x20
     """
-    Measurement flag for a alarm for low value.
+    Measurement flag for an alarm for low value.
     """
 
     WARNINGHIGH = 0x40
@@ -209,7 +209,7 @@ class StateFlags(IntFlag):
 
     FLATLINEALARM = 0x100
     """
-    Measurement flag for a alarm for flat-lined value, i.e., latched value test alarm.
+    Measurement flag for an alarm for flat-lined value, i.e., latched value test alarm.
     """
 
     COMPARISONALARM = 0x200
@@ -269,7 +269,7 @@ class StateFlags(IntFlag):
 
     UPSAMPLED = 0x100000
     """
-    Measurement flag for a up-sampled state.
+    Measurement flag for an up-sampled state.
     """
 
     DOWNSAMPLED = 0x200000
@@ -335,27 +335,35 @@ class DataPacketFlags(IntFlag):
 
     COMPACT = 0x02
     """
-    Determines if serialized measurement is compact. Bit set = compact, bit clear = full fidelity.
+    Determines if serialized measurement is compact. 
+    
+    Obsolete: Bit will be removed in future version. Currently this bit is always set.
     """
 
     CIPHERINDEX = 0x04
     """
-    Determines which cipher index to use when encrypting data packet. Bit set = use odd cipher index (i.e., 1), bit clear = use even cipher index (i.e., 0).    
+    Determines which cipher index to use when encrypting data packet.
+    
+    Bit set = use odd cipher index (i.e., 1), bit clear = use even cipher index (i.e., 0).    
     """
 
     COMPRESSED = 0x08
     """
-    Determines if data packet payload is compressed. Bit set = payload compressed, bit clear = payload normal.
+    Determines if data packet payload is compressed.
+    
+    Bit set = payload compressed, bit clear = payload normal.
     """
 
     CACHEINDEX = 0x10
     """
-    Determines with signal index cache to use when decoding a data packet. Used by STTP version 2 or greater.
+    Determines which signal index cache to use when decoding a data packet. Used by STTP version 2 or greater.
+    
+    Bit set = use odd cache index (i.e., 1), bit clear = use even cache index (i.e., 0).
     """
 
     NOFLAGS = 0x0
     """
-    Defines state where there are no flags set. This would represent unsynchronized, full fidelity measurement data packets.
+    Defines state where there are no flags set.
     """
 
 
@@ -369,7 +377,9 @@ class ServerCommand(IntEnum):
 
     CONNECT = 0x00
     """
-    Command code for handling connect operations. Only used as part of connection refused response.
+    Command code handling connect operations.
+    
+    Only used as part of connection refused response -- value not sent on the wire.
     """
 
     METADATAREFRESH = 0x01
@@ -399,102 +409,127 @@ class ServerCommand(IntEnum):
 
     DEFINEOPERATIONALMODES = 0x06
     """
-    Command code for establishing operational modes. As soon as connection is established, requests that server set operational modes that affect how the subscriber and publisher will communicate.
+    Command code for establishing operational modes.
+    
+    As soon as connection is established, requests that server set operational modes that affect how the subscriber and publisher will communicate.
     """
 
     CONFIRMNOTIFICATION = 0x07
     """
-    Command code for receipt of a notification. This message is sent in response to ServerResponse.Notify.
+    Command code for receipt of a notification.
+    
+    This message is sent in response to ServerResponse.Notify.
     """
 
     CONFIRMBUFFERBLOCK = 0x08
     """
-    Command code for receipt of a buffer block measurement. This message is sent in response to ServerResponse.BufferBlock.
+    Command code for receipt of a buffer block measurement.
+    
+    This message is sent in response to ServerResponse.BufferBlock.
+    """
+
+    CONFIRMUPDATEBASETIMES = 0x09
+    """
+    Command code for receipt of a base time update.
+    
+    This message is sent in response to ServerResponse.UpdateBaseTimes.
     """
 
     CONFIRMSIGNALINDEXCACHE = 0x0A
     """
-    Command code for confirming the receipt of a signal index cache. This allows publisher to safely transition to next signal index cache.
+    Command code for confirming the receipt of a signal index cache.
+    
+    This allows publisher to safely transition to next signal index cache.
+    """
+
+    GETPRIMARYMETADATASCHEMA = 0x0B
+    """
+    Command code for requesting the primary metadata schema.
+    """
+
+    GETSIGNALSELECTIONSCHEMA = 0x0C
+    """
+    Command code for requesting the signal selection schema.
     """
 
     USERCOMMAND00 = 0xD0
     """
-    Command code for handling user-defined commands.
+    Command code handling user-defined commands.
     """
 
     USERCOMMAND01 = 0xD1
     """
-    Command code for handling user-defined commands.
+    Command code handling user-defined commands.
     """
 
     USERCOMMAND02 = 0xD2
     """
-    Command code for handling user-defined commands.
+    Command code handling user-defined commands.
     """
 
     USERCOMMAND03 = 0xD3
     """
-    Command code for handling user-defined commands.
+    Command code handling user-defined commands.
     """
 
     USERCOMMAND04 = 0xD4
     """
-    Command code for handling user-defined commands.
+    Command code handling user-defined commands.
     """
 
     USERCOMMAND05 = 0xD5
     """
-    Command code for handling user-defined commands.
+    Command code handling user-defined commands.
     """
 
     USERCOMMAND06 = 0xD6
     """
-    Command code for handling user-defined commands.
+    Command code handling user-defined commands.
     """
 
     USERCOMMAND07 = 0xD7
     """
-    Command code for handling user-defined commands.
+    Command code handling user-defined commands.
     """
 
     USERCOMMAND08 = 0xD8
     """
-    Command code for handling user-defined commands.
+    Command code handling user-defined commands.
     """
 
     USERCOMMAND09 = 0xD9
     """
-    Command code for handling user-defined commands.
+    Command code handling user-defined commands.
     """
 
     USERCOMMAND10 = 0xDA
     """
-    Command code for handling user-defined commands.
+    Command code handling user-defined commands.
     """
 
     USERCOMMAND11 = 0xDB
     """
-    Command code for handling user-defined commands.
+    Command code handling user-defined commands.
     """
 
     USERCOMMAND12 = 0xDC
     """
-    Command code for handling user-defined commands.
+    Command code handling user-defined commands.
     """
 
     USERCOMMAND13 = 0xDD
     """
-    Command code for handling user-defined commands.
+    Command code handling user-defined commands.
     """
 
     USERCOMMAND14 = 0xDE
     """
-    Command code for handling user-defined commands.
+    Command code handling user-defined commands.
     """
 
     USERCOMMAND15 = 0xDF
     """
-    Command code for handling user-defined commands.
+    Command code handling user-defined commands.
     """
 
 
@@ -508,57 +543,79 @@ class ServerResponse(IntEnum):
 
     SUCCEEDED = 0x80
     """
-    Response code indicating a succeeded response. Informs client that its solicited server command succeeded, original command and success message follow.
+    Response code indicating a succeeded response.
+    
+    Informs client that its solicited server command succeeded, original command and success message follow.
     """
 
     FAILED = 0x81
     """
-    Response code indicating a failed response. Informs client that its solicited server command failed, original command and failure message follow.
+    Response code indicating a failed response.
+    
+    Informs client that its solicited server command failed, original command and failure message follow.
     """
 
     DATAPACKET = 0x82
     """
-    Response code indicating a data packet. Unsolicited response informs client that a data packet follows.
+    Response code indicating a data packet.
+    
+    Unsolicited response informs client that a data packet follows.
     """
 
     UPDATESIGNALINDEXCACHE = 0x83
     """
-    Response code indicating a signal index cache update. Unsolicited response requests that client update its runtime signal index cache with the one that follows.
+    Response code indicating a signal index cache update.
+    
+    Unsolicited response requests that client update its runtime signal index cache with the one that follows.
     """
 
     UPDATEBASETIMES = 0x84
     """
-    Response code indicating a runtime base-timestamp offsets have been updated. Unsolicited response requests that client update its runtime base-timestamp offsets with those that follow.
+    Response code indicating a runtime base-timestamp offsets have been updated.
+    
+    Unsolicited response requests that client update its runtime base-timestamp offsets with those that follow.
     """
 
     UPDATECIPHERKEYS = 0x85
     """
-    Response code indicating a runtime cipher keys have been updated. Response, solicited or unsolicited, requests that client update its runtime data cipher keys with those that follow.
+    Response code indicating a runtime cipher keys have been updated.
+    
+    Response, solicited or unsolicited, requests that client update its runtime data cipher keys with those that follow.
     """
 
     DATASTARTTIME = 0x86
     """
-    Response code indicating the start time of data being published. Unsolicited response provides the start time of data being processed from the first measurement.
+    Response code indicating the start time of data being published.
+    
+    Unsolicited response provides the start time of data being processed from the first measurement.
     """
 
     PROCESSINGCOMPLETE = 0x87
     """
-    Response code indicating that processing has completed. Unsolicited response provides notification that input processing has completed, typically via temporal constraint.
+    Response code indicating that processing has completed.
+    
+    Unsolicited response provides notification that input processing has completed, typically via temporal constraint.
     """
 
     BUFFERBLOCK = 0x88
     """
-    Response code indicating a buffer block. Unsolicited response informs client that a raw buffer block follows.
+    Response code indicating a buffer block.
+    
+    Unsolicited response informs client that a raw buffer block follows.
     """
 
     NOTIFICATION = 0x89
     """
-    Response code indicating a notification. Unsolicited response provides a notification message to the client.
+    Response code indicating a notification.
+    
+    Unsolicited response provides a notification message to the client.
     """
 
     CONFIGURATIONCHANGED = 0x8A
     """
-    Response code indicating a that the publisher configuration metadata has changed. Unsolicited response provides a notification that the publisher's source configuration has changed and that client may want to request a meta-data refresh.
+    Response code indicating a that the publisher configuration metadata has changed.
+    
+    Unsolicited response provides a notification that the publisher's source configuration has changed and that client may want to request a meta-data refresh.
     """
 
     USERRESPONSE00 = 0xE0
@@ -643,7 +700,9 @@ class ServerResponse(IntEnum):
 
     NOOP = 0xFF
     """
-    Response code indicating a nil-operation keep-alive ping. The command channel can remain quiet for some time, this command allows a period test of client connectivity.
+    Response code indicating an empty-operation keep-alive ping.
+    
+    The command channel can remain quiet for some time, this command allows a period test of client connectivity.
     """
 
 
@@ -657,44 +716,62 @@ class OperationalModes(IntFlag):
     # silently refuse some requests (e.g., compression) based on its configuration. Operational modes only
     # apply to fundamental protocol control.
 
-    VERSIONMASK = 0x0000001F
+    VERSIONMASK = 0x000000FF
     """
-    Bit mask used to get version number of protocol. Version number is currently set to 2.
-    """
-
-    COMPRESSIONMODEMASK = 0x000000E0
-    """
-    Bit mask used to get mode of compression. GZip and TSSC compression are the only modes currently supported. Remaining bits are reserved for future compression modes.
+    Bit mask used to get version number of protocol.
+    
+    Version number is currently set to 2.
     """
 
     ENCODINGMASK = 0x00000300
     """
     Bit mask used to get character encoding used when exchanging messages between publisher and subscriber.
+
+    STTP currently only supports UTF-8 string encoding.
+    """
+
+    IMPLEMENTATIONSPECIFICEXTENSIONMASK = 0x00FF0000
+    """
+    Bit mask used to apply an implementation-specific extension to STTP.
+
+    If the value is zero, no implementation specific extensions are applied.
+    If the value is non-zero, an implementation specific extension is applied, and all parties need to coordinate and agree to the extension.
+    If extended flags are unsupported, returned failure message text should be prefixed with UNSUPPORTED EXTENSION: as the context reference.
     """
 
     RECEIVEEXTERNALMETADATA = 0x02000000
     """
-    Bit flag used to determine whether external measurements are exchanged during metadata synchronization. Bit set = external measurements are exchanged, bit clear = no external measurements are exchanged.
+    Bit flag used to determine whether external measurements are exchanged during metadata synchronization.
+    
+    Bit set = external measurements are exchanged, bit clear = no external measurements are exchanged.
     """
 
     RECEIVEINTERNALMETADATA = 0x04000000
     """
-    Bit flag used to determine whether internal measurements are exchanged during metadata synchronization. Bit set = internal measurements are exchanged, bit clear = no internal measurements are exchanged.
+    Bit flag used to determine whether internal measurements are exchanged during metadata synchronization.
+    
+    Bit set = internal measurements are exchanged, bit clear = no internal measurements are exchanged.
     """
 
     COMPRESSPAYLOADDATA = 0x20000000
     """
-    Bit flag used to determine whether payload data is compressed when exchanging between publisher and subscriber. Bit set = compress, bit clear = no compression.
+    Bit flag used to determine whether payload data is compressed when exchanging between publisher and subscriber.
+    
+    Bit set = compress, bit clear = no compression.
     """
 
     COMPRESSSIGNALINDEXCACHE = 0x40000000
     """
-    Bit flag used to determine whether the signal index cache is compressed when exchanging between publisher and subscriber. Bit set = compress, bit clear = no compression.
+    Bit flag used to determine whether the signal index cache is compressed when exchanging between publisher and subscriber.
+    
+    Bit set = compress, bit clear = no compression.
     """
 
     COMPRESSMETADATA = 0x80000000
     """
-    Bit flag used to determine whether metadata is compressed when exchanging between publisher and subscriber. Bit set = compress, bit clear = no compression.
+    Bit flag used to determine whether metadata is compressed when exchanging between publisher and subscriber.
+    
+    Bit set = compress, bit clear = no compression.
     """
 
     NOFLAGS = 0x00000000
@@ -710,12 +787,16 @@ class OperationalEncoding(IntEnum):
 
     UTF16LE = 0x00000000
     """
-    Targets little-endian 16-bit Unicode character encoding for strings (deprecated).
+    Targets little-endian 16-bit Unicode character encoding for strings.
+
+    Obsolete: STTP currently only supports UTF-8 string encoding.
     """
 
     UTF16BE = 0x00000100
     """
-    Targets big-endian 16-bit Unicode character encoding for strings (deprecated).
+    Targets big-endian 16-bit Unicode character encoding for strings.
+
+    Obsolete: STTP currently only supports UTF-8 string encoding.
     """
 
     UTF8 = 0x00000200
@@ -727,6 +808,9 @@ class OperationalEncoding(IntEnum):
 class CompressionModes(IntFlag):
     """
     Enumeration of the possible compression modes supported by STTP.
+
+    Obsolete: Only used for backwards compatibility with pre-standard STTP implementations.
+    OperationalModes now supports custom compression types
     """
 
     GZIP = 0x00000020
