@@ -33,7 +33,7 @@ class Ticks:
     A single tick represents one hundred nanoseconds, or one ten-millionth of a second. There are 10,000 ticks in a millisecond
     and 10 million ticks in a second. Only bits 01 to 62 (0x3FFFFFFFFFFFFFFF) are used to represent the timestamp value.
     Bit 64 (0x8000000000000000) is used to denote leap second, i.e., second 60, where actual second value would remain at 59.
-    Bit 63 is reserved and unset.
+    Bit 63 (0x4000000000000000) is used to denote leap second direction, 0 for add, 1 for delete.
     """
 
     PERSECOND = np.uint64(10000000)
@@ -66,17 +66,17 @@ class Ticks:
     Number of Ticks that occur in a day.
     """
 
-    LEAPSECONDFLAG = np.uint64(1 << 63)
+    LEAPSECOND_FLAG = np.uint64(1 << 63)
     """
     Flag (64th bit) that marks a Ticks value as a leap second, i.e., second 60 (one beyond normal second 59).
     """
 
-    RESERVEDUTCFLAG = np.uint64(1 << 62)
+    LEAPSECOND_DIRECTION = np.uint64(1 << 62)
     """
-    Reserved flag (63rd bit) that should be unset when serializing and deserializing Ticks.
+    Flag (63rd bit) that indicates if leap second is positive or negative; 0 for add, 1 for delete.
     """
 
-    VALUEMASK = np.uint64(~LEAPSECONDFLAG & ~RESERVEDUTCFLAG)
+    VALUEMASK = np.uint64(~LEAPSECOND_FLAG & ~LEAPSECOND_DIRECTION)
     """
     All bits (bits 1 to 62) that make up the value portion of a Ticks that represent time.
     """
@@ -112,14 +112,14 @@ class Ticks:
         """
         Determines if the deserialized Ticks value represents a leap second, i.e., second 60.
         """
-        return (ticks & Ticks.LEAPSECONDFLAG) > 0
+        return (ticks & Ticks.LEAPSECOND_FLAG) > 0
 
     @staticmethod
     def set_leapsecond(ticks: np.uint64) -> np.uint64:
         """
         Flags a Ticks value to represent a leap second, i.e., second 60, before wire serialization.
         """
-        return np.uint64(ticks | Ticks.LEAPSECONDFLAG)
+        return np.uint64(ticks | Ticks.LEAPSECOND_FLAG)
 
     @staticmethod
     def now() -> np.uint64:

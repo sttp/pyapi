@@ -58,7 +58,7 @@ class Measurement:
 
         self.timestamp = Measurement.DEFAULT_TIMESTAMP if timestamp is ... else timestamp
         """
-        Defines the time, in ticks, that measurement was taken.
+        Defines the STTP uint64 timestamp, in ticks, that measurement was taken.
         """
 
         self.flags = Measurement.DEFAULT_FLAGS if flags is ... else flags
