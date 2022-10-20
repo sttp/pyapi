@@ -165,7 +165,7 @@ class DataSubscriber:
 
         self.processingcomplete_callback: Optional[Callable[[str], None]] = None
         """
-        Called when the `DataPublished` sends a notification that temporal processing has completed, i.e., the end of a historical playback data stream has been reached.
+        Called when the `DataPublisher` sends a notification that temporal processing has completed, i.e., the end of a historical playback data stream has been reached.
         """
 
         self.notificationreceived_callback: Optional[Callable[[str], None]] = None
@@ -267,7 +267,7 @@ class DataSubscriber:
     @property
     def disposing(self) -> bool:
         """
-        Determines if DataSubscriber is being disposed.
+        Determines if `DataSubscriber` is being disposed.
         """
 
         return self._disposing
@@ -277,9 +277,9 @@ class DataSubscriber:
         Encodes an STTP string according to the defined operational modes.
         """
 
-        # Latest version of STTP only encodes to UTF8
+        # Latest version of STTP only encodes to UTF-8
         if self._encoding != OperationalEncoding.UTF8:
-            raise RuntimeError("Python implementation of STTP only supports UTF8 string encoding")
+            raise RuntimeError("Python implementation of STTP only supports UTF-8 string encoding")
 
         return data.encode("utf-8")
 
@@ -288,9 +288,9 @@ class DataSubscriber:
         Decodes an STTP string according to the defined operational modes.
         """
 
-        # Latest version of STTP only encodes to UTF8
+        # Latest version of STTP only encodes to UTF-8
         if self._encoding != OperationalEncoding.UTF8:
-            raise RuntimeError("Python implementation of STTP only supports UTF8 string encoding")
+            raise RuntimeError("Python implementation of STTP only supports UTF-8 string encoding")
 
         return data.decode("utf-8")
 
@@ -311,7 +311,7 @@ class DataSubscriber:
 
     def adjustedvalue(self, measurement: Measurement) -> np.float64:
         """
-        Gets the Value of a `Measurement` with any linear adjustments applied from the measurement's Adder and Multiplier metadata, if found.
+        Gets the `Value` of a `Measurement` with any linear adjustments applied from the measurement's `Adder` and `Multiplier` metadata, if found.
         """
 
         record = self.metadatacache.find_measurement_signalid(measurement.signalid)
@@ -366,7 +366,7 @@ class DataSubscriber:
 
             # TODO: Add TLS implementation options
             # TODO: Add reverse (server-based) connection options, see:
-            # https://sttp.github.io/documentation/reverse-connections/
+            # https://sttp.info/reverse-connections/
 
             self._commandchannel_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM, socket.IPPROTO_TCP)
             self._commandchannel_socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
@@ -406,7 +406,7 @@ class DataSubscriber:
 
         subscription = self._subscription
 
-        connectionbuilder: List[str] = [
+        parmaterbuilder: List[str] = [
             f"throttled={subscription.throttled}",
             f";publishInterval={subscription.publishinterval:.6f}",
             f";includeTime={subscription.includetime}",
@@ -419,7 +419,7 @@ class DataSubscriber:
         ]
 
         if len(subscription.filterexpression) > 0:
-            connectionbuilder.append(f";filterExpression={{{subscription.filterexpression}}}")
+            parmaterbuilder.append(f";filterExpression={{{subscription.filterexpression}}}")
 
         if subscription.udpdatachannel:
             udpport = subscription.datachannel_localport
@@ -429,32 +429,33 @@ class DataSubscriber:
                 self._datachannel_socket.bind((subscription.datachannel_interface, udpport))
                 self._datachannel_socket.settimeout(self.socket_timeout)
             except Exception as ex:
-                return RuntimeError(f"failed to open UDP socket for port {udpport}:{ex}")
+                return RuntimeError(f"failed to open UDP socket for port {udpport}: {ex}")
 
             self._datachannel_responsethread = Thread(target=self._run_datachannel_responsethread, name="DataChannelThread")
             self._datachannel_responsethread.start()
 
-            connectionbuilder.append(f";dataChannel={{localport={udpport}}}")
+            parmaterbuilder.append(f";dataChannel={{localport={udpport}}}")
 
         if len(subscription.starttime) > 0:
-            connectionbuilder.append(f";startTimeConstraint={subscription.starttime}")
+            parmaterbuilder.append(f";startTimeConstraint={subscription.starttime}")
 
         if len(subscription.stoptime) > 0:
-            connectionbuilder.append(f";stopTimeConstraint={subscription.stoptime}")
+            parmaterbuilder.append(f";stopTimeConstraint={subscription.stoptime}")
 
         if len(subscription.constraintparameters) > 0:
-            connectionbuilder.append(f";timeConstraintParameters={subscription.constraintparameters}")
+            parmaterbuilder.append(f";timeConstraintParameters={subscription.constraintparameters}")
 
         if len(subscription.extra_connectionstring_parameters) > 0:
-            connectionbuilder.append(f";{subscription.extra_connectionstring_parameters}")
+            parmaterbuilder.append(f";{subscription.extra_connectionstring_parameters}")
 
-        connectionstring = "".join(connectionbuilder)
-        length = np.uint32(len(connectionstring))
+        parameterstring = "".join(parmaterbuilder)
+        parameterexpression = self.encodestr(parameterstring)
+        length = np.uint32(len(parameterexpression))
         buffer = bytearray(5 + length)
 
         buffer[0] = DataPacketFlags.COMPACT
         buffer[1:5] = BigEndian.from_uint32(length)
-        buffer[5:] = self.encodestr(connectionstring)
+        buffer[5:] = parameterexpression
 
         self.send_servercommand(ServerCommand.SUBSCRIBE, buffer)
 
@@ -1187,7 +1188,7 @@ class DataSubscriber:
     @property
     def connector(self) -> SubscriberConnector:
         """
-        Gets the SubscriberConnector associated with this DataSubscriber.
+        Gets the `SubscriberConnector` associated with this `DataSubscriber`.
         """
 
         return self._connector

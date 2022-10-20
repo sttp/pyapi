@@ -112,7 +112,7 @@ class SubscriberConnector:
 
     def dispose(self):
         """
-        Cleanly shuts down a `DataConnector` that is no longer being used, e.g., during a normal application exit.
+        Cleanly shuts down a `SubscriberConnector` that is no longer being used, e.g., during a normal application exit.
         """
 
         self.cancel()
