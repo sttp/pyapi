@@ -122,6 +122,20 @@ class Ticks:
         return np.uint64(ticks | Ticks.LEAPSECOND_FLAG)
 
     @staticmethod
+    def is_negative_leapsecond(ticks: np.uint64) -> bool:
+        """
+        Determines if the deserialized Ticks value represents a negative leap second, i.e., second -1.
+        """
+        return (ticks & Ticks.LEAPSECOND_DIRECTION) > 0
+
+    @staticmethod
+    def set_negative_leapsecond(ticks: np.uint64) -> np.uint64:
+        """
+        Flags a Ticks value to represent a negative leap second, i.e., second 59 will be missing, before wire serialization.
+        """
+        return np.uint64(ticks | Ticks.LEAPSECOND_FLAG | Ticks.LEAPSECOND_DIRECTION)
+
+    @staticmethod
     def now() -> np.uint64:
         """
         Gets the current local time as a Ticks value.
