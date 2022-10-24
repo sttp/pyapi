@@ -56,12 +56,8 @@ class SignalIndexCache:
         self._idlist.append(id)
         self._signalidcache[signalid] = signalindex
 
-        metadata = ds.lookup_metadata(signalid)
-
-        # Register measurement metadata if not defined already
-        if len(metadata.source) == 0:
-            metadata.source = source
-            metadata.id = id
+        # Lookup measurement metadata, registering it if not defined already
+        metadata = ds.lookup_metadata(signalid, source, id)
 
         # Char size here helps provide a rough-estimate on binary length used to reserve
         # bytes for a vector, if exact size is needed call RecalculateBinaryLength first

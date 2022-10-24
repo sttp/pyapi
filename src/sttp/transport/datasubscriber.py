@@ -294,7 +294,7 @@ class DataSubscriber:
 
         return data.decode("utf-8")
 
-    def lookup_metadata(self, signalid: UUID) -> MeasurementRecord:
+    def lookup_metadata(self, signalid: UUID, source: str = ..., id: np.uint64 = ...) -> MeasurementRecord:
         """
         Gets the `MeasurementRecord` for the specified signal ID from the local registry.
         If the metadata does not exist, a new record is created and returned.
@@ -305,7 +305,7 @@ class DataSubscriber:
         if record is not None:
             return record
 
-        record = MeasurementRecord(signalid)
+        record = MeasurementRecord(signalid, source=source, id=id)
         self.metadatacache.add_measurement(record)
         return record
 
