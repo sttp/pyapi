@@ -104,8 +104,11 @@ class Ticks:
     def to_datetime(ticks: np.uint64) -> datetime:
         """
         Converts a Ticks value to standard Python datetime value.
+
+        Note: Python `datetime` values have a maximum resolution of 1 microsecond, so any Ticks values,
+        which have 100 nanosecond resolution, will be rounded to the nearest microsecond.
         """
-        return Empty.DATETIME + timedelta(microseconds=ticks // 10)
+        return Empty.DATETIME + timedelta(microseconds=round((ticks & Ticks.VALUEMASK) / 10.0))
 
     @staticmethod
     def is_leapsecond(ticks: np.uint64) -> bool:
@@ -126,7 +129,7 @@ class Ticks:
         """
         Determines if the deserialized Ticks value represents a negative leap second, i.e., checks flag on second 58 to see if second 59 will be missing.
         """
-        return ticks.is_leapsecond(ticks) and (ticks & Ticks.LEAPSECOND_DIRECTION) > 0
+        return Ticks.is_leapsecond(ticks) and (ticks & Ticks.LEAPSECOND_DIRECTION) > 0
 
     @staticmethod
     def set_negative_leapsecond(ticks: np.uint64) -> np.uint64:
