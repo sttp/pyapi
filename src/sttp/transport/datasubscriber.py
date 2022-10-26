@@ -527,10 +527,9 @@ class DataSubscriber:
         disconnectthread = Thread(target=lambda: self._run_disconnectthread(autoreconnecting), name="DisconnectThread")
 
         self._disconnectthread_mutex.acquire()
+        disconnectthread.start()
         self._disconnectthread = disconnectthread
         self._disconnectthread_mutex.release()
-
-        disconnectthread.start()
 
         if jointhread and disconnectthread.is_alive():
             disconnectthread.join()
