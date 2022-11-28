@@ -157,6 +157,7 @@ class Defaults:
     Default for extra connection string parameters.
     """
 
+
 class StateFlags(IntFlag):
     """
     Enumeration of the possible quality states of a `Measurement` value.
@@ -435,19 +436,26 @@ class ServerCommand(IntEnum):
     This message is sent in response to ServerResponse.UpdateBaseTimes.
     """
 
-    CONFIRMSIGNALINDEXCACHE = 0x0A
+    CONFIRMUPDATESIGNALINDEXCACHE = 0x0A
     """
     Command code for confirming the receipt of a signal index cache.
     
     This allows publisher to safely transition to next signal index cache.
     """
 
-    GETPRIMARYMETADATASCHEMA = 0x0B
+    CONFIRMUPDATECIPHERKEYS = 0x0B
+    """
+    Command code for confirming the receipt of a cipher key update.
+
+    This verifies delivery of the cipher keys indicating that it is safe to transition to the new keys.
+    """
+
+    GETPRIMARYMETADATASCHEMA = 0x0C
     """
     Command code for requesting the primary metadata schema.
     """
 
-    GETSIGNALSELECTIONSCHEMA = 0x0C
+    GETSIGNALSELECTIONSCHEMA = 0x0D
     """
     Command code for requesting the signal selection schema.
     """
@@ -604,7 +612,7 @@ class ServerResponse(IntEnum):
     Unsolicited response informs client that a raw buffer block follows.
     """
 
-    NOTIFICATION = 0x89
+    NOTIFY = 0x89
     """
     Response code indicating a notification.
     

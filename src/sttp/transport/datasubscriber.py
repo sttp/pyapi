@@ -728,7 +728,7 @@ class DataSubscriber:
             self._handle_configurationchanged()
         elif responsecode == ServerResponse.BUFFERBLOCK:
             self._handle_bufferblock(data)
-        elif responsecode == ServerResponse.NOTIFICATION:
+        elif responsecode == ServerResponse.NOTIFY:
             self._handle_notification(data)
         elif responsecode == ServerResponse.NOOP:
             # NoOP Handled
@@ -843,7 +843,7 @@ class DataSubscriber:
         self._signalindexcache_mutex.release()
 
         if version > 1:
-            self.send_servercommand(ServerCommand.CONFIRMSIGNALINDEXCACHE)
+            self.send_servercommand(ServerCommand.CONFIRMUPDATESIGNALINDEXCACHE)
 
         if self.subscriptionupdated_callback is not None:
             self.subscriptionupdated_callback(signalindexcache)
