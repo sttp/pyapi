@@ -122,12 +122,12 @@ class Defaults:
     Default for include time flag.
     """
 
-    ENABLE_TIME_REASONABILITY_CHECK = True
+    ENABLE_TIME_REASONABILITY_CHECK = False
     """
     Default for enable time reasonability check flag.
     """
 
-    LAGTIME = np.float64(5.0)
+    LAGTIME = np.float64(10.0)
     """
     Default for lag time in seconds.
     """
