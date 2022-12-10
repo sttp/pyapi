@@ -94,6 +94,7 @@
         "udpport",
         "UMAXINT",
         "unsynchronized",
+        "uselocalclockasrealtime",
         "valueas",
         "valueasint",
         "VPHA",

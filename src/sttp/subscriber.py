@@ -326,6 +326,10 @@ class Subscriber:
             sub.datachannel_interface = Defaults.DATACHANNEL_INTERFACE
 
         sub.includetime = settings.includetime
+        sub.enabletimereasonabilitycheck = settings.enabletimereasonabilitycheck
+        sub.lagtime = settings.lagtime
+        sub.leadtime = settings.leadtime
+        sub.uselocalclockasrealtime = settings.uselocalclockasrealtime
         sub.use_millisecondresolution = settings.use_millisecondresolution
         sub.request_nanvaluefilter = settings.request_nanvaluefilter
         sub.starttime = settings.starttime

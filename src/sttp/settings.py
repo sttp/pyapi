@@ -41,6 +41,10 @@ class Settings:
     DEFAULT_UDPPORT = Defaults.DATACHANNEL_LOCALPORT
     DEFAULT_UDPINTERFACE = Defaults.DATACHANNEL_INTERFACE
     DEFAULT_INCLUDETIME = Defaults.INCLUDETIME
+    DEFAULT_ENABLE_TIME_REASONABILITY_CHECK = Defaults.ENABLE_TIME_REASONABILITY_CHECK
+    DEFAULT_LAGTIME = Defaults.LAGTIME
+    DEFAULT_LEADTIME = Defaults.LEADTIME
+    DEFAULT_USE_LOCALCLOCK_AS_REALTIME = Defaults.USE_LOCALCLOCK_AS_REALTIME
     DEFAULT_USE_MILLISECONDRESOLUTION = Defaults.USE_MILLISECONDRESOLUTION
     DEFAULT_REQUEST_NANVALUEFILTER = Defaults.REQUEST_NANVALUEFILTER
     DEFAULT_STARTTIME = Defaults.STARTTIME
@@ -55,6 +59,10 @@ class Settings:
                  udpport: np.uint16 = ...,
                  udpinterface: str = ...,
                  includetime: bool = ...,
+                 enabletimereasonabilitycheck: bool = ...,
+                 lagtime: np.float64 = ...,
+                 leadtime: np.float64 = ...,
+                 uselocalclockasrealtime: bool = ...,
                  usemillisecondresolution: bool = ...,
                  requestnanvaluefilter: bool = ...,
                  starttime: str = ...,
@@ -74,7 +82,7 @@ class Settings:
 
         self.publishinterval = Settings.DEFAULT_PUBLISHINTERVAL if publishinterval is ... else publishinterval
         """
-        Defines the down-sampling publish interval, in seconds, to use when `Throttled` is True.
+        Defines the down-sampling publish interval, in seconds, to use when `throttled` is True.
         """
 
         self.udpport = Settings.DEFAULT_UDPPORT if udpport is ... else udpport
@@ -92,6 +100,33 @@ class Settings:
         self.includetime = Settings.DEFAULT_INCLUDETIME if includetime is ... else includetime
         """
         Determines if time should be included in non-compressed, compact measurements.
+        """
+
+        self.enabletimereasonabilitycheck = Settings.DEFAULT_ENABLE_TIME_REASONABILITY_CHECK if enabletimereasonabilitycheck is ... else enabletimereasonabilitycheck
+        """
+        Determines  if publisher should perform time reasonability checks.
+        When enabled `lagtime` and `leadtime` will be used to determine if a measurement timestamp is reasonable.
+        """
+
+        self.lagtime = Settings.DEFAULT_LAGTIME if lagtime is ... else lagtime
+        """
+        Defines defines the allowed past time deviation tolerance in seconds (can be sub-second).
+        Value is used to determine if a measurement timestamp is reasonable.
+        Only applicable when `enabletimereasonabilitycheck` is `true`.
+        """
+
+        self.leadtime = Settings.DEFAULT_LEADTIME if leadtime is ... else leadtime
+        """
+        Defines defines the allowed future time deviation tolerance in seconds (can be sub-second).
+        Value is used to determine if a measurement timestamp is reasonable.
+        Only applicable when `enabletimereasonabilitycheck` is `true`.
+        """
+
+        self.uselocalclockasrealtime = Settings.DEFAULT_USE_LOCALCLOCK_AS_REALTIME if uselocalclockasrealtime is ... else uselocalclockasrealtime
+        """
+        Determines if publisher should use local clock as real time. If false,
+        the timestamp of the latest measurement will be used as real-time.
+        Only applicable when `enabletimereasonabilitycheck` is `true`.
         """
 
         self.use_millisecondresolution = Settings.DEFAULT_USE_MILLISECONDRESOLUTION if usemillisecondresolution is ... else usemillisecondresolution

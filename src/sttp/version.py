@@ -22,17 +22,18 @@
 # ******************************************************************************************************
 
 class Version:
-	STTP_SOURCE = "STTP Python Library"
-	"""
+    STTP_SOURCE = "STTP Python Library"
+    """
 	Defines the STTP library API title used for data subscriber identification.
 	"""
 
-	STTP_VERSION = "0.6.0"
-	"""
+    STTP_VERSION = "0.6.1"
+    """
 	Defines the STTP library API version used for data subscriber identification.
+	Note: This is not the STTP protocol version, but the version of the STTP library API.
 	"""
 
-	STTP_UPDATEDON = "2022-09-11"
-	"""
+    STTP_UPDATEDON = "2022-12-09"
+    """
 	Defines when the STTP library API was last updated used for data subscriber identification.
 	"""

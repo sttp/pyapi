@@ -1,4 +1,4 @@
-#******************************************************************************************************
+# ******************************************************************************************************
 #  subscriptioninfo.py - Gbtc
 #
 #  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.
@@ -19,7 +19,7 @@
 #  08/17/2022 - J. Ritchie Carroll
 #       Generated original version of source code.
 #
-#******************************************************************************************************
+# ******************************************************************************************************
 
 from .constants import Defaults
 import numpy as np
@@ -37,6 +37,10 @@ class SubscriptionInfo:
     DEFAULT_DATACHANNEL_LOCALPORT = Defaults.DATACHANNEL_LOCALPORT
     DEFAULT_DATACHANNEL_INTERFACE = Defaults.DATACHANNEL_INTERFACE
     DEFAULT_INCLUDETIME = Defaults.INCLUDETIME
+    DEFAULT_ENABLE_TIME_REASONABILITY_CHECK = Defaults.ENABLE_TIME_REASONABILITY_CHECK
+    DEFAULT_LAGTIME = Defaults.LAGTIME
+    DEFAULT_LEADTIME = Defaults.LEADTIME
+    DEFAULT_USE_LOCALCLOCK_AS_REALTIME = Defaults.USE_LOCALCLOCK_AS_REALTIME
     DEFAULT_USE_MILLISECONDRESOLUTION = Defaults.USE_MILLISECONDRESOLUTION
     DEFAULT_REQUEST_NANVALUEFILTER = Defaults.REQUEST_NANVALUEFILTER
     DEFAULT_STARTTIME = Defaults.STARTTIME
@@ -53,6 +57,10 @@ class SubscriptionInfo:
                  datachannel_localport: np.uint16 = ...,
                  datachannel_interface: str = ...,
                  includetime: bool = ...,
+                 enabletimereasonabilitycheck: bool = ...,
+                 lagtime: np.float64 = ...,
+                 leadtime: np.float64 = ...,
+                 uselocalclockasrealtime: bool = ...,
                  usemillisecondresolution: bool = ...,
                  requestnanvaluefilter: bool = ...,
                  starttime: str = ...,
@@ -85,7 +93,7 @@ class SubscriptionInfo:
 
         self.publishinterval = SubscriptionInfo.DEFAULT_PUBLISHINTERVAL if publishinterval is ... else publishinterval
         """
-        Defines the down-sampling publish interval to use when `Throttled` is `True`.
+        Defines the down-sampling publish interval to use when `throttled` is `True`.
         """
 
         self.udpdatachannel = False if SubscriptionInfo.DEFAULT_UDPDATACHANNEL is ... else udpdatachannel
@@ -106,6 +114,33 @@ class SubscriptionInfo:
         self.includetime = SubscriptionInfo.DEFAULT_INCLUDETIME if includetime is ... else includetime
         """
         Determines if time should be included in non-compressed, compact measurements.
+        """
+
+        self.enabletimereasonabilitycheck = SubscriptionInfo.DEFAULT_ENABLE_TIME_REASONABILITY_CHECK if enabletimereasonabilitycheck is ... else enabletimereasonabilitycheck
+        """
+        Determines  if publisher should perform time reasonability checks.
+        When enabled `lagtime` and `leadtime` will be used to determine if a measurement timestamp is reasonable.
+        """
+
+        self.lagtime = SubscriptionInfo.DEFAULT_LAGTIME if lagtime is ... else lagtime
+        """
+        Defines defines the allowed past time deviation tolerance in seconds (can be sub-second).
+        Value is used to determine if a measurement timestamp is reasonable.
+        Only applicable when `enabletimereasonabilitycheck` is `True`.
+        """
+
+        self.leadtime = SubscriptionInfo.DEFAULT_LEADTIME if leadtime is ... else leadtime
+        """
+        Defines defines the allowed future time deviation tolerance in seconds (can be sub-second).
+        Value is used to determine if a measurement timestamp is reasonable.
+        Only applicable when `enabletimereasonabilitycheck` is `True`.
+        """
+
+        self.uselocalclockasrealtime = SubscriptionInfo.DEFAULT_USE_LOCALCLOCK_AS_REALTIME if uselocalclockasrealtime is ... else uselocalclockasrealtime
+        """
+        Determines if publisher should use local clock as real time. If false,
+        the timestamp of the latest measurement will be used as real-time.
+        Only applicable when `enabletimereasonabilitycheck` is `True`.
         """
 
         self.use_millisecondresolution = SubscriptionInfo.DEFAULT_USE_MILLISECONDRESOLUTION if usemillisecondresolution is ... else usemillisecondresolution

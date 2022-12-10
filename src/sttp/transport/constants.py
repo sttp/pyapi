@@ -122,6 +122,26 @@ class Defaults:
     Default for include time flag.
     """
 
+    ENABLE_TIME_REASONABILITY_CHECK = True
+    """
+    Default for enable time reasonability check flag.
+    """
+
+    LAGTIME = np.float64(5.0)
+    """
+    Default for lag time in seconds.
+    """
+
+    LEADTIME = np.float64(5.0)
+    """
+    Default for lead time in seconds.
+    """
+
+    USE_LOCALCLOCK_AS_REALTIME = False
+    """
+    Default for use local clock as real time flag.
+    """
+
     USE_MILLISECONDRESOLUTION = False
     """
     Default for use millisecond resolution flag.
