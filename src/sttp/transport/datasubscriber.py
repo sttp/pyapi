@@ -1034,7 +1034,7 @@ class DataSubscriber:
             if self._last_missingcachewarning + MISSINGCACHEWARNING_INTERVAL < time():
                 # Warning message for missing signal index cache
                 if self._last_missingcachewarning > 0.0:
-                    self._dispatch_statusmessage("Signal index cache has not arrived. No compact measurements can be parsed.")
+                    self._dispatch_statusmessage("WARNING: Signal index cache has not arrived. No compact measurements can be parsed.")
 
                 self._last_missingcachewarning = time()
 
