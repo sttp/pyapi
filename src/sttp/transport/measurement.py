@@ -67,7 +67,7 @@ class Measurement:
         """
 
     @property
-    def ticksvalue(self) -> np.int64:
+    def timestampvalue(self) -> np.int64:
         """
         Gets the integer-based time from a Measurement Ticks based timestamp, i.e.,
         the 62-bit time value excluding any reserved flags.

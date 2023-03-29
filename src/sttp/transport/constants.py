@@ -305,7 +305,7 @@ class StateFlags(IntFlag):
 
     RESERVEDTIMEFLAG = 0x800000
     """
-    Measurement flag for a reserved time
+    Measurement flag for a reserved time state.
     """
 
     USERDEFINEDFLAG1 = 0x1000000
@@ -345,7 +345,7 @@ class StateFlags(IntFlag):
 
     MEASUREMENTERROR = 0x80000000
     """
-    Measurement flag for an error state.
+    Measurement flag for a measurement error state.
     """
 
 
