@@ -85,6 +85,14 @@ class Ticks:
     """
     Ticks representation of the Unix epoch timestamp starting at January 1, 1970.
     """
+    
+    @staticmethod
+    def timestampvalue(ticks: np.uint64) -> datetime:
+        """
+        Gets the timestamp portion of the `Ticks` value, i.e.,
+        the 62-bit time value excluding any leap second flags.
+        """
+        return ticks & Ticks.VALUEMASK
 
     @staticmethod
     def from_datetime(dt: datetime) -> np.uint64:
@@ -108,7 +116,7 @@ class Ticks:
         Note: Python `datetime` values have a maximum resolution of 1 microsecond, so any Ticks values,
         which have 100 nanosecond resolution, will be rounded to the nearest microsecond.
         """
-        return Empty.DATETIME + timedelta(microseconds=round((ticks & Ticks.VALUEMASK) / 10.0))
+        return Empty.DATETIME + timedelta(microseconds=round(Ticks.timestampvalue(ticks) / 10.0))
 
     @staticmethod
     def is_leapsecond(ticks: np.uint64) -> bool:

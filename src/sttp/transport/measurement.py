@@ -69,15 +69,15 @@ class Measurement:
     @property
     def timestampvalue(self) -> np.int64:
         """
-        Gets the integer-based time from a Measurement Ticks based timestamp, i.e.,
-        the 62-bit time value excluding any reserved flags.
+        Gets the integer-based time from a `Measurement` ticks-based timestamp, i.e.,
+        the 62-bit time value excluding any leap-second flags.
         """
-        return self.timestamp & Ticks.VALUEMASK
+        return Ticks.timestampvalue(self.timestamp)
 
     @property
     def datetime(self) -> datetime:
         """
-        Gets a Measurement Ticks based timestamp as a standard Python datetime value.
+        Gets `Measurement` ticks-based timestamp as a standard Python datetime value.
         """
         return Ticks.to_datetime(self.timestamp)
 
