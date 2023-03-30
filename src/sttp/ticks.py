@@ -87,7 +87,7 @@ class Ticks:
     """
     
     @staticmethod
-    def timestampvalue(ticks: np.uint64) -> datetime:
+    def timestampvalue(ticks: np.uint64) -> np.uint64:
         """
         Gets the timestamp portion of the `Ticks` value, i.e.,
         the 62-bit time value excluding any leap second flags.
