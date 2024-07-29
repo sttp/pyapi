@@ -1,4 +1,4 @@
-﻿# Generated from FilterExpressionSyntax.g4 by ANTLR 4.11.1
+﻿# Generated from FilterExpressionSyntax.g4 by ANTLR 4.13.1
 # encoding: utf-8
 from antlr4 import *
 from io import StringIO
@@ -276,7 +276,7 @@ class FilterExpressionSyntaxParser ( Parser ):
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
-        self.checkVersion("4.11.1")
+        self.checkVersion("4.13.1")
         self._interp = ParserATNSimulator(self, self.atn, self.decisionsToDFA, self.sharedContextCache)
         self._predicates = None
 
@@ -588,7 +588,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 88
             _la = self._input.LA(1)
-            if not((((_la - 90)) & ~0x3f) == 0 and ((1 << (_la - 90)) & 7) != 0):
+            if not(((((_la - 90)) & ~0x3f) == 0 and ((1 << (_la - 90)) & 7) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1419,7 +1419,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 213
             _la = self._input.LA(1)
-            if not(((_la) & ~0x3f) == 0 and ((1 << _la) & 1152921504606847384) != 0):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 1152921504606847384) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1511,7 +1511,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 217
             _la = self._input.LA(1)
-            if not(((_la) & ~0x3f) == 0 and ((1 << _la) & 523776) != 0):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 523776) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1561,7 +1561,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 219
             _la = self._input.LA(1)
-            if not((((_la - 19)) & ~0x3f) == 0 and ((1 << (_la - 19)) & 35184372090883) != 0):
+            if not(((((_la - 19)) & ~0x3f) == 0 and ((1 << (_la - 19)) & 35184372090883) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1608,7 +1608,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 221
             _la = self._input.LA(1)
-            if not(((_la) & ~0x3f) == 0 and ((1 << _la) & 65011712) != 0 or _la==85):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 65011712) != 0) or _la==85):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1653,7 +1653,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 223
             _la = self._input.LA(1)
-            if not(((_la) & ~0x3f) == 0 and ((1 << _la) & 469762072) != 0):
+            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 469762072) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1820,7 +1820,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 225
             _la = self._input.LA(1)
-            if not((((_la - 29)) & ~0x3f) == 0 and ((1 << (_la - 29)) & 35465724524081121) != 0):
+            if not(((((_la - 29)) & ~0x3f) == 0 and ((1 << (_la - 29)) & 35465724524081121) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
@@ -1877,7 +1877,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.state = 230
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if ((_la) & ~0x3f) == 0 and ((1 << _la) & -72420449518091848) != 0 or (((_la - 66)) & ~0x3f) == 0 and ((1 << (_la - 66)) & 435417087) != 0:
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & -72420449518091848) != 0) or ((((_la - 66)) & ~0x3f) == 0 and ((1 << (_la - 66)) & 435417087) != 0):
                 self.state = 229
                 self.expressionList()
 
@@ -1944,7 +1944,7 @@ class FilterExpressionSyntaxParser ( Parser ):
             self.enterOuterAlt(localctx, 1)
             self.state = 234
             _la = self._input.LA(1)
-            if not((((_la - 63)) & ~0x3f) == 0 and ((1 << (_la - 63)) & 3464495105) != 0):
+            if not(((((_la - 63)) & ~0x3f) == 0 and ((1 << (_la - 63)) & 3464495105) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)

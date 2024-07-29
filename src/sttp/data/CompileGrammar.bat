@@ -1,6 +1,6 @@
 @echo off
 echo Compiling FilterExpressionSyntax grammar for Python...
-java -jar antlr-4.11.1-complete.jar -Dlanguage=Python3 -o parser FilterExpressionSyntax.g4
+java -jar antlr-4.13.1-complete.jar -Dlanguage=Python3 -o parser FilterExpressionSyntax.g4
 echo Replacing Go "panic" code (from UNEXPECTED_CHAR grammar handler) with properly aligned Python "raise exception"...
 powershell -Command "(Get-Content 'parser/FilterExpressionSyntaxParser.py') -replace '                 panic', '            raise RuntimeError' | Set-Content -encoding UTF8 'parser/FilterExpressionSyntaxParser.py'"
 echo Finished.
