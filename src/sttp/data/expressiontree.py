@@ -1260,7 +1260,7 @@ class ExpressionTree:
         foundvaluetype = False
 
         for valuetype in ExpressionValueType:
-            if targettypename == str(valuetype).removeprefix("ExpressionValueType."):
+            if targettypename == valuetype.name:
                 targetvaluetype = valuetype
                 foundvaluetype = True
                 break

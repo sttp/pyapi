@@ -15,6 +15,18 @@
                 "127.0.0.1",
                 "7165"
             ]
+        },
+        {
+            "name": "openHistorian Stream",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "127.0.0.1",
+                "7175"
+            ]
         }
     ]
 }

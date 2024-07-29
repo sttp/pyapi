@@ -299,21 +299,14 @@ class MetadataCache:
         return self.signalref_measurement_map.get(signalreference)
 
     def find_measurements_signaltype(self, signaltype: SignalType, instancename: Optional[str] = None) -> List[MeasurementRecord]:
-        return self.find_measurements_signaltypename(str(signaltype), instancename)
+        return self.find_measurements_signaltypename(signaltype.name, instancename)
 
     def find_measurements_signaltypename(self, signaltypename: str, instancename: Optional[str] = None) -> List[MeasurementRecord]:
-        # sourcery skip: for-append-to-extend
-        matched_records: List[MeasurementRecord] = []
-
         signaltypename = signaltypename.upper()
-        signaltypename = signaltypename.removeprefix("SIGNALTYPE.")
 
-        for record in self.measurement_records:
-            if record.signaltypename.upper() == signaltypename and \
-                    (instancename is None or record.instancename == instancename):
-                matched_records.append(record)
-
-        return matched_records
+        return [ record for record in self.measurement_records if
+                record.signaltypename.upper() == signaltypename and
+                (instancename is None or record.instancename == instancename) ]
 
     def find_measurements(self, searchval: str, instancename: Optional[str] = None) -> List[MeasurementRecord]:
         records = set()
