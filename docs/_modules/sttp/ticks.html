@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.ticks &mdash; sttp/pyapi 0.6.0 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <title>sttp.ticks &mdash; sttp/pyapi 0.6.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=8209df7b" />
+
+  
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script src="../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -26,12 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> sttp/pyapi
-            <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            sttp/pyapi
+              <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -52,9 +58,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-      <li>sttp.ticks</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sttp.ticks</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -92,128 +98,192 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="Ticks"><a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks">[docs]</a><span class="k">class</span> <span class="nc">Ticks</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Ticks">
+<a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks">[docs]</a>
+<span class="k">class</span> <span class="nc">Ticks</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Defines constants and functions for tick values, 64-bit integers used to designate time in STTP. A tick value represents</span>
 <span class="sd">    the number of 100-nanosecond intervals that have elapsed since 12:00:00 midnight, January 1, 0001 UTC, Gregorian calendar.</span>
 <span class="sd">    A single tick represents one hundred nanoseconds, or one ten-millionth of a second. There are 10,000 ticks in a millisecond</span>
 <span class="sd">    and 10 million ticks in a second. Only bits 01 to 62 (0x3FFFFFFFFFFFFFFF) are used to represent the timestamp value.</span>
 <span class="sd">    Bit 64 (0x8000000000000000) is used to denote leap second, i.e., second 60, where actual second value would remain at 59.</span>
-<span class="sd">    Bit 63 is reserved and unset.</span>
+<span class="sd">    Bit 63 (0x4000000000000000) is used to denote leap second direction, 0 for add, 1 for delete.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">PERSECOND</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">10000000</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Number of Ticks that occur in a second.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">PERMILLISECOND</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">PERSECOND</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Number of Ticks that occur in a millisecond.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">PERMICROSECOND</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">PERSECOND</span> <span class="o">/</span> <span class="mi">1000000</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Number of Ticks that occur in a microsecond.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">PERMINUTE</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">60</span> <span class="o">*</span> <span class="n">PERSECOND</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Number of Ticks that occur in a minute.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">PERHOUR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">60</span> <span class="o">*</span> <span class="n">PERMINUTE</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Number of Ticks that occur in an hour.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">PERDAY</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">24</span> <span class="o">*</span> <span class="n">PERHOUR</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Number of Ticks that occur in a day.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">LEAPSECONDFLAG</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">63</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="n">LEAPSECOND_FLAG</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">63</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Flag (64th bit) that marks a Ticks value as a leap second, i.e., second 60 (one beyond normal second 59).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">RESERVEDUTCFLAG</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">62</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Reserved flag (63rd bit) that should be unset when serializing and deserializing Ticks.</span>
+    <span class="n">LEAPSECOND_DIRECTION</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">62</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Flag (63rd bit) that indicates if leap second is positive or negative; 0 for add, 1 for delete.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">VALUEMASK</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="o">~</span><span class="n">LEAPSECONDFLAG</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">RESERVEDUTCFLAG</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="n">VALUEMASK</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="o">~</span><span class="n">LEAPSECOND_FLAG</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">LEAPSECOND_DIRECTION</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    All bits (bits 1 to 62) that make up the value portion of a Ticks that represent time.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">UNIXBASEOFFSET</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">621355968000000000</span><span class="p">)</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Ticks representation of the Unix epoch timestamp starting at January 1, 1970.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    
+<div class="viewcode-block" id="Ticks.timestampvalue">
+<a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.timestampvalue">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">timestampvalue</span><span class="p">(</span><span class="n">ticks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the timestamp portion of the `Ticks` value, i.e.,</span>
+<span class="sd">        the 62-bit time value excluding any leap second flags.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">ticks</span> <span class="o">&amp;</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">VALUEMASK</span></div>
 
-<div class="viewcode-block" id="Ticks.from_datetime"><a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.from_datetime">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Ticks.from_datetime">
+<a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.from_datetime">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">from_datetime</span><span class="p">(</span><span class="n">dt</span><span class="p">:</span> <span class="n">datetime</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts a standard Python dattime value to a Ticks value.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">((</span><span class="n">dt</span> <span class="o">-</span> <span class="n">Empty</span><span class="o">.</span><span class="n">DATETIME</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">*</span> <span class="mi">10000000</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Ticks.from_timedelta"><a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.from_timedelta">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Ticks.from_timedelta">
+<a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.from_timedelta">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">from_timedelta</span><span class="p">(</span><span class="n">td</span><span class="p">:</span> <span class="n">timedelta</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Converts a standard Python timedelta value to a Ticks value.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">td</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="o">*</span> <span class="mi">10000000</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Ticks.to_datetime"><a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.to_datetime">[docs]</a>    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">to_datetime</span><span class="p">(</span><span class="n">ticks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Converts a Ticks value to standard Python datetime value.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">Empty</span><span class="o">.</span><span class="n">DATETIME</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">microseconds</span><span class="o">=</span><span class="n">ticks</span> <span class="o">//</span> <span class="mi">10</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Ticks.is_leapsecond"><a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.is_leapsecond">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Ticks.to_datetime">
+<a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.to_datetime">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">to_datetime</span><span class="p">(</span><span class="n">ticks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Converts a Ticks value to standard Python datetime value.</span>
+
+<span class="sd">        Note: Python `datetime` values have a maximum resolution of 1 microsecond, so any Ticks values,</span>
+<span class="sd">        which have 100 nanosecond resolution, will be rounded to the nearest microsecond.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Empty</span><span class="o">.</span><span class="n">DATETIME</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">microseconds</span><span class="o">=</span><span class="nb">round</span><span class="p">(</span><span class="n">Ticks</span><span class="o">.</span><span class="n">timestampvalue</span><span class="p">(</span><span class="n">ticks</span><span class="p">)</span> <span class="o">/</span> <span class="mf">10.0</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Ticks.is_leapsecond">
+<a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.is_leapsecond">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">is_leapsecond</span><span class="p">(</span><span class="n">ticks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determines if the deserialized Ticks value represents a leap second, i.e., second 60.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">ticks</span> <span class="o">&amp;</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">LEAPSECONDFLAG</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+        <span class="k">return</span> <span class="p">(</span><span class="n">ticks</span> <span class="o">&amp;</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">LEAPSECOND_FLAG</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="Ticks.set_leapsecond"><a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.set_leapsecond">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Ticks.set_leapsecond">
+<a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.set_leapsecond">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">set_leapsecond</span><span class="p">(</span><span class="n">ticks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Flags a Ticks value to represent a leap second, i.e., second 60, before wire serialization.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">ticks</span> <span class="o">|</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">LEAPSECONDFLAG</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">ticks</span> <span class="o">|</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">LEAPSECOND_FLAG</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Ticks.now"><a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.now">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Ticks.is_negative_leapsecond">
+<a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.is_negative_leapsecond">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">is_negative_leapsecond</span><span class="p">(</span><span class="n">ticks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determines if the deserialized Ticks value represents a negative leap second, i.e., checks flag on second 58 to see if second 59 will be missing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">is_leapsecond</span><span class="p">(</span><span class="n">ticks</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">ticks</span> <span class="o">&amp;</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">LEAPSECOND_DIRECTION</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span></div>
+
+
+<div class="viewcode-block" id="Ticks.set_negative_leapsecond">
+<a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.set_negative_leapsecond">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">set_negative_leapsecond</span><span class="p">(</span><span class="n">ticks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Flags a Ticks value to represent a negative leap second, i.e., sets flag on second 58 to mark that second 59 will be missing, before wire serialization.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">ticks</span> <span class="o">|</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">LEAPSECOND_FLAG</span> <span class="o">|</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">LEAPSECOND_DIRECTION</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Ticks.now">
+<a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.now">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">now</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the current local time as a Ticks value.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">from_datetime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="Ticks.utcnow"><a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.utcnow">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Ticks.utcnow">
+<a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.utcnow">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">utcnow</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the current time in UTC as a Ticks value.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">from_datetime</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Ticks.to_string"><a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.to_string">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Ticks.to_string">
+<a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.to_string">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">to_string</span><span class="p">(</span><span class="n">ticks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">,</span> <span class="n">timespec</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;microseconds&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Standard timestamp representation for a Ticks value, e.g., 2006-01-02 15:04:05.999999999.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">ticks</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(</span><span class="n">sep</span><span class="o">=</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">timespec</span><span class="o">=</span><span class="n">timespec</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Ticks.to_shortstring"><a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.to_shortstring">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Ticks.to_shortstring">
+<a class="viewcode-back" href="../../sttp.html#sttp.ticks.Ticks.to_shortstring">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">to_shortstring</span><span class="p">(</span><span class="n">ticks</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Shows just the timestamp portion of a Ticks value with milliseconds, e.g., 15:04:05.999.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">ticks</span><span class="p">,</span> <span class="s2">&quot;milliseconds&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span></div></div>
+        <span class="k">return</span> <span class="n">Ticks</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">ticks</span><span class="p">,</span> <span class="s2">&quot;milliseconds&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span></div>
+</div>
+
 </pre></div>
 
            </div>
@@ -235,7 +305,9 @@
 <p>
     <a href="https://github.com/sttp/pyapi">GitHub Home</a>
     &nbsp;&nbsp;•&nbsp;&nbsp;
-    <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
+    <a href="https://pypi.org/project/sttpapi/" target="_blank">PyPi Package: sttpapi</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://sttp.github.io/documentation/" target="_blank">General STTP Documentation</a>
 </p>
 <br /><br />
 Copyright © 2022, <a href="https://gridprotectionalliance.org/" target="_blank">Grid&nbsp;Protection&nbsp;Alliance</a>

@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.subscriberconnector &mdash; sttp/pyapi 0.6.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>sttp.transport.subscriberconnector &mdash; sttp/pyapi 0.6.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
+
+  
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -26,12 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> sttp/pyapi
-            <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sttp/pyapi
+              <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -52,9 +58,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>sttp.transport.subscriberconnector</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sttp.transport.subscriberconnector</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -101,8 +107,10 @@
     <span class="kn">from</span> <span class="nn">datasubscriber</span> <span class="kn">import</span> <span class="n">DataSubscriber</span>
 
 
-<div class="viewcode-block" id="SubscriberConnector"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriberconnector.SubscriberConnector">[docs]</a><span class="k">class</span> <span class="nc">SubscriberConnector</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SubscriberConnector">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriberconnector.SubscriberConnector">[docs]</a>
+<span class="k">class</span> <span class="nc">SubscriberConnector</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Represents a connector that will establish or automatically reestablish a connection from a `DataSubscriber` to a `DataPublisher`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -127,42 +135,42 @@
                  <span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">errormessage_callback</span> <span class="o">=</span> <span class="n">SubscriberConnector</span><span class="o">.</span><span class="n">DEFAULT_ERRORMESSAGE_CALLBACK</span> <span class="k">if</span> <span class="n">errormessage_callback</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">errormessage_callback</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called when an error message should be logged.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">reconnect_callback</span> <span class="o">=</span> <span class="n">SubscriberConnector</span><span class="o">.</span><span class="n">DEFAULT_RECONNECT_CALLBACK</span> <span class="k">if</span> <span class="n">reconnect_callback</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">reconnect_callback</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called when `SubscriberConnector` attempts to reconnect.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">hostname</span> <span class="o">=</span> <span class="n">SubscriberConnector</span><span class="o">.</span><span class="n">DEFAULT_HOSTNAME</span> <span class="k">if</span> <span class="n">hostname</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">hostname</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        `DataPublisher` DNS name or IP.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="n">SubscriberConnector</span><span class="o">.</span><span class="n">DEFAULT_PORT</span> <span class="k">if</span> <span class="n">port</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">port</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        TCP/IP listening port of the `DataPublisher`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">maxretries</span> <span class="o">=</span> <span class="n">SubscriberConnector</span><span class="o">.</span><span class="n">DEFAULT_MAXRETRIES</span> <span class="k">if</span> <span class="n">maxretries</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">maxretries</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        MaxRetries defines the maximum number of times to retry a connection. Set value to -1 to retry infinitely.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">retryinterval</span> <span class="o">=</span> <span class="n">SubscriberConnector</span><span class="o">.</span><span class="n">DEFAULT_RETRYINTERVAL</span> <span class="k">if</span> <span class="n">retryinterval</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">retryinterval</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        defines the base retry interval, in milliseconds. Retries will exponentially back-off starting from this interval.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">maxretryinterval</span> <span class="o">=</span> <span class="n">SubscriberConnector</span><span class="o">.</span><span class="n">DEFAULT_MAXRETRYINTERVAL</span> <span class="k">if</span> <span class="n">maxretryinterval</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">maxretryinterval</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the maximum retry interval, in milliseconds.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">autoreconnect</span> <span class="o">=</span> <span class="n">SubscriberConnector</span><span class="o">.</span><span class="n">DEFAULT_AUTORECONNECT</span> <span class="k">if</span> <span class="n">autoreconnect</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">autoreconnect</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines flag that determines if connections should be automatically reattempted.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -176,13 +184,16 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_threadpool</span> <span class="o">=</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">thread_name_prefix</span><span class="o">=</span><span class="s2">&quot;SC-PoolThread&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SubscriberConnector.dispose"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriberconnector.SubscriberConnector.dispose">[docs]</a>    <span class="k">def</span> <span class="nf">dispose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Cleanly shuts down a `DataConnector` that is no longer being used, e.g., during a normal application exit.</span>
+<div class="viewcode-block" id="SubscriberConnector.dispose">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriberconnector.SubscriberConnector.dispose">[docs]</a>
+    <span class="k">def</span> <span class="nf">dispose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Cleanly shuts down a `SubscriberConnector` that is no longer being used, e.g., during a normal application exit.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_threadpool</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
 
     <span class="k">def</span> <span class="nf">_autoreconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">:</span> <span class="n">DataSubscriber</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancel</span> <span class="ow">or</span> <span class="n">ds</span><span class="o">.</span><span class="n">disposing</span><span class="p">:</span>
@@ -240,7 +251,7 @@
         <span class="n">message</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Connection&quot;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; attempt </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">+</span> <span class="mi">1</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; attempt </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="n">message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; to </span><span class="se">\&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">hostname</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> was terminated. &quot;</span><span class="p">)</span>
 
@@ -259,12 +270,15 @@
 
         <span class="n">waittimer</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">retryinterval</span><span class="p">)</span>
 
-<div class="viewcode-block" id="SubscriberConnector.connect"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriberconnector.SubscriberConnector.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">:</span> <span class="n">DataSubscriber</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConnectStatus</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SubscriberConnector.connect">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriberconnector.SubscriberConnector.connect">[docs]</a>
+    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">:</span> <span class="n">DataSubscriber</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConnectStatus</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initiates a connection sequence for a `DataSubscriber`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="n">ConnectStatus</span><span class="o">.</span><span class="n">CANCELED</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancel</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connect</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
 
     <span class="k">def</span> <span class="nf">_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">:</span> <span class="n">DataSubscriber</span><span class="p">,</span> <span class="n">autoreconnecting</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConnectStatus</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">autoreconnect</span><span class="p">:</span>
@@ -297,8 +311,10 @@
 
         <span class="k">return</span> <span class="n">ConnectStatus</span><span class="o">.</span><span class="n">SUCCESS</span> <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">connected</span> <span class="k">else</span> <span class="n">ConnectStatus</span><span class="o">.</span><span class="n">FAILED</span>
 
-<div class="viewcode-block" id="SubscriberConnector.cancel"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriberconnector.SubscriberConnector.cancel">[docs]</a>    <span class="k">def</span> <span class="nf">cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SubscriberConnector.cancel">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriberconnector.SubscriberConnector.cancel">[docs]</a>
+    <span class="k">def</span> <span class="nf">cancel</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Stops all current and future connection sequences.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -321,17 +337,22 @@
         <span class="k">if</span> <span class="n">reconnectthread</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">reconnectthread</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
             <span class="n">reconnectthread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span></div>
 
-<div class="viewcode-block" id="SubscriberConnector.reset_connection"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriberconnector.SubscriberConnector.reset_connection">[docs]</a>    <span class="k">def</span> <span class="nf">reset_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SubscriberConnector.reset_connection">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriberconnector.SubscriberConnector.reset_connection">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset_connection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Resets `SubscriberConnector` for a new connection.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_connectattempt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_cancel</span> <span class="o">=</span> <span class="kc">False</span></div>
 
+
     <span class="k">def</span> <span class="nf">_dispatch_errormessage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">errormessage_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_threadpool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">errormessage_callback</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span></div>
+
 </pre></div>
 
            </div>
@@ -353,7 +374,9 @@
 <p>
     <a href="https://github.com/sttp/pyapi">GitHub Home</a>
     &nbsp;&nbsp;•&nbsp;&nbsp;
-    <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
+    <a href="https://pypi.org/project/sttpapi/" target="_blank">PyPi Package: sttpapi</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://sttp.github.io/documentation/" target="_blank">General STTP Documentation</a>
 </p>
 <br /><br />
 Copyright © 2022, <a href="https://gridprotectionalliance.org/" target="_blank">Grid&nbsp;Protection&nbsp;Alliance</a>

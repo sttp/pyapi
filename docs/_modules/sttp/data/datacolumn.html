@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.data.datacolumn &mdash; sttp/pyapi 0.6.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>sttp.data.datacolumn &mdash; sttp/pyapi 0.6.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
+
+  
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -26,12 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> sttp/pyapi
-            <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sttp/pyapi
+              <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -52,9 +58,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>sttp.data.datacolumn</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sttp.data.datacolumn</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -96,8 +102,10 @@
     <span class="kn">from</span> <span class="nn">.datatable</span> <span class="kn">import</span> <span class="n">DataTable</span>
 
 
-<div class="viewcode-block" id="DataColumn"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.datacolumn.DataColumn">[docs]</a><span class="k">class</span> <span class="nc">DataColumn</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DataColumn">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.datacolumn.DataColumn">[docs]</a>
+<span class="k">class</span> <span class="nc">DataColumn</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Represents a column, i.e., a field, in a `DataTable` defining a name and a data type.</span>
 <span class="sd">    Data columns can also be computed where its value would be derived from other columns and</span>
 <span class="sd">    functions (https://sttp.github.io/documentation/filter-expressions/) defined in an expression.</span>
@@ -109,7 +117,7 @@
                  <span class="n">datatype</span><span class="p">:</span> <span class="n">DataType</span><span class="p">,</span>
                  <span class="n">expression</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span>
                  <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Creates a new `DataColumn`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -122,7 +130,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">parent</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataTable</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the parent `DataTable` of the `DataColumn`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -130,7 +138,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">name</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the column name of the `DataColumn`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -138,7 +146,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">datatype</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataType</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the column `DataType` enumeration value of the `DataColumn`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -146,7 +154,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">expression</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the column expression value of the `DataColumn`, if any.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -154,7 +162,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">computed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets a flag that determines if the `DataColumn` is a computed value,</span>
 <span class="sd">        i.e., has a defined expression.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -163,7 +171,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the index of the `DataColumn` within its parent `DataTable` columns collection.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -176,6 +184,7 @@
             <span class="n">datatype</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Computed </span><span class="si">{</span><span class="n">datatype</span><span class="si">}</span><span class="s2">&quot;</span>
 
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">datatype</span><span class="si">}</span><span class="s2">)&quot;</span></div>
+
 </pre></div>
 
            </div>
@@ -197,7 +206,9 @@
 <p>
     <a href="https://github.com/sttp/pyapi">GitHub Home</a>
     &nbsp;&nbsp;•&nbsp;&nbsp;
-    <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
+    <a href="https://pypi.org/project/sttpapi/" target="_blank">PyPi Package: sttpapi</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://sttp.github.io/documentation/" target="_blank">General STTP Documentation</a>
 </p>
 <br /><br />
 Copyright © 2022, <a href="https://gridprotectionalliance.org/" target="_blank">Grid&nbsp;Protection&nbsp;Alliance</a>

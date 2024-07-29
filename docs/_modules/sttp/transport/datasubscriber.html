@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.datasubscriber &mdash; sttp/pyapi 0.6.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>sttp.transport.datasubscriber &mdash; sttp/pyapi 0.6.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
+
+  
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -26,12 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> sttp/pyapi
-            <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sttp/pyapi
+              <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -52,9 +58,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>sttp.transport.datasubscriber</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sttp.transport.datasubscriber</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -124,9 +130,11 @@
 <span class="n">MISSINGCACHEWARNING_INTERVAL</span> <span class="o">=</span> <span class="mf">20.0</span>
 
 
-<div class="viewcode-block" id="DataSubscriber"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber">[docs]</a><span class="k">class</span> <span class="nc">DataSubscriber</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Represents a client subscription for an STTP connection.</span>
+<div class="viewcode-block" id="DataSubscriber">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber">[docs]</a>
+<span class="k">class</span> <span class="nc">DataSubscriber</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Represents a subscription for an STTP connection.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">DEFAULT_COMPRESS_PAYLOADDATA</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">COMPRESS_PAYLOADDATA</span>            <span class="c1"># Defaults to TSSC</span>
@@ -148,7 +156,7 @@
                  <span class="n">sttp_updatedoninfo</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="n">socket_timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">...</span>
                  <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Creates a new `DataSubscriber`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -180,107 +188,107 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_total_measurementsreceived</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">statusmessage_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called when a informational message should be logged.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">errormessage_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called when an error message should be logged.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">connectionterminated_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called when `DataSubscriber` terminates its connection.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">autoreconnect_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called when `DataSubscriber` automatically reconnects.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">metadatareceived_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">bytes</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called when `DataSubscriber` receives a metadata response.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">subscriptionupdated_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">SignalIndexCache</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called when `DataSubscriber` receives a new signal index cache.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">data_starttime_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called with timestamp of first received measurement in a subscription.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">configurationchanged_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called when the `DataPublisher` sends a notification that configuration has changed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">newmeasurements_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">List</span><span class="p">[</span><span class="n">Measurement</span><span class="p">]],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called when `DataSubscriber` receives a set of new measurements from the `DataPublisher`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">newbufferblocks_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">List</span><span class="p">[</span><span class="n">BufferBlock</span><span class="p">]],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called when `DataSubscriber` receives a set of new buffer block measurements from the `DataPublisher`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">processingcomplete_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Called when the `DataPublished` sends a notification that temporal processing has completed, i.e., the end of a historical playback data stream has been reached.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called when the `DataPublisher` sends a notification that temporal processing has completed, i.e., the end of a historical playback data stream has been reached.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">notificationreceived_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called when the `DataPublisher` sends a notification that requires receipt.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">compress_payloaddata</span> <span class="o">=</span> <span class="n">DataSubscriber</span><span class="o">.</span><span class="n">DEFAULT_COMPRESS_PAYLOADDATA</span> <span class="k">if</span> <span class="n">compress_payloaddata</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">compress_payloaddata</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determines whether payload data is compressed, defaults to TSSC.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">compress_metadata</span> <span class="o">=</span> <span class="n">DataSubscriber</span><span class="o">.</span><span class="n">DEFAULT_COMPRESS_METADATA</span> <span class="k">if</span> <span class="n">compress_metadata</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">compress_metadata</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determines whether the metadata transfer is compressed, defaults to GZip.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">compress_signalindexcache</span> <span class="o">=</span> <span class="n">DataSubscriber</span><span class="o">.</span><span class="n">DEFAULT_COMPRESS_SIGNALINDEXCACHE</span> <span class="k">if</span> <span class="n">compress_signalindexcache</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">compress_signalindexcache</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determines whether the signal index cache is compressed, defaults to GZip.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="n">DataSubscriber</span><span class="o">.</span><span class="n">DEFAULT_VERSION</span> <span class="k">if</span> <span class="n">version</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">version</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the STTP protocol version used by this library.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">sttp_sourceinfo</span> <span class="o">=</span> <span class="n">DataSubscriber</span><span class="o">.</span><span class="n">DEFAULT_STTP_SOURCEINFO</span> <span class="k">if</span> <span class="n">sttp_sourceinfo</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">sttp_sourceinfo</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the STTP library API title as identification information of `DataSubscriber` to a `DataPublisher`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">sttp_versioninfo</span> <span class="o">=</span> <span class="n">DataSubscriber</span><span class="o">.</span><span class="n">DEFAULT_STTP_VERSIONINFO</span> <span class="k">if</span> <span class="n">sttp_versioninfo</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">sttp_versioninfo</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the STTP library API version as identification information of `DataSubscriber` to a `DataPublisher`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">sttp_updatedoninfo</span> <span class="o">=</span> <span class="n">DataSubscriber</span><span class="o">.</span><span class="n">DEFAULT_STTP_UPDATEDONINFO</span> <span class="k">if</span> <span class="n">sttp_updatedoninfo</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">sttp_updatedoninfo</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines when the STTP library API was last updated as identification information of `DataSubscriber` to a `DataPublisher`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">metadatacache</span> <span class="o">=</span> <span class="n">MetadataCache</span><span class="p">()</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the metadata cache associated with this `DataSubscriber`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">socket_timeout</span> <span class="o">=</span> <span class="n">DataSubscriber</span><span class="o">.</span><span class="n">DEFAULT_SOCKET_TIMEOUT</span> <span class="k">if</span> <span class="n">socket_timeout</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">socket_timeout</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the socket timeout in seconds for the `DataSubscriber` connection.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -302,8 +310,10 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_threadpool</span> <span class="o">=</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">thread_name_prefix</span><span class="o">=</span><span class="s2">&quot;DS-PoolThread&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="DataSubscriber.dispose"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.dispose">[docs]</a>    <span class="k">def</span> <span class="nf">dispose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DataSubscriber.dispose">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.dispose">[docs]</a>
+    <span class="k">def</span> <span class="nf">dispose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Cleanly shuts down a `DataSubscriber` that is no longer being used, e.g., during a normal application exit.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -314,9 +324,10 @@
         <span class="c1"># Wait for connection terminated event to complete</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_threadpool</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">connected</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determines if a `DataSubscriber` is currently connected to a `DataPublisher`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -324,7 +335,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">subscribed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determines if a `DataSubscriber` is currently subscribed to a data stream.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -332,36 +343,44 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">disposing</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Determines if DataSubscriber is being disposed.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determines if `DataSubscriber` is being disposed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_disposing</span>
 
-<div class="viewcode-block" id="DataSubscriber.encodestr"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.encodestr">[docs]</a>    <span class="k">def</span> <span class="nf">encodestr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DataSubscriber.encodestr">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.encodestr">[docs]</a>
+    <span class="k">def</span> <span class="nf">encodestr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytes</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Encodes an STTP string according to the defined operational modes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># Latest version of STTP only encodes to UTF8</span>
+        <span class="c1"># Latest version of STTP only encodes to UTF-8</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encoding</span> <span class="o">!=</span> <span class="n">OperationalEncoding</span><span class="o">.</span><span class="n">UTF8</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Python implementation of STTP only supports UTF8 string encoding&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Python implementation of STTP only supports UTF-8 string encoding&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DataSubscriber.decodestr"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.decodestr">[docs]</a>    <span class="k">def</span> <span class="nf">decodestr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DataSubscriber.decodestr">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.decodestr">[docs]</a>
+    <span class="k">def</span> <span class="nf">decodestr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Decodes an STTP string according to the defined operational modes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c1"># Latest version of STTP only encodes to UTF8</span>
+        <span class="c1"># Latest version of STTP only encodes to UTF-8</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encoding</span> <span class="o">!=</span> <span class="n">OperationalEncoding</span><span class="o">.</span><span class="n">UTF8</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Python implementation of STTP only supports UTF8 string encoding&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Python implementation of STTP only supports UTF-8 string encoding&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="DataSubscriber.lookup_metadata"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.lookup_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">lookup_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signalid</span><span class="p">:</span> <span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MeasurementRecord</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DataSubscriber.lookup_metadata">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.lookup_metadata">[docs]</a>
+    <span class="k">def</span> <span class="nf">lookup_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signalid</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MeasurementRecord</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the `MeasurementRecord` for the specified signal ID from the local registry.</span>
 <span class="sd">        If the metadata does not exist, a new record is created and returned.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -371,13 +390,16 @@
         <span class="k">if</span> <span class="n">record</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">record</span>
 
-        <span class="n">record</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="p">(</span><span class="n">signalid</span><span class="p">)</span>
+        <span class="n">record</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="p">(</span><span class="n">signalid</span><span class="p">,</span> <span class="n">source</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">metadatacache</span><span class="o">.</span><span class="n">add_measurement</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">record</span></div>
 
-<div class="viewcode-block" id="DataSubscriber.adjustedvalue"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.adjustedvalue">[docs]</a>    <span class="k">def</span> <span class="nf">adjustedvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurement</span><span class="p">:</span> <span class="n">Measurement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Gets the Value of a `Measurement` with any linear adjustments applied from the measurement&#39;s Adder and Multiplier metadata, if found.</span>
+
+<div class="viewcode-block" id="DataSubscriber.adjustedvalue">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.adjustedvalue">[docs]</a>
+    <span class="k">def</span> <span class="nf">adjustedvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurement</span><span class="p">:</span> <span class="n">Measurement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the `Value` of a `Measurement` with any linear adjustments applied from the measurement&#39;s `Adder` and `Multiplier` metadata, if found.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">record</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadatacache</span><span class="o">.</span><span class="n">find_measurement_signalid</span><span class="p">(</span><span class="n">measurement</span><span class="o">.</span><span class="n">signalid</span><span class="p">)</span>
@@ -387,13 +409,17 @@
 
         <span class="k">return</span> <span class="n">measurement</span><span class="o">.</span><span class="n">value</span></div>
 
-<div class="viewcode-block" id="DataSubscriber.connect"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.connect">[docs]</a>    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hostname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DataSubscriber.connect">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.connect">[docs]</a>
+    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hostname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Requests the the `DataSubscriber` initiate a connection to the `DataPublisher`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1">#  User requests to connection are not an auto-reconnect attempt</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connect</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
 
     <span class="k">def</span> <span class="nf">_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hostname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">,</span> <span class="n">autoreconnecting</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]:</span>  <span class="c1"># sourcery skip: extract-method</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connected</span><span class="p">:</span>
@@ -432,7 +458,7 @@
 
             <span class="c1"># TODO: Add TLS implementation options</span>
             <span class="c1"># TODO: Add reverse (server-based) connection options, see:</span>
-            <span class="c1"># https://sttp.github.io/documentation/reverse-connections/</span>
+            <span class="c1"># https://sttp.info/reverse-connections/</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_socket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">IPPROTO_TCP</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_commandchannel_socket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">IPPROTO_TCP</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">TCP_NODELAY</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
@@ -460,8 +486,10 @@
 
         <span class="k">return</span> <span class="n">err</span>
 
-<div class="viewcode-block" id="DataSubscriber.subscribe"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.subscribe">[docs]</a>    <span class="k">def</span> <span class="nf">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DataSubscriber.subscribe">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.subscribe">[docs]</a>
+    <span class="k">def</span> <span class="nf">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Notifies the `DataPublisher` that a `DataSubscriber` would like to start receiving streaming data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -472,10 +500,14 @@
 
         <span class="n">subscription</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subscription</span>
 
-        <span class="n">connectionbuilder</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">parmaterbuilder</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
             <span class="sa">f</span><span class="s2">&quot;throttled=</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">throttled</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="sa">f</span><span class="s2">&quot;;publishInterval=</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">publishinterval</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="sa">f</span><span class="s2">&quot;;includeTime=</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">includetime</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;;enableTimeReasonabilityCheck=</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">enabletimereasonabilitycheck</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;;lagTime=</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">lagtime</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;;leadTime=</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">leadtime</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;;useLocalClockAsRealTime=</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">uselocalclockasrealtime</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="sa">f</span><span class="s2">&quot;;processingInterval=</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">processinginterval</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="sa">f</span><span class="s2">&quot;;useMillisecondResolution=</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">use_millisecondresolution</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="sa">f</span><span class="s2">&quot;;requestNaNValueFilter=</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">request_nanvaluefilter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
@@ -485,7 +517,7 @@
         <span class="p">]</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">subscription</span><span class="o">.</span><span class="n">filterexpression</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">connectionbuilder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;;filterExpression=</span><span class="se">{{</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">filterexpression</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">parmaterbuilder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;;filterExpression=</span><span class="se">{{</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">filterexpression</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">subscription</span><span class="o">.</span><span class="n">udpdatachannel</span><span class="p">:</span>
             <span class="n">udpport</span> <span class="o">=</span> <span class="n">subscription</span><span class="o">.</span><span class="n">datachannel_localport</span>
@@ -495,32 +527,33 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="n">subscription</span><span class="o">.</span><span class="n">datachannel_interface</span><span class="p">,</span> <span class="n">udpport</span><span class="p">))</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_socket</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">socket_timeout</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
-                <span class="k">return</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;failed to open UDP socket for port </span><span class="si">{</span><span class="n">udpport</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;failed to open UDP socket for port </span><span class="si">{</span><span class="n">udpport</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_responsethread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_run_datachannel_responsethread</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;DataChannelThread&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_datachannel_responsethread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
-            <span class="n">connectionbuilder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;;dataChannel=</span><span class="se">{{</span><span class="s2">localport=</span><span class="si">{</span><span class="n">udpport</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">parmaterbuilder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;;dataChannel=</span><span class="se">{{</span><span class="s2">localport=</span><span class="si">{</span><span class="n">udpport</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">subscription</span><span class="o">.</span><span class="n">starttime</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">connectionbuilder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;;startTimeConstraint=</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">starttime</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">parmaterbuilder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;;startTimeConstraint=</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">starttime</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">subscription</span><span class="o">.</span><span class="n">stoptime</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">connectionbuilder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;;stopTimeConstraint=</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">stoptime</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">parmaterbuilder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;;stopTimeConstraint=</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">stoptime</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">subscription</span><span class="o">.</span><span class="n">constraintparameters</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">connectionbuilder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;;timeConstraintParameters=</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">constraintparameters</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">parmaterbuilder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;;timeConstraintParameters=</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">constraintparameters</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">subscription</span><span class="o">.</span><span class="n">extra_connectionstring_parameters</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">connectionbuilder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;;</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">extra_connectionstring_parameters</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">parmaterbuilder</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;;</span><span class="si">{</span><span class="n">subscription</span><span class="o">.</span><span class="n">extra_connectionstring_parameters</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="n">connectionstring</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">connectionbuilder</span><span class="p">)</span>
-        <span class="n">length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">connectionstring</span><span class="p">))</span>
+        <span class="n">parameterstring</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parmaterbuilder</span><span class="p">)</span>
+        <span class="n">parameterexpression</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encodestr</span><span class="p">(</span><span class="n">parameterstring</span><span class="p">)</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">parameterexpression</span><span class="p">))</span>
         <span class="n">buffer</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">(</span><span class="mi">5</span> <span class="o">+</span> <span class="n">length</span><span class="p">)</span>
 
         <span class="n">buffer</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">DataPacketFlags</span><span class="o">.</span><span class="n">COMPACT</span>
         <span class="n">buffer</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="n">BigEndian</span><span class="o">.</span><span class="n">from_uint32</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
-        <span class="n">buffer</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">encodestr</span><span class="p">(</span><span class="n">connectionstring</span><span class="p">)</span>
+        <span class="n">buffer</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span> <span class="o">=</span> <span class="n">parameterexpression</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">send_servercommand</span><span class="p">(</span><span class="n">ServerCommand</span><span class="o">.</span><span class="n">SUBSCRIBE</span><span class="p">,</span> <span class="n">buffer</span><span class="p">)</span>
 
@@ -532,8 +565,11 @@
 
         <span class="k">return</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="DataSubscriber.unsubscribe"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.unsubscribe">[docs]</a>    <span class="k">def</span> <span class="nf">unsubscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DataSubscriber.unsubscribe">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.unsubscribe">[docs]</a>
+    <span class="k">def</span> <span class="nf">unsubscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Notifies the `DataPublisher` that a `DataSubscriber` would like to stop receiving streaming data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -556,8 +592,11 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_disconnecting</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-<div class="viewcode-block" id="DataSubscriber.disconnect"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.disconnect">[docs]</a>    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DataSubscriber.disconnect">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.disconnect">[docs]</a>
+    <span class="k">def</span> <span class="nf">disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initiates a `DataSubscriber` disconnect sequence.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -568,6 +607,7 @@
         <span class="c1"># issues where user may call disconnect method from a dispatched event thread. Also,</span>
         <span class="c1"># user requests to disconnect are not an auto-reconnect attempt</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_disconnect</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span></div>
+
 
     <span class="k">def</span> <span class="nf">_disconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">jointhread</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">autoreconnecting</span><span class="p">:</span> <span class="nb">bool</span><span class="p">):</span>
         <span class="c1"># Check if disconnect thread is running or subscriber has already disconnected</span>
@@ -592,10 +632,9 @@
         <span class="n">disconnectthread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_run_disconnectthread</span><span class="p">(</span><span class="n">autoreconnecting</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;DisconnectThread&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_disconnectthread_mutex</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
+        <span class="n">disconnectthread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_disconnectthread</span> <span class="o">=</span> <span class="n">disconnectthread</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_disconnectthread_mutex</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
-
-        <span class="n">disconnectthread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">jointhread</span> <span class="ow">and</span> <span class="n">disconnectthread</span><span class="o">.</span><span class="n">is_alive</span><span class="p">():</span>
             <span class="n">disconnectthread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
@@ -794,7 +833,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_handle_configurationchanged</span><span class="p">()</span>
         <span class="k">elif</span> <span class="n">responsecode</span> <span class="o">==</span> <span class="n">ServerResponse</span><span class="o">.</span><span class="n">BUFFERBLOCK</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_handle_bufferblock</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">responsecode</span> <span class="o">==</span> <span class="n">ServerResponse</span><span class="o">.</span><span class="n">NOTIFICATION</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">responsecode</span> <span class="o">==</span> <span class="n">ServerResponse</span><span class="o">.</span><span class="n">NOTIFY</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_handle_notification</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">responsecode</span> <span class="o">==</span> <span class="n">ServerResponse</span><span class="o">.</span><span class="n">NOOP</span><span class="p">:</span>
             <span class="c1"># NoOP Handled</span>
@@ -851,7 +890,7 @@
     <span class="k">def</span> <span class="nf">_handle_metadatarefresh</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadatareceived_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">compress_metadata</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_statusmessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> bytes of metadata in </span><span class="si">{</span><span class="p">(</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadatarequested</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> seconds. Decompressing...&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_statusmessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> bytes of metadata in </span><span class="si">{</span><span class="p">(</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">_metadatarequested</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> seconds. Decompressing...&quot;</span><span class="p">)</span>
 
                 <span class="n">decompress_started</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
 
@@ -861,9 +900,9 @@
                     <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to decompress received metadata: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                     <span class="k">return</span>
 
-                <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_statusmessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Decompressed </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> bytes of metadata in </span><span class="si">{</span><span class="p">(</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">decompress_started</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> seconds. Parsing...&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_statusmessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Decompressed </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> bytes of metadata in </span><span class="si">{</span><span class="p">(</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">decompress_started</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> seconds. Parsing...&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_statusmessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> bytes of metadata in </span><span class="si">{</span><span class="p">(</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadatarequested</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> seconds. Parsing...&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_statusmessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> bytes of metadata in </span><span class="si">{</span><span class="p">(</span><span class="n">time</span><span class="p">()</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="bp">self</span><span class="o">.</span><span class="n">_metadatarequested</span><span class="p">)</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> seconds. Parsing...&quot;</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">_threadpool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadatareceived_callback</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
@@ -909,7 +948,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_signalindexcache_mutex</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">version</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">send_servercommand</span><span class="p">(</span><span class="n">ServerCommand</span><span class="o">.</span><span class="n">CONFIRMSIGNALINDEXCACHE</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">send_servercommand</span><span class="p">(</span><span class="n">ServerCommand</span><span class="o">.</span><span class="n">CONFIRMUPDATESIGNALINDEXCACHE</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">subscriptionupdated_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">subscriptionupdated_callback</span><span class="p">(</span><span class="n">signalindexcache</span><span class="p">)</span>
@@ -921,7 +960,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_timeindex</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">BigEndian</span><span class="o">.</span><span class="n">to_uint32</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_basetimeoffsets</span> <span class="o">=</span> <span class="p">[</span><span class="n">BigEndian</span><span class="o">.</span><span class="n">to_uint64</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">4</span><span class="p">:]),</span> <span class="n">BigEndian</span><span class="o">.</span><span class="n">to_uint64</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">12</span><span class="p">:])]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_statusmessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received new base time offset from publisher: </span><span class="si">{</span><span class="n">Ticks</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_basetimeoffsets</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeindex</span> <span class="o">^</span> <span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_statusmessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received new base time offset from publisher: </span><span class="si">{</span><span class="n">Ticks</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_basetimeoffsets</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeindex</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="mi">1</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_handle_update_cipherkeys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
         <span class="c1"># Deserialize new cipher keys</span>
@@ -1096,7 +1135,7 @@
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_missingcachewarning</span> <span class="o">+</span> <span class="n">MISSINGCACHEWARNING_INTERVAL</span> <span class="o">&lt;</span> <span class="n">time</span><span class="p">():</span>
                 <span class="c1"># Warning message for missing signal index cache</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_last_missingcachewarning</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_statusmessage</span><span class="p">(</span><span class="s2">&quot;Signal index cache has not arrived. No compact measurements can be parsed.&quot;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_statusmessage</span><span class="p">(</span><span class="s2">&quot;WARNING: Signal index cache has not arrived. No compact measurements can be parsed.&quot;</span><span class="p">)</span>
 
                 <span class="bp">self</span><span class="o">.</span><span class="n">_last_missingcachewarning</span> <span class="o">=</span> <span class="n">time</span><span class="p">()</span>
 
@@ -1186,15 +1225,20 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">notificationreceived_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">notificationreceived_callback</span><span class="p">()</span>
 
-<div class="viewcode-block" id="DataSubscriber.send_servercommand_withmessage"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.send_servercommand_withmessage">[docs]</a>    <span class="k">def</span> <span class="nf">send_servercommand_withmessage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">:</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="DataSubscriber.send_servercommand_withmessage">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.send_servercommand_withmessage">[docs]</a>
+    <span class="k">def</span> <span class="nf">send_servercommand_withmessage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">:</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sends a server command code to the `DataPublisher` along with the specified string message as payload.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">send_servercommand</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">encodestr</span><span class="p">(</span><span class="n">message</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="DataSubscriber.send_servercommand"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.send_servercommand">[docs]</a>    <span class="k">def</span> <span class="nf">send_servercommand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">:</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="DataSubscriber.send_servercommand">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.send_servercommand">[docs]</a>
+    <span class="k">def</span> <span class="nf">send_servercommand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">:</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Sends a server command code to the `DataPublisher` with specified payload.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1225,9 +1269,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to send server command - disconnecting: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_connectionterminated</span><span class="p">()</span></div>
 
+
     <span class="k">def</span> <span class="nf">_send_operationalmodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="n">operationalModes</span> <span class="o">=</span> <span class="n">CompressionModes</span><span class="o">.</span><span class="n">GZIP</span>
-        <span class="n">operationalModes</span> <span class="o">|=</span> <span class="n">OperationalModes</span><span class="o">.</span><span class="n">VERSIONMASK</span> <span class="o">&amp;</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span>
+        <span class="n">operationalModes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">CompressionModes</span><span class="o">.</span><span class="n">GZIP</span><span class="p">)</span>
+        <span class="n">operationalModes</span> <span class="o">|=</span> <span class="n">OperationalModes</span><span class="o">.</span><span class="n">VERSIONMASK</span> <span class="o">&amp;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
         <span class="n">operationalModes</span> <span class="o">|=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_encoding</span>
 
         <span class="c1"># TSSC compression only works with stateful connections</span>
@@ -1244,7 +1289,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">subscription</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SubscriptionInfo</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the `SubscriptionInfo` associated with this `DataSubscriber`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1252,15 +1297,15 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">connector</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SubscriberConnector</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Gets the SubscriberConnector associated with this DataSubscriber.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the `SubscriberConnector` associated with this `DataSubscriber`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connector</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">activesignalindexcache</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SignalIndexCache</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the active signal index cache.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1272,7 +1317,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">subscriberid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UUID</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the subscriber ID as assigned by the `DataPublisher` upon receipt of the `SignalIndexCache`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1280,7 +1325,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">total_commandchannel_bytesreceived</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the total number of bytes received via the command channel since last connection.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1288,7 +1333,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">total_datachannel_bytesreceived</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the total number of bytes received via the data channel since last connection.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -1296,11 +1341,12 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">total_measurementsreceived</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the total number of measurements received since last subscription.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_total_measurementsreceived</span></div>
+
 </pre></div>
 
            </div>
@@ -1322,7 +1368,9 @@
 <p>
     <a href="https://github.com/sttp/pyapi">GitHub Home</a>
     &nbsp;&nbsp;•&nbsp;&nbsp;
-    <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
+    <a href="https://pypi.org/project/sttpapi/" target="_blank">PyPi Package: sttpapi</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://sttp.github.io/documentation/" target="_blank">General STTP Documentation</a>
 </p>
 <br /><br />
 Copyright © 2022, <a href="https://gridprotectionalliance.org/" target="_blank">Grid&nbsp;Protection&nbsp;Alliance</a>

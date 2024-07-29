@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.data.expressiontree &mdash; sttp/pyapi 0.6.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>sttp.data.expressiontree &mdash; sttp/pyapi 0.6.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
+
+  
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -26,12 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> sttp/pyapi
-            <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sttp/pyapi
+              <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -52,9 +58,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>sttp.data.expressiontree</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sttp.data.expressiontree</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -154,42 +160,46 @@
     <span class="k">return</span> <span class="n">firstindex</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">test</span><span class="p">),</span> <span class="n">secondindex</span><span class="p">,</span> <span class="kc">True</span>
 
 
-<div class="viewcode-block" id="ExpressionTree"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.expressiontree.ExpressionTree">[docs]</a><span class="k">class</span> <span class="nc">ExpressionTree</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ExpressionTree">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.expressiontree.ExpressionTree">[docs]</a>
+<span class="k">class</span> <span class="nc">ExpressionTree</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Represents a tree of expressions for evaluation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Creates a new expression tree.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_currentrow</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DataRow</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">tablename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the associated table name parsed from &quot;FILTER&quot; statement, if any.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">toplimit</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defined the parsed value associated with the &quot;TOP&quot; keyword, if any.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">orderbyterms</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">OrderByTerm</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Represents the order by elements parsed from the &quot;ORDER BY&quot; keyword, if any.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Expression</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the starting `Expression` for evaluation of the expression tree, or None if there</span>
 <span class="sd">        is not one. This is the root expression of the `ExpressionTree`. Value is automatically</span>
 <span class="sd">        managed by the `FilterExpressionParser`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="ExpressionTree.select"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.expressiontree.ExpressionTree.select">[docs]</a>    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="n">DataTable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">DataRow</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="ExpressionTree.select">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.expressiontree.ExpressionTree.select">[docs]</a>
+    <span class="k">def</span> <span class="nf">select</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="n">DataTable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">DataRow</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the rows matching the the `ExpressionTree`.</span>
 
 <span class="sd">        The expression tree result type is expected to be a boolean for this filtering operation.</span>
@@ -209,8 +219,11 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">selectwhere</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">predicate</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="ExpressionTree.selectwhere"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.expressiontree.ExpressionTree.selectwhere">[docs]</a>    <span class="k">def</span> <span class="nf">selectwhere</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="n">DataTable</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">ValueExpression</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]],</span> <span class="n">applylimit</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">applysort</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">DataRow</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ExpressionTree.selectwhere">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.expressiontree.ExpressionTree.selectwhere">[docs]</a>
+    <span class="k">def</span> <span class="nf">selectwhere</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">table</span><span class="p">:</span> <span class="n">DataTable</span><span class="p">,</span> <span class="n">predicate</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">ValueExpression</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]],</span> <span class="n">applylimit</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">applysort</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">DataRow</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns each table row evaluated from the `ExpressionTree` that matches the specified predicate.</span>
 
 <span class="sd">        The `applylimit` and `applysort` parameters determine if any encountered &quot;TOP&quot; limit and &quot;ORDER BY&quot;</span>
@@ -271,8 +284,11 @@
 
         <span class="k">return</span> <span class="n">matchedrows</span><span class="p">,</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="ExpressionTree.evaluate"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.expressiontree.ExpressionTree.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DataRow</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">ValueExpression</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ExpressionTree.evaluate">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.expressiontree.ExpressionTree.evaluate">[docs]</a>
+    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DataRow</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">ValueExpression</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Traverses the the `ExpressionTree` for the provided data row to produce a `ValueExpression`.</span>
 <span class="sd">        Root expression should be assigned before calling `evaluate`; otherwise result will be a Null</span>
 <span class="sd">        `ValueExpression`. The `datarow` parameter can be None if there are no columns referenced in</span>
@@ -281,6 +297,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_currentrow</span> <span class="o">=</span> <span class="n">row</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="p">)</span></div>
+
 
     <span class="k">def</span> <span class="nf">_evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Expression</span><span class="p">,</span> <span class="n">ValueExpression</span><span class="p">]],</span> <span class="n">target_valuetype</span><span class="p">:</span> <span class="n">ExpressionValueType</span> <span class="o">=</span> <span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">ValueExpression</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
         <span class="k">if</span> <span class="n">expression</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1326,7 +1343,7 @@
         <span class="n">foundvaluetype</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="k">for</span> <span class="n">valuetype</span> <span class="ow">in</span> <span class="n">ExpressionValueType</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">targettypename</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">valuetype</span><span class="p">)</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">&quot;ExpressionValueType.&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">targettypename</span> <span class="o">==</span> <span class="n">valuetype</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
                 <span class="n">targetvaluetype</span> <span class="o">=</span> <span class="n">valuetype</span>
                 <span class="n">foundvaluetype</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="k">break</span>
@@ -2694,6 +2711,7 @@
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;cannot perform </span><span class="se">\&quot;</span><span class="s2">OR</span><span class="se">\&quot;</span><span class="s2"> operation on </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">leftvalue</span><span class="o">.</span><span class="n">valuetype</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> and </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">rightvalue</span><span class="o">.</span><span class="n">valuetype</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">ValueExpression</span><span class="p">(</span><span class="n">ExpressionValueType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">,</span> <span class="n">leftvalue</span><span class="o">.</span><span class="n">_booleanvalue</span><span class="p">()</span> <span class="ow">or</span> <span class="n">rightvalue</span><span class="o">.</span><span class="n">_booleanvalue</span><span class="p">()),</span> <span class="kc">None</span></div>
+
 </pre></div>
 
            </div>
@@ -2715,7 +2733,9 @@
 <p>
     <a href="https://github.com/sttp/pyapi">GitHub Home</a>
     &nbsp;&nbsp;•&nbsp;&nbsp;
-    <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
+    <a href="https://pypi.org/project/sttpapi/" target="_blank">PyPi Package: sttpapi</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://sttp.github.io/documentation/" target="_blank">General STTP Documentation</a>
 </p>
 <br /><br />
 Copyright © 2022, <a href="https://gridprotectionalliance.org/" target="_blank">Grid&nbsp;Protection&nbsp;Alliance</a>

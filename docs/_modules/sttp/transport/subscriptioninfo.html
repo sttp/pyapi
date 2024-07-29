@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.subscriptioninfo &mdash; sttp/pyapi 0.6.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>sttp.transport.subscriptioninfo &mdash; sttp/pyapi 0.6.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
+
+  
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -26,12 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> sttp/pyapi
-            <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sttp/pyapi
+              <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -52,9 +58,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>sttp.transport.subscriptioninfo</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sttp.transport.subscriptioninfo</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -64,7 +70,7 @@
            <div itemprop="articleBody">
              
   <h1>Source code for sttp.transport.subscriptioninfo</h1><div class="highlight"><pre>
-<span></span><span class="c1">#******************************************************************************************************</span>
+<span></span><span class="c1"># ******************************************************************************************************</span>
 <span class="c1">#  subscriptioninfo.py - Gbtc</span>
 <span class="c1">#</span>
 <span class="c1">#  Copyright © 2022, Grid Protection Alliance.  All Rights Reserved.</span>
@@ -85,14 +91,16 @@
 <span class="c1">#  08/17/2022 - J. Ritchie Carroll</span>
 <span class="c1">#       Generated original version of source code.</span>
 <span class="c1">#</span>
-<span class="c1">#******************************************************************************************************</span>
+<span class="c1"># ******************************************************************************************************</span>
 
 <span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">Defaults</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="SubscriptionInfo"><a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriptioninfo.SubscriptionInfo">[docs]</a><span class="k">class</span> <span class="nc">SubscriptionInfo</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SubscriptionInfo">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriptioninfo.SubscriptionInfo">[docs]</a>
+<span class="k">class</span> <span class="nc">SubscriptionInfo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Defines subscription related settings for a `DataSubscriber` instance.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -103,6 +111,10 @@
     <span class="n">DEFAULT_DATACHANNEL_LOCALPORT</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">DATACHANNEL_LOCALPORT</span>
     <span class="n">DEFAULT_DATACHANNEL_INTERFACE</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">DATACHANNEL_INTERFACE</span>
     <span class="n">DEFAULT_INCLUDETIME</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">INCLUDETIME</span>
+    <span class="n">DEFAULT_ENABLE_TIME_REASONABILITY_CHECK</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">ENABLE_TIME_REASONABILITY_CHECK</span>
+    <span class="n">DEFAULT_LAGTIME</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">LAGTIME</span>
+    <span class="n">DEFAULT_LEADTIME</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">LEADTIME</span>
+    <span class="n">DEFAULT_USE_LOCALCLOCK_AS_REALTIME</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">USE_LOCALCLOCK_AS_REALTIME</span>
     <span class="n">DEFAULT_USE_MILLISECONDRESOLUTION</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">USE_MILLISECONDRESOLUTION</span>
     <span class="n">DEFAULT_REQUEST_NANVALUEFILTER</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">REQUEST_NANVALUEFILTER</span>
     <span class="n">DEFAULT_STARTTIME</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">STARTTIME</span>
@@ -119,6 +131,10 @@
                  <span class="n">datachannel_localport</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="n">datachannel_interface</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="n">includetime</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">enabletimereasonabilitycheck</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">lagtime</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">leadtime</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">uselocalclockasrealtime</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="n">usemillisecondresolution</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="n">requestnanvaluefilter</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="n">starttime</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
@@ -128,7 +144,7 @@
                  <span class="n">extra_connectionstring_parameters</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">filterexpression</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_FILTEREXPRESSION</span> <span class="k">if</span> <span class="n">filterexpression</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">filterexpression</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the desired measurements for a subscription. Examples include:</span>
 <span class="sd">        </span>
 <span class="sd">        * Directly specified signal IDs (UUID values in string format):</span>
@@ -145,67 +161,94 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">throttled</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_THROTTLED</span> <span class="k">if</span> <span class="n">throttled</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">throttled</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determines if data will be published using down-sampling.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">publishinterval</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_PUBLISHINTERVAL</span> <span class="k">if</span> <span class="n">publishinterval</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">publishinterval</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Defines the down-sampling publish interval to use when `Throttled` is `True`.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the down-sampling publish interval to use when `throttled` is `True`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">udpdatachannel</span> <span class="o">=</span> <span class="kc">False</span> <span class="k">if</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_UDPDATACHANNEL</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">udpdatachannel</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Requests that a UDP channel be used for data publication.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">datachannel_localport</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_DATACHANNEL_LOCALPORT</span> <span class="k">if</span> <span class="n">datachannel_localport</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">datachannel_localport</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the desired UDP port to use for publication.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">datachannel_interface</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_DATACHANNEL_INTERFACE</span> <span class="k">if</span> <span class="n">datachannel_interface</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">datachannel_interface</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the desired network interface to use for UDP publication.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">includetime</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_INCLUDETIME</span> <span class="k">if</span> <span class="n">includetime</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">includetime</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determines if time should be included in non-compressed, compact measurements.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="bp">self</span><span class="o">.</span><span class="n">enabletimereasonabilitycheck</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_ENABLE_TIME_REASONABILITY_CHECK</span> <span class="k">if</span> <span class="n">enabletimereasonabilitycheck</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">enabletimereasonabilitycheck</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determines  if publisher should perform time reasonability checks.</span>
+<span class="sd">        When enabled `lagtime` and `leadtime` will be used to determine if a measurement timestamp is reasonable.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">lagtime</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_LAGTIME</span> <span class="k">if</span> <span class="n">lagtime</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">lagtime</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines defines the allowed past time deviation tolerance in seconds (can be sub-second).</span>
+<span class="sd">        Value is used to determine if a measurement timestamp is reasonable.</span>
+<span class="sd">        Only applicable when `enabletimereasonabilitycheck` is `True`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">leadtime</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_LEADTIME</span> <span class="k">if</span> <span class="n">leadtime</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">leadtime</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines defines the allowed future time deviation tolerance in seconds (can be sub-second).</span>
+<span class="sd">        Value is used to determine if a measurement timestamp is reasonable.</span>
+<span class="sd">        Only applicable when `enabletimereasonabilitycheck` is `True`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">uselocalclockasrealtime</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_USE_LOCALCLOCK_AS_REALTIME</span> <span class="k">if</span> <span class="n">uselocalclockasrealtime</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">uselocalclockasrealtime</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Determines if publisher should use local clock as real time. If false,</span>
+<span class="sd">        the timestamp of the latest measurement will be used as real-time.</span>
+<span class="sd">        Only applicable when `enabletimereasonabilitycheck` is `True`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">use_millisecondresolution</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_USE_MILLISECONDRESOLUTION</span> <span class="k">if</span> <span class="n">usemillisecondresolution</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">usemillisecondresolution</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determines if time should be restricted to milliseconds in non-compressed, compact measurements.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">request_nanvaluefilter</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_REQUEST_NANVALUEFILTER</span> <span class="k">if</span> <span class="n">requestnanvaluefilter</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">requestnanvaluefilter</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Requests that the publisher filter, i.e., does not send, any NaN values.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">starttime</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_STARTTIME</span> <span class="k">if</span> <span class="n">starttime</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">starttime</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the start time for a requested temporal data playback, i.e., a historical subscription.</span>
 <span class="sd">        Simply by specifying a `StartTime` and `StopTime`, a subscription is considered a historical subscription.</span>
 <span class="sd">        Note that the publisher may not support historical subscriptions, in which case the subscribe will fail.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">stoptime</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_STOPTIME</span> <span class="k">if</span> <span class="n">stoptime</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">stoptime</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the stop time for a requested temporal data playback, i.e., a historical subscription.</span>
 <span class="sd">        Simply by specifying a `StartTime` and `StopTime`, a subscription is considered a historical subscription.</span>
 <span class="sd">        Note that the publisher may not support historical subscriptions, in which case the subscribe will fail.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">constraintparameters</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_CONSTRAINTPARAMETERS</span> <span class="k">if</span> <span class="n">constraintparameters</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">constraintparameters</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines any custom constraint parameters for a requested temporal data playback. This can include</span>
 <span class="sd">        parameters that may be needed to initiate, filter, or control historical data access.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">processinginterval</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_PROCESSINGINTERVAL</span> <span class="k">if</span> <span class="n">processinginterval</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">processinginterval</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the initial playback speed, in milliseconds, for a requested temporal data playback.</span>
 <span class="sd">        With the exception of the values of -1 and 0, this value specifies the desired processing interval for data, i.e.,</span>
 <span class="sd">        basically a delay, or timer interval, over which to process data. A value of -1 means to use the default processing</span>
@@ -213,9 +256,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">extra_connectionstring_parameters</span> <span class="o">=</span> <span class="n">SubscriptionInfo</span><span class="o">.</span><span class="n">DEFAULT_EXTRA_CONNECTIONSTRING_PARAMETERS</span> <span class="k">if</span> <span class="n">extra_connectionstring_parameters</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">extra_connectionstring_parameters</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines any extra or custom connection string parameters that may be needed for a subscription.</span>
 <span class="sd">        &quot;&quot;&quot;</span></div>
+
 </pre></div>
 
            </div>
@@ -237,7 +281,9 @@
 <p>
     <a href="https://github.com/sttp/pyapi">GitHub Home</a>
     &nbsp;&nbsp;•&nbsp;&nbsp;
-    <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
+    <a href="https://pypi.org/project/sttpapi/" target="_blank">PyPi Package: sttpapi</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://sttp.github.io/documentation/" target="_blank">General STTP Documentation</a>
 </p>
 <br /><br />
 Copyright © 2022, <a href="https://gridprotectionalliance.org/" target="_blank">Grid&nbsp;Protection&nbsp;Alliance</a>

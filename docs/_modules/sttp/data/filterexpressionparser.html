@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.data.filterexpressionparser &mdash; sttp/pyapi 0.6.0 documentation</title>
-      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <title>sttp.data.filterexpressionparser &mdash; sttp/pyapi 0.6.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
+
+  
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-        <script src="../../../_static/jquery.js"></script>
-        <script src="../../../_static/underscore.js"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -26,12 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../index.html" class="icon icon-home"> sttp/pyapi
-            <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            sttp/pyapi
+              <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -52,9 +58,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../index.html">Module code</a> &raquo;</li>
-      <li>sttp.data.filterexpressionparser</li>
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sttp.data.filterexpressionparser</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -116,8 +122,10 @@
 <span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span>
 
 
-<div class="viewcode-block" id="FilterExpressionParser"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser">[docs]</a><span class="k">class</span> <span class="nc">FilterExpressionParser</span><span class="p">(</span><span class="n">ExpressionListener</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="FilterExpressionParser">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser">[docs]</a>
+<span class="k">class</span> <span class="nc">FilterExpressionParser</span><span class="p">(</span><span class="n">ExpressionListener</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Represents a parser for STTP filter expressions.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -144,31 +152,31 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_expressions</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="n">ParserRuleContext</span><span class="p">,</span> <span class="n">Expression</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">:</span> <span class="n">DataSet</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the source metadata used for parsing the filter expression.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">primary_tablename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the name of the table to use in the DataSet when filter expressions do not specify</span>
 <span class="sd">        a table name, e.g., direct signal identification. See:</span>
 <span class="sd">        https://sttp.github.io/documentation/filter-expressions/#direct-signal-identification</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">tableidfields_map</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TableIDFields</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines a map of table ID fields associated with table names.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">track_filteredrows</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines a flag that enables tracking of matching rows during filter expression evaluation.</span>
 <span class="sd">        Value defaults to True. Set value to False and set `track_filteredsignalids` to True if</span>
 <span class="sd">        only signal IDs are needed post filter expression evaluation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">track_filteredsignalids</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines a flag that enables tracking of matching signal IDs during filter expression evaluation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -177,14 +185,16 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_parser</span><span class="o">.</span><span class="n">addErrorListener</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_errorlistener</span><span class="p">)</span>
 
-<div class="viewcode-block" id="FilterExpressionParser.from_dataset"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.from_dataset">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="FilterExpressionParser.from_dataset">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.from_dataset">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">from_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">DataSet</span><span class="p">,</span>
                      <span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                      <span class="n">primary_table</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                      <span class="n">tableidfields</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TableIDFields</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
                      <span class="n">suppress_console_erroroutput</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
                      <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;FilterExpressionParser&quot;</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Creates a new filter expression parser associated with the provided `dataSet`</span>
 <span class="sd">        and provided table details. Error will be returned if `dataset` parameter is</span>
 <span class="sd">        None or the `filterexpression` is empty.</span>
@@ -209,16 +219,20 @@
 
         <span class="k">return</span> <span class="n">parser</span><span class="p">,</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="FilterExpressionParser.set_parsingexception_callback"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.set_parsingexception_callback">[docs]</a>    <span class="k">def</span> <span class="nf">set_parsingexception_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FilterExpressionParser.set_parsingexception_callback">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.set_parsingexception_callback">[docs]</a>
+    <span class="k">def</span> <span class="nf">set_parsingexception_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Registers a callback for receiving parsing exception messages.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_errorlistener</span><span class="o">.</span><span class="n">parsingexception_callback</span> <span class="o">=</span> <span class="n">callback</span></div>
 
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">expressiontrees</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">ExpressionTree</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the list of expression trees parsed from the filter expression.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -232,7 +246,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">filtered_rows</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">DataRow</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the rows matching the parsed filter expression.</span>
 
 <span class="sd">        Results could contain duplicates if source `DataSet` has duplicated rows.</span>
@@ -242,7 +256,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">filtered_rowset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">DataRow</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the unique row set matching the parsed filter expression.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -251,7 +265,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">filtered_signalids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">UUID</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the Guid-based signal IDs matching the parsed filter expression.</span>
 
 <span class="sd">        Results could contain duplicates if source `DataSet` has duplicated rows.</span>
@@ -261,7 +275,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">filtered_signalidset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="n">UUID</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the unique Guid-based signal ID set matching the parsed filter expression.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -270,14 +284,16 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">filterexpression_statementcount</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the number of filter expression statements encountered while parsing.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filterexpression_statementcount</span>
 
-<div class="viewcode-block" id="FilterExpressionParser.table"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.table">[docs]</a>    <span class="k">def</span> <span class="nf">table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tablename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">DataTable</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="FilterExpressionParser.table">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.table">[docs]</a>
+    <span class="k">def</span> <span class="nf">table</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tablename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">DataTable</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the DataTable for the specified tableName from the FilterExpressionParser DataSet.</span>
 
 <span class="sd">        An error will be returned if no DataSet has been defined or the tableName cannot be found.</span>
@@ -293,8 +309,11 @@
 
         <span class="k">return</span> <span class="n">table</span><span class="p">,</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="FilterExpressionParser.evaluate"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">applylimit</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">applysort</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FilterExpressionParser.evaluate">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.evaluate">[docs]</a>
+    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">applylimit</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">applysort</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Evaluate parses each statement in the filter expression and tracks the results.</span>
 
 <span class="sd">        Filter expressions can contain multiple statements, separated by semi-colons, where each</span>
@@ -374,6 +393,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">_add_matchedrow</span><span class="p">(</span><span class="n">matchedrow</span><span class="p">,</span> <span class="n">signalid_columnindex</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="kc">None</span></div>
+
 
     <span class="k">def</span> <span class="nf">_visit_parsetreenodes</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]:</span>
         <span class="n">err</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
@@ -463,7 +483,9 @@
     <span class="c1">#     | filterStatement</span>
     <span class="c1">#     | expression</span>
     <span class="c1">#     ;</span>
-<div class="viewcode-block" id="FilterExpressionParser.enterFilterExpressionStatement"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.enterFilterExpressionStatement">[docs]</a>    <span class="k">def</span> <span class="nf">enterFilterExpressionStatement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">FilterExpressionStatementContext</span><span class="p">):</span>
+<div class="viewcode-block" id="FilterExpressionParser.enterFilterExpressionStatement">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.enterFilterExpressionStatement">[docs]</a>
+    <span class="k">def</span> <span class="nf">enterFilterExpressionStatement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">FilterExpressionStatementContext</span><span class="p">):</span>
         <span class="c1"># One filter expression can contain multiple filter statements separated by semi-colon,</span>
         <span class="c1"># so we track each as an independent expression tree</span>
 
@@ -476,6 +498,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filterexpression_statementcount</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_initialize_set_operations</span><span class="p">()</span></div>
 
+
     <span class="c1">#    filterStatement</span>
     <span class="c1">#     : K_FILTER ( K_TOP topLimit )? tableName K_WHERE expression ( K_ORDER K_BY orderingTerm ( &#39;,&#39; orderingTerm )* )?</span>
     <span class="c1">#     ;</span>
@@ -487,7 +510,9 @@
     <span class="c1">#    orderingTerm</span>
     <span class="c1">#     : exactMatchModifier? columnName ( K_ASC | K_DESC )?</span>
     <span class="c1">#     ;</span>
-<div class="viewcode-block" id="FilterExpressionParser.enterFilterStatement"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.enterFilterStatement">[docs]</a>    <span class="k">def</span> <span class="nf">enterFilterStatement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">FilterStatementContext</span><span class="p">):</span>
+<div class="viewcode-block" id="FilterExpressionParser.enterFilterStatement">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.enterFilterStatement">[docs]</a>
+    <span class="k">def</span> <span class="nf">enterFilterStatement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">FilterStatementContext</span><span class="p">):</span>
         <span class="n">tablename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">tableName</span><span class="p">()</span><span class="o">.</span><span class="n">getText</span><span class="p">()</span>
 
         <span class="n">table</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="n">tablename</span><span class="p">)</span>
@@ -518,12 +543,15 @@
                     <span class="n">orderingterm</span><span class="o">.</span><span class="n">K_DESC</span><span class="p">()</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">,</span>
                     <span class="n">orderingterm</span><span class="o">.</span><span class="n">exactMatchModifier</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">))</span></div>
 
+
     <span class="c1">#    identifierStatement</span>
     <span class="c1">#     : GUID_LITERAL</span>
     <span class="c1">#     | MEASUREMENT_KEY_LITERAL</span>
     <span class="c1">#     | POINT_TAG_LITERAL</span>
     <span class="c1">#     ;</span>
-<div class="viewcode-block" id="FilterExpressionParser.exitIdentifierStatement"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.exitIdentifierStatement">[docs]</a>    <span class="k">def</span> <span class="nf">exitIdentifierStatement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">IdentifierStatementContext</span><span class="p">):</span>
+<div class="viewcode-block" id="FilterExpressionParser.exitIdentifierStatement">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.exitIdentifierStatement">[docs]</a>
+    <span class="k">def</span> <span class="nf">exitIdentifierStatement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">IdentifierStatementContext</span><span class="p">):</span>
         <span class="c1"># sourcery skip</span>
         <span class="n">signalid</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">GUID</span>
 
@@ -602,24 +630,30 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_map_matchedfieldrow</span><span class="p">(</span><span class="n">primary_table</span><span class="p">,</span> <span class="n">primary_tableidfields</span><span class="o">.</span><span class="n">pointtag_fieldname</span><span class="p">,</span> <span class="n">ctx</span><span class="o">.</span><span class="n">POINT_TAG_LITERAL</span><span class="p">()</span><span class="o">.</span><span class="n">getText</span><span class="p">(),</span> <span class="n">signalid_columnindex</span><span class="p">)</span>
             <span class="k">return</span></div>
 
-    <span class="c1">#    expression</span>
-    <span class="c1">#     : notOperator expression</span>
-    <span class="c1">#     | expression logicalOperator expression</span>
-    <span class="c1">#     | predicateExpression</span>
-    <span class="c1">#     ;</span>
-<div class="viewcode-block" id="FilterExpressionParser.enterExpression"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.enterExpression">[docs]</a>    <span class="k">def</span> <span class="nf">enterExpression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">ExpressionContext</span><span class="p">):</span>
-        <span class="c1"># Handle case of encountering a standalone expression, i.e., an expression not</span>
-        <span class="c1"># within a filter statement context</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_expressiontree</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_active_expressiontree</span> <span class="o">=</span> <span class="n">ExpressionTree</span><span class="p">()</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_expressiontrees</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_active_expressiontree</span><span class="p">)</span></div>
 
     <span class="c1">#    expression</span>
     <span class="c1">#     : notOperator expression</span>
     <span class="c1">#     | expression logicalOperator expression</span>
     <span class="c1">#     | predicateExpression</span>
     <span class="c1">#     ;</span>
-<div class="viewcode-block" id="FilterExpressionParser.exitExpression"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.exitExpression">[docs]</a>    <span class="k">def</span> <span class="nf">exitExpression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">ExpressionContext</span><span class="p">):</span>
+<div class="viewcode-block" id="FilterExpressionParser.enterExpression">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.enterExpression">[docs]</a>
+    <span class="k">def</span> <span class="nf">enterExpression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">ExpressionContext</span><span class="p">):</span>
+        <span class="c1"># Handle case of encountering a standalone expression, i.e., an expression not</span>
+        <span class="c1"># within a filter statement context</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_expressiontree</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_active_expressiontree</span> <span class="o">=</span> <span class="n">ExpressionTree</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_expressiontrees</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_active_expressiontree</span><span class="p">)</span></div>
+
+
+    <span class="c1">#    expression</span>
+    <span class="c1">#     : notOperator expression</span>
+    <span class="c1">#     | expression logicalOperator expression</span>
+    <span class="c1">#     | predicateExpression</span>
+    <span class="c1">#     ;</span>
+<div class="viewcode-block" id="FilterExpressionParser.exitExpression">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.exitExpression">[docs]</a>
+    <span class="k">def</span> <span class="nf">exitExpression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">ExpressionContext</span><span class="p">):</span>
         <span class="n">value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Expression</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># Check for predicate expressions (see explicit visit function)</span>
@@ -684,6 +718,7 @@
 
         <span class="k">raise</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unexpected expression </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">ctx</span><span class="o">.</span><span class="n">getText</span><span class="p">()</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
+
     <span class="c1">#    predicateExpression</span>
     <span class="c1">#     : predicateExpression notOperator? K_IN exactMatchModifier? &#39;(&#39; expressionList &#39;)&#39;</span>
     <span class="c1">#     | predicateExpression K_IS notOperator? K_NULL</span>
@@ -691,7 +726,9 @@
     <span class="c1">#     | predicateExpression notOperator? K_LIKE exactMatchModifier? predicateExpression</span>
     <span class="c1">#     | valueExpression</span>
     <span class="c1">#     ;</span>
-<div class="viewcode-block" id="FilterExpressionParser.exitPredicateExpression"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.exitPredicateExpression">[docs]</a>    <span class="k">def</span> <span class="nf">exitPredicateExpression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">PredicateExpressionContext</span><span class="p">):</span>
+<div class="viewcode-block" id="FilterExpressionParser.exitPredicateExpression">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.exitPredicateExpression">[docs]</a>
+    <span class="k">def</span> <span class="nf">exitPredicateExpression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">PredicateExpressionContext</span><span class="p">):</span>
         <span class="c1"># sourcery skip</span>
         <span class="n">value_expression</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">ValueExpressionContext</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">valueExpression</span><span class="p">()</span>
 
@@ -818,6 +855,7 @@
 
         <span class="k">raise</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unexpected predicate expression </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">ctx</span><span class="o">.</span><span class="n">getText</span><span class="p">()</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
+
     <span class="c1">#    valueExpression</span>
     <span class="c1">#     : literalValue</span>
     <span class="c1">#     | columnName</span>
@@ -827,7 +865,9 @@
     <span class="c1">#     | valueExpression mathOperator valueExpression</span>
     <span class="c1">#     | valueExpression bitwiseOperator valueExpression</span>
     <span class="c1"># 	  ;</span>
-<div class="viewcode-block" id="FilterExpressionParser.exitValueExpression"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.exitValueExpression">[docs]</a>    <span class="k">def</span> <span class="nf">exitValueExpression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">ValueExpressionContext</span><span class="p">):</span>
+<div class="viewcode-block" id="FilterExpressionParser.exitValueExpression">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.exitValueExpression">[docs]</a>
+    <span class="k">def</span> <span class="nf">exitValueExpression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">ValueExpressionContext</span><span class="p">):</span>
         <span class="c1"># sourcery skip</span>
         <span class="n">literal_value</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">LiteralValueContext</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">literalValue</span><span class="p">()</span>
 
@@ -975,6 +1015,7 @@
 
         <span class="k">raise</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unexpected value expression </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">ctx</span><span class="o">.</span><span class="n">getText</span><span class="p">()</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
+
     <span class="c1">#    literalValue</span>
     <span class="c1">#     : INTEGER_LITERAL</span>
     <span class="c1">#     | NUMERIC_LITERAL</span>
@@ -984,7 +1025,9 @@
     <span class="c1">#     | BOOLEAN_LITERAL</span>
     <span class="c1">#     | K_NULL</span>
     <span class="c1">#     ;</span>
-<div class="viewcode-block" id="FilterExpressionParser.exitLiteralValue"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.exitLiteralValue">[docs]</a>    <span class="k">def</span> <span class="nf">exitLiteralValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">LiteralValueContext</span><span class="p">):</span>
+<div class="viewcode-block" id="FilterExpressionParser.exitLiteralValue">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.exitLiteralValue">[docs]</a>
+    <span class="k">def</span> <span class="nf">exitLiteralValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">LiteralValueContext</span><span class="p">):</span>
         <span class="n">result</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">ValueExpression</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># Literal numeric values will not be negative, unary operators will handle negative values</span>
@@ -1029,6 +1072,7 @@
         <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_add_expr</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span></div>
 
+
     <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">_parse_numericliteral</span><span class="p">(</span><span class="n">literal</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ValueExpression</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1067,7 +1111,9 @@
     <span class="c1">#    columnName</span>
     <span class="c1">#     : IDENTIFIER</span>
     <span class="c1">#     ;</span>
-<div class="viewcode-block" id="FilterExpressionParser.exitColumnName"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.exitColumnName">[docs]</a>    <span class="k">def</span> <span class="nf">exitColumnName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">ColumnNameContext</span><span class="p">):</span>
+<div class="viewcode-block" id="FilterExpressionParser.exitColumnName">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.exitColumnName">[docs]</a>
+    <span class="k">def</span> <span class="nf">exitColumnName</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">ColumnNameContext</span><span class="p">):</span>
         <span class="n">tablename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_active_expressiontree</span><span class="o">.</span><span class="n">tablename</span>
 
         <span class="k">if</span> <span class="n">tablename</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">tablename</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
@@ -1089,10 +1135,13 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_add_expr</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">ColumnExpression</span><span class="p">(</span><span class="n">datacolumn</span><span class="p">))</span></div>
 
+
     <span class="c1">#    functionExpression</span>
     <span class="c1">#     : functionName &#39;(&#39; expressionList? &#39;)&#39;</span>
     <span class="c1">#     ;</span>
-<div class="viewcode-block" id="FilterExpressionParser.exitFunctionExpression"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.exitFunctionExpression">[docs]</a>    <span class="k">def</span> <span class="nf">exitFunctionExpression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">FunctionExpressionContext</span><span class="p">):</span>
+<div class="viewcode-block" id="FilterExpressionParser.exitFunctionExpression">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.exitFunctionExpression">[docs]</a>
+    <span class="k">def</span> <span class="nf">exitFunctionExpression</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">FunctionExpressionContext</span><span class="p">):</span>
         <span class="c1"># sourcery skip</span>
         <span class="n">functionname</span><span class="p">:</span> <span class="n">ExpressionParser</span><span class="o">.</span><span class="n">FunctionNameContext</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">functionName</span><span class="p">()</span>
 
@@ -1198,9 +1247,12 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_add_expr</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">FunctionExpression</span><span class="p">(</span><span class="n">functiontype</span><span class="p">,</span> <span class="n">arguments</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="FilterExpressionParser.generate_expressiontrees"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.generate_expressiontrees">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="FilterExpressionParser.generate_expressiontrees">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.generate_expressiontrees">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">generate_expressiontrees</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">DataSet</span><span class="p">,</span> <span class="n">primarytable</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">suppress_console_erroroutput</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">ExpressionTree</span><span class="p">]],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Produces a set of expression trees for the provided `filterexpression` and `dataset`.</span>
 
 <span class="sd">        One expression tree will be produced per filter expression statement encountered in the specified `filterexpression`.</span>
@@ -1217,9 +1269,12 @@
 
         <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="n">expressiontrees</span></div>
 
-<div class="viewcode-block" id="FilterExpressionParser.generate_expressiontrees_fromtable"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.generate_expressiontrees_fromtable">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="FilterExpressionParser.generate_expressiontrees_fromtable">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.generate_expressiontrees_fromtable">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">generate_expressiontrees_fromtable</span><span class="p">(</span><span class="n">datatable</span><span class="p">:</span> <span class="n">DataTable</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">suppress_console_erroroutput</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">ExpressionTree</span><span class="p">]],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Produces a set of expression trees for the provided `filterexpression` and `datatable`.</span>
 
 <span class="sd">        One expression tree will be produced per filter expression statement encountered in the specified `filterexpression`.</span>
@@ -1231,9 +1286,12 @@
 
         <span class="k">return</span> <span class="n">FilterExpressionParser</span><span class="o">.</span><span class="n">generate_expressiontrees</span><span class="p">(</span><span class="n">datatable</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">datatable</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">,</span> <span class="n">suppress_console_erroroutput</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FilterExpressionParser.generate_expressiontree"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.generate_expressiontree">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="FilterExpressionParser.generate_expressiontree">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.generate_expressiontree">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">generate_expressiontree</span><span class="p">(</span><span class="n">datatable</span><span class="p">:</span> <span class="n">DataTable</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">suppress_console_erroroutput</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">ExpressionTree</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the first produced expression tree for the provided `filterexpression` and `datatable`.</span>
 
 <span class="sd">        If `filterexpression` contains multiple semi-colon separated statements, only the first expression is returned.</span>
@@ -1250,9 +1308,12 @@
 
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;no expression trees generated with filter expression </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">filterexpression</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2"> for table </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">datatable</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FilterExpressionParser.evaluate_expression"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.evaluate_expression">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="FilterExpressionParser.evaluate_expression">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.evaluate_expression">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">evaluate_expression</span><span class="p">(</span><span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">suppress_console_erroroutput</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">ValueExpression</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the result of the evaluated `filterexpression`.</span>
 
 <span class="sd">        This expression evaluation function is only for simple expressions that do not reference any `DataSet` columns.</span>
@@ -1277,9 +1338,12 @@
 
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;no expression trees generated with filter expression </span><span class="se">\&quot;</span><span class="si">{</span><span class="n">filterexpression</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FilterExpressionParser.evaluate_datarowexpression"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.evaluate_datarowexpression">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="FilterExpressionParser.evaluate_datarowexpression">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.evaluate_datarowexpression">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">evaluate_datarowexpression</span><span class="p">(</span><span class="n">datarow</span><span class="p">:</span> <span class="n">DataRow</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">suppress_console_erroroutput</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">ValueExpression</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns the result of the evaluated `filterexpression` using the specified `datarow`.</span>
 
 <span class="sd">        If `filterexpression` contains multiple semi-colon separated statements, only the first expression is evaluated.</span>
@@ -1297,9 +1361,12 @@
 
         <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span> <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">expressiontree</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">datarow</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FilterExpressionParser.select_datarows"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.select_datarows">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="FilterExpressionParser.select_datarows">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.select_datarows">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">select_datarows</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">DataSet</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">primarytable</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tableidfields</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TableIDFields</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">suppress_console_erroroutput</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">DataRow</span><span class="p">]],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns all rows matching the provided `filterexpression` and `dataset`.</span>
 
 <span class="sd">        Filter expressions can contain multiple statements, separated by semi-colons, where each statement results in a</span>
@@ -1319,9 +1386,12 @@
 
         <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span> <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">filtered_rows</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FilterExpressionParser.select_datarows_fromtable"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.select_datarows_fromtable">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="FilterExpressionParser.select_datarows_fromtable">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.select_datarows_fromtable">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">select_datarows_fromtable</span><span class="p">(</span><span class="n">datatable</span><span class="p">:</span> <span class="n">DataTable</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tableidfields</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TableIDFields</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">suppress_console_erroroutput</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">DataRow</span><span class="p">]],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns all rows matching the provided `filterexpression` and `datatable`.</span>
 
 <span class="sd">        Filter expressions can contain multiple statements, separated by semi-colons, where each statement results</span>
@@ -1337,9 +1407,12 @@
 
         <span class="k">return</span> <span class="n">FilterExpressionParser</span><span class="o">.</span><span class="n">select_datarows</span><span class="p">(</span><span class="n">datatable</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">,</span> <span class="n">datatable</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">tableidfields</span><span class="p">,</span> <span class="n">suppress_console_erroroutput</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FilterExpressionParser.select_datarowset"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.select_datarowset">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="FilterExpressionParser.select_datarowset">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.select_datarowset">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">select_datarowset</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">DataSet</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">primarytable</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tableidfields</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TableIDFields</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">suppress_console_erroroutput</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="n">DataRow</span><span class="p">]],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns all unique rows matching the provided `filterexpression` and `dataset`.</span>
 
 <span class="sd">        Filter expressions can contain multiple statements, separated by semi-colons, where each statement results</span>
@@ -1359,9 +1432,12 @@
 
         <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span> <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">filtered_rowset</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FilterExpressionParser.select_datarowset_fromtable"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.select_datarowset_fromtable">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="FilterExpressionParser.select_datarowset_fromtable">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.select_datarowset_fromtable">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">select_datarowset_fromtable</span><span class="p">(</span><span class="n">datatable</span><span class="p">:</span> <span class="n">DataTable</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tableidfields</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TableIDFields</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">suppress_console_erroroutput</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="n">DataRow</span><span class="p">]],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns all unique rows matching the provided `filterexpression` and `datatable`.</span>
 
 <span class="sd">        Filter expressions can contain multiple statements, separated by semi-colons, where each statement results</span>
@@ -1377,9 +1453,12 @@
 
         <span class="k">return</span> <span class="n">FilterExpressionParser</span><span class="o">.</span><span class="n">select_datarowset</span><span class="p">(</span><span class="n">datatable</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">,</span> <span class="n">datatable</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">tableidfields</span><span class="p">,</span> <span class="n">suppress_console_erroroutput</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FilterExpressionParser.select_signalidset"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.select_signalidset">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="FilterExpressionParser.select_signalidset">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.select_signalidset">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">select_signalidset</span><span class="p">(</span><span class="n">dataset</span><span class="p">:</span> <span class="n">DataSet</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">primarytable</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tableidfields</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TableIDFields</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">suppress_console_erroroutput</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="n">UUID</span><span class="p">]],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns all unique signal IDs matching the provided `filterexpression` and `dataset`.</span>
 
 <span class="sd">        Filter expressions can contain multiple statements, separated by semi-colons, where each statement results</span>
@@ -1402,9 +1481,12 @@
 
         <span class="k">return</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span> <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">parser</span><span class="o">.</span><span class="n">filtered_signalidset</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="FilterExpressionParser.select_signalidset_fromtable"><a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.select_signalidset_fromtable">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="FilterExpressionParser.select_signalidset_fromtable">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.filterexpressionparser.FilterExpressionParser.select_signalidset_fromtable">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">select_signalidset_fromtable</span><span class="p">(</span><span class="n">datatable</span><span class="p">:</span> <span class="n">DataTable</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">tableidfields</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">TableIDFields</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">suppress_console_erroroutput</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">Set</span><span class="p">[</span><span class="n">UUID</span><span class="p">]],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Returns all unique signal IDs matching the provided `filterexpression` and `datatable`.</span>
 
 <span class="sd">        Filter expressions can contain multiple statements, separated by semi-colons, where each statement results</span>
@@ -1418,7 +1500,9 @@
         <span class="k">if</span> <span class="n">datatable</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;datatable is None&quot;</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">FilterExpressionParser</span><span class="o">.</span><span class="n">select_signalidset</span><span class="p">(</span><span class="n">datatable</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">,</span> <span class="n">datatable</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">tableidfields</span><span class="p">,</span> <span class="n">suppress_console_erroroutput</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">FilterExpressionParser</span><span class="o">.</span><span class="n">select_signalidset</span><span class="p">(</span><span class="n">datatable</span><span class="o">.</span><span class="n">parent</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">,</span> <span class="n">datatable</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">tableidfields</span><span class="p">,</span> <span class="n">suppress_console_erroroutput</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
            </div>
@@ -1440,7 +1524,9 @@
 <p>
     <a href="https://github.com/sttp/pyapi">GitHub Home</a>
     &nbsp;&nbsp;•&nbsp;&nbsp;
-    <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
+    <a href="https://pypi.org/project/sttpapi/" target="_blank">PyPi Package: sttpapi</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://sttp.github.io/documentation/" target="_blank">General STTP Documentation</a>
 </p>
 <br /><br />
 Copyright © 2022, <a href="https://gridprotectionalliance.org/" target="_blank">Grid&nbsp;Protection&nbsp;Alliance</a>

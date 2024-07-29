@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.metadata.record.phasor &mdash; sttp/pyapi 0.6.0 documentation</title>
-      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <title>sttp.metadata.record.phasor &mdash; sttp/pyapi 0.6.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=8209df7b" />
+
+  
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../../../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
-        <script src="../../../../_static/jquery.js"></script>
-        <script src="../../../../_static/underscore.js"></script>
-        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../../../_static/doctools.js"></script>
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script src="../../../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
@@ -26,12 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../../../index.html" class="icon icon-home"> sttp/pyapi
-            <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            sttp/pyapi
+              <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -52,9 +58,9 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../../../index.html">Module code</a> &raquo;</li>
-      <li>sttp.metadata.record.phasor</li>
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">sttp.metadata.record.phasor</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -97,13 +103,18 @@
     <span class="kn">from</span> <span class="nn">.measurement</span> <span class="kn">import</span> <span class="n">MeasurementRecord</span>
     <span class="kn">from</span> <span class="nn">.device</span> <span class="kn">import</span> <span class="n">DeviceRecord</span>
 
-<div class="viewcode-block" id="CompositePhasorMeasurement"><a class="viewcode-back" href="../../../../sttp.metadata.record.html#sttp.metadata.record.phasor.CompositePhasorMeasurement">[docs]</a><span class="k">class</span> <span class="nc">CompositePhasorMeasurement</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+<div class="viewcode-block" id="CompositePhasorMeasurement">
+<a class="viewcode-back" href="../../../../sttp.metadata.record.html#sttp.metadata.record.phasor.CompositePhasorMeasurement">[docs]</a>
+<span class="k">class</span> <span class="nc">CompositePhasorMeasurement</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
     <span class="n">ANGLE</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">MAGNITUDE</span> <span class="o">=</span> <span class="mi">1</span></div>
 
 
-<div class="viewcode-block" id="PhasorRecord"><a class="viewcode-back" href="../../../../sttp.metadata.record.html#sttp.metadata.record.phasor.PhasorRecord">[docs]</a><span class="k">class</span> <span class="nc">PhasorRecord</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PhasorRecord">
+<a class="viewcode-back" href="../../../../sttp.metadata.record.html#sttp.metadata.record.phasor.PhasorRecord">[docs]</a>
+<span class="k">class</span> <span class="nc">PhasorRecord</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Represents a record of phasor metadata in the STTP.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -122,7 +133,7 @@
                  <span class="n">basekv</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="n">updatedon</span><span class="p">:</span> <span class="n">datetime</span> <span class="o">=</span> <span class="o">...</span>
                  <span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Constructs a new `PhasorRecord`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -136,18 +147,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_updatedon</span> <span class="o">=</span> <span class="n">PhasorRecord</span><span class="o">.</span><span class="n">DEFAULT_UPDATEDON</span> <span class="k">if</span> <span class="n">updatedon</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">updatedon</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DeviceRecord</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the associated `DeviceRecord` for this `PhasorRecord`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">measurements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">MeasurementRecord</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the two `MeasurementRecord` values, i.e., the angle and magnitude, associated with this `PhasorRecord`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>  <span class="c1"># &lt;PhasorDetail&gt;/&lt;ID&gt;</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the unique integer identifier for this `PhasorRecord`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -155,7 +166,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">deviceacronym</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;PhasorDetail&gt;/&lt;DeviceAcronym&gt;</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the alpha-numeric identifier of the associated device for this `PhasorRecord`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -163,7 +174,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">label</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;PhasorDetail&gt;/&lt;Label&gt;</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the free form label for this `PhasorRecord`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -171,7 +182,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;PhasorDetail&gt;/&lt;Type&gt;</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the phasor type, i.e., &quot;I&quot; or &quot;V&quot;, for current or voltage, respectively, for this `PhasorRecord`. </span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -179,7 +190,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">phase</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;PhasorDetail&gt;/&lt;Phase&gt;</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the phase of this `PhasorRecord`, e.g., &quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;+&quot;, &quot;-&quot;, &quot;0&quot;, etc.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -187,7 +198,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">basekv</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>  <span class="c1"># &lt;PhasorDetail&gt;/&lt;BaseKV&gt;</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the base, i.e., nominal, kV level for this `PhasorRecord`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -195,7 +206,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">sourceindex</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>  <span class="c1"># &lt;PhasorDetail&gt;/&lt;SourceIndex&gt;</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the source index, i.e., the 1-based ordering index of the phasor in its original context, for this `PhasorRecord`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -203,7 +214,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">updatedon</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">datetime</span><span class="p">:</span>  <span class="c1"># &lt;PhasorDetail&gt;/&lt;UpdatedOn&gt;</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the `datetime` of when this `PhasorRecord` was last updated.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -211,7 +222,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">angle_measurement</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MeasurementRecord</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the associated angle `MeasurementRecord`, or `None` if not available.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -220,12 +231,13 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">magnitude_measurement</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MeasurementRecord</span><span class="p">]:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the associated magnitude `MeasurementRecord`, or `None` if not available.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="kc">None</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">measurements</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">CompositePhasorMeasurement</span><span class="o">.</span><span class="n">MAGNITUDE</span> <span class="k">else</span> \
             <span class="bp">self</span><span class="o">.</span><span class="n">measurements</span><span class="p">[</span><span class="n">CompositePhasorMeasurement</span><span class="o">.</span><span class="n">MAGNITUDE</span><span class="p">]</span></div>
+
 </pre></div>
 
            </div>
@@ -247,7 +259,9 @@
 <p>
     <a href="https://github.com/sttp/pyapi">GitHub Home</a>
     &nbsp;&nbsp;•&nbsp;&nbsp;
-    <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
+    <a href="https://pypi.org/project/sttpapi/" target="_blank">PyPi Package: sttpapi</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://sttp.github.io/documentation/" target="_blank">General STTP Documentation</a>
 </p>
 <br /><br />
 Copyright © 2022, <a href="https://gridprotectionalliance.org/" target="_blank">Grid&nbsp;Protection&nbsp;Alliance</a>

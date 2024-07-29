@@ -1,21 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gsf.encoding7bit &mdash; sttp/pyapi 0.6.0 documentation</title>
-      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <title>gsf.encoding7bit &mdash; sttp/pyapi 0.6.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=8209df7b" />
+
+  
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-        <script src="../../_static/jquery.js"></script>
-        <script src="../../_static/underscore.js"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script src="../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -26,12 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../../index.html" class="icon icon-home"> sttp/pyapi
-            <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            sttp/pyapi
+              <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -52,10 +58,10 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../index.html">Module code</a> &raquo;</li>
-          <li><a href="../gsf.html">gsf</a> &raquo;</li>
-      <li>gsf.encoding7bit</li>
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../gsf.html">gsf</a></li>
+      <li class="breadcrumb-item active">gsf.encoding7bit</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -93,14 +99,18 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="Encoding7Bit"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit">[docs]</a><span class="k">class</span> <span class="nc">Encoding7Bit</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Encoding7Bit">
+<a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit">[docs]</a>
+<span class="k">class</span> <span class="nc">Encoding7Bit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Defines 7-bit encoding/decoding functions.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Encoding7Bit.write_int16"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.write_int16">[docs]</a>    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Encoding7Bit.write_int16">
+<a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.write_int16">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">write_int16</span><span class="p">(</span><span class="n">stream_writer</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="nb">int</span><span class="p">],</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Writes 16-bit signed integer value using 7-bit encoding to the provided stream writer.</span>
 
 <span class="sd">        Parameters</span>
@@ -111,9 +121,12 @@
 
         <span class="k">return</span> <span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">write_uint16</span><span class="p">(</span><span class="n">stream_writer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">INT16</span><span class="p">,</span> <span class="s2">&quot;little&quot;</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Encoding7Bit.write_uint16"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.write_uint16">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Encoding7Bit.write_uint16">
+<a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.write_uint16">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">write_uint16</span><span class="p">(</span><span class="n">stream_writer</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="nb">int</span><span class="p">],</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Writes 16-bit unsigned integer value using 7-bit encoding to the provided stream writer.</span>
 
 <span class="sd">        Parameters</span>
@@ -134,9 +147,12 @@
         <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="n">np7</span><span class="p">)</span>  <span class="c1"># 2</span>
         <span class="k">return</span> <span class="mi">2</span></div>
 
-<div class="viewcode-block" id="Encoding7Bit.write_int32"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.write_int32">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Encoding7Bit.write_int32">
+<a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.write_int32">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">write_int32</span><span class="p">(</span><span class="n">stream_writer</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="nb">int</span><span class="p">],</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Writes 32-bit signed integer value using 7-bit encoding to the provided stream writer.</span>
 
 <span class="sd">        Parameters</span>
@@ -147,9 +163,12 @@
 
         <span class="k">return</span> <span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">write_uint32</span><span class="p">(</span><span class="n">stream_writer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="s2">&quot;little&quot;</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Encoding7Bit.write_uint32"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.write_uint32">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Encoding7Bit.write_uint32">
+<a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.write_uint32">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">write_uint32</span><span class="p">(</span><span class="n">stream_writer</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="nb">int</span><span class="p">],</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Writes 32-bit unsigned integer value using 7-bit encoding to the provided stream writer.</span>
 
 <span class="sd">        Parameters</span>
@@ -185,9 +204,12 @@
         <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>  <span class="c1"># 5</span>
         <span class="k">return</span> <span class="mi">5</span></div>
 
-<div class="viewcode-block" id="Encoding7Bit.write_int64"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.write_int64">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Encoding7Bit.write_int64">
+<a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.write_int64">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">write_int64</span><span class="p">(</span><span class="n">stream_writer</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="nb">int</span><span class="p">],</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Writes 64-bit signed integer value using 7-bit encoding to the provided stream writer.</span>
 
 <span class="sd">        Parameters</span>
@@ -198,9 +220,12 @@
 
         <span class="k">return</span> <span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">write_uint64</span><span class="p">(</span><span class="n">stream_writer</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="s2">&quot;little&quot;</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Encoding7Bit.write_uint64"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.write_uint64">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Encoding7Bit.write_uint64">
+<a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.write_uint64">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">write_uint64</span><span class="p">(</span><span class="n">stream_writer</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">],</span> <span class="nb">int</span><span class="p">],</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Writes 64-bit unsigned integer value using 7-bit encoding to the provided stream writer.</span>
 
 <span class="sd">        Parameters</span>
@@ -257,9 +282,12 @@
         <span class="n">np_stream_writer</span><span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>  <span class="c1"># 9</span>
         <span class="k">return</span> <span class="mi">9</span></div>
 
-<div class="viewcode-block" id="Encoding7Bit.read_int16"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.read_int16">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Encoding7Bit.read_int16">
+<a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.read_int16">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">read_int16</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reads 16-bit signed integer value using 7-bit encoding from the provided stream reader.</span>
 
 <span class="sd">        Parameters</span>
@@ -273,9 +301,12 @@
 
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">read_uint16</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">))</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT16</span><span class="p">,</span> <span class="s2">&quot;little&quot;</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Encoding7Bit.read_uint16"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.read_uint16">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Encoding7Bit.read_uint16">
+<a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.read_uint16">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">read_uint16</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reads 16-bit unsigned integer value using 7-bit encoding from the provided stream reader.</span>
 
 <span class="sd">        Parameters</span>
@@ -299,9 +330,12 @@
         <span class="n">value</span> <span class="o">^=</span> <span class="p">(</span><span class="n">np_stream_reader</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">np7</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">value</span> <span class="o">^</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">(</span><span class="mh">0x80</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Encoding7Bit.read_int32"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.read_int32">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Encoding7Bit.read_int32">
+<a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.read_int32">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">read_int32</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reads 32-bit signed integer value using 7-bit encoding from the provided stream reader.</span>
 
 <span class="sd">        Parameters</span>
@@ -315,9 +349,12 @@
 
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">read_uint32</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">))</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT32</span><span class="p">,</span> <span class="s2">&quot;little&quot;</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Encoding7Bit.read_uint32"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.read_uint32">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Encoding7Bit.read_uint32">
+<a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.read_uint32">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">read_uint32</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reads 32-bit unsigned integer value using 7-bit encoding from the provided stream reader.</span>
 
 <span class="sd">        Parameters</span>
@@ -353,9 +390,12 @@
         <span class="n">value</span> <span class="o">^=</span> <span class="p">(</span><span class="n">np_stream_reader</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>
         <span class="k">return</span> <span class="n">value</span> <span class="o">^</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mh">0x10204080</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Encoding7Bit.read_int64"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.read_int64">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Encoding7Bit.read_int64">
+<a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.read_int64">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">read_int64</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reads 64-bit signed integer value using 7-bit encoding from the provided stream reader.</span>
 
 <span class="sd">        Parameters</span>
@@ -370,9 +410,12 @@
 
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">read_uint64</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">))</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT64</span><span class="p">,</span> <span class="s2">&quot;little&quot;</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Encoding7Bit.read_uint64"><a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.read_uint64">[docs]</a>    <span class="nd">@staticmethod</span>
+
+<div class="viewcode-block" id="Encoding7Bit.read_uint64">
+<a class="viewcode-back" href="../../gsf.html#gsf.encoding7bit.Encoding7Bit.read_uint64">[docs]</a>
+    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">read_uint64</span><span class="p">(</span><span class="n">stream_reader</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reads 64-bit unsigned integer value using 7-bit encoding from the provided stream reader.</span>
 
 <span class="sd">        Parameters</span>
@@ -423,7 +466,9 @@
             <span class="k">return</span> <span class="n">value</span> <span class="o">^</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x2040810204080</span><span class="p">)</span>
 
         <span class="n">value</span> <span class="o">^=</span> <span class="p">(</span><span class="n">np_stream_reader</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="p">(</span><span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span> <span class="o">+</span> <span class="n">np7</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">value</span> <span class="o">^</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x102040810204080</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">value</span> <span class="o">^</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mh">0x102040810204080</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
            </div>
@@ -445,7 +490,9 @@
 <p>
     <a href="https://github.com/sttp/pyapi">GitHub Home</a>
     &nbsp;&nbsp;•&nbsp;&nbsp;
-    <a href="https://pypi.org/project/sttpapi/">PyPi Package: sttpapi</a>
+    <a href="https://pypi.org/project/sttpapi/" target="_blank">PyPi Package: sttpapi</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://sttp.github.io/documentation/" target="_blank">General STTP Documentation</a>
 </p>
 <br /><br />
 Copyright © 2022, <a href="https://gridprotectionalliance.org/" target="_blank">Grid&nbsp;Protection&nbsp;Alliance</a>
