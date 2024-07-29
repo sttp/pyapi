@@ -388,7 +388,7 @@ class Decoder:
                     f" with last position {self._lastposition}"
                 ]
 
-                return np.float32(np.NAN), RuntimeError("".join(message))
+                return np.float32(np.nan), RuntimeError("".join(message))
 
             update_prevvalues(valueraw)
 

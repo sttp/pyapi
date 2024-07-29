@@ -35,7 +35,7 @@ class Measurement:
     """
 
     DEFAULT_SIGNALID = Empty.GUID
-    DEFAULT_VALUE = np.float64(np.NAN)
+    DEFAULT_VALUE = np.float64(np.nan)
     DEFAULT_TIMESTAMP = Empty.TICKS
     DEFAULT_FLAGS = StateFlags.NORMAL
 
