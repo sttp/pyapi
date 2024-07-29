@@ -1164,8 +1164,8 @@ class DataSubscriber:
             self._dispatch_connectionterminated()
 
     def _send_operationalmodes(self):
-        operationalModes = CompressionModes.GZIP
-        operationalModes |= OperationalModes.VERSIONMASK & self.version
+        operationalModes = np.uint32(CompressionModes.GZIP)
+        operationalModes |= OperationalModes.VERSIONMASK & np.uint32(self.version)
         operationalModes |= self._encoding
 
         # TSSC compression only works with stateful connections
