@@ -91,6 +91,11 @@ class GroupedDataSubscriber(Subscriber):
         """
         Defines the number of samples per second for the data in the stream.
         """
+
+        self.display_measurement_summary = False
+        """
+        Defines if the subscriber should display a summary of received measurements every few seconds.
+        """
         
         self._grouped_data: Dict[np.uint64, Dict[UUID, Measurement]] = {} 
         self._grouped_data_receiver: Optional[Callable[[GroupedDataSubscriber, np.uint64, Dict[np.uint64, Dict[UUID, Measurement]]], None]] = None
@@ -197,7 +202,6 @@ class GroupedDataSubscriber(Subscriber):
 
         return destination_ticks
 
-
     def _subscription_updated(self, signalindexcache: SignalIndexCache):
         self.statusmessage(f"Received signal index cache with {signalindexcache.count:,} mappings")
 
@@ -240,7 +244,7 @@ class GroupedDataSubscriber(Subscriber):
                 threading.Thread(target=self._publish_data, args=(timestamp, grouped_data), name="PublishDataThread").start()
  
         # Provide user feedback on data reception
-        if time() - self._lastmessage < 5.0:
+        if not self.display_measurement_summary or time() - self._lastmessage < 5.0:
             return
 
         try:
@@ -272,13 +276,13 @@ class GroupedDataSubscriber(Subscriber):
                 if self._grouped_data_receiver is not None:
                     self._grouped_data_receiver(self, timestamp, data_buffer)
 
-                self.statusmessage(f"Data publication for buffer at {time_str} processed in {self._get_elapsed_time_str(time() - process_started)}.\n")
+                self.statusmessage(f"Data publication for buffer at {time_str} processed in {self._get_elapsed_time_str(time() - process_started)}.")
             finally:
                 self._process_lock.release()
         else:
             with self._process_missed_count_lock:
                 self._process_missed_count += 1
-                self.errormessage(f"WARNING: Data publication missed for buffer at {time_str}, a previous data buffer is still processing. {self._process_missed_count:,} data sets missed so far...\n")
+                self.errormessage(f"WARNING: Data publication missed for buffer at {time_str}, a previous data buffer is still processing. {self._process_missed_count:,} data sets missed so far...")
 
     def _get_elapsed_time_str(self, elapsed: float) -> str:
         hours, rem = divmod(elapsed, 3600)
@@ -392,7 +396,7 @@ def process_data(subscriber: GroupedDataSubscriber, timestamp: np.uint64, data_b
 
     average_frequency = frequency_sum / frequency_count
 
-    print(f"Average frequency for {frequency_count:,} values in second {Ticks.to_datetime(timestamp).second}: {average_frequency:.6f} Hz")
+    print(f"\nAverage frequency for {frequency_count:,} values in second {Ticks.to_datetime(timestamp).second}: {average_frequency:.6f} Hz")
 
     if subscriber.downsampled_count > 0:
         print(f"   Downsampled {subscriber.downsampled_count:,} measurements in last measurement set...")
