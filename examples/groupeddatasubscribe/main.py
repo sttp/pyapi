@@ -21,9 +21,13 @@
 #
 # ******************************************************************************************************
 
+from __future__ import annotations
 import os
 import sys
+import threading
 import numpy as np
+import argparse
+
 sys.path.append(f"{os.path.dirname(os.path.realpath(__file__))}/../../src") 
 
 from gsf import Limits
@@ -36,7 +40,6 @@ from sttp.transport.signalindexcache import SignalIndexCache
 from typing import Callable, List, Dict, Optional
 from uuid import UUID
 from time import time
-import argparse
 
 MAXPORT = Limits.MAXUINT16
 
@@ -47,6 +50,10 @@ class GroupedDataSubscriber(Subscriber):
     data to a user defined callback function. Data is grouped by timestamp to the nearest second and then further grouped
     by subsecond distribution based on the number of samples per second. The grouped data is then published to a user
     defined callback function that handles the grouped data.
+
+    If incoming frame rate is higher than the samples per second, or timestamp alignment does not accurately coinside with
+    the subsecond distribution, some data will be downsampled. Downsampled data count is tracked and reported to through the
+    downsampled_count property.
 
     This example depends on a semi-accurate system clock to group data by timestamp. If the system clock is not accurate,
     data may not be grouped as expected.
@@ -82,21 +89,42 @@ class GroupedDataSubscriber(Subscriber):
         """
         
         self._grouped_data: Dict[np.uint64, Dict[UUID, Measurement]] = {} 
-        self._grouped_data_receiver: Optional[Callable[[np.uint64, Dict[np.uint64, List[Measurement]]], None]] = None
+        self._grouped_data_receiver: Optional[Callable[[GroupedDataSubscriber, np.uint64, Dict[np.uint64, Dict[UUID, Measurement]]], None]] = None
 
         self._lastmessage = 0.0
+
+        self._downsampled_count_lock = threading.Lock()
+        self._downsampled_count = 0
 
         # Set up event handlers for STTP API
         self.set_subscriptionupdated_receiver(self._subscription_updated)
         self.set_newmeasurements_receiver(self._new_measurements)
         self.set_connectionterminated_receiver(self._connection_terminated)
 
-    def set_grouped_data_receiver(self, callback: Optional[Callable[[np.uint64, Dict[np.uint64, List[Measurement]]], None]]):
+    @property
+    def downsampled_count(self) -> int:
+        """
+        Gets the count of downsampled measurements.
+        """
+
+        with self._downsampled_count_lock:
+            return self._downsampled_count
+
+    @downsampled_count.setter
+    def downsampled_count(self, value: np.int32):
+        """
+        Sets the count of downsampled measurements.
+        """
+
+        with self._downsampled_count_lock:
+            self._downsampled_count = value
+        
+    def set_grouped_data_receiver(self, callback: Optional[Callable[[GroupedDataSubscriber, np.uint64, Dict[np.uint64, Dict[UUID, Measurement]]], None]]):
         """
         Defines the callback function that handles grouped data that has been received.
 
         Function signature:
-            def handle_data(timestamp: np.uint64, data_buffer: Dict[np.uint64, List[Measurement]]):
+            def handle_data(GroupedDataSubscriber subscriber, timestamp: np.uint64, data_buffer: Dict[np.uint64, Dict[UUID, Measurement]]):
                 pass
         """
 
@@ -160,12 +188,16 @@ class GroupedDataSubscriber(Subscriber):
                 # Get timestamp rounded to the nearest subsecond distribution, e.g., 000, 033, 066, 100 ms
                 timestamp_subsecond = self._round_to_subsecond_distribution(measurement.timestamp)
 
-                # Create a new subsecond timestamp list if it doesn't exist                
+                # Create a new subsecond timestamp map if it doesn't exist                
                 if timestamp_subsecond not in self._grouped_data[timestamp_second]:
-                    self._grouped_data[timestamp_second][timestamp_subsecond] = []
+                    self._grouped_data[timestamp_second][timestamp_subsecond] = {}
 
-                # Append measurement to subsecond timestamp list
-                self._grouped_data[timestamp_second][timestamp_subsecond].append(measurement)
+                # Append measurement to subsecond timestamp list, tracking downsampled measurements
+                if measurement.signalid in self._grouped_data[timestamp_second][timestamp_subsecond]:
+                    with self._downsampled_count_lock:
+                        self._downsampled_count += 1
+
+                self._grouped_data[timestamp_second][timestamp_subsecond][measurement.signalid] = measurement
 
         # Check if it's time to publish grouped data, waiting for measurement_window_size to elapse. Note
         # that this implementation depends on continuous data reception to trigger data publication. A more
@@ -179,7 +211,7 @@ class GroupedDataSubscriber(Subscriber):
 
                 # Call user defined data function handler with grouped data
                 if self._grouped_data_receiver is not None:
-                    self._grouped_data_receiver(timestamp, grouped_data)
+                    self._grouped_data_receiver(self, timestamp, grouped_data)
  
         # Provide user feedback on data reception
         if time() - self._lastmessage < 5.0:
@@ -211,6 +243,9 @@ class GroupedDataSubscriber(Subscriber):
         # Reset last message display time on disconnect
         self._lastmessage = 0.0
 
+        # Reset grouped data on disconnect
+        self._downsampled_count = 0
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -238,7 +273,7 @@ def main():
 
 
 
-def process_data(timestamp: np.uint64, data_buffer: Dict[np.uint64, List[Measurement]]):
+def process_data(subscriber: GroupedDataSubscriber, timestamp: np.uint64, data_buffer: Dict[np.uint64, Dict[UUID, Measurement]]):
     """
     User defined callback function that handles grouped data that has been received.
 
@@ -246,7 +281,7 @@ def process_data(timestamp: np.uint64, data_buffer: Dict[np.uint64, List[Measure
         timestamp:   The timestamp, at top of second, for the grouped data
         data_buffer: The grouped one second data buffer:
                      np.uint64: sub-second timestamps of aligned measurement groups
-                     List[Measurement]: aligned measurements for the sub-second timestamp
+                     Dict[UUID, Measurement]: aligned measurements for the sub-second timestamp
     """
 
     # Calculate average frequency for all frequencies in the one second buffer
@@ -255,7 +290,7 @@ def process_data(timestamp: np.uint64, data_buffer: Dict[np.uint64, List[Measure
 
     # Loop through each set of measurement groups in the one second buffer
     for measurements in data_buffer.values():
-        # Note, to use subsecond timestamp values, you can use the following loop instead:
+        # To use subsecond timestamp values, you can use the following loop instead:
         #     for subsecond_timestamp, measurements in data_buffer.items():
 
         # subsecond_timestamp is the timestamp rounded to the nearest subsecond distribution.
@@ -267,7 +302,13 @@ def process_data(timestamp: np.uint64, data_buffer: Dict[np.uint64, List[Measure
         #    2024-07-30 17:55:29.366
 
         # At this point, all measurements are aligned to the same subsecond timestamp
-        for measurement in measurements:
+        for measurement in measurements.values():
+            # To use UUID values, you can use the following loop instead:
+            #     for signalid, measurement in measurements.items():
+
+            # If you know which measurement you are looking for, you can use the following loopup:
+            #     measurement = measurements.get(my_signalid)
+
             # Note:
             #   measurement.value is a numpy float64
             #   measurement.timestamp is a numpy uint64 (in ticks, i.e., 100-nanosecond intervals)
@@ -281,12 +322,17 @@ def process_data(timestamp: np.uint64, data_buffer: Dict[np.uint64, List[Measure
 
             # Ensure frequency is in reasonable range (59.95 to 60.05 Hz) and not NaN
             if not np.isnan(measurement.value) and measurement.value >= 59.95 and measurement.value <= 60.05:
-                frequency_sum += measurement.value
+                frequency_sum += subscriber.adjustedvalue(measurement)
+                #frequency_sum += measurement.value
                 frequency_count += 1
 
     average_frequency = frequency_sum / frequency_count
 
     print(f"Average frequency for {frequency_count:,} values in second {Ticks.to_shortstring(timestamp)}: {average_frequency:.6f} Hz")
+
+    if subscriber.downsampled_count > 0:
+        print(f"   Downsampled {subscriber.downsampled_count:,} measurements in last measurement set...")
+        subscriber.downsampled_count = 0
 
 if __name__ == "__main__":
     main()
