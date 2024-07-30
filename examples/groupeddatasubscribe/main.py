@@ -308,7 +308,12 @@ class GroupedDataSubscriber(Subscriber):
         self._lastmessage = 0.0
 
         # Reset grouped data on disconnect
-        self._downsampled_count = 0
+        with self._downsampled_count_lock:
+            self._downsampled_count = 0
+
+        # Reset process missed count on disconnect
+        with self._process_missed_count_lock:
+            self._process_missed_count += 1
 
 
 def main():
