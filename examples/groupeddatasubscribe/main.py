@@ -401,10 +401,10 @@ def process_data(subscriber: GroupedDataSubscriber, timestamp: np.uint64, data_b
 
     average_frequency = frequency_sum / frequency_count
 
-    print(f"\nAverage frequency for {frequency_count:,} values in second {Ticks.to_datetime(timestamp).second}: {average_frequency:.6f} Hz")
+    subscriber.statusmessage(f"\nAverage frequency for {frequency_count:,} values in second {Ticks.to_datetime(timestamp).second}: {average_frequency:.6f} Hz")
 
     if subscriber.downsampled_count > 0:
-        print(f"   Downsampled {subscriber.downsampled_count:,} measurements in last measurement set...")
+        subscriber.statusmessage(f"   Downsampled {subscriber.downsampled_count:,} measurements in last measurement set...")
         subscriber.downsampled_count = 0
 
 if __name__ == "__main__":
