@@ -94,7 +94,8 @@ class GroupedDataSubscriber(Subscriber):
 
         self.display_measurement_summary = False
         """
-        Defines if the subscriber should display a summary of received measurements every few seconds.
+        Defines if the subscriber should display a summary of received measurements
+        every few seconds.
         """
         
         self._grouped_data: Dict[np.uint64, Dict[UUID, Measurement]] = {} 
@@ -267,7 +268,7 @@ class GroupedDataSubscriber(Subscriber):
             self._lastmessage = time()
 
     def _publish_data(self, timestamp: np.uint64, data_buffer: Dict[np.uint64, Dict[UUID, Measurement]]):
-        time_str = Ticks.to_shortstring(timestamp).split(".")[0]
+        data_buffer_time_str = Ticks.to_shortstring(timestamp).split(".")[0]
 
         if self._process_lock.acquire(False):
             try:
@@ -276,13 +277,13 @@ class GroupedDataSubscriber(Subscriber):
                 if self._grouped_data_receiver is not None:
                     self._grouped_data_receiver(self, timestamp, data_buffer)
 
-                self.statusmessage(f"Data publication for buffer at {time_str} processed in {self._get_elapsed_time_str(time() - process_started)}.")
+                self.statusmessage(f"Data publication for buffer at {data_buffer_time_str} processed in {self._get_elapsed_time_str(time() - process_started)}.")
             finally:
                 self._process_lock.release()
         else:
             with self._process_missed_count_lock:
                 self._process_missed_count += 1
-                self.errormessage(f"WARNING: Data publication missed for buffer at {time_str}, a previous data buffer is still processing. {self._process_missed_count:,} data sets missed so far...")
+                self.errormessage(f"WARNING: Data publication missed for buffer at {data_buffer_time_str}, a previous data buffer is still processing. {self._process_missed_count:,} data sets missed so far...")
 
     def _get_elapsed_time_str(self, elapsed: float) -> str:
         hours, rem = divmod(elapsed, 3600)
@@ -308,13 +309,10 @@ class GroupedDataSubscriber(Subscriber):
         self._lastmessage = 0.0
 
         # Reset grouped data on disconnect
-        with self._downsampled_count_lock:
-            self._downsampled_count = 0
+        self.downsampled_count = 0
 
         # Reset process missed count on disconnect
-        with self._process_missed_count_lock:
-            self._process_missed_count += 1
-
+        self.process_missed_count  = 0
 
 def main():
     parser = argparse.ArgumentParser()
@@ -340,15 +338,15 @@ def main():
     finally:
         subscriber.dispose()
 
-
-
 def process_data(subscriber: GroupedDataSubscriber, timestamp: np.uint64, data_buffer: Dict[np.uint64, Dict[UUID, Measurement]]):
     """
     User defined callback function that handles grouped data that has been received.
 
     Note: This function is called by the subscriber when grouped data is available for processing.
-    Normally the function is called once per second with a buffer of grouped data for the second.
-    The call frequency can be higher if the processing of the data takes longer than a second.
+    The function will only be called once per second with a buffer of grouped data for the second.
+    If the function processing time exceeds the one second window, a warning message will be displayed
+    and the data will be skipped. The number of skipped data sets is tracked and reported through the
+    process_missed_count property.
     
     Parameters:
         timestamp:   The timestamp, at top of second, for the grouped data
@@ -357,7 +355,7 @@ def process_data(subscriber: GroupedDataSubscriber, timestamp: np.uint64, data_b
                      Dict[UUID, Measurement]: aligned measurements for the sub-second timestamp
     """
 
-    # Calculate average frequency for all frequencies in the one second buffer
+    # In this example, we calculate average frequency for all frequencies in the one second buffer
     frequency_sum = 0.0
     frequency_count = 0
 
@@ -395,8 +393,10 @@ def process_data(subscriber: GroupedDataSubscriber, timestamp: np.uint64, data_b
 
             # Ensure frequency is in reasonable range (59.95 to 60.05 Hz) and not NaN
             if not np.isnan(measurement.value) and measurement.value >= 59.95 and measurement.value <= 60.05:
-                frequency_sum += subscriber.adjustedvalue(measurement)
-                #frequency_sum += measurement.value
+                # The following line demonstrates how to use the value of a measurement based on its
+                # linear adjustment factor metadata , i.e., the configured adder and multiplier:
+                #frequency_sum += subscriber.adjustedvalue(measurement)                
+                frequency_sum += measurement.value # raw, unadjusted value
                 frequency_count += 1
 
     average_frequency = frequency_sum / frequency_count
