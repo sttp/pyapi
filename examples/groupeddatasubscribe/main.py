@@ -55,6 +55,10 @@ class GroupedDataSubscriber(Subscriber):
     the subsecond distribution, some data will be downsampled. Downsampled data count is tracked and reported to through the
     downsampled_count property.
 
+    Only a single one-second data buffer will be published at a time. If data cannot be processed within the one-second
+    window, a warning message will be displayed and the data will be skipped. The number of skipped data sets is tracked
+    and reported through the process_missed_count property.
+
     This example depends on a semi-accurate system clock to group data by timestamp. If the system clock is not accurate,
     data may not be grouped as expected.
     """
@@ -96,6 +100,11 @@ class GroupedDataSubscriber(Subscriber):
         self._downsampled_count_lock = threading.Lock()
         self._downsampled_count = 0
 
+        self._process_lock = threading.Lock()
+        
+        self._process_missed_count_lock = threading.Lock()
+        self._process_missed_count = 0
+
         # Set up event handlers for STTP API
         self.set_subscriptionupdated_receiver(self._subscription_updated)
         self.set_newmeasurements_receiver(self._new_measurements)
@@ -118,7 +127,25 @@ class GroupedDataSubscriber(Subscriber):
 
         with self._downsampled_count_lock:
             self._downsampled_count = value
+
+    @property
+    def process_missed_count(self) -> int:
+        """
+        Gets the count of missed data processing.
+        """
+
+        with self._process_missed_count_lock:
+            return self._process_missed_count
         
+    @process_missed_count.setter
+    def process_missed_count(self, value: np.int32):
+        """
+        Sets the count of missed data processing.
+        """
+
+        with self._process_missed_count_lock:
+            self._process_missed_count = value
+
     def set_grouped_data_receiver(self, callback: Optional[Callable[[GroupedDataSubscriber, np.uint64, Dict[np.uint64, Dict[UUID, Measurement]]], None]]):
         """
         Defines the callback function that handles grouped data that has been received.
@@ -209,9 +236,8 @@ class GroupedDataSubscriber(Subscriber):
             if current_time - timestamp >= window_size:
                 grouped_data = self._grouped_data.pop(timestamp)
 
-                # Call user defined data function handler with grouped data
-                if self._grouped_data_receiver is not None:
-                    self._grouped_data_receiver(self, timestamp, grouped_data)
+                # Call user defined data function handler with one-second grouped data buffer on a separate thread
+                threading.Thread(target=self._publish_data, args=(timestamp, grouped_data), name="PublishDataThread").start()
  
         # Provide user feedback on data reception
         if time() - self._lastmessage < 5.0:
@@ -235,6 +261,40 @@ class GroupedDataSubscriber(Subscriber):
             self.statusmessage("".join(message))
         finally:
             self._lastmessage = time()
+
+    def _publish_data(self, timestamp: np.uint64, data_buffer: Dict[np.uint64, Dict[UUID, Measurement]]):
+        time_str = Ticks.to_shortstring(timestamp).split(".")[0]
+
+        if self._process_lock.acquire(False):
+            try:
+                process_started = time()
+
+                if self._grouped_data_receiver is not None:
+                    self._grouped_data_receiver(self, timestamp, data_buffer)
+
+                self.statusmessage(f"Data publication for buffer at {time_str} processed in {self._get_elapsed_time_str(time() - process_started)}.\n")
+            finally:
+                self._process_lock.release()
+        else:
+            with self._process_missed_count_lock:
+                self._process_missed_count += 1
+                self.errormessage(f"WARNING: Data publication missed for buffer at {time_str}, a previous data buffer is still processing. {self._process_missed_count:,} data sets missed so far...\n")
+
+    def _get_elapsed_time_str(self, elapsed: float) -> str:
+        hours, rem = divmod(elapsed, 3600)
+        minutes, seconds = divmod(rem, 60)
+        milliseconds = (elapsed - int(elapsed)) * 1000
+
+        if hours < 1.0:
+            if minutes < 1.0:
+                if seconds < 1.0:
+                    return f"{int(milliseconds):03} ms"
+
+                return f"{int(seconds):02}.{int(milliseconds):03} sec"
+                        
+            return f"{int(minutes):02}:{int(seconds):02}.{int(milliseconds):03}"
+                        
+        return f"{int(hours):02}:{int(minutes):02}:{int(seconds):02}.{int(milliseconds):03}"
 
     def _connection_terminated(self):
         # Call default implementation which will display a connection terminated message to stderr
@@ -277,6 +337,10 @@ def process_data(subscriber: GroupedDataSubscriber, timestamp: np.uint64, data_b
     """
     User defined callback function that handles grouped data that has been received.
 
+    Note: This function is called by the subscriber when grouped data is available for processing.
+    Normally the function is called once per second with a buffer of grouped data for the second.
+    The call frequency can be higher if the processing of the data takes longer than a second.
+    
     Parameters:
         timestamp:   The timestamp, at top of second, for the grouped data
         data_buffer: The grouped one second data buffer:
@@ -328,7 +392,7 @@ def process_data(subscriber: GroupedDataSubscriber, timestamp: np.uint64, data_b
 
     average_frequency = frequency_sum / frequency_count
 
-    print(f"Average frequency for {frequency_count:,} values in second {Ticks.to_shortstring(timestamp)}: {average_frequency:.6f} Hz")
+    print(f"Average frequency for {frequency_count:,} values in second {Ticks.to_datetime(timestamp).second}: {average_frequency:.6f} Hz")
 
     if subscriber.downsampled_count > 0:
         print(f"   Downsampled {subscriber.downsampled_count:,} measurements in last measurement set...")
