@@ -147,7 +147,7 @@ class GroupedDataSubscriber(Subscriber):
         self.statusmessage(f"Received signal index cache with {signalindexcache.count:,} mappings")
 
     def _new_measurements(self, measurements: List[Measurement]):
-        # Collect data into a ap group by timestamps to the nearest second
+        # Collect data into a map grouped by timestamps to the nearest second
         for measurement in measurements:
             # Get timestamp rounded to the nearest second
             timestamp_second = self._get_timestamp_to_nearest_second(measurement.timestamp)
