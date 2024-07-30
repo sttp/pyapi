@@ -165,11 +165,11 @@ class Ticks:
         """
         Standard timestamp representation for a Ticks value, e.g., 2006-01-02 15:04:05.999999999.
         """
-        return Ticks.to_datetime(ticks).isoformat(sep=' ', timespec=timespec)
+        return Ticks.to_datetime(ticks).isoformat(sep=' ', timespec=timespec).split("+")[0]
 
     @staticmethod
     def to_shortstring(ticks: np.uint64) -> str:
         """
         Shows just the timestamp portion of a Ticks value with milliseconds, e.g., 15:04:05.999.
         """
-        return Ticks.to_string(ticks, "milliseconds").split("+")[0]
+        return Ticks.to_string(ticks, "milliseconds").split(" ")[1]
