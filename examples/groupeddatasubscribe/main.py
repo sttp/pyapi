@@ -112,9 +112,9 @@ class GroupedDataSubscriber(Subscriber):
 
         return distance >= -lead_time and distance <= lag_time
 
-    def _get_timestamp_to_nearest_second(self, timestamp: np.uint64) -> np.uint64:
+    def _round_to_nearest_second(self, timestamp: np.uint64) -> np.uint64:
         """
-        Gets the timestamp rounded to the nearest second.
+        Rounds the timestamp rounded to the nearest second.
         """
         
         return timestamp - timestamp % Ticks.PERSECOND
@@ -125,7 +125,7 @@ class GroupedDataSubscriber(Subscriber):
         """
        
         # Baseline timestamp to the top of the second
-        base_ticks = self._get_timestamp_to_nearest_second(timestamp)
+        base_ticks = self._round_to_nearest_second(timestamp)
 
         # Remove the seconds from ticks
         ticks_beyond_second = timestamp - base_ticks
@@ -150,7 +150,7 @@ class GroupedDataSubscriber(Subscriber):
         # Collect data into a map grouped by timestamps to the nearest second
         for measurement in measurements:
             # Get timestamp rounded to the nearest second
-            timestamp_second = self._get_timestamp_to_nearest_second(measurement.timestamp)
+            timestamp_second = self._round_to_nearest_second(measurement.timestamp)
 
             if self._time_is_valid(timestamp_second):
                 # Create a new one-second timestamp map if it doesn't exist
@@ -158,14 +158,14 @@ class GroupedDataSubscriber(Subscriber):
                     self._grouped_data[timestamp_second] = {}
 
                 # Get timestamp rounded to the nearest subsecond distribution, e.g., 000, 033, 066, 100 ms
-                subsecond_timestamp = self._round_to_subsecond_distribution(measurement.timestamp)
+                timestamp_subsecond = self._round_to_subsecond_distribution(measurement.timestamp)
 
                 # Create a new subsecond timestamp list if it doesn't exist                
-                if subsecond_timestamp not in self._grouped_data[timestamp_second]:
-                    self._grouped_data[timestamp_second][subsecond_timestamp] = []
+                if timestamp_subsecond not in self._grouped_data[timestamp_second]:
+                    self._grouped_data[timestamp_second][timestamp_subsecond] = []
 
                 # Append measurement to subsecond timestamp list
-                self._grouped_data[timestamp_second][subsecond_timestamp].append(measurement)
+                self._grouped_data[timestamp_second][timestamp_subsecond].append(measurement)
 
         # Check if it's time to publish grouped data, waiting for measurement_window_size to elapse. Note
         # that this implementation depends on continuous data reception to trigger data publication. A more
@@ -225,7 +225,7 @@ def main():
     subscriber = GroupedDataSubscriber()
     
     # Set user defined callback function to handle grouped data:
-    subscriber.set_grouped_data_receiver(handle_data)
+    subscriber.set_grouped_data_receiver(process_data)
 
     try:
         subscriber.subscribe("FILTER ActiveMeasurements WHERE SignalType = 'FREQ'", subscriber.settings)
@@ -238,7 +238,7 @@ def main():
 
 
 
-def handle_data(timestamp: np.uint64, data_buffer: Dict[np.uint64, List[Measurement]]):
+def process_data(timestamp: np.uint64, data_buffer: Dict[np.uint64, List[Measurement]]):
     """
     User defined callback function that handles grouped data that has been received.
 
