@@ -172,4 +172,4 @@ class Ticks:
         """
         Shows just the timestamp portion of a Ticks value with milliseconds, e.g., 15:04:05.999.
         """
-        return Ticks.to_string(ticks, "milliseconds").split(" ")[1]
+        return Ticks.to_string(ticks, "milliseconds").split("+")[0]

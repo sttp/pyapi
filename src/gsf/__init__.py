@@ -23,7 +23,7 @@
 
 from enum import Enum
 from decimal import Decimal
-from datetime import datetime
+from datetime import datetime, timezone
 from dateutil import parser
 from dateutil.tz import tzoffset
 from uuid import UUID
@@ -58,7 +58,7 @@ def override(self):
 
 class Empty:
     GUID = UUID(int=0)
-    DATETIME = datetime.min
+    DATETIME = datetime.min.replace(tzinfo=timezone.utc)
     DECIMAL = Decimal(0.0)
     TICKS = np.uint64(0)
     STRING = ""
