@@ -53,11 +53,11 @@ class GroupedDataSubscriber(Subscriber):
 
     If incoming frame rate is higher than the samples per second, or timestamp alignment does not accurately coinside with
     the subsecond distribution, some data will be downsampled. Downsampled data count is tracked and reported to through the
-    downsampledcount property.
+    `downsampledcount` property.
 
     Only a single one-second data buffer will be published at a time. If data cannot be processed within the one-second
-    window, a warning message will be displayed and the data will be skipped. The number of skipped data sets is tracked
-    and reported through the processmissedcount property.
+    window, a warning message will be displayed and any new data will be skipped. The number of skipped data sets is tracked
+    and reported through the `processmissedcount` property.
 
     This example depends on a semi-accurate system clock to group data by timestamp. If the system clock is not accurate,
     data may not be grouped as expected.
@@ -346,7 +346,7 @@ def process_data(subscriber: GroupedDataSubscriber, timestamp: np.uint64, databu
     The function will only be called once per second with a buffer of grouped data for the second.
     If the function processing time exceeds the one second window, a warning message will be displayed
     and new data will be skipped. The number of skipped data sets is tracked and reported through the
-    processmissed count property.
+    `processmissedcount` property.
     
     Parameters:
         timestamp:   The timestamp, at top of second, for the grouped data
@@ -373,12 +373,14 @@ def process_data(subscriber: GroupedDataSubscriber, timestamp: np.uint64, databu
         #    2024-07-30 17:55:29.366
 
         # At this point, all measurements are aligned to the same subsecond timestamp
+
+        # If you know which measurement you are looking for, you can use the following loopup:
+        #     measurement = measurements.get(my_signalid)
+
+        # Loop through each measurement in the subsecond time-aligned group
         for measurement in measurements.values():
             # To use UUID values, you can use the following loop instead:
             #     for signalid, measurement in measurements.items():
-
-            # If you know which measurement you are looking for, you can use the following loopup:
-            #     measurement = measurements.get(my_signalid)
 
             # Note:
             #   measurement.value is a numpy float64
