@@ -70,7 +70,7 @@ class GroupedDataSubscriber(Subscriber):
         self.config = Config()
         self.settings = Settings()
 
-        self.measurement_windowsize = 1
+        self.measurement_windowsize = 5
         """
         Defines measurement window size, in whole seconds, for data grouping.
         """
