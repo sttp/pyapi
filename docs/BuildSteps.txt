@@ -21,9 +21,12 @@ It is always best to delete the following folders before a new build:
     build/
     dist/
 
-Note: In order for next steps to work, make sure to run "pip install build"
+Notes: In order for next steps to work, make sure to:
+  * run steps from Windows admin "cmd" prompt
+  * run "pip install build"
+  * run "pip install twine"
 
-Build Distribution: 
+Build Distribution: ./
     python -m build
 
 Validate Distribution:
@@ -33,7 +36,8 @@ Upload to PiPy:
     twine upload dist/*
 
     >> You will need credentials for this step,
-    >> Copy password to clipboard and paste when prompted via "Edit > Paste" menu
+    >> Copy password to clipboard and paste when prompted via "Edit > Paste" menu / or right-click
+    >> This may be a token when using two factor authentication (check account)
 
 Update Sphinx Documentation:
     ./BuildDocs.cmd
