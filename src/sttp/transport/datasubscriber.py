@@ -1014,7 +1014,7 @@ class DataSubscriber:
                     signalindexcache.signalid(pointid),
                     np.float64(value),
                     np.uint64(timestamp),
-                    StateFlags(stateflags))
+                    StateFlags(int(stateflags)))
 
                 index += 1
 
