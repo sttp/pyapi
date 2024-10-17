@@ -100,6 +100,6 @@ For discussion and support, join our [discussions channel](https://github.com/st
 * [STTP PyPi Package: sttpapi](https://pypi.org/project/sttpapi/)
 * [STTP Python Documentation](https://sttp.github.io/pyapi/)
 * [STTP General Documentation](https://sttp.github.io/documentation/)
-* [STTP (IEEE 2664) Standard](https://standards.ieee.org/project/2664.html)
+* [STTP (IEEE 2664) Standard](https://standards.ieee.org/ieee/2664/7397/)
 
 [![Lock](https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/LockPython_64High.png)](https://github.com/sttp/pyapi)
