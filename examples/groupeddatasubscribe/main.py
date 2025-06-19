@@ -75,13 +75,13 @@ class GroupedDataSubscriber(Subscriber):
         Defines measurement window size, in whole seconds, for data grouping.
         """
 
-        self.lagtime = 5.0
+        self.lagtime = 2.0
         """
         Defines the lag time, in seconds, for data grouping. Data received outside
         of this past time limit, relative to local clock, will be discarded.
         """
 
-        self.leadtime = 5.0
+        self.leadtime = 2.0
         """
         Defines the lead time, in seconds, for data grouping. Data received outside
         this future time limit, relative to local clock,  will be discarded.
@@ -231,9 +231,9 @@ class GroupedDataSubscriber(Subscriber):
 
                 self._groupeddata[timestamp_second][timestamp_subsecond][measurement.signalid] = measurement
 
-        # Check if it's time to publish grouped data, waiting for measurement_window_size to elapse. Note
-        # that this implementation depends on continuous data reception to trigger data publication. A more
-        # robust implementation would use a precision timer to trigger data publication.
+        # Check if it's time to publish grouped data, waiting for measurement_windowsize to elapse. Note
+        # that this implementation depends on continuous data reception to trigger data publication.
+        # A more robust implementation would use a precision timer to trigger data publication.
         currenttime = Ticks.utcnow()
         windowsize = np.uint64(self.measurement_windowsize * Ticks.PERSECOND)
 
