@@ -529,11 +529,11 @@ class FilterExpressionParser(ExpressionListener):
             return
 
         if ctx.MEASUREMENT_KEY_LITERAL() is not None:
-            self._map_matchedfieldrow(primary_table, primary_tableidfields.measurementkey_fieldname, ctx.MEASUREMENT_KEY_LITERAL().getText(), signalid_columnindex)
+            self._map_matchedfieldrow(primary_table, primary_tableidfields.measurementkey_fieldname, str(FilterExpressionParser._parse_guidliteral(ctx.MEASUREMENT_KEY_LITERAL().getText())), signalid_columnindex)
             return
 
         if ctx.POINT_TAG_LITERAL() is not None:
-            self._map_matchedfieldrow(primary_table, primary_tableidfields.pointtag_fieldname, ctx.POINT_TAG_LITERAL().getText(), signalid_columnindex)
+            self._map_matchedfieldrow(primary_table, primary_tableidfields.pointtag_fieldname, FilterExpressionParser._parse_point_tag_literal(ctx.POINT_TAG_LITERAL().getText()), signalid_columnindex)
             return
 
     #    expression
@@ -997,6 +997,15 @@ class FilterExpressionParser(ExpressionListener):
             return Convert.from_str(literal, datetime)
         except Exception as ex:
             raise EvaluateError(f"failed to parse datetime literal #{literal}#: {ex}") from ex
+
+    @staticmethod
+    def _parse_point_tag_literal(point_tag_literal: str) -> str:
+        # Remove any double-quotes from point tag literal, ANTLR grammar already
+        # ensures tag starting with quote also ends with one
+        if point_tag_literal.startswith('"'):
+            point_tag_literal = point_tag_literal[1:-1]
+
+        return point_tag_literal
 
     #    columnName
     #     : IDENTIFIER
