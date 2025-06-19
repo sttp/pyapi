@@ -529,7 +529,7 @@ class FilterExpressionParser(ExpressionListener):
             return
 
         if ctx.MEASUREMENT_KEY_LITERAL() is not None:
-            self._map_matchedfieldrow(primary_table, primary_tableidfields.measurementkey_fieldname, str(FilterExpressionParser._parse_guidliteral(ctx.MEASUREMENT_KEY_LITERAL().getText())), signalid_columnindex)
+            self._map_matchedfieldrow(primary_table, primary_tableidfields.measurementkey_fieldname, ctx.MEASUREMENT_KEY_LITERAL().getText(), signalid_columnindex)
             return
 
         if ctx.POINT_TAG_LITERAL() is not None:
