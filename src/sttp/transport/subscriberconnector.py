@@ -32,7 +32,7 @@ import math
 import numpy as np
 
 if TYPE_CHECKING:
-    from datasubscriber import DataSubscriber
+    from .datasubscriber import DataSubscriber
 
 
 class SubscriberConnector:
