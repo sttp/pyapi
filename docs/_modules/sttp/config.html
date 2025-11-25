@@ -1,21 +1,23 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.config &mdash; sttp/pyapi 0.6.4 documentation</title>
+  <title>sttp.config &mdash; sttp/pyapi 0.6.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-      <script src="../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
-      <script src="../../_static/documentation_options.js?v=b1f64a84"></script>
-      <script src="../../_static/doctools.js?v=92e14aea"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script src="../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -91,6 +93,7 @@
 <span class="c1">#</span>
 <span class="c1"># ******************************************************************************************************</span>
 
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">EllipsisType</span>
 <span class="kn">from</span> <span class="nn">.transport.constants</span> <span class="kn">import</span> <span class="n">Defaults</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -115,18 +118,18 @@
     <span class="n">DEFAULT_VERSION</span> <span class="o">=</span> <span class="n">Defaults</span><span class="o">.</span><span class="n">VERSION</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                 <span class="n">maxretries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
-                 <span class="n">retryinterval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
-                 <span class="n">maxretryinterval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
-                 <span class="n">autoreconnect</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
-                 <span class="n">autorequestmetadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
-                 <span class="n">autosubscribe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
-                 <span class="n">compress_payloaddata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
-                 <span class="n">compress_metadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
-                 <span class="n">compress_signalindexcache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
-                 <span class="n">metadatafilters</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
-                 <span class="n">socket_timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
-                 <span class="n">version</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">byte</span> <span class="o">=</span> <span class="o">...</span>
+                 <span class="n">maxretries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">EllipsisType</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">retryinterval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">EllipsisType</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">maxretryinterval</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">EllipsisType</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">autoreconnect</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="n">EllipsisType</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">autorequestmetadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="n">EllipsisType</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">autosubscribe</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="n">EllipsisType</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">compress_payloaddata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="n">EllipsisType</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">compress_metadata</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="n">EllipsisType</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">compress_signalindexcache</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">|</span> <span class="n">EllipsisType</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">metadatafilters</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">EllipsisType</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">socket_timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="n">EllipsisType</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">version</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">byte</span> <span class="o">|</span> <span class="n">EllipsisType</span> <span class="o">=</span> <span class="o">...</span>
                 <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Creates a new `Config` instance.</span>

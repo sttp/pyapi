@@ -1,21 +1,23 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.data.filterexpressionparser &mdash; sttp/pyapi 0.6.4 documentation</title>
+  <title>sttp.data.filterexpressionparser &mdash; sttp/pyapi 0.6.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
-      <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
-      <script src="../../../_static/doctools.js?v=92e14aea"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -625,7 +627,7 @@
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="n">ctx</span><span class="o">.</span><span class="n">POINT_TAG_LITERAL</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_map_matchedfieldrow</span><span class="p">(</span><span class="n">primary_table</span><span class="p">,</span> <span class="n">primary_tableidfields</span><span class="o">.</span><span class="n">pointtag_fieldname</span><span class="p">,</span> <span class="n">ctx</span><span class="o">.</span><span class="n">POINT_TAG_LITERAL</span><span class="p">()</span><span class="o">.</span><span class="n">getText</span><span class="p">(),</span> <span class="n">signalid_columnindex</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_map_matchedfieldrow</span><span class="p">(</span><span class="n">primary_table</span><span class="p">,</span> <span class="n">primary_tableidfields</span><span class="o">.</span><span class="n">pointtag_fieldname</span><span class="p">,</span> <span class="n">FilterExpressionParser</span><span class="o">.</span><span class="n">_parse_point_tag_literal</span><span class="p">(</span><span class="n">ctx</span><span class="o">.</span><span class="n">POINT_TAG_LITERAL</span><span class="p">()</span><span class="o">.</span><span class="n">getText</span><span class="p">()),</span> <span class="n">signalid_columnindex</span><span class="p">)</span>
             <span class="k">return</span></div>
 
 
@@ -1105,6 +1107,15 @@
             <span class="k">return</span> <span class="n">Convert</span><span class="o">.</span><span class="n">from_str</span><span class="p">(</span><span class="n">literal</span><span class="p">,</span> <span class="n">datetime</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">EvaluateError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;failed to parse datetime literal #</span><span class="si">{</span><span class="n">literal</span><span class="si">}</span><span class="s2">#: </span><span class="si">{</span><span class="n">ex</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">ex</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_parse_point_tag_literal</span><span class="p">(</span><span class="n">point_tag_literal</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="c1"># Remove any double-quotes from point tag literal, ANTLR grammar already</span>
+        <span class="c1"># ensures tag starting with quote also ends with one</span>
+        <span class="k">if</span> <span class="n">point_tag_literal</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">):</span>
+            <span class="n">point_tag_literal</span> <span class="o">=</span> <span class="n">point_tag_literal</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">point_tag_literal</span>
 
     <span class="c1">#    columnName</span>
     <span class="c1">#     : IDENTIFIER</span>

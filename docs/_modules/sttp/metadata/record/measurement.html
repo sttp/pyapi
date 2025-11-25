@@ -1,21 +1,23 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.metadata.record.measurement &mdash; sttp/pyapi 0.6.4 documentation</title>
+  <title>sttp.metadata.record.measurement &mdash; sttp/pyapi 0.6.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
-      <script src="../../../../_static/documentation_options.js?v=b1f64a84"></script>
-      <script src="../../../../_static/doctools.js?v=92e14aea"></script>
-      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script src="../../../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
@@ -177,7 +179,7 @@
 <span class="sd">        Constructs a new `MeasurementRecord`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_signalid</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_SIGNALID</span> <span class="k">if</span> <span class="n">signalid</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">signalid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signalid</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_SIGNALID</span> <span class="k">if</span> <span class="n">signalid</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">signalid</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signalid</span><span class="p">,</span> <span class="n">UUID</span><span class="p">)</span> <span class="k">else</span> <span class="n">UUID</span><span class="p">(</span><span class="n">signalid</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_adder</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_ADDER</span> <span class="k">if</span> <span class="n">adder</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">adder</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_multiplier</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_MULTIPLIER</span> <span class="k">if</span> <span class="n">multiplier</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">multiplier</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_ID</span> <span class="k">if</span> <span class="nb">id</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="nb">id</span>
