@@ -67,8 +67,8 @@ class DeviceRecord:
         Constructs a new `DeviceRecord`.
         """
 
-        self._nodeid = nodeid
-        self._deviceid = deviceid
+        self._nodeid = nodeid if isinstance(nodeid, UUID) else UUID(nodeid)
+        self._deviceid = deviceid if isinstance(deviceid, UUID) else UUID(deviceid)
         self._acronym = acronym
         self._name = name
         self._accessid = accessid

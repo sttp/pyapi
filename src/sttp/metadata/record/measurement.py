@@ -99,7 +99,7 @@ class MeasurementRecord:
         Constructs a new `MeasurementRecord`.
         """
 
-        self._signalid = MeasurementRecord.DEFAULT_SIGNALID if signalid is ... else signalid
+        self._signalid = MeasurementRecord.DEFAULT_SIGNALID if signalid is ... else signalid if isinstance(signalid, UUID) else UUID(signalid)
         self._adder = MeasurementRecord.DEFAULT_ADDER if adder is ... else adder
         self._multiplier = MeasurementRecord.DEFAULT_MULTIPLIER if multiplier is ... else multiplier
         self._id = MeasurementRecord.DEFAULT_ID if id is ... else id
