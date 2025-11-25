@@ -83,7 +83,9 @@ def read_data(subscriber: Subscriber):
         message = [
             f"{subscriber.total_measurementsreceived:,}",
             " measurements received so far. Current measurement:\n    ",
-            str(measurement)
+            str(subscriber.measurement_metadata(measurement).pointtag),
+            " -> ",
+            str(measurement),
         ]
 
         subscriber.statusmessage("".join(message))
