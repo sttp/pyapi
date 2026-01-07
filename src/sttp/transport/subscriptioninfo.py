@@ -27,7 +27,7 @@ import numpy as np
 
 class SubscriptionInfo:
     """
-    Defines subscription related settings for a `DataSubscriber` instance.
+    Defines subscription related settings for a `sttp.transport.datasubscriber.DataSubscriber` instance.
     """
 
     DEFAULT_FILTEREXPRESSION = Defaults.FILTEREXPRESSION

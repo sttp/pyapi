@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -12,11 +10,15 @@
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-      <script src="_static/jquery.js?v=5d32c60e"></script>
-      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
-      <script src="_static/documentation_options.js?v=b1f64a84"></script>
-      <script src="_static/doctools.js?v=92e14aea"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script src="_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="_static/doctools.js?v=92e14aea"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -1391,7 +1393,7 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.config.Config.DEFAULT_VERSION">
-<span class="sig-name descname"><span class="pre">DEFAULT_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(2)</span></em><a class="headerlink" href="#sttp.config.Config.DEFAULT_VERSION" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#sttp.config.Config.DEFAULT_VERSION" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1483,7 +1485,7 @@ starting from this interval.</p>
 <span id="sttp-reader-module"></span><h2>sttp.reader module<a class="headerlink" href="#module-sttp.reader" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="sttp.reader.MeasurementReader">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.reader.</span></span><span class="sig-name descname"><span class="pre">MeasurementReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subscriber</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.subscriber.Subscriber" title="sttp.subscriber.Subscriber"><span class="pre">Subscriber</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/reader.html#MeasurementReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.reader.MeasurementReader" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.reader.</span></span><span class="sig-name descname"><span class="pre">MeasurementReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subscriber</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.subscriber.Subscriber" title="sttp.subscriber.Subscriber"><span class="pre">sttp.subscriber.Subscriber</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/reader.html#MeasurementReader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.reader.MeasurementReader" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Defines an STTP measurement reader.</p>
 <dl class="py method">
@@ -1535,22 +1537,22 @@ class found in the <cite>transport</cite> namespace. Internally, the <cite>Subsc
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_LAGTIME">
-<span class="sig-name descname"><span class="pre">DEFAULT_LAGTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(10.0)</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_LAGTIME" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_LAGTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10.0</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_LAGTIME" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_LEADTIME">
-<span class="sig-name descname"><span class="pre">DEFAULT_LEADTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(5.0)</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_LEADTIME" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_LEADTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5.0</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_LEADTIME" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_PROCESSINGINTERVAL">
-<span class="sig-name descname"><span class="pre">DEFAULT_PROCESSINGINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int32(-1)</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_PROCESSINGINTERVAL" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_PROCESSINGINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_PROCESSINGINTERVAL" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_PUBLISHINTERVAL">
-<span class="sig-name descname"><span class="pre">DEFAULT_PUBLISHINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(1.0)</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_PUBLISHINTERVAL" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_PUBLISHINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_PUBLISHINTERVAL" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1580,7 +1582,7 @@ class found in the <cite>transport</cite> namespace. Internally, the <cite>Subsc
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_UDPPORT">
-<span class="sig-name descname"><span class="pre">DEFAULT_UDPPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint16(0)</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_UDPPORT" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_UDPPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_UDPPORT" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1730,7 +1732,7 @@ to simplify common uses of STTP data reception.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sttp.subscriber.Subscriber.adjustedvalue">
 <span class="sig-name descname"><span class="pre">adjustedvalue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="sttp.transport.html#sttp.transport.measurement.Measurement" title="sttp.transport.measurement.Measurement"><span class="pre">Measurement</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float64</span></span></span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.adjustedvalue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.subscriber.Subscriber.adjustedvalue" title="Link to this definition"></a></dt>
-<dd><p>Gets the Value of a <cite>Measurement</cite> with any linear adjustments applied from the
+<dd><p>Gets the Value of a <cite>sttp.transport.measurement.Measurement</cite> with any linear adjustments applied from the
 measurement’s Adder and Multiplier metadata, if found.</p>
 </dd></dl>
 
@@ -2009,61 +2011,61 @@ Bit 64 (0x8000000000000000) is used to denote leap second, i.e., second 60, wher
 Bit 63 (0x4000000000000000) is used to denote leap second direction, 0 for add, 1 for delete.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.LEAPSECOND_DIRECTION">
-<span class="sig-name descname"><span class="pre">LEAPSECOND_DIRECTION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(4611686018427387904)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.LEAPSECOND_DIRECTION" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">LEAPSECOND_DIRECTION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4611686018427387904</span></em><a class="headerlink" href="#sttp.ticks.Ticks.LEAPSECOND_DIRECTION" title="Link to this definition"></a></dt>
 <dd><p>Flag (63rd bit) that indicates if leap second is positive or negative; 0 for add, 1 for delete.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.LEAPSECOND_FLAG">
-<span class="sig-name descname"><span class="pre">LEAPSECOND_FLAG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(9223372036854775808)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.LEAPSECOND_FLAG" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">LEAPSECOND_FLAG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9223372036854775808</span></em><a class="headerlink" href="#sttp.ticks.Ticks.LEAPSECOND_FLAG" title="Link to this definition"></a></dt>
 <dd><p>Flag (64th bit) that marks a Ticks value as a leap second, i.e., second 60 (one beyond normal second 59).</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.PERDAY">
-<span class="sig-name descname"><span class="pre">PERDAY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(864000000000)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERDAY" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PERDAY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">864000000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERDAY" title="Link to this definition"></a></dt>
 <dd><p>Number of Ticks that occur in a day.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.PERHOUR">
-<span class="sig-name descname"><span class="pre">PERHOUR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(36000000000)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERHOUR" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PERHOUR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">36000000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERHOUR" title="Link to this definition"></a></dt>
 <dd><p>Number of Ticks that occur in an hour.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.PERMICROSECOND">
-<span class="sig-name descname"><span class="pre">PERMICROSECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(10)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMICROSECOND" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PERMICROSECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMICROSECOND" title="Link to this definition"></a></dt>
 <dd><p>Number of Ticks that occur in a microsecond.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.PERMILLISECOND">
-<span class="sig-name descname"><span class="pre">PERMILLISECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(10000)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMILLISECOND" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PERMILLISECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMILLISECOND" title="Link to this definition"></a></dt>
 <dd><p>Number of Ticks that occur in a millisecond.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.PERMINUTE">
-<span class="sig-name descname"><span class="pre">PERMINUTE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(600000000)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMINUTE" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PERMINUTE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">600000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMINUTE" title="Link to this definition"></a></dt>
 <dd><p>Number of Ticks that occur in a minute.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.PERSECOND">
-<span class="sig-name descname"><span class="pre">PERSECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(10000000)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERSECOND" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PERSECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERSECOND" title="Link to this definition"></a></dt>
 <dd><p>Number of Ticks that occur in a second.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.UNIXBASEOFFSET">
-<span class="sig-name descname"><span class="pre">UNIXBASEOFFSET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(621355968000000000)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.UNIXBASEOFFSET" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">UNIXBASEOFFSET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">621355968000000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.UNIXBASEOFFSET" title="Link to this definition"></a></dt>
 <dd><p>Ticks representation of the Unix epoch timestamp starting at January 1, 1970.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.VALUEMASK">
-<span class="sig-name descname"><span class="pre">VALUEMASK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(4611686018427387903)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.VALUEMASK" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">VALUEMASK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4611686018427387903</span></em><a class="headerlink" href="#sttp.ticks.Ticks.VALUEMASK" title="Link to this definition"></a></dt>
 <dd><p>All bits (bits 1 to 62) that make up the value portion of a Ticks that represent time.</p>
 </dd></dl>
 
@@ -2355,7 +2357,7 @@ to simplify common uses of STTP data reception.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sttp.Subscriber.adjustedvalue">
 <span class="sig-name descname"><span class="pre">adjustedvalue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="sttp.transport.html#sttp.transport.measurement.Measurement" title="sttp.transport.measurement.Measurement"><span class="pre">Measurement</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float64</span></span></span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.adjustedvalue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.adjustedvalue" title="Link to this definition"></a></dt>
-<dd><p>Gets the Value of a <cite>Measurement</cite> with any linear adjustments applied from the
+<dd><p>Gets the Value of a <cite>sttp.transport.measurement.Measurement</cite> with any linear adjustments applied from the
 measurement’s Adder and Multiplier metadata, if found.</p>
 </dd></dl>
 

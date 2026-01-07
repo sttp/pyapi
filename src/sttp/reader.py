@@ -35,7 +35,7 @@ class MeasurementReader:
     Defines an STTP measurement reader.
     """
 
-    def __init__(self, subscriber: Subscriber):
+    def __init__(self, subscriber: 'sttp.subscriber.Subscriber'):
         """
         Creates a new `MeasurementReader`.
         """

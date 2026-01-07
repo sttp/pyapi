@@ -37,11 +37,11 @@ if TYPE_CHECKING:
 
 class SubscriberConnector:
     """
-    Represents a connector that will establish or automatically reestablish a connection from a `DataSubscriber` to a `DataPublisher`.
+    Represents a connector that will establish or automatically reestablish a connection from a `sttp.transport.datasubscriber.DataSubscriber` to a `DataPublisher`.
     """
 
     DEFAULT_ERRORMESSAGE_CALLBACK: Callable[[str], None] = lambda msg: print(msg, file=stderr)
-    DEFAULT_RECONNECT_CALLBACK: Callable[[DataSubscriber], None] = lambda _: ...
+    DEFAULT_RECONNECT_CALLBACK: Callable[['sttp.transport.datasubscriber.DataSubscriber'], None] = lambda _: ...
     DEFAULT_HOSTNAME = Empty.STRING
     DEFAULT_PORT = np.uint16(0)
     DEFAULT_MAXRETRIES = np.int32(-1)
@@ -51,7 +51,7 @@ class SubscriberConnector:
 
     def __init__(self,
                  errormessage_callback: Callable[[str], None] = ...,
-                 reconnect_callback: Callable[[DataSubscriber], None] = ...,
+                 reconnect_callback: Callable[['sttp.transport.datasubscriber.DataSubscriber'], None] = ...,
                  hostname: str = ...,
                  port: np.uint16 = ...,
                  maxretries: np.int32 = ...,
@@ -118,7 +118,7 @@ class SubscriberConnector:
         self.cancel()
         self._threadpool.shutdown(wait=False)
 
-    def _autoreconnect(self, ds: DataSubscriber):
+    def _autoreconnect(self, ds: 'sttp.transport.datasubscriber.DataSubscriber'):
         if self._cancel or ds.disposing:
             return
 
@@ -138,7 +138,7 @@ class SubscriberConnector:
 
         reconnectthread.start()
 
-    def _run_reconnectthread(self, ds: DataSubscriber):
+    def _run_reconnectthread(self, ds: 'sttp.transport.datasubscriber.DataSubscriber'):
         # Reset connection attempt counter if last attempt was not refused
         if not self._connectionrefused:
             self.reset_connection()
@@ -193,14 +193,14 @@ class SubscriberConnector:
 
         waittimer.wait(retryinterval)
 
-    def connect(self, ds: DataSubscriber) -> ConnectStatus:
+    def connect(self, ds: 'sttp.transport.datasubscriber.DataSubscriber') -> ConnectStatus:
         """
-        Initiates a connection sequence for a `DataSubscriber`
+        Initiates a connection sequence for a `sttp.transport.datasubscriber.DataSubscriber`
         """
 
         return ConnectStatus.CANCELED if self._cancel else self._connect(ds, False)
 
-    def _connect(self, ds: DataSubscriber, autoreconnecting: bool) -> ConnectStatus:
+    def _connect(self, ds: 'sttp.transport.datasubscriber.DataSubscriber', autoreconnecting: bool) -> ConnectStatus:
         if self.autoreconnect:
             ds.autoreconnect_callback = lambda: self._autoreconnect(ds)
 

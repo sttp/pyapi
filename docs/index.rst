@@ -7,10 +7,10 @@ Python STTP API documentation
 ==============================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 4
    :caption: Contents:
 
-
+   _apidocs/modules
 
 Indices and tables
 ==================

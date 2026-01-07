@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
+<html class="writer-html5" lang="en" data-content_root="../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>uuid &mdash; STTP 0.1.0 documentation</title>
-      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <title>uuid &mdash; sttp/pyapi 0.7.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=92fd9be5" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=8209df7b" />
+
+  
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
   <!--[if lt IE 9]>
     <script src="../_static/js/html5shiv.min.js"></script>
   <![endif]-->
   
-        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-        <script src="../_static/jquery.js"></script>
-        <script src="../_static/underscore.js"></script>
-        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
-        <script src="../_static/doctools.js"></script>
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+        <script src="../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../_static/doctools.js?v=92e14aea"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" /> 
@@ -25,11 +28,16 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> STTP
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            sttp/pyapi
+              <img src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/sttp.png" class="logo" alt="Logo"/>
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -43,16 +51,16 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">STTP</a>
+          <a href="../index.html">sttp/pyapi</a>
       </nav>
 
       <div class="wy-nav-content">
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="index.html">Module code</a> &raquo;</li>
-      <li>uuid</li>
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">uuid</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -111,13 +119,13 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span><span class="p">,</span> <span class="n">_simple_enum</span>
 
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Ka-Ping Yee &lt;ping@zesty.ca&gt;&#39;</span>
 
 <span class="c1"># The recognized platforms - known behaviors</span>
-<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;win32&#39;</span><span class="p">,</span> <span class="s1">&#39;darwin&#39;</span><span class="p">):</span>
+<span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;win32&#39;</span><span class="p">,</span> <span class="s1">&#39;darwin&#39;</span><span class="p">,</span> <span class="s1">&#39;emscripten&#39;</span><span class="p">,</span> <span class="s1">&#39;wasi&#39;</span><span class="p">):</span>
     <span class="n">_AIX</span> <span class="o">=</span> <span class="n">_LINUX</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">platform</span>
@@ -139,14 +147,15 @@
 <span class="n">bytes_</span> <span class="o">=</span> <span class="nb">bytes</span>  <span class="c1"># The built-in bytes type</span>
 
 
-<span class="k">class</span> <span class="nc">SafeUUID</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="nd">@_simple_enum</span><span class="p">(</span><span class="n">Enum</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">SafeUUID</span><span class="p">:</span>
     <span class="n">safe</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">unsafe</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
     <span class="n">unknown</span> <span class="o">=</span> <span class="kc">None</span>
 
 
 <span class="k">class</span> <span class="nc">UUID</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Instances of the UUID class represent UUIDs as specified in RFC 4122.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Instances of the UUID class represent UUIDs as specified in RFC 4122.</span>
 <span class="sd">    UUID objects are immutable, hashable, and usable as dictionary keys.</span>
 <span class="sd">    Converting a UUID to a string with str() yields something in the form</span>
 <span class="sd">    &#39;12345678-1234-1234-1234-123456789abc&#39;.  The UUID constructor accepts</span>
@@ -202,7 +211,7 @@
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">hex</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">bytes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bytes_le</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="nb">int</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                        <span class="o">*</span><span class="p">,</span> <span class="n">is_safe</span><span class="o">=</span><span class="n">SafeUUID</span><span class="o">.</span><span class="n">unknown</span><span class="p">):</span>
-        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Create a UUID from either a string of 32 hexadecimal digits,</span>
+<span class="w">        </span><span class="sa">r</span><span class="sd">&quot;&quot;&quot;Create a UUID from either a string of 32 hexadecimal digits,</span>
 <span class="sd">        a string of 16 bytes as the &#39;bytes&#39; argument, a string of 16 bytes</span>
 <span class="sd">        in little-endian order as the &#39;bytes_le&#39; argument, a tuple of six</span>
 <span class="sd">        integers (32-bit time_low, 16-bit time_mid, 16-bit time_hi_version,</span>
@@ -249,7 +258,7 @@
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">bytes</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">16</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;bytes is not a 16-char string&#39;</span><span class="p">)</span>
             <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">bytes_</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="nb">bytes</span><span class="p">)</span>
-            <span class="nb">int</span> <span class="o">=</span> <span class="n">int_</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="nb">bytes</span><span class="p">,</span> <span class="n">byteorder</span><span class="o">=</span><span class="s1">&#39;big&#39;</span><span class="p">)</span>
+            <span class="nb">int</span> <span class="o">=</span> <span class="n">int_</span><span class="o">.</span><span class="n">from_bytes</span><span class="p">(</span><span class="nb">bytes</span><span class="p">)</span>  <span class="c1"># big endian</span>
         <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">6</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;fields is not a 6-tuple&#39;</span><span class="p">)</span>
@@ -347,7 +356,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">bytes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">int</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="s1">&#39;big&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">int</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="mi">16</span><span class="p">)</span>  <span class="c1"># big endian</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">bytes_le</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -434,7 +443,12 @@
         <span class="c1"># for are actually localized, but in theory some system could do so.)</span>
         <span class="n">env</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">)</span>
         <span class="n">env</span><span class="p">[</span><span class="s1">&#39;LC_ALL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span>
-        <span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">((</span><span class="n">executable</span><span class="p">,)</span> <span class="o">+</span> <span class="n">args</span><span class="p">,</span>
+        <span class="c1"># Empty strings will be quoted by popen so we should just ommit it</span>
+        <span class="k">if</span> <span class="n">args</span> <span class="o">!=</span> <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,):</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="p">(</span><span class="n">executable</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="p">(</span><span class="n">executable</span><span class="p">,)</span>
+        <span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">command</span><span class="p">,</span>
                                 <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
                                 <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">DEVNULL</span><span class="p">,</span>
                                 <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
@@ -459,14 +473,14 @@
 <span class="c1"># over locally administered ones since the former are globally unique, but</span>
 <span class="c1"># we&#39;ll return the first of the latter found if that&#39;s all the machine has.</span>
 <span class="c1">#</span>
-<span class="c1"># See https://en.wikipedia.org/wiki/MAC_address#Universal_vs._local</span>
+<span class="c1"># See https://en.wikipedia.org/wiki/MAC_address#Universal_vs._local_(U/L_bit)</span>
 
 <span class="k">def</span> <span class="nf">_is_universal</span><span class="p">(</span><span class="n">mac</span><span class="p">):</span>
     <span class="k">return</span> <span class="ow">not</span> <span class="p">(</span><span class="n">mac</span> <span class="o">&amp;</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">41</span><span class="p">))</span>
 
 
 <span class="k">def</span> <span class="nf">_find_mac_near_keyword</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">keywords</span><span class="p">,</span> <span class="n">get_word_index</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Searches a command&#39;s output for a MAC address near a keyword.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Searches a command&#39;s output for a MAC address near a keyword.</span>
 
 <span class="sd">    Each line of words in the output is case-insensitively searched for</span>
 <span class="sd">    any of the given keywords.  Upon a match, get_word_index is invoked</span>
@@ -529,7 +543,7 @@
 
 
 <span class="k">def</span> <span class="nf">_find_mac_under_heading</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">heading</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Looks for a MAC address under a heading in a command&#39;s output.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Looks for a MAC address under a heading in a command&#39;s output.</span>
 
 <span class="sd">    The first line of words in the output is searched for the given</span>
 <span class="sd">    heading. Words at the same word index as the heading in subsequent</span>
@@ -567,17 +581,17 @@
 <span class="c1"># The following functions call external programs to &#39;get&#39; a macaddr value to</span>
 <span class="c1"># be used as basis for an uuid</span>
 <span class="k">def</span> <span class="nf">_ifconfig_getnode</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Get the hardware address on Unix by running ifconfig.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the hardware address on Unix by running ifconfig.&quot;&quot;&quot;</span>
     <span class="c1"># This works on Linux (&#39;&#39; or &#39;-a&#39;), Tru64 (&#39;-av&#39;), but not all Unixes.</span>
     <span class="n">keywords</span> <span class="o">=</span> <span class="p">(</span><span class="sa">b</span><span class="s1">&#39;hwaddr&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;ether&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;address:&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;lladdr&#39;</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">args</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;-a&#39;</span><span class="p">,</span> <span class="s1">&#39;-av&#39;</span><span class="p">):</span>
         <span class="n">mac</span> <span class="o">=</span> <span class="n">_find_mac_near_keyword</span><span class="p">(</span><span class="s1">&#39;ifconfig&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">keywords</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">mac</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">mac</span>
-        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="kc">None</span>
 
 <span class="k">def</span> <span class="nf">_ip_getnode</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Get the hardware address on Unix by running ip.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the hardware address on Unix by running ip.&quot;&quot;&quot;</span>
     <span class="c1"># This works on Linux with iproute2.</span>
     <span class="n">mac</span> <span class="o">=</span> <span class="n">_find_mac_near_keyword</span><span class="p">(</span><span class="s1">&#39;ip&#39;</span><span class="p">,</span> <span class="s1">&#39;link&#39;</span><span class="p">,</span> <span class="p">[</span><span class="sa">b</span><span class="s1">&#39;link/ether&#39;</span><span class="p">],</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">mac</span><span class="p">:</span>
@@ -585,8 +599,10 @@
     <span class="k">return</span> <span class="kc">None</span>
 
 <span class="k">def</span> <span class="nf">_arp_getnode</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Get the hardware address on Unix by running arp.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the hardware address on Unix by running arp.&quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">socket</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">socket</span><span class="p">,</span> <span class="s2">&quot;gethostbyname&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">None</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">ip_addr</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">gethostbyname</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">gethostname</span><span class="p">())</span>
     <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
@@ -611,22 +627,22 @@
     <span class="k">return</span> <span class="kc">None</span>
 
 <span class="k">def</span> <span class="nf">_lanscan_getnode</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Get the hardware address on Unix by running lanscan.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the hardware address on Unix by running lanscan.&quot;&quot;&quot;</span>
     <span class="c1"># This might work on HP-UX.</span>
     <span class="k">return</span> <span class="n">_find_mac_near_keyword</span><span class="p">(</span><span class="s1">&#39;lanscan&#39;</span><span class="p">,</span> <span class="s1">&#39;-ai&#39;</span><span class="p">,</span> <span class="p">[</span><span class="sa">b</span><span class="s1">&#39;lan0&#39;</span><span class="p">],</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="mi">0</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">_netstat_getnode</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Get the hardware address on Unix by running netstat.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the hardware address on Unix by running netstat.&quot;&quot;&quot;</span>
     <span class="c1"># This works on AIX and might work on Tru64 UNIX.</span>
     <span class="k">return</span> <span class="n">_find_mac_under_heading</span><span class="p">(</span><span class="s1">&#39;netstat&#39;</span><span class="p">,</span> <span class="s1">&#39;-ian&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;Address&#39;</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">_ipconfig_getnode</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;[DEPRECATED] Get the hardware address on Windows.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;[DEPRECATED] Get the hardware address on Windows.&quot;&quot;&quot;</span>
     <span class="c1"># bpo-40501: UuidCreateSequential() is now the only supported approach</span>
     <span class="k">return</span> <span class="n">_windll_getnode</span><span class="p">()</span>
 
 <span class="k">def</span> <span class="nf">_netbios_getnode</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;[DEPRECATED] Get the hardware address on Windows.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;[DEPRECATED] Get the hardware address on Windows.&quot;&quot;&quot;</span>
     <span class="c1"># bpo-40501: UuidCreateSequential() is now the only supported approach</span>
     <span class="k">return</span> <span class="n">_windll_getnode</span><span class="p">()</span>
 
@@ -645,23 +661,23 @@
 
 
 <span class="k">def</span> <span class="nf">_load_system_functions</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;[DEPRECATED] Platform-specific functions loaded at import time&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;[DEPRECATED] Platform-specific functions loaded at import time&quot;&quot;&quot;</span>
 
 
 <span class="k">def</span> <span class="nf">_unix_getnode</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Get the hardware address on Unix using the _uuid extension module.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the hardware address on Unix using the _uuid extension module.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">_generate_time_safe</span><span class="p">:</span>
         <span class="n">uuid_time</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_generate_time_safe</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">UUID</span><span class="p">(</span><span class="nb">bytes</span><span class="o">=</span><span class="n">uuid_time</span><span class="p">)</span><span class="o">.</span><span class="n">node</span>
 
 <span class="k">def</span> <span class="nf">_windll_getnode</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Get the hardware address on Windows using the _uuid extension module.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the hardware address on Windows using the _uuid extension module.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">_UuidCreate</span><span class="p">:</span>
         <span class="n">uuid_bytes</span> <span class="o">=</span> <span class="n">_UuidCreate</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">UUID</span><span class="p">(</span><span class="n">bytes_le</span><span class="o">=</span><span class="n">uuid_bytes</span><span class="p">)</span><span class="o">.</span><span class="n">node</span>
 
 <span class="k">def</span> <span class="nf">_random_getnode</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Get a random node ID.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a random node ID.&quot;&quot;&quot;</span>
     <span class="c1"># RFC 4122, $4.1.6 says &quot;For systems with no IEEE address, a randomly or</span>
     <span class="c1"># pseudo-randomly generated value may be used; see Section 4.5.  The</span>
     <span class="c1"># multicast bit must be set in such addresses, in order that they will</span>
@@ -671,7 +687,7 @@
     <span class="c1"># significant bit of the first octet&quot;.  This works out to be the 41st bit</span>
     <span class="c1"># counting from 1 being the least significant bit, or 1&lt;&lt;40.</span>
     <span class="c1">#</span>
-    <span class="c1"># See https://en.wikipedia.org/wiki/MAC_address#Unicast_vs._multicast</span>
+    <span class="c1"># See https://en.wikipedia.org/w/index.php?title=MAC_address&amp;oldid=1128764812#Universal_vs._local_(U/L_bit)</span>
     <span class="kn">import</span> <span class="nn">random</span>
     <span class="k">return</span> <span class="n">random</span><span class="o">.</span><span class="n">getrandbits</span><span class="p">(</span><span class="mi">48</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">40</span><span class="p">)</span>
 
@@ -704,7 +720,7 @@
 <span class="n">_node</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="k">def</span> <span class="nf">getnode</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Get the hardware address as a 48-bit positive integer.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the hardware address as a 48-bit positive integer.</span>
 
 <span class="sd">    The first time this runs, it may launch a separate program, which could</span>
 <span class="sd">    be quite slow.  If all attempts to obtain the hardware address fail, we</span>
@@ -728,7 +744,7 @@
 <span class="n">_last_timestamp</span> <span class="o">=</span> <span class="kc">None</span>
 
 <span class="k">def</span> <span class="nf">uuid1</span><span class="p">(</span><span class="n">node</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">clock_seq</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Generate a UUID from a host ID, sequence number, and the current time.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a UUID from a host ID, sequence number, and the current time.</span>
 <span class="sd">    If &#39;node&#39; is not given, getnode() is used to obtain the hardware</span>
 <span class="sd">    address.  If &#39;clock_seq&#39; is given, it is used as the sequence number;</span>
 <span class="sd">    otherwise a random 14-bit sequence number is chosen.&quot;&quot;&quot;</span>
@@ -766,23 +782,77 @@
                         <span class="n">clock_seq_hi_variant</span><span class="p">,</span> <span class="n">clock_seq_low</span><span class="p">,</span> <span class="n">node</span><span class="p">),</span> <span class="n">version</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">uuid3</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Generate a UUID from the MD5 hash of a namespace UUID and a name.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a UUID from the MD5 hash of a namespace UUID and a name.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
     <span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">md5</span>
     <span class="n">digest</span> <span class="o">=</span> <span class="n">md5</span><span class="p">(</span>
-        <span class="n">namespace</span><span class="o">.</span><span class="n">bytes</span> <span class="o">+</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">),</span>
+        <span class="n">namespace</span><span class="o">.</span><span class="n">bytes</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span>
         <span class="n">usedforsecurity</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">UUID</span><span class="p">(</span><span class="nb">bytes</span><span class="o">=</span><span class="n">digest</span><span class="p">[:</span><span class="mi">16</span><span class="p">],</span> <span class="n">version</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">uuid4</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Generate a random UUID.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a random UUID.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">UUID</span><span class="p">(</span><span class="nb">bytes</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">urandom</span><span class="p">(</span><span class="mi">16</span><span class="p">),</span> <span class="n">version</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 
 <span class="k">def</span> <span class="nf">uuid5</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Generate a UUID from the SHA-1 hash of a namespace UUID and a name.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a UUID from the SHA-1 hash of a namespace UUID and a name.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
     <span class="kn">from</span> <span class="nn">hashlib</span> <span class="kn">import</span> <span class="n">sha1</span>
-    <span class="nb">hash</span> <span class="o">=</span> <span class="n">sha1</span><span class="p">(</span><span class="n">namespace</span><span class="o">.</span><span class="n">bytes</span> <span class="o">+</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
+    <span class="nb">hash</span> <span class="o">=</span> <span class="n">sha1</span><span class="p">(</span><span class="n">namespace</span><span class="o">.</span><span class="n">bytes</span> <span class="o">+</span> <span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">UUID</span><span class="p">(</span><span class="nb">bytes</span><span class="o">=</span><span class="nb">hash</span><span class="p">[:</span><span class="mi">16</span><span class="p">],</span> <span class="n">version</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the uuid command line interface.&quot;&quot;&quot;</span>
+    <span class="n">uuid_funcs</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;uuid1&quot;</span><span class="p">:</span> <span class="n">uuid1</span><span class="p">,</span>
+        <span class="s2">&quot;uuid3&quot;</span><span class="p">:</span> <span class="n">uuid3</span><span class="p">,</span>
+        <span class="s2">&quot;uuid4&quot;</span><span class="p">:</span> <span class="n">uuid4</span><span class="p">,</span>
+        <span class="s2">&quot;uuid5&quot;</span><span class="p">:</span> <span class="n">uuid5</span>
+    <span class="p">}</span>
+    <span class="n">uuid_namespace_funcs</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;uuid3&quot;</span><span class="p">,</span> <span class="s2">&quot;uuid5&quot;</span><span class="p">)</span>
+    <span class="n">namespaces</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;@dns&quot;</span><span class="p">:</span> <span class="n">NAMESPACE_DNS</span><span class="p">,</span>
+        <span class="s2">&quot;@url&quot;</span><span class="p">:</span> <span class="n">NAMESPACE_URL</span><span class="p">,</span>
+        <span class="s2">&quot;@oid&quot;</span><span class="p">:</span> <span class="n">NAMESPACE_OID</span><span class="p">,</span>
+        <span class="s2">&quot;@x500&quot;</span><span class="p">:</span> <span class="n">NAMESPACE_X500</span>
+    <span class="p">}</span>
+
+    <span class="kn">import</span> <span class="nn">argparse</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span>
+        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Generates a uuid using the selected uuid function.&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-u&quot;</span><span class="p">,</span> <span class="s2">&quot;--uuid&quot;</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">uuid_funcs</span><span class="o">.</span><span class="n">keys</span><span class="p">(),</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;uuid4&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The function to use to generate the uuid. &quot;</span>
+                        <span class="s2">&quot;By default uuid4 function is used.&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-n&quot;</span><span class="p">,</span> <span class="s2">&quot;--namespace&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The namespace is a UUID, or &#39;@ns&#39; where &#39;ns&#39; is a &quot;</span>
+                        <span class="s2">&quot;well-known predefined UUID addressed by namespace name. &quot;</span>
+                        <span class="s2">&quot;Such as @dns, @url, @oid, and @x500. &quot;</span>
+                        <span class="s2">&quot;Only required for uuid3/uuid5 functions.&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s2">&quot;-N&quot;</span><span class="p">,</span> <span class="s2">&quot;--name&quot;</span><span class="p">,</span>
+                        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;The name used as part of generating the uuid. &quot;</span>
+                        <span class="s2">&quot;Only required for uuid3/uuid5 functions.&quot;</span><span class="p">)</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+    <span class="n">uuid_func</span> <span class="o">=</span> <span class="n">uuid_funcs</span><span class="p">[</span><span class="n">args</span><span class="o">.</span><span class="n">uuid</span><span class="p">]</span>
+    <span class="n">namespace</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">namespace</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">uuid</span> <span class="ow">in</span> <span class="n">uuid_namespace_funcs</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">namespace</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">name</span><span class="p">:</span>
+            <span class="n">parser</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+                <span class="s2">&quot;Incorrect number of arguments. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">uuid</span><span class="si">}</span><span class="s2"> requires a namespace and a name. &quot;</span>
+                <span class="s2">&quot;Run &#39;python -m uuid -h&#39; for more information.&quot;</span>
+            <span class="p">)</span>
+        <span class="n">namespace</span> <span class="o">=</span> <span class="n">namespaces</span><span class="p">[</span><span class="n">namespace</span><span class="p">]</span> <span class="k">if</span> <span class="n">namespace</span> <span class="ow">in</span> <span class="n">namespaces</span> <span class="k">else</span> <span class="n">UUID</span><span class="p">(</span><span class="n">namespace</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">uuid_func</span><span class="p">(</span><span class="n">namespace</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">uuid_func</span><span class="p">())</span>
+
 
 <span class="c1"># The following standard UUIDs are for use with uuid3() or uuid5().</span>
 
@@ -790,6 +860,9 @@
 <span class="n">NAMESPACE_URL</span> <span class="o">=</span> <span class="n">UUID</span><span class="p">(</span><span class="s1">&#39;6ba7b811-9dad-11d1-80b4-00c04fd430c8&#39;</span><span class="p">)</span>
 <span class="n">NAMESPACE_OID</span> <span class="o">=</span> <span class="n">UUID</span><span class="p">(</span><span class="s1">&#39;6ba7b812-9dad-11d1-80b4-00c04fd430c8&#39;</span><span class="p">)</span>
 <span class="n">NAMESPACE_X500</span> <span class="o">=</span> <span class="n">UUID</span><span class="p">(</span><span class="s1">&#39;6ba7b814-9dad-11d1-80b4-00c04fd430c8&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
 </pre></div>
 
            </div>
@@ -799,13 +872,29 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2022, J. Ritchie Carroll.</p>
+    <p></p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
     <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
     provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
+  
+ 
+<hr />
+<p>
+    <a href="https://github.com/sttp/pyapi">GitHub Home</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://pypi.org/project/sttpapi/" target="_blank">PyPi Package: sttpapi</a>
+    &nbsp;&nbsp;•&nbsp;&nbsp;
+    <a href="https://sttp.github.io/documentation/" target="_blank">General STTP Documentation</a>
+</p>
+<br /><br />
+Copyright © 2022, <a href="https://gridprotectionalliance.org/" target="_blank">Grid&nbsp;Protection&nbsp;Alliance</a>
+<a href="https://github.com/sttp/pyapi">
+    <img align="right" style="margin-top: -50px"
+        src="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/LockPython_64High.png">
+</a>
+
 
 </footer>
         </div>

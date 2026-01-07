@@ -164,7 +164,7 @@ class Subscriber:
 
     def adjustedvalue(self, measurement: Measurement) -> np.float64:
         """
-        Gets the Value of a `Measurement` with any linear adjustments applied from the
+        Gets the Value of a `sttp.transport.measurement.Measurement` with any linear adjustments applied from the
         measurement's Adder and Multiplier metadata, if found.
         """
 

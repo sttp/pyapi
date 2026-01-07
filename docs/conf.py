@@ -26,6 +26,9 @@ extensions = [
     "sphinx.ext.napoleon"
 ]
 
+# Suppress warnings for ambiguous cross-references where classes are re-exported in __init__.py
+suppress_warnings = ['ref.python']
+
 templates_path = ['_templates']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
