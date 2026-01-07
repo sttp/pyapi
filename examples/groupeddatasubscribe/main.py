@@ -401,6 +401,10 @@ def process_data(subscriber: GroupedDataSubscriber, timestamp: np.uint64, databu
                 frequency_sum += measurement.value # raw, unadjusted value
                 frequency_count += 1
 
+    if frequency_count == 0:
+        subscriber.statusmessage(f"\nNo valid frequency measurements received in second {Ticks.to_datetime(timestamp).second}.")
+        return
+    
     average_frequency = frequency_sum / frequency_count
 
     subscriber.statusmessage(f"\nAverage frequency for {frequency_count:,} values in second {Ticks.to_datetime(timestamp).second}: {average_frequency:.6f} Hz")

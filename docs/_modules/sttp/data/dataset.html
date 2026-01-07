@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.data.dataset &mdash; sttp/pyapi 0.6.2 documentation</title>
+  <title>sttp.data.dataset &mdash; sttp/pyapi 0.7.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
-        <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
-        <script src="../../../_static/doctools.js?v=92e14aea"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+      <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
+      <script src="../../../_static/doctools.js?v=92e14aea"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -348,6 +346,128 @@
 
         <span class="k">return</span> <span class="kc">None</span></div>
 
+
+<div class="viewcode-block" id="DataSet.to_xml">
+<a class="viewcode-back" href="../../../sttp.data.html#sttp.data.dataset.DataSet.to_xml">[docs]</a>
+    <span class="k">def</span> <span class="nf">to_xml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Serializes the `DataSet` to XML format.</span>
+<span class="sd">        Returns an XML string representation of the dataset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="k">if</span> <span class="n">dataset_name</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">dataset_name</span>
+        
+        <span class="c1"># Build XML using ElementTree</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">Element</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        
+        <span class="c1"># Create schema node</span>
+        <span class="n">schema</span> <span class="o">=</span> <span class="n">ElementTree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s1">&#39;xs:schema&#39;</span><span class="p">)</span>
+        <span class="n">schema</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">schema</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;xmlns:xs&#39;</span><span class="p">,</span> <span class="n">XMLSCHEMA_NAMESPACE</span><span class="p">)</span>
+        <span class="n">schema</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;xmlns:ext&#39;</span><span class="p">,</span> <span class="n">EXT_XMLSCHEMADATA_NAMESPACE</span><span class="p">)</span>
+        
+        <span class="c1"># Create root element definition</span>
+        <span class="n">element</span> <span class="o">=</span> <span class="n">ElementTree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">schema</span><span class="p">,</span> <span class="s1">&#39;xs:element&#39;</span><span class="p">)</span>
+        <span class="n">element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        
+        <span class="n">complex_type</span> <span class="o">=</span> <span class="n">ElementTree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="s1">&#39;xs:complexType&#39;</span><span class="p">)</span>
+        <span class="n">choice</span> <span class="o">=</span> <span class="n">ElementTree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">complex_type</span><span class="p">,</span> <span class="s1">&#39;xs:choice&#39;</span><span class="p">)</span>
+        <span class="n">choice</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;minOccurs&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">)</span>
+        <span class="n">choice</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;maxOccurs&#39;</span><span class="p">,</span> <span class="s1">&#39;unbounded&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Write schema definition for each table</span>
+        <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="n">table_element</span> <span class="o">=</span> <span class="n">ElementTree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">choice</span><span class="p">,</span> <span class="s1">&#39;xs:element&#39;</span><span class="p">)</span>
+            <span class="n">table_element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">table</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            
+            <span class="n">table_complex</span> <span class="o">=</span> <span class="n">ElementTree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">table_element</span><span class="p">,</span> <span class="s1">&#39;xs:complexType&#39;</span><span class="p">)</span>
+            <span class="n">sequence</span> <span class="o">=</span> <span class="n">ElementTree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">table_complex</span><span class="p">,</span> <span class="s1">&#39;xs:sequence&#39;</span><span class="p">)</span>
+            
+            <span class="c1"># Write schema definition for each column</span>
+            <span class="k">for</span> <span class="n">col_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">columncount</span><span class="p">):</span>
+                <span class="n">column</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="n">col_idx</span><span class="p">)</span>
+                <span class="n">col_element</span> <span class="o">=</span> <span class="n">ElementTree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="s1">&#39;xs:element&#39;</span><span class="p">)</span>
+                <span class="n">col_element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">column</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                
+                <span class="c1"># Map DataType to XSD type</span>
+                <span class="n">xsd_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datatype_to_xsd</span><span class="p">(</span><span class="n">column</span><span class="o">.</span><span class="n">datatype</span><span class="p">)</span>
+                <span class="n">col_element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="n">xsd_type</span><span class="p">)</span>
+                <span class="n">col_element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;minOccurs&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">)</span>
+                
+                <span class="c1"># Guid is an extended schema data type</span>
+                <span class="k">if</span> <span class="n">column</span><span class="o">.</span><span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">GUID</span><span class="p">:</span>
+                    <span class="n">col_element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;ext:DataType&#39;</span><span class="p">,</span> <span class="s1">&#39;System.Guid&#39;</span><span class="p">)</span>
+                
+                <span class="c1"># Computed columns define an expression</span>
+                <span class="k">if</span> <span class="n">column</span><span class="o">.</span><span class="n">computed</span> <span class="ow">and</span> <span class="n">column</span><span class="o">.</span><span class="n">expression</span><span class="p">:</span>
+                    <span class="n">col_element</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;ext:Expression&#39;</span><span class="p">,</span> <span class="n">column</span><span class="o">.</span><span class="n">expression</span><span class="p">)</span>
+        
+        <span class="c1"># Write records for each table</span>
+        <span class="k">for</span> <span class="n">table</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tables</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">row_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">rowcount</span><span class="p">):</span>
+                <span class="n">row</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">row</span><span class="p">(</span><span class="n">row_idx</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">row</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                    
+                <span class="n">record</span> <span class="o">=</span> <span class="n">ElementTree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">table</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                
+                <span class="k">for</span> <span class="n">col_idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">table</span><span class="o">.</span><span class="n">columncount</span><span class="p">):</span>
+                    <span class="n">column</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">column</span><span class="p">(</span><span class="n">col_idx</span><span class="p">)</span>
+                    
+                    <span class="c1"># Skip null and computed values</span>
+                    <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="n">col_idx</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">column</span><span class="o">.</span><span class="n">computed</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    
+                    <span class="n">field</span> <span class="o">=</span> <span class="n">ElementTree</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">column</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+                    <span class="n">field</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_value_to_xml_text</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">col_idx</span><span class="p">],</span> <span class="n">column</span><span class="o">.</span><span class="n">datatype</span><span class="p">)</span>
+        
+        <span class="c1"># Generate XML with declaration</span>
+        <span class="c1"># Use tostring with utf-8 encoding to get proper byte output, then decode to string</span>
+        <span class="n">xml_bytes</span> <span class="o">=</span> <span class="n">ElementTree</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">xml_declaration</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">xml_bytes</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span></div>
+
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_datatype_to_xsd</span><span class="p">(</span><span class="n">datatype</span><span class="p">:</span> <span class="n">DataType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Maps DataType enum to XSD schema type string.&quot;&quot;&quot;</span>
+        <span class="n">mapping</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">DataType</span><span class="o">.</span><span class="n">STRING</span><span class="p">:</span> <span class="s1">&#39;xs:string&#39;</span><span class="p">,</span>
+            <span class="n">DataType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span> <span class="s1">&#39;xs:boolean&#39;</span><span class="p">,</span>
+            <span class="n">DataType</span><span class="o">.</span><span class="n">DATETIME</span><span class="p">:</span> <span class="s1">&#39;xs:dateTime&#39;</span><span class="p">,</span>
+            <span class="n">DataType</span><span class="o">.</span><span class="n">SINGLE</span><span class="p">:</span> <span class="s1">&#39;xs:float&#39;</span><span class="p">,</span>
+            <span class="n">DataType</span><span class="o">.</span><span class="n">DOUBLE</span><span class="p">:</span> <span class="s1">&#39;xs:double&#39;</span><span class="p">,</span>
+            <span class="n">DataType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">:</span> <span class="s1">&#39;xs:decimal&#39;</span><span class="p">,</span>
+            <span class="n">DataType</span><span class="o">.</span><span class="n">GUID</span><span class="p">:</span> <span class="s1">&#39;xs:string&#39;</span><span class="p">,</span>  <span class="c1"># Guid uses string with ext:DataType</span>
+            <span class="n">DataType</span><span class="o">.</span><span class="n">INT8</span><span class="p">:</span> <span class="s1">&#39;xs:byte&#39;</span><span class="p">,</span>
+            <span class="n">DataType</span><span class="o">.</span><span class="n">INT16</span><span class="p">:</span> <span class="s1">&#39;xs:short&#39;</span><span class="p">,</span>
+            <span class="n">DataType</span><span class="o">.</span><span class="n">INT32</span><span class="p">:</span> <span class="s1">&#39;xs:int&#39;</span><span class="p">,</span>
+            <span class="n">DataType</span><span class="o">.</span><span class="n">INT64</span><span class="p">:</span> <span class="s1">&#39;xs:long&#39;</span><span class="p">,</span>
+            <span class="n">DataType</span><span class="o">.</span><span class="n">UINT8</span><span class="p">:</span> <span class="s1">&#39;xs:unsignedByte&#39;</span><span class="p">,</span>
+            <span class="n">DataType</span><span class="o">.</span><span class="n">UINT16</span><span class="p">:</span> <span class="s1">&#39;xs:unsignedShort&#39;</span><span class="p">,</span>
+            <span class="n">DataType</span><span class="o">.</span><span class="n">UINT32</span><span class="p">:</span> <span class="s1">&#39;xs:unsignedInt&#39;</span><span class="p">,</span>
+            <span class="n">DataType</span><span class="o">.</span><span class="n">UINT64</span><span class="p">:</span> <span class="s1">&#39;xs:unsignedLong&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">mapping</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">datatype</span><span class="p">,</span> <span class="s1">&#39;xs:string&#39;</span><span class="p">)</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_value_to_xml_text</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">datatype</span><span class="p">:</span> <span class="n">DataType</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Converts a Python value to XML text representation.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">BOOLEAN</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s1">&#39;true&#39;</span> <span class="k">if</span> <span class="n">value</span> <span class="k">else</span> <span class="s1">&#39;false&#39;</span>
+        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">DATETIME</span><span class="p">:</span>
+            <span class="c1"># Format as ISO 8601 with milliseconds and Z suffix</span>
+            <span class="n">dt_str</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(</span><span class="n">timespec</span><span class="o">=</span><span class="s1">&#39;milliseconds&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;.&#39;</span> <span class="ow">in</span> <span class="n">dt_str</span><span class="p">:</span>
+                <span class="n">dt_str</span> <span class="o">=</span> <span class="n">dt_str</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">dt_str</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;Z&#39;</span><span class="p">):</span>
+                <span class="n">dt_str</span> <span class="o">+=</span> <span class="s1">&#39;Z&#39;</span>
+            <span class="k">return</span> <span class="n">dt_str</span>
+        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">GUID</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">datatype</span> <span class="o">==</span> <span class="n">DataType</span><span class="o">.</span><span class="n">DECIMAL</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_load_schema</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">schema</span><span class="p">:</span> <span class="n">Element</span><span class="p">,</span> <span class="n">namespaces</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">xs</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">EXT_PREFIX</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="se">{{</span><span class="si">{</span><span class="n">EXT_XMLSCHEMADATA_NAMESPACE</span><span class="si">}</span><span class="se">}}</span><span class="s2">&quot;</span>

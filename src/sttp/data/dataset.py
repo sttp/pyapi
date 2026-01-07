@@ -242,6 +242,125 @@ class DataSet:
 
         return None
 
+    def to_xml(self, dataset_name: str = ...) -> str:
+        """
+        Serializes the `DataSet` to XML format.
+        Returns an XML string representation of the dataset.
+        """
+        
+        name = self.name if dataset_name is ... else dataset_name
+        
+        # Build XML using ElementTree
+        root = Element(name)
+        
+        # Create schema node
+        schema = ElementTree.SubElement(root, 'xs:schema')
+        schema.set('id', name)
+        schema.set('xmlns:xs', XMLSCHEMA_NAMESPACE)
+        schema.set('xmlns:ext', EXT_XMLSCHEMADATA_NAMESPACE)
+        
+        # Create root element definition
+        element = ElementTree.SubElement(schema, 'xs:element')
+        element.set('name', name)
+        
+        complex_type = ElementTree.SubElement(element, 'xs:complexType')
+        choice = ElementTree.SubElement(complex_type, 'xs:choice')
+        choice.set('minOccurs', '0')
+        choice.set('maxOccurs', 'unbounded')
+        
+        # Write schema definition for each table
+        for table in self._tables.values():
+            table_element = ElementTree.SubElement(choice, 'xs:element')
+            table_element.set('name', table.name)
+            
+            table_complex = ElementTree.SubElement(table_element, 'xs:complexType')
+            sequence = ElementTree.SubElement(table_complex, 'xs:sequence')
+            
+            # Write schema definition for each column
+            for col_idx in range(table.columncount):
+                column = table.column(col_idx)
+                col_element = ElementTree.SubElement(sequence, 'xs:element')
+                col_element.set('name', column.name)
+                
+                # Map DataType to XSD type
+                xsd_type = self._datatype_to_xsd(column.datatype)
+                col_element.set('type', xsd_type)
+                col_element.set('minOccurs', '0')
+                
+                # Guid is an extended schema data type
+                if column.datatype == DataType.GUID:
+                    col_element.set('ext:DataType', 'System.Guid')
+                
+                # Computed columns define an expression
+                if column.computed and column.expression:
+                    col_element.set('ext:Expression', column.expression)
+        
+        # Write records for each table
+        for table in self._tables.values():
+            for row_idx in range(table.rowcount):
+                row = table.row(row_idx)
+                if row is None:
+                    continue
+                    
+                record = ElementTree.SubElement(root, table.name)
+                
+                for col_idx in range(table.columncount):
+                    column = table.column(col_idx)
+                    
+                    # Skip null and computed values
+                    if row[col_idx] is None or column.computed:
+                        continue
+                    
+                    field = ElementTree.SubElement(record, column.name)
+                    field.text = self._value_to_xml_text(row[col_idx], column.datatype)
+        
+        # Generate XML with declaration
+        # Use tostring with utf-8 encoding to get proper byte output, then decode to string
+        xml_bytes = ElementTree.tostring(root, encoding='utf-8', xml_declaration=True)
+        return xml_bytes.decode('utf-8')
+    
+    @staticmethod
+    def _datatype_to_xsd(datatype: DataType) -> str:
+        """Maps DataType enum to XSD schema type string."""
+        mapping = {
+            DataType.STRING: 'xs:string',
+            DataType.BOOLEAN: 'xs:boolean',
+            DataType.DATETIME: 'xs:dateTime',
+            DataType.SINGLE: 'xs:float',
+            DataType.DOUBLE: 'xs:double',
+            DataType.DECIMAL: 'xs:decimal',
+            DataType.GUID: 'xs:string',  # Guid uses string with ext:DataType
+            DataType.INT8: 'xs:byte',
+            DataType.INT16: 'xs:short',
+            DataType.INT32: 'xs:int',
+            DataType.INT64: 'xs:long',
+            DataType.UINT8: 'xs:unsignedByte',
+            DataType.UINT16: 'xs:unsignedShort',
+            DataType.UINT32: 'xs:unsignedInt',
+            DataType.UINT64: 'xs:unsignedLong',
+        }
+        return mapping.get(datatype, 'xs:string')
+    
+    @staticmethod
+    def _value_to_xml_text(value, datatype: DataType) -> str:
+        """Converts a Python value to XML text representation."""
+        if datatype == DataType.BOOLEAN:
+            return 'true' if value else 'false'
+        elif datatype == DataType.DATETIME:
+            # Format as ISO 8601 with milliseconds and Z suffix
+            dt_str = value.isoformat(timespec='milliseconds')
+            if '.' in dt_str:
+                dt_str = dt_str.rstrip('0')
+            if not dt_str.endswith('Z'):
+                dt_str += 'Z'
+            return dt_str
+        elif datatype == DataType.GUID:
+            return str(value)
+        elif datatype == DataType.DECIMAL:
+            return str(value)
+        else:
+            return str(value)
+
     def _load_schema(self, schema: Element, namespaces: Dict[str, str], xs: str):
         EXT_PREFIX = f"{{{EXT_XMLSCHEMADATA_NAMESPACE}}}"
 

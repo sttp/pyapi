@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.compactmeasurement &mdash; sttp/pyapi 0.6.2 documentation</title>
+  <title>sttp.transport.compactmeasurement &mdash; sttp/pyapi 0.7.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
-        <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
-        <script src="../../../_static/doctools.js?v=92e14aea"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+      <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
+      <script src="../../../_static/doctools.js?v=92e14aea"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -383,7 +381,44 @@
             <span class="n">index</span> <span class="o">+=</span> <span class="mi">8</span>
 
         <span class="k">return</span> <span class="n">index</span><span class="p">,</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="CompactMeasurement.encode">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.compactmeasurement.CompactMeasurement.encode">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="n">signalindex</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">,</span> <span class="n">flags</span><span class="p">:</span> <span class="n">StateFlags</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Encodes a compact measurement into a byte array.</span>
+<span class="sd">        This is a simplified static version for publisher use that doesn&#39;t support</span>
+<span class="sd">        time compression (always uses full 8-byte timestamps).</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            signalindex: The runtime signal index</span>
+<span class="sd">            timestamp: The measurement timestamp (ticks)</span>
+<span class="sd">            flags: The measurement state flags</span>
+<span class="sd">            value: The measurement value</span>
+<span class="sd">            </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            bytearray containing the encoded compact measurement</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        
+        <span class="c1"># Encode compact state flags (simplified - no time compression)</span>
+        <span class="n">compact_flags</span> <span class="o">=</span> <span class="n">_map_to_compactflags</span><span class="p">(</span><span class="n">flags</span><span class="p">)</span>
+        <span class="n">buffer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">byte</span><span class="p">(</span><span class="n">compact_flags</span><span class="p">))</span>
+        
+        <span class="c1"># Encode runtime ID (4 bytes, big-endian)</span>
+        <span class="n">buffer</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">BigEndian</span><span class="o">.</span><span class="n">from_uint32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">signalindex</span><span class="p">)))</span>
+        
+        <span class="c1"># Encode value (4 bytes, big-endian float32)</span>
+        <span class="n">buffer</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">BigEndian</span><span class="o">.</span><span class="n">from_float32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
+        
+        <span class="c1"># Encode full timestamp (8 bytes, big-endian)</span>
+        <span class="n">buffer</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">BigEndian</span><span class="o">.</span><span class="n">from_uint64</span><span class="p">(</span><span class="n">timestamp</span><span class="p">))</span>
+        
+        <span class="k">return</span> <span class="n">buffer</span></div>
 </div>
+
 
 </pre></div>
 

@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.signalindexcache &mdash; sttp/pyapi 0.6.5 documentation</title>
+  <title>sttp.transport.signalindexcache &mdash; sttp/pyapi 0.7.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
-        <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
-        <script src="../../../_static/doctools.js?v=92e14aea"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+      <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
+      <script src="../../../_static/doctools.js?v=92e14aea"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -279,6 +277,93 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_add_record</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">signalindex</span><span class="p">,</span> <span class="n">signalid</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">keyid</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="p">(</span><span class="n">subscriberid</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+
+    <span class="c1"># Publisher-side methods (for DataPublisher/SubscriberConnection)</span>
+    
+<div class="viewcode-block" id="SignalIndexCache.add_measurement_key">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache.add_measurement_key">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_measurement_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signalindex</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">signalid</span><span class="p">:</span> <span class="n">UUID</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Adds a measurement key to the signal index cache for publisher use.</span>
+<span class="sd">        This is a simplified version for publishers that doesn&#39;t require a DataSubscriber.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_signalidlist</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reference</span><span class="p">[</span><span class="n">signalindex</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signalidlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">signalid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sourcelist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_idlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signalidcache</span><span class="p">[</span><span class="n">signalid</span><span class="p">]</span> <span class="o">=</span> <span class="n">signalindex</span>
+        
+        <span class="c1"># Rough estimate for binary length</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_binarylength</span> <span class="o">+=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="mi">32</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">source</span><span class="p">))</span></div>
+
+    
+<div class="viewcode-block" id="SignalIndexCache.get_signal_index">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache.get_signal_index">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_signal_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signalid</span><span class="p">:</span> <span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the signal index for the specified signal ID.</span>
+<span class="sd">        Returns -1 if the signal ID is not in the cache.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">signalindex</span><span class="p">(</span><span class="n">signalid</span><span class="p">)</span></div>
+
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">signal_id_cache</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">UUID</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets a dictionary mapping signal indices to signal IDs.</span>
+<span class="sd">        Used by publisher to encode signal index cache for transmission.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">signalindex</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reference</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">signalindex</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signalidlist</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">result</span>
+    
+<div class="viewcode-block" id="SignalIndexCache.encode">
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache.encode">[docs]</a>
+    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subscriber_id</span><span class="p">:</span> <span class="n">UUID</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bytearray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Encodes the signal index cache for transmission to a subscriber.</span>
+<span class="sd">        Returns a bytearray containing the encoded cache.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">buffer</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
+        
+        <span class="c1"># Calculate binary length</span>
+        <span class="n">binary_length</span> <span class="o">=</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">16</span> <span class="o">+</span> <span class="mi">4</span>  <span class="c1"># length + subscriber_id + count</span>
+        <span class="k">for</span> <span class="n">signalindex</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reference</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sourcelist</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">binary_length</span> <span class="o">+=</span> <span class="mi">4</span> <span class="o">+</span> <span class="mi">16</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span> <span class="o">+</span> <span class="mi">8</span>
+        
+        <span class="c1"># Write binary length</span>
+        <span class="n">buffer</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">BigEndian</span><span class="o">.</span><span class="n">from_uint32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">binary_length</span><span class="p">)))</span>
+        
+        <span class="c1"># Write subscriber ID</span>
+        <span class="n">buffer</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">subscriber_id</span><span class="o">.</span><span class="n">bytes</span><span class="p">)</span>
+        
+        <span class="c1"># Write reference count</span>
+        <span class="n">buffer</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">BigEndian</span><span class="o">.</span><span class="n">from_uint32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_reference</span><span class="p">))))</span>
+        
+        <span class="c1"># Write each reference</span>
+        <span class="k">for</span> <span class="n">signalindex</span><span class="p">,</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_reference</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+            <span class="c1"># Signal index</span>
+            <span class="n">buffer</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">BigEndian</span><span class="o">.</span><span class="n">from_uint32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="n">signalindex</span><span class="p">)))</span>
+            
+            <span class="c1"># Signal ID</span>
+            <span class="n">signalid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signalidlist</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">buffer</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">signalid</span><span class="o">.</span><span class="n">bytes</span><span class="p">)</span>
+            
+            <span class="c1"># Source</span>
+            <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sourcelist</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">source_bytes</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+            <span class="n">buffer</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">BigEndian</span><span class="o">.</span><span class="n">from_uint32</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">source_bytes</span><span class="p">))))</span>
+            <span class="n">buffer</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">source_bytes</span><span class="p">)</span>
+            
+            <span class="c1"># ID</span>
+            <span class="n">id_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_idlist</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">buffer</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">BigEndian</span><span class="o">.</span><span class="n">from_uint64</span><span class="p">(</span><span class="n">id_value</span><span class="p">))</span>
+        
+        <span class="k">return</span> <span class="n">buffer</span></div>
 </div>
 
 </pre></div>

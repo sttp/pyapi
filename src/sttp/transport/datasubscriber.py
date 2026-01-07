@@ -748,7 +748,7 @@ class DataSubscriber:
         elif commandcode in [ServerCommand.SUBSCRIBE, ServerCommand.UNSUBSCRIBE]:
             self._subscribed = commandcode == ServerCommand.SUBSCRIBE
             has_response_message = True
-        elif commandcode in [ServerCommand.ROTATECIPHERKEYS, ServerCommand.UPDATEPROCESSINGINTERVAL]:
+        elif commandcode in [ServerCommand.ROTATECIPHERKEYS, ServerCommand.UPDATEPROCESSINGINTERVAL, ServerCommand.DEFINEOPERATIONALMODES]:
             has_response_message = True
         else:
             # If we don't know what the message is, we can't interpret

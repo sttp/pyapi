@@ -1,24 +1,22 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport package &mdash; sttp/pyapi 0.6.5 documentation</title>
+  <title>sttp.transport package &mdash; sttp/pyapi 0.7.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
-        <script src="_static/documentation_options.js?v=b1f64a84"></script>
-        <script src="_static/doctools.js?v=92e14aea"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+      <script src="_static/documentation_options.js?v=b1f64a84"></script>
+      <script src="_static/doctools.js?v=92e14aea"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -62,6 +60,7 @@
 <li><a class="reference internal" href="#module-sttp.transport.compactmeasurement">sttp.transport.compactmeasurement module</a><ul>
 <li><a class="reference internal" href="#sttp.transport.compactmeasurement.CompactMeasurement"><code class="docutils literal notranslate"><span class="pre">CompactMeasurement</span></code></a><ul>
 <li><a class="reference internal" href="#sttp.transport.compactmeasurement.CompactMeasurement.decode"><code class="docutils literal notranslate"><span class="pre">CompactMeasurement.decode()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.compactmeasurement.CompactMeasurement.encode"><code class="docutils literal notranslate"><span class="pre">CompactMeasurement.encode()</span></code></a></li>
 <li><a class="reference internal" href="#sttp.transport.compactmeasurement.CompactMeasurement.get_binarylength"><code class="docutils literal notranslate"><span class="pre">CompactMeasurement.get_binarylength()</span></code></a></li>
 <li><a class="reference internal" href="#sttp.transport.compactmeasurement.CompactMeasurement.get_compact_stateflags"><code class="docutils literal notranslate"><span class="pre">CompactMeasurement.get_compact_stateflags()</span></code></a></li>
 <li><a class="reference internal" href="#sttp.transport.compactmeasurement.CompactMeasurement.get_timestamp_c2"><code class="docutils literal notranslate"><span class="pre">CompactMeasurement.get_timestamp_c2()</span></code></a></li>
@@ -150,6 +149,7 @@
 <li><a class="reference internal" href="#sttp.transport.constants.OperationalModes.ENCODINGMASK"><code class="docutils literal notranslate"><span class="pre">OperationalModes.ENCODINGMASK</span></code></a></li>
 <li><a class="reference internal" href="#sttp.transport.constants.OperationalModes.IMPLEMENTATIONSPECIFICEXTENSIONMASK"><code class="docutils literal notranslate"><span class="pre">OperationalModes.IMPLEMENTATIONSPECIFICEXTENSIONMASK</span></code></a></li>
 <li><a class="reference internal" href="#sttp.transport.constants.OperationalModes.NOFLAGS"><code class="docutils literal notranslate"><span class="pre">OperationalModes.NOFLAGS</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.constants.OperationalModes.PRESTANDARDVERSIONMASK"><code class="docutils literal notranslate"><span class="pre">OperationalModes.PRESTANDARDVERSIONMASK</span></code></a></li>
 <li><a class="reference internal" href="#sttp.transport.constants.OperationalModes.RECEIVEEXTERNALMETADATA"><code class="docutils literal notranslate"><span class="pre">OperationalModes.RECEIVEEXTERNALMETADATA</span></code></a></li>
 <li><a class="reference internal" href="#sttp.transport.constants.OperationalModes.RECEIVEINTERNALMETADATA"><code class="docutils literal notranslate"><span class="pre">OperationalModes.RECEIVEINTERNALMETADATA</span></code></a></li>
 <li><a class="reference internal" href="#sttp.transport.constants.OperationalModes.VERSIONMASK"><code class="docutils literal notranslate"><span class="pre">OperationalModes.VERSIONMASK</span></code></a></li>
@@ -336,11 +336,15 @@
 </li>
 <li><a class="reference internal" href="#module-sttp.transport.signalindexcache">sttp.transport.signalindexcache module</a><ul>
 <li><a class="reference internal" href="#sttp.transport.signalindexcache.SignalIndexCache"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache</span></code></a><ul>
+<li><a class="reference internal" href="#sttp.transport.signalindexcache.SignalIndexCache.add_measurement_key"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.add_measurement_key()</span></code></a></li>
 <li><a class="reference internal" href="#sttp.transport.signalindexcache.SignalIndexCache.contains"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.contains()</span></code></a></li>
 <li><a class="reference internal" href="#sttp.transport.signalindexcache.SignalIndexCache.count"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.count</span></code></a></li>
 <li><a class="reference internal" href="#sttp.transport.signalindexcache.SignalIndexCache.decode"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.decode()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.signalindexcache.SignalIndexCache.encode"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.encode()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.signalindexcache.SignalIndexCache.get_signal_index"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.get_signal_index()</span></code></a></li>
 <li><a class="reference internal" href="#sttp.transport.signalindexcache.SignalIndexCache.id"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.id()</span></code></a></li>
 <li><a class="reference internal" href="#sttp.transport.signalindexcache.SignalIndexCache.record"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.record()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.signalindexcache.SignalIndexCache.signal_id_cache"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.signal_id_cache</span></code></a></li>
 <li><a class="reference internal" href="#sttp.transport.signalindexcache.SignalIndexCache.signalid"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.signalid()</span></code></a></li>
 <li><a class="reference internal" href="#sttp.transport.signalindexcache.SignalIndexCache.signalids"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.signalids</span></code></a></li>
 <li><a class="reference internal" href="#sttp.transport.signalindexcache.SignalIndexCache.signalindex"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.signalindex()</span></code></a></li>
@@ -441,7 +445,127 @@
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-sttp.transport">Module contents</a></li>
+<li><a class="reference internal" href="#module-sttp.transport">Module contents</a><ul>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher"><code class="docutils literal notranslate"><span class="pre">DataPublisher</span></code></a><ul>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.define_metadata"><code class="docutils literal notranslate"><span class="pre">DataPublisher.define_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.dispose"><code class="docutils literal notranslate"><span class="pre">DataPublisher.dispose()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.filter_metadata"><code class="docutils literal notranslate"><span class="pre">DataPublisher.filter_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.filtering_metadata"><code class="docutils literal notranslate"><span class="pre">DataPublisher.filtering_metadata</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.is_ipv6"><code class="docutils literal notranslate"><span class="pre">DataPublisher.is_ipv6</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.is_metadata_refresh_allowed"><code class="docutils literal notranslate"><span class="pre">DataPublisher.is_metadata_refresh_allowed</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.is_nan_value_filter_allowed"><code class="docutils literal notranslate"><span class="pre">DataPublisher.is_nan_value_filter_allowed</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.is_nan_value_filter_forced"><code class="docutils literal notranslate"><span class="pre">DataPublisher.is_nan_value_filter_forced</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.is_started"><code class="docutils literal notranslate"><span class="pre">DataPublisher.is_started</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.maximum_allowed_connections"><code class="docutils literal notranslate"><span class="pre">DataPublisher.maximum_allowed_connections</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.metadata"><code class="docutils literal notranslate"><span class="pre">DataPublisher.metadata</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.node_id"><code class="docutils literal notranslate"><span class="pre">DataPublisher.node_id</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.port"><code class="docutils literal notranslate"><span class="pre">DataPublisher.port</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.publish_measurements"><code class="docutils literal notranslate"><span class="pre">DataPublisher.publish_measurements()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.security_mode"><code class="docutils literal notranslate"><span class="pre">DataPublisher.security_mode</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.start"><code class="docutils literal notranslate"><span class="pre">DataPublisher.start()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.stop"><code class="docutils literal notranslate"><span class="pre">DataPublisher.stop()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.supports_temporal_subscriptions"><code class="docutils literal notranslate"><span class="pre">DataPublisher.supports_temporal_subscriptions</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataPublisher.use_base_time_offsets"><code class="docutils literal notranslate"><span class="pre">DataPublisher.use_base_time_offsets</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber"><code class="docutils literal notranslate"><span class="pre">DataSubscriber</span></code></a><ul>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.DEFAULT_COMPRESS_METADATA"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.DEFAULT_COMPRESS_METADATA</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.DEFAULT_COMPRESS_PAYLOADDATA"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.DEFAULT_COMPRESS_PAYLOADDATA</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.DEFAULT_COMPRESS_SIGNALINDEXCACHE"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.DEFAULT_COMPRESS_SIGNALINDEXCACHE</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.DEFAULT_SOCKET_TIMEOUT"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.DEFAULT_SOCKET_TIMEOUT</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.DEFAULT_STTP_SOURCEINFO"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.DEFAULT_STTP_SOURCEINFO</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.DEFAULT_STTP_UPDATEDONINFO"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.DEFAULT_STTP_UPDATEDONINFO</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.DEFAULT_STTP_VERSIONINFO"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.DEFAULT_STTP_VERSIONINFO</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.DEFAULT_VERSION"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.DEFAULT_VERSION</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.activesignalindexcache"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.activesignalindexcache</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.adjustedvalue"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.adjustedvalue()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.autoreconnect_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.autoreconnect_callback</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.compress_metadata"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.compress_metadata</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.compress_payloaddata"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.compress_payloaddata</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.compress_signalindexcache"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.compress_signalindexcache</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.configurationchanged_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.configurationchanged_callback</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.connect"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.connect()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.connected"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.connected</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.connectionterminated_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.connectionterminated_callback</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.connector"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.connector</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.data_starttime_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.data_starttime_callback</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.decodestr"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.decodestr()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.disconnect"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.disconnect()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.dispose"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.dispose()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.disposing"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.disposing</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.encodestr"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.encodestr()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.errormessage_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.errormessage_callback</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.lookup_metadata"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.lookup_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.metadatacache"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.metadatacache</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.metadatareceived_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.metadatareceived_callback</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.newbufferblocks_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.newbufferblocks_callback</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.newmeasurements_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.newmeasurements_callback</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.notificationreceived_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.notificationreceived_callback</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.processingcomplete_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.processingcomplete_callback</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.send_servercommand"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.send_servercommand()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.send_servercommand_withmessage"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.send_servercommand_withmessage()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.socket_timeout"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.socket_timeout</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.statusmessage_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.statusmessage_callback</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.sttp_sourceinfo"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.sttp_sourceinfo</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.sttp_updatedoninfo"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.sttp_updatedoninfo</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.sttp_versioninfo"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.sttp_versioninfo</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.subscribe"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.subscribe()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.subscribed"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.subscribed</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.subscriberid"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.subscriberid</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.subscription"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.subscription</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.subscriptionupdated_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.subscriptionupdated_callback</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.total_commandchannel_bytesreceived"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.total_commandchannel_bytesreceived</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.total_datachannel_bytesreceived"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.total_datachannel_bytesreceived</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.total_measurementsreceived"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.total_measurementsreceived</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.unsubscribe"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.unsubscribe()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.DataSubscriber.version"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.version</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sttp.transport.Measurement"><code class="docutils literal notranslate"><span class="pre">Measurement</span></code></a><ul>
+<li><a class="reference internal" href="#sttp.transport.Measurement.DEFAULT_FLAGS"><code class="docutils literal notranslate"><span class="pre">Measurement.DEFAULT_FLAGS</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.Measurement.DEFAULT_SIGNALID"><code class="docutils literal notranslate"><span class="pre">Measurement.DEFAULT_SIGNALID</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.Measurement.DEFAULT_TIMESTAMP"><code class="docutils literal notranslate"><span class="pre">Measurement.DEFAULT_TIMESTAMP</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.Measurement.DEFAULT_VALUE"><code class="docutils literal notranslate"><span class="pre">Measurement.DEFAULT_VALUE</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.Measurement.datetime"><code class="docutils literal notranslate"><span class="pre">Measurement.datetime</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.Measurement.flags"><code class="docutils literal notranslate"><span class="pre">Measurement.flags</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.Measurement.signalid"><code class="docutils literal notranslate"><span class="pre">Measurement.signalid</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.Measurement.timestamp"><code class="docutils literal notranslate"><span class="pre">Measurement.timestamp</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.Measurement.timestampvalue"><code class="docutils literal notranslate"><span class="pre">Measurement.timestampvalue</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.Measurement.value"><code class="docutils literal notranslate"><span class="pre">Measurement.value</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sttp.transport.RoutingTables"><code class="docutils literal notranslate"><span class="pre">RoutingTables</span></code></a><ul>
+<li><a class="reference internal" href="#sttp.transport.RoutingTables.clear"><code class="docutils literal notranslate"><span class="pre">RoutingTables.clear()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.RoutingTables.dispose"><code class="docutils literal notranslate"><span class="pre">RoutingTables.dispose()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.RoutingTables.publish_measurements"><code class="docutils literal notranslate"><span class="pre">RoutingTables.publish_measurements()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.RoutingTables.remove_routes"><code class="docutils literal notranslate"><span class="pre">RoutingTables.remove_routes()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.RoutingTables.update_routes"><code class="docutils literal notranslate"><span class="pre">RoutingTables.update_routes()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection</span></code></a><ul>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.connection_id"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.connection_id</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.encoding"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.encoding</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.hostname"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.hostname</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.instance_id"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.instance_id</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.ipaddress"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.ipaddress</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.is_connected"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.is_connected</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.is_subscribed"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.is_subscribed</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.is_temporal_subscription"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.is_temporal_subscription</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.is_validated"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.is_validated</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.operational_modes"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.operational_modes</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.publish_measurements"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.publish_measurements()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.send_data_packet"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.send_data_packet()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.send_response"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.send_response()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.signal_index_cache"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.signal_index_cache</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.start"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.start()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.stop"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.stop()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.subscriber_id"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.subscriber_id</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.using_payload_compression"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.using_payload_compression</span></code></a></li>
+<li><a class="reference internal" href="#sttp.transport.SubscriberConnection.version"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.version</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -586,6 +710,27 @@ This buffer typically represents a partial image of a larger whole.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.compactmeasurement.CompactMeasurement.encode">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">encode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signalindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint64</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.transport.constants.StateFlags" title="sttp.transport.constants.StateFlags"><span class="pre">StateFlags</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float64</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytearray</span></span></span><a class="reference internal" href="_modules/sttp/transport/compactmeasurement.html#CompactMeasurement.encode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.compactmeasurement.CompactMeasurement.encode" title="Link to this definition"></a></dt>
+<dd><p>Encodes a compact measurement into a byte array.
+This is a simplified static version for publisher use that doesn’t support
+time compression (always uses full 8-byte timestamps).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>signalindex</strong> – The runtime signal index</p></li>
+<li><p><strong>timestamp</strong> – The measurement timestamp (ticks)</p></li>
+<li><p><strong>flags</strong> – The measurement state flags</p></li>
+<li><p><strong>value</strong> – The measurement value</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>bytearray containing the encoded compact measurement</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="sttp.transport.compactmeasurement.CompactMeasurement.get_binarylength">
 <span class="sig-name descname"><span class="pre">get_binarylength</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">uint32</span></span></span><a class="reference internal" href="_modules/sttp/transport/compactmeasurement.html#CompactMeasurement.get_binarylength"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.compactmeasurement.CompactMeasurement.get_binarylength" title="Link to this definition"></a></dt>
 <dd><p>Gets the binary byte length of a <cite>CompactMeasurement</cite></p>
@@ -625,7 +770,7 @@ This buffer typically represents a partial image of a larger whole.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sttp.transport.compactmeasurement.CompactStateFlags">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.compactmeasurement.</span></span><span class="sig-name descname"><span class="pre">CompactStateFlags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/compactmeasurement.html#CompactStateFlags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.compactmeasurement.CompactStateFlags" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.compactmeasurement.</span></span><span class="sig-name descname"><span class="pre">CompactStateFlags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/compactmeasurement.html#CompactStateFlags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.compactmeasurement.CompactStateFlags" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntFlag</span></code></p>
 <p>Enumeration constants represent each flag in the 8-bit compact measurement state flags.</p>
 <dl class="py attribute">
@@ -675,7 +820,7 @@ This buffer typically represents a partial image of a larger whole.</p>
 <span id="sttp-transport-constants-module"></span><h2>sttp.transport.constants module<a class="headerlink" href="#module-sttp.transport.constants" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="sttp.transport.constants.CompressionModes">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.constants.</span></span><span class="sig-name descname"><span class="pre">CompressionModes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/constants.html#CompressionModes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.constants.CompressionModes" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.constants.</span></span><span class="sig-name descname"><span class="pre">CompressionModes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/constants.html#CompressionModes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.constants.CompressionModes" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntFlag</span></code></p>
 <p>Enumeration of the possible compression modes supported by STTP.</p>
 <p>Obsolete: Only used for backwards compatibility with pre-standard STTP implementations.
@@ -702,7 +847,7 @@ OperationalModes now supports custom compression types</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sttp.transport.constants.ConnectStatus">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.constants.</span></span><span class="sig-name descname"><span class="pre">ConnectStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/constants.html#ConnectStatus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.constants.ConnectStatus" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.constants.</span></span><span class="sig-name descname"><span class="pre">ConnectStatus</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/constants.html#ConnectStatus"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.constants.ConnectStatus" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
 <p>Enumeration of the possible connection status results used by the SubscriberConnector.</p>
 <dl class="py attribute">
@@ -727,7 +872,7 @@ OperationalModes now supports custom compression types</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sttp.transport.constants.DataPacketFlags">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.constants.</span></span><span class="sig-name descname"><span class="pre">DataPacketFlags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/constants.html#DataPacketFlags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.constants.DataPacketFlags" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.constants.</span></span><span class="sig-name descname"><span class="pre">DataPacketFlags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/constants.html#DataPacketFlags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.constants.DataPacketFlags" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntFlag</span></code></p>
 <p>Enumeration of the possible flags for a data packet.</p>
 <dl class="py attribute">
@@ -820,7 +965,7 @@ OperationalModes now supports custom compression types</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.constants.Defaults.DATACHANNEL_LOCALPORT">
-<span class="sig-name descname"><span class="pre">DATACHANNEL_LOCALPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#sttp.transport.constants.Defaults.DATACHANNEL_LOCALPORT" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DATACHANNEL_LOCALPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint16(0)</span></em><a class="headerlink" href="#sttp.transport.constants.Defaults.DATACHANNEL_LOCALPORT" title="Link to this definition"></a></dt>
 <dd><p>Default for local port for data channel.</p>
 </dd></dl>
 
@@ -850,13 +995,13 @@ OperationalModes now supports custom compression types</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.constants.Defaults.LAGTIME">
-<span class="sig-name descname"><span class="pre">LAGTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10.0</span></em><a class="headerlink" href="#sttp.transport.constants.Defaults.LAGTIME" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">LAGTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(10.0)</span></em><a class="headerlink" href="#sttp.transport.constants.Defaults.LAGTIME" title="Link to this definition"></a></dt>
 <dd><p>Default for lag time in seconds.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.constants.Defaults.LEADTIME">
-<span class="sig-name descname"><span class="pre">LEADTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5.0</span></em><a class="headerlink" href="#sttp.transport.constants.Defaults.LEADTIME" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">LEADTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(5.0)</span></em><a class="headerlink" href="#sttp.transport.constants.Defaults.LEADTIME" title="Link to this definition"></a></dt>
 <dd><p>Default for lead time in seconds.</p>
 </dd></dl>
 
@@ -880,13 +1025,13 @@ OperationalModes now supports custom compression types</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.constants.Defaults.PROCESSINGINTERVAL">
-<span class="sig-name descname"><span class="pre">PROCESSINGINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#sttp.transport.constants.Defaults.PROCESSINGINTERVAL" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PROCESSINGINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int32(-1)</span></em><a class="headerlink" href="#sttp.transport.constants.Defaults.PROCESSINGINTERVAL" title="Link to this definition"></a></dt>
 <dd><p>Default for processing interval in seconds.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.constants.Defaults.PUBLISHINTERVAL">
-<span class="sig-name descname"><span class="pre">PUBLISHINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#sttp.transport.constants.Defaults.PUBLISHINTERVAL" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PUBLISHINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(1.0)</span></em><a class="headerlink" href="#sttp.transport.constants.Defaults.PUBLISHINTERVAL" title="Link to this definition"></a></dt>
 <dd><p>Default for publish interval in seconds.</p>
 </dd></dl>
 
@@ -946,7 +1091,7 @@ OperationalModes now supports custom compression types</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.constants.Defaults.VERSION">
-<span class="sig-name descname"><span class="pre">VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#sttp.transport.constants.Defaults.VERSION" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(2)</span></em><a class="headerlink" href="#sttp.transport.constants.Defaults.VERSION" title="Link to this definition"></a></dt>
 <dd><p>Default for STTP version.</p>
 </dd></dl>
 
@@ -954,7 +1099,7 @@ OperationalModes now supports custom compression types</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sttp.transport.constants.OperationalEncoding">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.constants.</span></span><span class="sig-name descname"><span class="pre">OperationalEncoding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/constants.html#OperationalEncoding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.constants.OperationalEncoding" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.constants.</span></span><span class="sig-name descname"><span class="pre">OperationalEncoding</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/constants.html#OperationalEncoding"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.constants.OperationalEncoding" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
 <p>Enumeration of the possible string encoding options of an STTP session.</p>
 <dl class="py attribute">
@@ -981,7 +1126,7 @@ OperationalModes now supports custom compression types</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sttp.transport.constants.OperationalModes">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.constants.</span></span><span class="sig-name descname"><span class="pre">OperationalModes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/constants.html#OperationalModes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.constants.OperationalModes" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.constants.</span></span><span class="sig-name descname"><span class="pre">OperationalModes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/constants.html#OperationalModes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.constants.OperationalModes" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntFlag</span></code></p>
 <p>Enumeration of the possible modes that affect how <cite>DataPublisher</cite> and <cite>DataSubscriber</cite> communicate during an STTP session.</p>
 <dl class="py attribute">
@@ -1028,6 +1173,12 @@ If extended flags are unsupported, returned failure message text should be prefi
 </dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.constants.OperationalModes.PRESTANDARDVERSIONMASK">
+<span class="sig-name descname"><span class="pre">PRESTANDARDVERSIONMASK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">31</span></em><a class="headerlink" href="#sttp.transport.constants.OperationalModes.PRESTANDARDVERSIONMASK" title="Link to this definition"></a></dt>
+<dd><p>Bit mask used to get version number of pre-IEEE standard implementations of protocol.</p>
+</dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.constants.OperationalModes.RECEIVEEXTERNALMETADATA">
 <span class="sig-name descname"><span class="pre">RECEIVEEXTERNALMETADATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">33554432</span></em><a class="headerlink" href="#sttp.transport.constants.OperationalModes.RECEIVEEXTERNALMETADATA" title="Link to this definition"></a></dt>
 <dd><p>Bit flag used to determine whether external measurements are exchanged during metadata synchronization.</p>
@@ -1052,7 +1203,7 @@ If extended flags are unsupported, returned failure message text should be prefi
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sttp.transport.constants.SecurityMode">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.constants.</span></span><span class="sig-name descname"><span class="pre">SecurityMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/constants.html#SecurityMode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.constants.SecurityMode" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.constants.</span></span><span class="sig-name descname"><span class="pre">SecurityMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/constants.html#SecurityMode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.constants.SecurityMode" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
 <p>Enumeration of the possible security modes used by the DataPublisher to secure data sent over the command channel in STTP.</p>
 <dl class="py attribute">
@@ -1071,7 +1222,7 @@ If extended flags are unsupported, returned failure message text should be prefi
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sttp.transport.constants.ServerCommand">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.constants.</span></span><span class="sig-name descname"><span class="pre">ServerCommand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/constants.html#ServerCommand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.constants.ServerCommand" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.constants.</span></span><span class="sig-name descname"><span class="pre">ServerCommand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/constants.html#ServerCommand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.constants.ServerCommand" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
 <p>Enumeration of the possible server commands received by a <cite>DataPublisher</cite> and sent by a <cite>DataSubscriber</cite> during an STTP session.</p>
 <dl class="py attribute">
@@ -1265,7 +1416,7 @@ If extended flags are unsupported, returned failure message text should be prefi
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sttp.transport.constants.ServerResponse">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.constants.</span></span><span class="sig-name descname"><span class="pre">ServerResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/constants.html#ServerResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.constants.ServerResponse" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.constants.</span></span><span class="sig-name descname"><span class="pre">ServerResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/constants.html#ServerResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.constants.ServerResponse" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
 <p>Enumeration of the possible server responses received sent by a <cite>DataPublisher</cite> and received by a <cite>DataSubscriber</cite> during an STTP session.</p>
 <dl class="py attribute">
@@ -1452,7 +1603,7 @@ If extended flags are unsupported, returned failure message text should be prefi
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sttp.transport.constants.StateFlags">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.constants.</span></span><span class="sig-name descname"><span class="pre">StateFlags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/constants.html#StateFlags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.constants.StateFlags" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.constants.</span></span><span class="sig-name descname"><span class="pre">StateFlags</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/constants.html#StateFlags"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.constants.StateFlags" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntFlag</span></code></p>
 <p>Enumeration of the possible quality states of a <cite>Measurement</cite> value.</p>
 <dl class="py attribute">
@@ -1695,12 +1846,12 @@ If extended flags are unsupported, returned failure message text should be prefi
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.datasubscriber.DataSubscriber.DEFAULT_STTP_VERSIONINFO">
-<span class="sig-name descname"><span class="pre">DEFAULT_STTP_VERSIONINFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'0.6.5'</span></em><a class="headerlink" href="#sttp.transport.datasubscriber.DataSubscriber.DEFAULT_STTP_VERSIONINFO" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_STTP_VERSIONINFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'0.7.0'</span></em><a class="headerlink" href="#sttp.transport.datasubscriber.DataSubscriber.DEFAULT_STTP_VERSIONINFO" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.datasubscriber.DataSubscriber.DEFAULT_VERSION">
-<span class="sig-name descname"><span class="pre">DEFAULT_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#sttp.transport.datasubscriber.DataSubscriber.DEFAULT_VERSION" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(2)</span></em><a class="headerlink" href="#sttp.transport.datasubscriber.DataSubscriber.DEFAULT_VERSION" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
@@ -1978,12 +2129,12 @@ If the metadata does not exist, a new record is created and returned.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.measurement.Measurement.DEFAULT_TIMESTAMP">
-<span class="sig-name descname"><span class="pre">DEFAULT_TIMESTAMP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#sttp.transport.measurement.Measurement.DEFAULT_TIMESTAMP" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_TIMESTAMP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(0)</span></em><a class="headerlink" href="#sttp.transport.measurement.Measurement.DEFAULT_TIMESTAMP" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.measurement.Measurement.DEFAULT_VALUE">
-<span class="sig-name descname"><span class="pre">DEFAULT_VALUE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">nan</span></em><a class="headerlink" href="#sttp.transport.measurement.Measurement.DEFAULT_VALUE" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_VALUE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(nan)</span></em><a class="headerlink" href="#sttp.transport.measurement.Measurement.DEFAULT_VALUE" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
@@ -2035,6 +2186,13 @@ the 62-bit time value excluding any leap-second flags.</p>
 <p>Represents a mapping of 32-bit runtime IDs to 128-bit globally unique measurement IDs. The class
 additionally provides reverse lookup and an extra mapping to human-readable measurement keys.</p>
 <dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.signalindexcache.SignalIndexCache.add_measurement_key">
+<span class="sig-name descname"><span class="pre">add_measurement_key</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signalindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int32</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">signalid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint64</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/signalindexcache.html#SignalIndexCache.add_measurement_key"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.signalindexcache.SignalIndexCache.add_measurement_key" title="Link to this definition"></a></dt>
+<dd><p>Adds a measurement key to the signal index cache for publisher use.
+This is a simplified version for publishers that doesn’t require a DataSubscriber.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="sttp.transport.signalindexcache.SignalIndexCache.contains">
 <span class="sig-name descname"><span class="pre">contains</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signalindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int32</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/sttp/transport/signalindexcache.html#SignalIndexCache.contains"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.signalindexcache.SignalIndexCache.contains" title="Link to this definition"></a></dt>
 <dd><p>Determines if the specified signalindex exists with the <cite>SignalIndexCache</cite>.</p>
@@ -2053,6 +2211,20 @@ additionally provides reverse lookup and an extra mapping to human-readable meas
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.signalindexcache.SignalIndexCache.encode">
+<span class="sig-name descname"><span class="pre">encode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subscriber_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytearray</span></span></span><a class="reference internal" href="_modules/sttp/transport/signalindexcache.html#SignalIndexCache.encode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.signalindexcache.SignalIndexCache.encode" title="Link to this definition"></a></dt>
+<dd><p>Encodes the signal index cache for transmission to a subscriber.
+Returns a bytearray containing the encoded cache.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.signalindexcache.SignalIndexCache.get_signal_index">
+<span class="sig-name descname"><span class="pre">get_signal_index</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signalid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int32</span></span></span><a class="reference internal" href="_modules/sttp/transport/signalindexcache.html#SignalIndexCache.get_signal_index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.signalindexcache.SignalIndexCache.get_signal_index" title="Link to this definition"></a></dt>
+<dd><p>Gets the signal index for the specified signal ID.
+Returns -1 if the signal ID is not in the cache.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="sttp.transport.signalindexcache.SignalIndexCache.id">
 <span class="sig-name descname"><span class="pre">id</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signalindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int32</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">uint64</span></span></span><a class="reference internal" href="_modules/sttp/transport/signalindexcache.html#SignalIndexCache.id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.signalindexcache.SignalIndexCache.id" title="Link to this definition"></a></dt>
 <dd><p>Returns the <cite>Measurement</cite> integer ID for the specified signalindex in the <cite>SignalIndexCache</cite>.</p>
@@ -2063,6 +2235,13 @@ additionally provides reverse lookup and an extra mapping to human-readable meas
 <span class="sig-name descname"><span class="pre">record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signalindex</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int32</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">UUID</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">uint64</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/transport/signalindexcache.html#SignalIndexCache.record"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.signalindexcache.SignalIndexCache.record" title="Link to this definition"></a></dt>
 <dd><p>Record returns the key <cite>Measurement</cite> values, signal ID Guid, source string, and integer ID and a
 final boolean value representing find success for the specified signalindex in the <cite>SignalIndexCache</cite>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.signalindexcache.SignalIndexCache.signal_id_cache">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">signal_id_cache</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">int32</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">UUID</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#sttp.transport.signalindexcache.SignalIndexCache.signal_id_cache" title="Link to this definition"></a></dt>
+<dd><p>Gets a dictionary mapping signal indices to signal IDs.
+Used by publisher to encode signal index cache for transmission.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -2096,7 +2275,7 @@ final boolean value representing find success for the specified signalindex in t
 <span id="sttp-transport-signalkind-module"></span><h2>sttp.transport.signalkind module<a class="headerlink" href="#module-sttp.transport.signalkind" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="sttp.transport.signalkind.SignalKind">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.signalkind.</span></span><span class="sig-name descname"><span class="pre">SignalKind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/signalkind.html#SignalKind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.signalkind.SignalKind" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.signalkind.</span></span><span class="sig-name descname"><span class="pre">SignalKind</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names=&lt;not</span> <span class="pre">given&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*values</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start=1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary=None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/signalkind.html#SignalKind"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.signalkind.SignalKind" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
 <p>Enumeration of the possible kinds of signals a Measurement can represent.</p>
 <dl class="py attribute">
@@ -2232,7 +2411,7 @@ enumeration value and phasor type, i.e., “V” voltage or “I” current.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.subscriberconnector.SubscriberConnector.DEFAULT_MAXRETRIES">
-<span class="sig-name descname"><span class="pre">DEFAULT_MAXRETRIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#sttp.transport.subscriberconnector.SubscriberConnector.DEFAULT_MAXRETRIES" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_MAXRETRIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int32(-1)</span></em><a class="headerlink" href="#sttp.transport.subscriberconnector.SubscriberConnector.DEFAULT_MAXRETRIES" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -2242,7 +2421,7 @@ enumeration value and phasor type, i.e., “V” voltage or “I” current.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.subscriberconnector.SubscriberConnector.DEFAULT_PORT">
-<span class="sig-name descname"><span class="pre">DEFAULT_PORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#sttp.transport.subscriberconnector.SubscriberConnector.DEFAULT_PORT" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_PORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint16(0)</span></em><a class="headerlink" href="#sttp.transport.subscriberconnector.SubscriberConnector.DEFAULT_PORT" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -2349,7 +2528,7 @@ enumeration value and phasor type, i.e., “V” voltage or “I” current.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.subscriptioninfo.SubscriptionInfo.DEFAULT_DATACHANNEL_LOCALPORT">
-<span class="sig-name descname"><span class="pre">DEFAULT_DATACHANNEL_LOCALPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#sttp.transport.subscriptioninfo.SubscriptionInfo.DEFAULT_DATACHANNEL_LOCALPORT" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_DATACHANNEL_LOCALPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint16(0)</span></em><a class="headerlink" href="#sttp.transport.subscriptioninfo.SubscriptionInfo.DEFAULT_DATACHANNEL_LOCALPORT" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -2374,22 +2553,22 @@ enumeration value and phasor type, i.e., “V” voltage or “I” current.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.subscriptioninfo.SubscriptionInfo.DEFAULT_LAGTIME">
-<span class="sig-name descname"><span class="pre">DEFAULT_LAGTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10.0</span></em><a class="headerlink" href="#sttp.transport.subscriptioninfo.SubscriptionInfo.DEFAULT_LAGTIME" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_LAGTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(10.0)</span></em><a class="headerlink" href="#sttp.transport.subscriptioninfo.SubscriptionInfo.DEFAULT_LAGTIME" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.subscriptioninfo.SubscriptionInfo.DEFAULT_LEADTIME">
-<span class="sig-name descname"><span class="pre">DEFAULT_LEADTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5.0</span></em><a class="headerlink" href="#sttp.transport.subscriptioninfo.SubscriptionInfo.DEFAULT_LEADTIME" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_LEADTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(5.0)</span></em><a class="headerlink" href="#sttp.transport.subscriptioninfo.SubscriptionInfo.DEFAULT_LEADTIME" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.subscriptioninfo.SubscriptionInfo.DEFAULT_PROCESSINGINTERVAL">
-<span class="sig-name descname"><span class="pre">DEFAULT_PROCESSINGINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#sttp.transport.subscriptioninfo.SubscriptionInfo.DEFAULT_PROCESSINGINTERVAL" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_PROCESSINGINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int32(-1)</span></em><a class="headerlink" href="#sttp.transport.subscriptioninfo.SubscriptionInfo.DEFAULT_PROCESSINGINTERVAL" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.subscriptioninfo.SubscriptionInfo.DEFAULT_PUBLISHINTERVAL">
-<span class="sig-name descname"><span class="pre">DEFAULT_PUBLISHINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#sttp.transport.subscriptioninfo.SubscriptionInfo.DEFAULT_PUBLISHINTERVAL" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_PUBLISHINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(1.0)</span></em><a class="headerlink" href="#sttp.transport.subscriptioninfo.SubscriptionInfo.DEFAULT_PUBLISHINTERVAL" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -2577,6 +2756,660 @@ Only applicable when <cite>enabletimereasonabilitycheck</cite> is <cite>True</ci
 </section>
 <section id="module-sttp.transport">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sttp.transport" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.</span></span><span class="sig-name descname"><span class="pre">DataPublisher</span></span><a class="reference internal" href="_modules/sttp/transport/datapublisher.html#DataPublisher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataPublisher" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a data publisher that accepts subscriber connections and publishes measurements.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.define_metadata">
+<span class="sig-name descname"><span class="pre">define_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="sttp.data.html#sttp.data.dataset.DataSet" title="sttp.data.dataset.DataSet"><span class="pre">DataSet</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/datapublisher.html#DataPublisher.define_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataPublisher.define_metadata" title="Link to this definition"></a></dt>
+<dd><p>Defines the publisher metadata from a DataSet.
+Builds the ActiveMeasurements filtering metadata table from the source metadata.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.dispose">
+<span class="sig-name descname"><span class="pre">dispose</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/datapublisher.html#DataPublisher.dispose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataPublisher.dispose" title="Link to this definition"></a></dt>
+<dd><p>Disposes of the data publisher.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.filter_metadata">
+<span class="sig-name descname"><span class="pre">filter_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter_expression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="sttp.metadata.record.html#sttp.metadata.record.measurement.MeasurementRecord" title="sttp.metadata.record.measurement.MeasurementRecord"><span class="pre">MeasurementRecord</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/sttp/transport/datapublisher.html#DataPublisher.filter_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataPublisher.filter_metadata" title="Link to this definition"></a></dt>
+<dd><p>Filters metadata using a filter expression against the MeasurementDetail table.</p>
+<p>This is for the publisher application to decide what measurements to publish.
+Matches C++ DataPublisher::FilterMetadata which filters from m_metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filter_expression</strong> – Filter expression (e.g., “SignalAcronym &lt;&gt; ‘STAT’”)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of MeasurementRecord objects from MeasurementDetail</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.filtering_metadata">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">filtering_metadata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="sttp.data.html#sttp.data.dataset.DataSet" title="sttp.data.dataset.DataSet"><span class="pre">DataSet</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.transport.DataPublisher.filtering_metadata" title="Link to this definition"></a></dt>
+<dd><p>Gets the filtering metadata.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.is_ipv6">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_ipv6</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.transport.DataPublisher.is_ipv6" title="Link to this definition"></a></dt>
+<dd><p>Gets flag indicating if using IPv6.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.is_metadata_refresh_allowed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_metadata_refresh_allowed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.transport.DataPublisher.is_metadata_refresh_allowed" title="Link to this definition"></a></dt>
+<dd><p>Gets flag indicating if metadata refresh is allowed.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.is_nan_value_filter_allowed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_nan_value_filter_allowed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.transport.DataPublisher.is_nan_value_filter_allowed" title="Link to this definition"></a></dt>
+<dd><p>Gets flag indicating if NaN value filtering is allowed.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.is_nan_value_filter_forced">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_nan_value_filter_forced</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.transport.DataPublisher.is_nan_value_filter_forced" title="Link to this definition"></a></dt>
+<dd><p>Gets flag indicating if NaN value filtering is forced.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.is_started">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_started</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.transport.DataPublisher.is_started" title="Link to this definition"></a></dt>
+<dd><p>Gets flag indicating if publisher is started.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.maximum_allowed_connections">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maximum_allowed_connections</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sttp.transport.DataPublisher.maximum_allowed_connections" title="Link to this definition"></a></dt>
+<dd><p>Gets the maximum allowed connections (-1 = unlimited).</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.metadata">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metadata</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="sttp.data.html#sttp.data.dataset.DataSet" title="sttp.data.dataset.DataSet"><span class="pre">DataSet</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.transport.DataPublisher.metadata" title="Link to this definition"></a></dt>
+<dd><p>Gets the primary metadata.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.node_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">node_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">UUID</span></em><a class="headerlink" href="#sttp.transport.DataPublisher.node_id" title="Link to this definition"></a></dt>
+<dd><p>Gets the node ID.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.port">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">port</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uint16</span></em><a class="headerlink" href="#sttp.transport.DataPublisher.port" title="Link to this definition"></a></dt>
+<dd><p>Gets the listening port.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.publish_measurements">
+<span class="sig-name descname"><span class="pre">publish_measurements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sttp.transport.measurement.Measurement" title="sttp.transport.measurement.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/datapublisher.html#DataPublisher.publish_measurements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataPublisher.publish_measurements" title="Link to this definition"></a></dt>
+<dd><p>Publishes measurements to subscribed clients.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.security_mode">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">security_mode</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sttp.transport.constants.SecurityMode" title="sttp.transport.constants.SecurityMode"><span class="pre">SecurityMode</span></a></em><a class="headerlink" href="#sttp.transport.DataPublisher.security_mode" title="Link to this definition"></a></dt>
+<dd><p>Gets the security mode.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ipv6</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/datapublisher.html#DataPublisher.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataPublisher.start" title="Link to this definition"></a></dt>
+<dd><p>Starts the data publisher listening on the specified port.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/datapublisher.html#DataPublisher.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataPublisher.stop" title="Link to this definition"></a></dt>
+<dd><p>Stops the data publisher.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.supports_temporal_subscriptions">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">supports_temporal_subscriptions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.transport.DataPublisher.supports_temporal_subscriptions" title="Link to this definition"></a></dt>
+<dd><p>Gets flag indicating if temporal subscriptions are supported.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataPublisher.use_base_time_offsets">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">use_base_time_offsets</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.transport.DataPublisher.use_base_time_offsets" title="Link to this definition"></a></dt>
+<dd><p>Gets flag indicating if base time offsets should be used.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.</span></span><span class="sig-name descname"><span class="pre">DataSubscriber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">compress_payloaddata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compress_metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compress_signalindexcache</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int8</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sttp_sourceinfo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sttp_versioninfo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sttp_updatedoninfo</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">socket_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/datasubscriber.html#DataSubscriber"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataSubscriber" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a subscription for an STTP connection.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.DEFAULT_COMPRESS_METADATA">
+<span class="sig-name descname"><span class="pre">DEFAULT_COMPRESS_METADATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.DEFAULT_COMPRESS_METADATA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.DEFAULT_COMPRESS_PAYLOADDATA">
+<span class="sig-name descname"><span class="pre">DEFAULT_COMPRESS_PAYLOADDATA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.DEFAULT_COMPRESS_PAYLOADDATA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.DEFAULT_COMPRESS_SIGNALINDEXCACHE">
+<span class="sig-name descname"><span class="pre">DEFAULT_COMPRESS_SIGNALINDEXCACHE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.DEFAULT_COMPRESS_SIGNALINDEXCACHE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.DEFAULT_SOCKET_TIMEOUT">
+<span class="sig-name descname"><span class="pre">DEFAULT_SOCKET_TIMEOUT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2.0</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.DEFAULT_SOCKET_TIMEOUT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.DEFAULT_STTP_SOURCEINFO">
+<span class="sig-name descname"><span class="pre">DEFAULT_STTP_SOURCEINFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'STTP</span> <span class="pre">Python</span> <span class="pre">Library'</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.DEFAULT_STTP_SOURCEINFO" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.DEFAULT_STTP_UPDATEDONINFO">
+<span class="sig-name descname"><span class="pre">DEFAULT_STTP_UPDATEDONINFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'2025-11-25'</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.DEFAULT_STTP_UPDATEDONINFO" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.DEFAULT_STTP_VERSIONINFO">
+<span class="sig-name descname"><span class="pre">DEFAULT_STTP_VERSIONINFO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'0.7.0'</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.DEFAULT_STTP_VERSIONINFO" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.DEFAULT_VERSION">
+<span class="sig-name descname"><span class="pre">DEFAULT_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(2)</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.DEFAULT_VERSION" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.activesignalindexcache">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">activesignalindexcache</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sttp.transport.signalindexcache.SignalIndexCache" title="sttp.transport.signalindexcache.SignalIndexCache"><span class="pre">SignalIndexCache</span></a></em><a class="headerlink" href="#sttp.transport.DataSubscriber.activesignalindexcache" title="Link to this definition"></a></dt>
+<dd><p>Gets the active signal index cache.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.adjustedvalue">
+<span class="sig-name descname"><span class="pre">adjustedvalue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.transport.measurement.Measurement" title="sttp.transport.measurement.Measurement"><span class="pre">Measurement</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float64</span></span></span><a class="reference internal" href="_modules/sttp/transport/datasubscriber.html#DataSubscriber.adjustedvalue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataSubscriber.adjustedvalue" title="Link to this definition"></a></dt>
+<dd><p>Gets the <cite>Value</cite> of a <cite>Measurement</cite> with any linear adjustments applied from the measurement’s <cite>Adder</cite> and <cite>Multiplier</cite> metadata, if found.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.autoreconnect_callback">
+<span class="sig-name descname"><span class="pre">autoreconnect_callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.autoreconnect_callback" title="Link to this definition"></a></dt>
+<dd><p>Called when <cite>DataSubscriber</cite> automatically reconnects.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.compress_metadata">
+<span class="sig-name descname"><span class="pre">compress_metadata</span></span><a class="headerlink" href="#sttp.transport.DataSubscriber.compress_metadata" title="Link to this definition"></a></dt>
+<dd><p>Determines whether the metadata transfer is compressed, defaults to GZip.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.compress_payloaddata">
+<span class="sig-name descname"><span class="pre">compress_payloaddata</span></span><a class="headerlink" href="#sttp.transport.DataSubscriber.compress_payloaddata" title="Link to this definition"></a></dt>
+<dd><p>Determines whether payload data is compressed, defaults to TSSC.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.compress_signalindexcache">
+<span class="sig-name descname"><span class="pre">compress_signalindexcache</span></span><a class="headerlink" href="#sttp.transport.DataSubscriber.compress_signalindexcache" title="Link to this definition"></a></dt>
+<dd><p>Determines whether the signal index cache is compressed, defaults to GZip.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.configurationchanged_callback">
+<span class="sig-name descname"><span class="pre">configurationchanged_callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.configurationchanged_callback" title="Link to this definition"></a></dt>
+<dd><p>Called when the <cite>DataPublisher</cite> sends a notification that configuration has changed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hostname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint16</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Exception</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/sttp/transport/datasubscriber.html#DataSubscriber.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataSubscriber.connect" title="Link to this definition"></a></dt>
+<dd><p>Requests the the <cite>DataSubscriber</cite> initiate a connection to the <cite>DataPublisher</cite>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.connected">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connected</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.connected" title="Link to this definition"></a></dt>
+<dd><p>Determines if a <cite>DataSubscriber</cite> is currently connected to a <cite>DataPublisher</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.connectionterminated_callback">
+<span class="sig-name descname"><span class="pre">connectionterminated_callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.connectionterminated_callback" title="Link to this definition"></a></dt>
+<dd><p>Called when <cite>DataSubscriber</cite> terminates its connection.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.connector">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connector</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sttp.transport.subscriberconnector.SubscriberConnector" title="sttp.transport.subscriberconnector.SubscriberConnector"><span class="pre">SubscriberConnector</span></a></em><a class="headerlink" href="#sttp.transport.DataSubscriber.connector" title="Link to this definition"></a></dt>
+<dd><p>Gets the <cite>SubscriberConnector</cite> associated with this <cite>DataSubscriber</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.data_starttime_callback">
+<span class="sig-name descname"><span class="pre">data_starttime_callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">uint64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.data_starttime_callback" title="Link to this definition"></a></dt>
+<dd><p>Called with timestamp of first received measurement in a subscription.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.decodestr">
+<span class="sig-name descname"><span class="pre">decodestr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/sttp/transport/datasubscriber.html#DataSubscriber.decodestr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataSubscriber.decodestr" title="Link to this definition"></a></dt>
+<dd><p>Decodes an STTP string according to the defined operational modes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.disconnect">
+<span class="sig-name descname"><span class="pre">disconnect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/datasubscriber.html#DataSubscriber.disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataSubscriber.disconnect" title="Link to this definition"></a></dt>
+<dd><p>Initiates a <cite>DataSubscriber</cite> disconnect sequence.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.dispose">
+<span class="sig-name descname"><span class="pre">dispose</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/datasubscriber.html#DataSubscriber.dispose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataSubscriber.dispose" title="Link to this definition"></a></dt>
+<dd><p>Cleanly shuts down a <cite>DataSubscriber</cite> that is no longer being used, e.g., during a normal application exit.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.disposing">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">disposing</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.disposing" title="Link to this definition"></a></dt>
+<dd><p>Determines if <cite>DataSubscriber</cite> is being disposed.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.encodestr">
+<span class="sig-name descname"><span class="pre">encodestr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/sttp/transport/datasubscriber.html#DataSubscriber.encodestr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataSubscriber.encodestr" title="Link to this definition"></a></dt>
+<dd><p>Encodes an STTP string according to the defined operational modes.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.errormessage_callback">
+<span class="sig-name descname"><span class="pre">errormessage_callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.errormessage_callback" title="Link to this definition"></a></dt>
+<dd><p>Called when an error message should be logged.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.lookup_metadata">
+<span class="sig-name descname"><span class="pre">lookup_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signalid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint64</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="sttp.metadata.record.html#sttp.metadata.record.measurement.MeasurementRecord" title="sttp.metadata.record.measurement.MeasurementRecord"><span class="pre">MeasurementRecord</span></a></span></span><a class="reference internal" href="_modules/sttp/transport/datasubscriber.html#DataSubscriber.lookup_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataSubscriber.lookup_metadata" title="Link to this definition"></a></dt>
+<dd><p>Gets the <cite>MeasurementRecord</cite> for the specified signal ID from the local registry.
+If the metadata does not exist, a new record is created and returned.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.metadatacache">
+<span class="sig-name descname"><span class="pre">metadatacache</span></span><a class="headerlink" href="#sttp.transport.DataSubscriber.metadatacache" title="Link to this definition"></a></dt>
+<dd><p>Defines the metadata cache associated with this <cite>DataSubscriber</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.metadatareceived_callback">
+<span class="sig-name descname"><span class="pre">metadatareceived_callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">bytes</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.metadatareceived_callback" title="Link to this definition"></a></dt>
+<dd><p>Called when <cite>DataSubscriber</cite> receives a metadata response.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.newbufferblocks_callback">
+<span class="sig-name descname"><span class="pre">newbufferblocks_callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sttp.transport.bufferblock.BufferBlock" title="sttp.transport.bufferblock.BufferBlock"><span class="pre">BufferBlock</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.newbufferblocks_callback" title="Link to this definition"></a></dt>
+<dd><p>Called when <cite>DataSubscriber</cite> receives a set of new buffer block measurements from the <cite>DataPublisher</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.newmeasurements_callback">
+<span class="sig-name descname"><span class="pre">newmeasurements_callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sttp.transport.measurement.Measurement" title="sttp.transport.measurement.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.newmeasurements_callback" title="Link to this definition"></a></dt>
+<dd><p>Called when <cite>DataSubscriber</cite> receives a set of new measurements from the <cite>DataPublisher</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.notificationreceived_callback">
+<span class="sig-name descname"><span class="pre">notificationreceived_callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.notificationreceived_callback" title="Link to this definition"></a></dt>
+<dd><p>Called when the <cite>DataPublisher</cite> sends a notification that requires receipt.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.processingcomplete_callback">
+<span class="sig-name descname"><span class="pre">processingcomplete_callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.processingcomplete_callback" title="Link to this definition"></a></dt>
+<dd><p>Called when the <cite>DataPublisher</cite> sends a notification that temporal processing has completed, i.e., the end of a historical playback data stream has been reached.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.send_servercommand">
+<span class="sig-name descname"><span class="pre">send_servercommand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commandcode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.transport.constants.ServerCommand" title="sttp.transport.constants.ServerCommand"><span class="pre">ServerCommand</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/datasubscriber.html#DataSubscriber.send_servercommand"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataSubscriber.send_servercommand" title="Link to this definition"></a></dt>
+<dd><p>Sends a server command code to the <cite>DataPublisher</cite> with specified payload.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.send_servercommand_withmessage">
+<span class="sig-name descname"><span class="pre">send_servercommand_withmessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commandcode</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.transport.constants.ServerCommand" title="sttp.transport.constants.ServerCommand"><span class="pre">ServerCommand</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/datasubscriber.html#DataSubscriber.send_servercommand_withmessage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataSubscriber.send_servercommand_withmessage" title="Link to this definition"></a></dt>
+<dd><p>Sends a server command code to the <cite>DataPublisher</cite> along with the specified string message as payload.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.socket_timeout">
+<span class="sig-name descname"><span class="pre">socket_timeout</span></span><a class="headerlink" href="#sttp.transport.DataSubscriber.socket_timeout" title="Link to this definition"></a></dt>
+<dd><p>Defines the socket timeout in seconds for the <cite>DataSubscriber</cite> connection.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.statusmessage_callback">
+<span class="sig-name descname"><span class="pre">statusmessage_callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.statusmessage_callback" title="Link to this definition"></a></dt>
+<dd><p>Called when a informational message should be logged.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.sttp_sourceinfo">
+<span class="sig-name descname"><span class="pre">sttp_sourceinfo</span></span><a class="headerlink" href="#sttp.transport.DataSubscriber.sttp_sourceinfo" title="Link to this definition"></a></dt>
+<dd><p>Defines the STTP library API title as identification information of <cite>DataSubscriber</cite> to a <cite>DataPublisher</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.sttp_updatedoninfo">
+<span class="sig-name descname"><span class="pre">sttp_updatedoninfo</span></span><a class="headerlink" href="#sttp.transport.DataSubscriber.sttp_updatedoninfo" title="Link to this definition"></a></dt>
+<dd><p>Defines when the STTP library API was last updated as identification information of <cite>DataSubscriber</cite> to a <cite>DataPublisher</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.sttp_versioninfo">
+<span class="sig-name descname"><span class="pre">sttp_versioninfo</span></span><a class="headerlink" href="#sttp.transport.DataSubscriber.sttp_versioninfo" title="Link to this definition"></a></dt>
+<dd><p>Defines the STTP library API version as identification information of <cite>DataSubscriber</cite> to a <cite>DataPublisher</cite>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.subscribe">
+<span class="sig-name descname"><span class="pre">subscribe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Exception</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/sttp/transport/datasubscriber.html#DataSubscriber.subscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataSubscriber.subscribe" title="Link to this definition"></a></dt>
+<dd><p>Notifies the <cite>DataPublisher</cite> that a <cite>DataSubscriber</cite> would like to start receiving streaming data.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.subscribed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subscribed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.subscribed" title="Link to this definition"></a></dt>
+<dd><p>Determines if a <cite>DataSubscriber</cite> is currently subscribed to a data stream.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.subscriberid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subscriberid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">UUID</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.subscriberid" title="Link to this definition"></a></dt>
+<dd><p>Gets the subscriber ID as assigned by the <cite>DataPublisher</cite> upon receipt of the <cite>SignalIndexCache</cite>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.subscription">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subscription</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sttp.transport.subscriptioninfo.SubscriptionInfo" title="sttp.transport.subscriptioninfo.SubscriptionInfo"><span class="pre">SubscriptionInfo</span></a></em><a class="headerlink" href="#sttp.transport.DataSubscriber.subscription" title="Link to this definition"></a></dt>
+<dd><p>Gets the <cite>SubscriptionInfo</cite> associated with this <cite>DataSubscriber</cite>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.subscriptionupdated_callback">
+<span class="sig-name descname"><span class="pre">subscriptionupdated_callback</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sttp.transport.signalindexcache.SignalIndexCache" title="sttp.transport.signalindexcache.SignalIndexCache"><span class="pre">SignalIndexCache</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.subscriptionupdated_callback" title="Link to this definition"></a></dt>
+<dd><p>Called when <cite>DataSubscriber</cite> receives a new signal index cache.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.total_commandchannel_bytesreceived">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">total_commandchannel_bytesreceived</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uint64</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.total_commandchannel_bytesreceived" title="Link to this definition"></a></dt>
+<dd><p>Gets the total number of bytes received via the command channel since last connection.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.total_datachannel_bytesreceived">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">total_datachannel_bytesreceived</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uint64</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.total_datachannel_bytesreceived" title="Link to this definition"></a></dt>
+<dd><p>Gets the total number of bytes received via the data channel since last connection.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.total_measurementsreceived">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">total_measurementsreceived</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uint64</span></em><a class="headerlink" href="#sttp.transport.DataSubscriber.total_measurementsreceived" title="Link to this definition"></a></dt>
+<dd><p>Gets the total number of measurements received since last subscription.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.unsubscribe">
+<span class="sig-name descname"><span class="pre">unsubscribe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/datasubscriber.html#DataSubscriber.unsubscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.DataSubscriber.unsubscribe" title="Link to this definition"></a></dt>
+<dd><p>Notifies the <cite>DataPublisher</cite> that a <cite>DataSubscriber</cite> would like to stop receiving streaming data.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.DataSubscriber.version">
+<span class="sig-name descname"><span class="pre">version</span></span><a class="headerlink" href="#sttp.transport.DataSubscriber.version" title="Link to this definition"></a></dt>
+<dd><p>Defines the STTP protocol version used by this library.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.transport.Measurement">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.</span></span><span class="sig-name descname"><span class="pre">Measurement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">signalid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float64</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint64</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">flags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.transport.constants.StateFlags" title="sttp.transport.constants.StateFlags"><span class="pre">StateFlags</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/measurement.html#Measurement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.Measurement" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a basic unit of measured data for transmission or reception in the STTP API.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.Measurement.DEFAULT_FLAGS">
+<span class="sig-name descname"><span class="pre">DEFAULT_FLAGS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#sttp.transport.Measurement.DEFAULT_FLAGS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.Measurement.DEFAULT_SIGNALID">
+<span class="sig-name descname"><span class="pre">DEFAULT_SIGNALID</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">UUID('00000000-0000-0000-0000-000000000000')</span></em><a class="headerlink" href="#sttp.transport.Measurement.DEFAULT_SIGNALID" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.Measurement.DEFAULT_TIMESTAMP">
+<span class="sig-name descname"><span class="pre">DEFAULT_TIMESTAMP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(0)</span></em><a class="headerlink" href="#sttp.transport.Measurement.DEFAULT_TIMESTAMP" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.Measurement.DEFAULT_VALUE">
+<span class="sig-name descname"><span class="pre">DEFAULT_VALUE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(nan)</span></em><a class="headerlink" href="#sttp.transport.Measurement.DEFAULT_VALUE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.Measurement.datetime">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">datetime</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span></em><a class="headerlink" href="#sttp.transport.Measurement.datetime" title="Link to this definition"></a></dt>
+<dd><p>Gets <cite>Measurement</cite> ticks-based timestamp as a standard Python datetime value.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.Measurement.flags">
+<span class="sig-name descname"><span class="pre">flags</span></span><a class="headerlink" href="#sttp.transport.Measurement.flags" title="Link to this definition"></a></dt>
+<dd><p>Defines flags indicating the state of the measurement as reported by the device that took it.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.Measurement.signalid">
+<span class="sig-name descname"><span class="pre">signalid</span></span><a class="headerlink" href="#sttp.transport.Measurement.signalid" title="Link to this definition"></a></dt>
+<dd><p>Defines measurement’s globally unique identifier.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.Measurement.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><a class="headerlink" href="#sttp.transport.Measurement.timestamp" title="Link to this definition"></a></dt>
+<dd><p>Defines the STTP uint64 timestamp, in ticks, that measurement was taken.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.Measurement.timestampvalue">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">timestampvalue</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int64</span></em><a class="headerlink" href="#sttp.transport.Measurement.timestampvalue" title="Link to this definition"></a></dt>
+<dd><p>Gets the integer-based time from a <cite>Measurement</cite> ticks-based timestamp, i.e.,
+the 62-bit time value excluding any leap-second flags.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="sttp.transport.Measurement.value">
+<span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#sttp.transport.Measurement.value" title="Link to this definition"></a></dt>
+<dd><p>Defines instantaneous value of the measurement.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.transport.RoutingTables">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.</span></span><span class="sig-name descname"><span class="pre">RoutingTables</span></span><a class="reference internal" href="_modules/sttp/transport/routingtables.html#RoutingTables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.RoutingTables" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Manages routing of measurements to subscribed connections.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.RoutingTables.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/routingtables.html#RoutingTables.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.RoutingTables.clear" title="Link to this definition"></a></dt>
+<dd><p>Clears all routing tables.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.RoutingTables.dispose">
+<span class="sig-name descname"><span class="pre">dispose</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/routingtables.html#RoutingTables.dispose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.RoutingTables.dispose" title="Link to this definition"></a></dt>
+<dd><p>Shuts down the routing tables.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.RoutingTables.publish_measurements">
+<span class="sig-name descname"><span class="pre">publish_measurements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sttp.transport.Measurement" title="sttp.transport.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/routingtables.html#RoutingTables.publish_measurements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.RoutingTables.publish_measurements" title="Link to this definition"></a></dt>
+<dd><p>Routes measurements to appropriate subscriber connections.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.RoutingTables.remove_routes">
+<span class="sig-name descname"><span class="pre">remove_routes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.transport.SubscriberConnection" title="sttp.transport.SubscriberConnection"><span class="pre">SubscriberConnection</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/routingtables.html#RoutingTables.remove_routes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.RoutingTables.remove_routes" title="Link to this definition"></a></dt>
+<dd><p>Removes all routes for the specified connection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.RoutingTables.update_routes">
+<span class="sig-name descname"><span class="pre">update_routes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.transport.SubscriberConnection" title="sttp.transport.SubscriberConnection"><span class="pre">SubscriberConnection</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">signal_ids</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">UUID</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/routingtables.html#RoutingTables.update_routes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.RoutingTables.update_routes" title="Link to this definition"></a></dt>
+<dd><p>Updates the routing table to route specified signal IDs to the given connection.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.</span></span><span class="sig-name descname"><span class="pre">SubscriberConnection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.transport.DataPublisher" title="sttp.transport.DataPublisher"><span class="pre">DataPublisher</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">client_socket</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">socket</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/subscriberconnection.html#SubscriberConnection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.SubscriberConnection" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a connection to a data subscriber.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.connection_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connection_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#sttp.transport.SubscriberConnection.connection_id" title="Link to this definition"></a></dt>
+<dd><p>Gets the connection identification string.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.encoding">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">encoding</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uint32</span></em><a class="headerlink" href="#sttp.transport.SubscriberConnection.encoding" title="Link to this definition"></a></dt>
+<dd><p>Gets the string encoding.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.hostname">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">hostname</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#sttp.transport.SubscriberConnection.hostname" title="Link to this definition"></a></dt>
+<dd><p>Gets the subscriber hostname.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.instance_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">instance_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">UUID</span></em><a class="headerlink" href="#sttp.transport.SubscriberConnection.instance_id" title="Link to this definition"></a></dt>
+<dd><p>Gets the instance UUID.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.ipaddress">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ipaddress</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#sttp.transport.SubscriberConnection.ipaddress" title="Link to this definition"></a></dt>
+<dd><p>Gets the subscriber IP address.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.is_connected">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_connected</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.transport.SubscriberConnection.is_connected" title="Link to this definition"></a></dt>
+<dd><p>Gets flag indicating if subscriber is connected.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.is_subscribed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_subscribed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.transport.SubscriberConnection.is_subscribed" title="Link to this definition"></a></dt>
+<dd><p>Gets flag indicating if subscriber is subscribed.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.is_temporal_subscription">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_temporal_subscription</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.transport.SubscriberConnection.is_temporal_subscription" title="Link to this definition"></a></dt>
+<dd><p>Gets flag indicating if this is a temporal subscription.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.is_validated">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_validated</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.transport.SubscriberConnection.is_validated" title="Link to this definition"></a></dt>
+<dd><p>Gets flag indicating if subscriber has been validated.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.operational_modes">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">operational_modes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uint32</span></em><a class="headerlink" href="#sttp.transport.SubscriberConnection.operational_modes" title="Link to this definition"></a></dt>
+<dd><p>Gets the operational modes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.publish_measurements">
+<span class="sig-name descname"><span class="pre">publish_measurements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#sttp.transport.measurement.Measurement" title="sttp.transport.measurement.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/subscriberconnection.html#SubscriberConnection.publish_measurements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.SubscriberConnection.publish_measurements" title="Link to this definition"></a></dt>
+<dd><p>Publishes measurements to the subscriber.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.send_data_packet">
+<span class="sig-name descname"><span class="pre">send_data_packet</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">command_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/sttp/transport/subscriberconnection.html#SubscriberConnection.send_data_packet"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.SubscriberConnection.send_data_packet" title="Link to this definition"></a></dt>
+<dd><p>Sends a data packet (server command) to the subscriber.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.send_response">
+<span class="sig-name descname"><span class="pre">send_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">command_code</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uint8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/sttp/transport/subscriberconnection.html#SubscriberConnection.send_response"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.SubscriberConnection.send_response" title="Link to this definition"></a></dt>
+<dd><p>Sends a response to the subscriber.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.signal_index_cache">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">signal_index_cache</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#sttp.transport.signalindexcache.SignalIndexCache" title="sttp.transport.signalindexcache.SignalIndexCache"><span class="pre">SignalIndexCache</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.transport.SubscriberConnection.signal_index_cache" title="Link to this definition"></a></dt>
+<dd><p>Gets the signal index cache.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/subscriberconnection.html#SubscriberConnection.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.SubscriberConnection.start" title="Link to this definition"></a></dt>
+<dd><p>Starts the subscriber connection.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/subscriberconnection.html#SubscriberConnection.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.SubscriberConnection.stop" title="Link to this definition"></a></dt>
+<dd><p>Stops the subscriber connection.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.subscriber_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subscriber_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">UUID</span></em><a class="headerlink" href="#sttp.transport.SubscriberConnection.subscriber_id" title="Link to this definition"></a></dt>
+<dd><p>Gets the subscriber UUID.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.using_payload_compression">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">using_payload_compression</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.transport.SubscriberConnection.using_payload_compression" title="Link to this definition"></a></dt>
+<dd><p>Gets flag indicating if payload compression (TSSC) is enabled.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.transport.SubscriberConnection.version">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">version</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int8</span></em><a class="headerlink" href="#sttp.transport.SubscriberConnection.version" title="Link to this definition"></a></dt>
+<dd><p>Gets the subscriber protocol version.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 

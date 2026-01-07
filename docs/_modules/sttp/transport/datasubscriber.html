@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.datasubscriber &mdash; sttp/pyapi 0.6.5 documentation</title>
+  <title>sttp.transport.datasubscriber &mdash; sttp/pyapi 0.7.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
-        <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
-        <script src="../../../_static/doctools.js?v=92e14aea"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+      <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
+      <script src="../../../_static/doctools.js?v=92e14aea"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -849,7 +847,7 @@
         <span class="k">elif</span> <span class="n">commandcode</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ServerCommand</span><span class="o">.</span><span class="n">SUBSCRIBE</span><span class="p">,</span> <span class="n">ServerCommand</span><span class="o">.</span><span class="n">UNSUBSCRIBE</span><span class="p">]:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_subscribed</span> <span class="o">=</span> <span class="n">commandcode</span> <span class="o">==</span> <span class="n">ServerCommand</span><span class="o">.</span><span class="n">SUBSCRIBE</span>
             <span class="n">has_response_message</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="k">elif</span> <span class="n">commandcode</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ServerCommand</span><span class="o">.</span><span class="n">ROTATECIPHERKEYS</span><span class="p">,</span> <span class="n">ServerCommand</span><span class="o">.</span><span class="n">UPDATEPROCESSINGINTERVAL</span><span class="p">]:</span>
+        <span class="k">elif</span> <span class="n">commandcode</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ServerCommand</span><span class="o">.</span><span class="n">ROTATECIPHERKEYS</span><span class="p">,</span> <span class="n">ServerCommand</span><span class="o">.</span><span class="n">UPDATEPROCESSINGINTERVAL</span><span class="p">,</span> <span class="n">ServerCommand</span><span class="o">.</span><span class="n">DEFINEOPERATIONALMODES</span><span class="p">]:</span>
             <span class="n">has_response_message</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># If we don&#39;t know what the message is, we can&#39;t interpret</span>

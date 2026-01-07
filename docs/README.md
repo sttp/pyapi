@@ -88,6 +88,72 @@ Receiving measurements...
 Connection to 127.0.0.1:7175 terminated.
 ```
 
+### Publisher Example
+```python
+from sttp.publisher import Publisher
+from sttp.transport.measurement import Measurement
+from sttp.data.dataset import DataSet
+from sttp.ticks import Ticks
+from threading import Timer
+import numpy as np
+import os
+
+def main():
+    publisher = Publisher()
+    
+    try:
+        # Start publisher on port 7165
+        publisher.start(7165)
+        
+        # Load and define metadata
+        metadata_path = os.path.join(os.path.dirname(__file__), "Metadata.xml")
+        dataset, err = DataSet.from_xml(open(metadata_path).read())
+        
+        if err is not None:
+            print(f"ERROR: Failed to load metadata: {err}")
+            return
+        
+        publisher.define_metadata(dataset)
+        
+        # Get measurements to publish (exclude statistics)
+        measurements_to_publish = publisher.filter_metadata("SignalAcronym <> 'STAT'")
+        
+        # Publish measurements every 33ms (30 Hz)
+        def publish_data():
+            timestamp = Ticks.utcnow()
+            measurements = []
+            
+            for metadata in measurements_to_publish:
+                measurement = Measurement()
+                measurement.signalid = metadata.signalid
+                measurement.timestamp = timestamp
+                
+                # Generate realistic values based on signal type
+                if metadata.signalacronym == "FREQ":
+                    measurement.value = np.float64(60.0 + (np.random.random() - 0.5) * 0.02)
+                else:
+                    measurement.value = np.float64(np.random.random())
+                
+                measurements.append(measurement)
+            
+            publisher.publish_measurements(measurements)
+            
+            # Schedule next publication
+            Timer(0.033, publish_data).start()
+        
+        # Start publishing
+        publish_data()
+        
+        # Wait for user input to stop
+        input("Press Enter to stop publishing...\n")
+        
+    finally:
+        publisher.stop()
+
+if __name__ == "__main__":
+    main()
+```
+
 ## Examples
 > [https://github.com/sttp/pyapi/tree/main/examples](https://github.com/sttp/pyapi/tree/main/examples)
 

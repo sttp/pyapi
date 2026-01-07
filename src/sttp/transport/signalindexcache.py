@@ -185,3 +185,81 @@ class SignalIndexCache:
             self._add_record(ds, signalindex, signalid, source, keyid)
 
         return (subscriberid, None)
+
+    # Publisher-side methods (for DataPublisher/SubscriberConnection)
+    
+    def add_measurement_key(self, signalindex: np.int32, signalid: UUID, source: str, id: np.uint64):
+        """
+        Adds a measurement key to the signal index cache for publisher use.
+        This is a simplified version for publishers that doesn't require a DataSubscriber.
+        """
+        index = np.uint32(len(self._signalidlist))
+        self._reference[signalindex] = index
+        self._signalidlist.append(signalid)
+        self._sourcelist.append(source)
+        self._idlist.append(id)
+        self._signalidcache[signalid] = signalindex
+        
+        # Rough estimate for binary length
+        self._binarylength += np.uint32(32 + len(source))
+    
+    def get_signal_index(self, signalid: UUID) -> np.int32:
+        """
+        Gets the signal index for the specified signal ID.
+        Returns -1 if the signal ID is not in the cache.
+        """
+        return self.signalindex(signalid)
+    
+    @property
+    def signal_id_cache(self) -> Dict[np.int32, UUID]:
+        """
+        Gets a dictionary mapping signal indices to signal IDs.
+        Used by publisher to encode signal index cache for transmission.
+        """
+        result = {}
+        for signalindex, index in self._reference.items():
+            result[signalindex] = self._signalidlist[index]
+        return result
+    
+    def encode(self, subscriber_id: UUID) -> bytearray:
+        """
+        Encodes the signal index cache for transmission to a subscriber.
+        Returns a bytearray containing the encoded cache.
+        """
+        buffer = bytearray()
+        
+        # Calculate binary length
+        binary_length = 4 + 16 + 4  # length + subscriber_id + count
+        for signalindex, index in self._reference.items():
+            source = self._sourcelist[index]
+            binary_length += 4 + 16 + 4 + len(source.encode('utf-8')) + 8
+        
+        # Write binary length
+        buffer.extend(BigEndian.from_uint32(np.uint32(binary_length)))
+        
+        # Write subscriber ID
+        buffer.extend(subscriber_id.bytes)
+        
+        # Write reference count
+        buffer.extend(BigEndian.from_uint32(np.uint32(len(self._reference))))
+        
+        # Write each reference
+        for signalindex, index in sorted(self._reference.items()):
+            # Signal index
+            buffer.extend(BigEndian.from_uint32(np.uint32(signalindex)))
+            
+            # Signal ID
+            signalid = self._signalidlist[index]
+            buffer.extend(signalid.bytes)
+            
+            # Source
+            source = self._sourcelist[index]
+            source_bytes = source.encode('utf-8')
+            buffer.extend(BigEndian.from_uint32(np.uint32(len(source_bytes))))
+            buffer.extend(source_bytes)
+            
+            # ID
+            id_value = self._idlist[index]
+            buffer.extend(BigEndian.from_uint64(id_value))
+        
+        return buffer

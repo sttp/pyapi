@@ -289,3 +289,37 @@ class CompactMeasurement(Measurement):
             index += 8
 
         return index, None
+
+    @staticmethod
+    def encode(signalindex: np.int32, timestamp: np.uint64, flags: StateFlags, value: np.float64) -> bytearray:
+        """
+        Encodes a compact measurement into a byte array.
+        This is a simplified static version for publisher use that doesn't support
+        time compression (always uses full 8-byte timestamps).
+        
+        Args:
+            signalindex: The runtime signal index
+            timestamp: The measurement timestamp (ticks)
+            flags: The measurement state flags
+            value: The measurement value
+            
+        Returns:
+            bytearray containing the encoded compact measurement
+        """
+        buffer = bytearray()
+        
+        # Encode compact state flags (simplified - no time compression)
+        compact_flags = _map_to_compactflags(flags)
+        buffer.append(np.byte(compact_flags))
+        
+        # Encode runtime ID (4 bytes, big-endian)
+        buffer.extend(BigEndian.from_uint32(np.uint32(signalindex)))
+        
+        # Encode value (4 bytes, big-endian float32)
+        buffer.extend(BigEndian.from_float32(np.float32(value)))
+        
+        # Encode full timestamp (8 bytes, big-endian)
+        buffer.extend(BigEndian.from_uint64(timestamp))
+        
+        return buffer
+

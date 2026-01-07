@@ -24,6 +24,17 @@
                 "127.0.0.1",
                 "7175"
             ]
+        },
+        {
+            "name": "Python Publisher",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "7175"
+            ]
         }
     ]
 }

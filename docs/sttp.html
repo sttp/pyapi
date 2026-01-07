@@ -1,24 +1,22 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp package &mdash; sttp/pyapi 0.6.5 documentation</title>
+  <title>sttp package &mdash; sttp/pyapi 0.7.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
-        <script src="_static/documentation_options.js?v=b1f64a84"></script>
-        <script src="_static/doctools.js?v=92e14aea"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
+      <script src="_static/documentation_options.js?v=b1f64a84"></script>
+      <script src="_static/doctools.js?v=92e14aea"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -203,7 +201,69 @@
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-sttp">Module contents</a></li>
+<li><a class="reference internal" href="#module-sttp">Module contents</a><ul>
+<li><a class="reference internal" href="#sttp.Publisher"><code class="docutils literal notranslate"><span class="pre">Publisher</span></code></a><ul>
+<li><a class="reference internal" href="#sttp.Publisher.clientconnected_receiver"><code class="docutils literal notranslate"><span class="pre">Publisher.clientconnected_receiver</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Publisher.clientdisconnected_receiver"><code class="docutils literal notranslate"><span class="pre">Publisher.clientdisconnected_receiver</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Publisher.default_clientconnected_receiver"><code class="docutils literal notranslate"><span class="pre">Publisher.default_clientconnected_receiver()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Publisher.default_clientdisconnected_receiver"><code class="docutils literal notranslate"><span class="pre">Publisher.default_clientdisconnected_receiver()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Publisher.default_errormessage_logger"><code class="docutils literal notranslate"><span class="pre">Publisher.default_errormessage_logger()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Publisher.default_statusmessage_logger"><code class="docutils literal notranslate"><span class="pre">Publisher.default_statusmessage_logger()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Publisher.define_metadata"><code class="docutils literal notranslate"><span class="pre">Publisher.define_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Publisher.dispose"><code class="docutils literal notranslate"><span class="pre">Publisher.dispose()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Publisher.errormessage_logger"><code class="docutils literal notranslate"><span class="pre">Publisher.errormessage_logger</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Publisher.filter_metadata"><code class="docutils literal notranslate"><span class="pre">Publisher.filter_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Publisher.is_metadata_refresh_allowed"><code class="docutils literal notranslate"><span class="pre">Publisher.is_metadata_refresh_allowed</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Publisher.is_nan_value_filter_allowed"><code class="docutils literal notranslate"><span class="pre">Publisher.is_nan_value_filter_allowed</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Publisher.is_nan_value_filter_forced"><code class="docutils literal notranslate"><span class="pre">Publisher.is_nan_value_filter_forced</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Publisher.maximum_allowed_connections"><code class="docutils literal notranslate"><span class="pre">Publisher.maximum_allowed_connections</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Publisher.publish_measurements"><code class="docutils literal notranslate"><span class="pre">Publisher.publish_measurements()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Publisher.start"><code class="docutils literal notranslate"><span class="pre">Publisher.start()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Publisher.started"><code class="docutils literal notranslate"><span class="pre">Publisher.started</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Publisher.statusmessage_logger"><code class="docutils literal notranslate"><span class="pre">Publisher.statusmessage_logger</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Publisher.stop"><code class="docutils literal notranslate"><span class="pre">Publisher.stop()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#sttp.Subscriber"><code class="docutils literal notranslate"><span class="pre">Subscriber</span></code></a><ul>
+<li><a class="reference internal" href="#sttp.Subscriber.activesignalindexcache"><code class="docutils literal notranslate"><span class="pre">Subscriber.activesignalindexcache</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.adjustedvalue"><code class="docutils literal notranslate"><span class="pre">Subscriber.adjustedvalue()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.connect"><code class="docutils literal notranslate"><span class="pre">Subscriber.connect()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.connected"><code class="docutils literal notranslate"><span class="pre">Subscriber.connected</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.default_connectionestablished_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.default_connectionestablished_receiver()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.default_connectionterminated_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.default_connectionterminated_receiver()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.default_errormessage_logger"><code class="docutils literal notranslate"><span class="pre">Subscriber.default_errormessage_logger()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.default_statusmessage_logger"><code class="docutils literal notranslate"><span class="pre">Subscriber.default_statusmessage_logger()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.disconnect"><code class="docutils literal notranslate"><span class="pre">Subscriber.disconnect()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.dispose"><code class="docutils literal notranslate"><span class="pre">Subscriber.dispose()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.errormessage"><code class="docutils literal notranslate"><span class="pre">Subscriber.errormessage()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.measurement_metadata"><code class="docutils literal notranslate"><span class="pre">Subscriber.measurement_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.metadatacache"><code class="docutils literal notranslate"><span class="pre">Subscriber.metadatacache</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.read_measurements"><code class="docutils literal notranslate"><span class="pre">Subscriber.read_measurements()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.request_metadata"><code class="docutils literal notranslate"><span class="pre">Subscriber.request_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.set_configurationchanged_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.set_configurationchanged_receiver()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.set_connectionestablished_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.set_connectionestablished_receiver()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.set_connectionterminated_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.set_connectionterminated_receiver()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.set_data_starttime_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.set_data_starttime_receiver()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.set_errormessage_logger"><code class="docutils literal notranslate"><span class="pre">Subscriber.set_errormessage_logger()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.set_historicalreadcomplete_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.set_historicalreadcomplete_receiver()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.set_metadatanotification_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.set_metadatanotification_receiver()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.set_newbufferblock_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.set_newbufferblock_receiver()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.set_newmeasurements_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.set_newmeasurements_receiver()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.set_notification_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.set_notification_receiver()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.set_statusmessage_logger"><code class="docutils literal notranslate"><span class="pre">Subscriber.set_statusmessage_logger()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.set_subscriptionupdated_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.set_subscriptionupdated_receiver()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.statusmessage"><code class="docutils literal notranslate"><span class="pre">Subscriber.statusmessage()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.subscribe"><code class="docutils literal notranslate"><span class="pre">Subscriber.subscribe()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.subscribed"><code class="docutils literal notranslate"><span class="pre">Subscriber.subscribed</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.subscriberid"><code class="docutils literal notranslate"><span class="pre">Subscriber.subscriberid</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.total_commandchannel_bytesreceived"><code class="docutils literal notranslate"><span class="pre">Subscriber.total_commandchannel_bytesreceived</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.total_datachannel_bytesreceived"><code class="docutils literal notranslate"><span class="pre">Subscriber.total_datachannel_bytesreceived</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.total_measurementsreceived"><code class="docutils literal notranslate"><span class="pre">Subscriber.total_measurementsreceived</span></code></a></li>
+<li><a class="reference internal" href="#sttp.Subscriber.unsubscribe"><code class="docutils literal notranslate"><span class="pre">Subscriber.unsubscribe()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -468,6 +528,7 @@
 <li class="toctree-l4"><a class="reference internal" href="sttp.data.html#sttp.data.dataset.DataSet.tablecount"><code class="docutils literal notranslate"><span class="pre">DataSet.tablecount</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.data.html#sttp.data.dataset.DataSet.tablenames"><code class="docutils literal notranslate"><span class="pre">DataSet.tablenames()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.data.html#sttp.data.dataset.DataSet.tables"><code class="docutils literal notranslate"><span class="pre">DataSet.tables()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.data.html#sttp.data.dataset.DataSet.to_xml"><code class="docutils literal notranslate"><span class="pre">DataSet.to_xml()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="sttp.data.html#sttp.data.dataset.EXT_XMLSCHEMADATA_NAMESPACE"><code class="docutils literal notranslate"><span class="pre">EXT_XMLSCHEMADATA_NAMESPACE</span></code></a></li>
@@ -752,6 +813,7 @@
 <li class="toctree-l2"><a class="reference internal" href="sttp.transport.html#module-sttp.transport.compactmeasurement">sttp.transport.compactmeasurement module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="sttp.transport.html#sttp.transport.compactmeasurement.CompactMeasurement"><code class="docutils literal notranslate"><span class="pre">CompactMeasurement</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.compactmeasurement.CompactMeasurement.decode"><code class="docutils literal notranslate"><span class="pre">CompactMeasurement.decode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.compactmeasurement.CompactMeasurement.encode"><code class="docutils literal notranslate"><span class="pre">CompactMeasurement.encode()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.compactmeasurement.CompactMeasurement.get_binarylength"><code class="docutils literal notranslate"><span class="pre">CompactMeasurement.get_binarylength()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.compactmeasurement.CompactMeasurement.get_compact_stateflags"><code class="docutils literal notranslate"><span class="pre">CompactMeasurement.get_compact_stateflags()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.compactmeasurement.CompactMeasurement.get_timestamp_c2"><code class="docutils literal notranslate"><span class="pre">CompactMeasurement.get_timestamp_c2()</span></code></a></li>
@@ -840,6 +902,7 @@
 <li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.constants.OperationalModes.ENCODINGMASK"><code class="docutils literal notranslate"><span class="pre">OperationalModes.ENCODINGMASK</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.constants.OperationalModes.IMPLEMENTATIONSPECIFICEXTENSIONMASK"><code class="docutils literal notranslate"><span class="pre">OperationalModes.IMPLEMENTATIONSPECIFICEXTENSIONMASK</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.constants.OperationalModes.NOFLAGS"><code class="docutils literal notranslate"><span class="pre">OperationalModes.NOFLAGS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.constants.OperationalModes.PRESTANDARDVERSIONMASK"><code class="docutils literal notranslate"><span class="pre">OperationalModes.PRESTANDARDVERSIONMASK</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.constants.OperationalModes.RECEIVEEXTERNALMETADATA"><code class="docutils literal notranslate"><span class="pre">OperationalModes.RECEIVEEXTERNALMETADATA</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.constants.OperationalModes.RECEIVEINTERNALMETADATA"><code class="docutils literal notranslate"><span class="pre">OperationalModes.RECEIVEINTERNALMETADATA</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.constants.OperationalModes.VERSIONMASK"><code class="docutils literal notranslate"><span class="pre">OperationalModes.VERSIONMASK</span></code></a></li>
@@ -1026,11 +1089,15 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="sttp.transport.html#module-sttp.transport.signalindexcache">sttp.transport.signalindexcache module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache.add_measurement_key"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.add_measurement_key()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache.contains"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.contains()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache.count"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.count</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache.decode"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.decode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache.encode"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.encode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache.get_signal_index"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.get_signal_index()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache.id"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.id()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache.record"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.record()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache.signal_id_cache"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.signal_id_cache</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache.signalid"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.signalid()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache.signalids"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.signalids</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache.signalindex"><code class="docutils literal notranslate"><span class="pre">SignalIndexCache.signalindex()</span></code></a></li>
@@ -1131,7 +1198,127 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="sttp.transport.html#module-sttp.transport">Module contents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="sttp.transport.html#module-sttp.transport">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher"><code class="docutils literal notranslate"><span class="pre">DataPublisher</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.define_metadata"><code class="docutils literal notranslate"><span class="pre">DataPublisher.define_metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.dispose"><code class="docutils literal notranslate"><span class="pre">DataPublisher.dispose()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.filter_metadata"><code class="docutils literal notranslate"><span class="pre">DataPublisher.filter_metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.filtering_metadata"><code class="docutils literal notranslate"><span class="pre">DataPublisher.filtering_metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.is_ipv6"><code class="docutils literal notranslate"><span class="pre">DataPublisher.is_ipv6</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.is_metadata_refresh_allowed"><code class="docutils literal notranslate"><span class="pre">DataPublisher.is_metadata_refresh_allowed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.is_nan_value_filter_allowed"><code class="docutils literal notranslate"><span class="pre">DataPublisher.is_nan_value_filter_allowed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.is_nan_value_filter_forced"><code class="docutils literal notranslate"><span class="pre">DataPublisher.is_nan_value_filter_forced</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.is_started"><code class="docutils literal notranslate"><span class="pre">DataPublisher.is_started</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.maximum_allowed_connections"><code class="docutils literal notranslate"><span class="pre">DataPublisher.maximum_allowed_connections</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.metadata"><code class="docutils literal notranslate"><span class="pre">DataPublisher.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.node_id"><code class="docutils literal notranslate"><span class="pre">DataPublisher.node_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.port"><code class="docutils literal notranslate"><span class="pre">DataPublisher.port</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.publish_measurements"><code class="docutils literal notranslate"><span class="pre">DataPublisher.publish_measurements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.security_mode"><code class="docutils literal notranslate"><span class="pre">DataPublisher.security_mode</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.start"><code class="docutils literal notranslate"><span class="pre">DataPublisher.start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.stop"><code class="docutils literal notranslate"><span class="pre">DataPublisher.stop()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.supports_temporal_subscriptions"><code class="docutils literal notranslate"><span class="pre">DataPublisher.supports_temporal_subscriptions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataPublisher.use_base_time_offsets"><code class="docutils literal notranslate"><span class="pre">DataPublisher.use_base_time_offsets</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber"><code class="docutils literal notranslate"><span class="pre">DataSubscriber</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.DEFAULT_COMPRESS_METADATA"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.DEFAULT_COMPRESS_METADATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.DEFAULT_COMPRESS_PAYLOADDATA"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.DEFAULT_COMPRESS_PAYLOADDATA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.DEFAULT_COMPRESS_SIGNALINDEXCACHE"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.DEFAULT_COMPRESS_SIGNALINDEXCACHE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.DEFAULT_SOCKET_TIMEOUT"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.DEFAULT_SOCKET_TIMEOUT</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.DEFAULT_STTP_SOURCEINFO"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.DEFAULT_STTP_SOURCEINFO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.DEFAULT_STTP_UPDATEDONINFO"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.DEFAULT_STTP_UPDATEDONINFO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.DEFAULT_STTP_VERSIONINFO"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.DEFAULT_STTP_VERSIONINFO</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.DEFAULT_VERSION"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.DEFAULT_VERSION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.activesignalindexcache"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.activesignalindexcache</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.adjustedvalue"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.adjustedvalue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.autoreconnect_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.autoreconnect_callback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.compress_metadata"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.compress_metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.compress_payloaddata"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.compress_payloaddata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.compress_signalindexcache"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.compress_signalindexcache</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.configurationchanged_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.configurationchanged_callback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.connect"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.connect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.connected"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.connected</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.connectionterminated_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.connectionterminated_callback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.connector"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.connector</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.data_starttime_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.data_starttime_callback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.decodestr"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.decodestr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.disconnect"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.disconnect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.dispose"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.dispose()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.disposing"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.disposing</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.encodestr"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.encodestr()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.errormessage_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.errormessage_callback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.lookup_metadata"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.lookup_metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.metadatacache"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.metadatacache</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.metadatareceived_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.metadatareceived_callback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.newbufferblocks_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.newbufferblocks_callback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.newmeasurements_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.newmeasurements_callback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.notificationreceived_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.notificationreceived_callback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.processingcomplete_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.processingcomplete_callback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.send_servercommand"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.send_servercommand()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.send_servercommand_withmessage"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.send_servercommand_withmessage()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.socket_timeout"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.socket_timeout</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.statusmessage_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.statusmessage_callback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.sttp_sourceinfo"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.sttp_sourceinfo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.sttp_updatedoninfo"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.sttp_updatedoninfo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.sttp_versioninfo"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.sttp_versioninfo</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.subscribe"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.subscribe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.subscribed"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.subscribed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.subscriberid"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.subscriberid</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.subscription"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.subscription</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.subscriptionupdated_callback"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.subscriptionupdated_callback</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.total_commandchannel_bytesreceived"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.total_commandchannel_bytesreceived</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.total_datachannel_bytesreceived"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.total_datachannel_bytesreceived</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.total_measurementsreceived"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.total_measurementsreceived</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.unsubscribe"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.unsubscribe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.DataSubscriber.version"><code class="docutils literal notranslate"><span class="pre">DataSubscriber.version</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sttp.transport.html#sttp.transport.Measurement"><code class="docutils literal notranslate"><span class="pre">Measurement</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.Measurement.DEFAULT_FLAGS"><code class="docutils literal notranslate"><span class="pre">Measurement.DEFAULT_FLAGS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.Measurement.DEFAULT_SIGNALID"><code class="docutils literal notranslate"><span class="pre">Measurement.DEFAULT_SIGNALID</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.Measurement.DEFAULT_TIMESTAMP"><code class="docutils literal notranslate"><span class="pre">Measurement.DEFAULT_TIMESTAMP</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.Measurement.DEFAULT_VALUE"><code class="docutils literal notranslate"><span class="pre">Measurement.DEFAULT_VALUE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.Measurement.datetime"><code class="docutils literal notranslate"><span class="pre">Measurement.datetime</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.Measurement.flags"><code class="docutils literal notranslate"><span class="pre">Measurement.flags</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.Measurement.signalid"><code class="docutils literal notranslate"><span class="pre">Measurement.signalid</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.Measurement.timestamp"><code class="docutils literal notranslate"><span class="pre">Measurement.timestamp</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.Measurement.timestampvalue"><code class="docutils literal notranslate"><span class="pre">Measurement.timestampvalue</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.Measurement.value"><code class="docutils literal notranslate"><span class="pre">Measurement.value</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sttp.transport.html#sttp.transport.RoutingTables"><code class="docutils literal notranslate"><span class="pre">RoutingTables</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.RoutingTables.clear"><code class="docutils literal notranslate"><span class="pre">RoutingTables.clear()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.RoutingTables.dispose"><code class="docutils literal notranslate"><span class="pre">RoutingTables.dispose()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.RoutingTables.publish_measurements"><code class="docutils literal notranslate"><span class="pre">RoutingTables.publish_measurements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.RoutingTables.remove_routes"><code class="docutils literal notranslate"><span class="pre">RoutingTables.remove_routes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.RoutingTables.update_routes"><code class="docutils literal notranslate"><span class="pre">RoutingTables.update_routes()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.connection_id"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.connection_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.encoding"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.encoding</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.hostname"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.hostname</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.instance_id"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.instance_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.ipaddress"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.ipaddress</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.is_connected"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.is_connected</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.is_subscribed"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.is_subscribed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.is_temporal_subscription"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.is_temporal_subscription</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.is_validated"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.is_validated</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.operational_modes"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.operational_modes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.publish_measurements"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.publish_measurements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.send_data_packet"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.send_data_packet()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.send_response"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.send_response()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.signal_index_cache"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.signal_index_cache</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.start"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.start()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.stop"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.stop()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.subscriber_id"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.subscriber_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.using_payload_compression"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.using_payload_compression</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection.version"><code class="docutils literal notranslate"><span class="pre">SubscriberConnection.version</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -1204,7 +1391,7 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.config.Config.DEFAULT_VERSION">
-<span class="sig-name descname"><span class="pre">DEFAULT_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#sttp.config.Config.DEFAULT_VERSION" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(2)</span></em><a class="headerlink" href="#sttp.config.Config.DEFAULT_VERSION" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1348,22 +1535,22 @@ class found in the <cite>transport</cite> namespace. Internally, the <cite>Subsc
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_LAGTIME">
-<span class="sig-name descname"><span class="pre">DEFAULT_LAGTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10.0</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_LAGTIME" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_LAGTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(10.0)</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_LAGTIME" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_LEADTIME">
-<span class="sig-name descname"><span class="pre">DEFAULT_LEADTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5.0</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_LEADTIME" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_LEADTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(5.0)</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_LEADTIME" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_PROCESSINGINTERVAL">
-<span class="sig-name descname"><span class="pre">DEFAULT_PROCESSINGINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_PROCESSINGINTERVAL" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_PROCESSINGINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int32(-1)</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_PROCESSINGINTERVAL" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_PUBLISHINTERVAL">
-<span class="sig-name descname"><span class="pre">DEFAULT_PUBLISHINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_PUBLISHINTERVAL" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_PUBLISHINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(1.0)</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_PUBLISHINTERVAL" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1393,7 +1580,7 @@ class found in the <cite>transport</cite> namespace. Internally, the <cite>Subsc
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_UDPPORT">
-<span class="sig-name descname"><span class="pre">DEFAULT_UDPPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_UDPPORT" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_UDPPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint16(0)</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_UDPPORT" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1822,61 +2009,61 @@ Bit 64 (0x8000000000000000) is used to denote leap second, i.e., second 60, wher
 Bit 63 (0x4000000000000000) is used to denote leap second direction, 0 for add, 1 for delete.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.LEAPSECOND_DIRECTION">
-<span class="sig-name descname"><span class="pre">LEAPSECOND_DIRECTION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4611686018427387904</span></em><a class="headerlink" href="#sttp.ticks.Ticks.LEAPSECOND_DIRECTION" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">LEAPSECOND_DIRECTION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(4611686018427387904)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.LEAPSECOND_DIRECTION" title="Link to this definition"></a></dt>
 <dd><p>Flag (63rd bit) that indicates if leap second is positive or negative; 0 for add, 1 for delete.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.LEAPSECOND_FLAG">
-<span class="sig-name descname"><span class="pre">LEAPSECOND_FLAG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9223372036854775808</span></em><a class="headerlink" href="#sttp.ticks.Ticks.LEAPSECOND_FLAG" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">LEAPSECOND_FLAG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(9223372036854775808)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.LEAPSECOND_FLAG" title="Link to this definition"></a></dt>
 <dd><p>Flag (64th bit) that marks a Ticks value as a leap second, i.e., second 60 (one beyond normal second 59).</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.PERDAY">
-<span class="sig-name descname"><span class="pre">PERDAY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">864000000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERDAY" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PERDAY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(864000000000)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERDAY" title="Link to this definition"></a></dt>
 <dd><p>Number of Ticks that occur in a day.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.PERHOUR">
-<span class="sig-name descname"><span class="pre">PERHOUR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">36000000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERHOUR" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PERHOUR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(36000000000)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERHOUR" title="Link to this definition"></a></dt>
 <dd><p>Number of Ticks that occur in an hour.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.PERMICROSECOND">
-<span class="sig-name descname"><span class="pre">PERMICROSECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMICROSECOND" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PERMICROSECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(10)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMICROSECOND" title="Link to this definition"></a></dt>
 <dd><p>Number of Ticks that occur in a microsecond.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.PERMILLISECOND">
-<span class="sig-name descname"><span class="pre">PERMILLISECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMILLISECOND" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PERMILLISECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(10000)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMILLISECOND" title="Link to this definition"></a></dt>
 <dd><p>Number of Ticks that occur in a millisecond.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.PERMINUTE">
-<span class="sig-name descname"><span class="pre">PERMINUTE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">600000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMINUTE" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PERMINUTE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(600000000)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMINUTE" title="Link to this definition"></a></dt>
 <dd><p>Number of Ticks that occur in a minute.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.PERSECOND">
-<span class="sig-name descname"><span class="pre">PERSECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERSECOND" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PERSECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(10000000)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERSECOND" title="Link to this definition"></a></dt>
 <dd><p>Number of Ticks that occur in a second.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.UNIXBASEOFFSET">
-<span class="sig-name descname"><span class="pre">UNIXBASEOFFSET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">621355968000000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.UNIXBASEOFFSET" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">UNIXBASEOFFSET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(621355968000000000)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.UNIXBASEOFFSET" title="Link to this definition"></a></dt>
 <dd><p>Ticks representation of the Unix epoch timestamp starting at January 1, 1970.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.VALUEMASK">
-<span class="sig-name descname"><span class="pre">VALUEMASK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4611686018427387903</span></em><a class="headerlink" href="#sttp.ticks.Ticks.VALUEMASK" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">VALUEMASK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(4611686018427387903)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.VALUEMASK" title="Link to this definition"></a></dt>
 <dd><p>All bits (bits 1 to 62) that make up the value portion of a Ticks that represent time.</p>
 </dd></dl>
 
@@ -1978,7 +2165,7 @@ which have 100 nanosecond resolution, will be rounded to the nearest microsecond
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.version.Version.STTP_VERSION">
-<span class="sig-name descname"><span class="pre">STTP_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'0.6.5'</span></em><a class="headerlink" href="#sttp.version.Version.STTP_VERSION" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">STTP_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'0.7.0'</span></em><a class="headerlink" href="#sttp.version.Version.STTP_VERSION" title="Link to this definition"></a></dt>
 <dd><p>Defines the STTP library API version used for data subscriber identification.
 Note: This is not the STTP protocol version, but the version of the STTP library API.</p>
 </dd></dl>
@@ -1988,6 +2175,450 @@ Note: This is not the STTP protocol version, but the version of the STTP library
 </section>
 <section id="module-sttp">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-sttp" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.Publisher">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.</span></span><span class="sig-name descname"><span class="pre">Publisher</span></span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Publisher" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents an STTP data publisher.</p>
+<p class="rubric">Notes</p>
+<p>The <cite>Publisher</cite> class exists as a simplified implementation wrapping the <cite>DataPublisher</cite>
+class found in the <cite>transport</cite> namespace. This class maintains an internal instance
+of the <cite>DataPublisher</cite> class and is intended to simplify common uses of STTP data
+publication, similar to how <cite>Subscriber</cite> wraps <cite>DataSubscriber</cite>.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.Publisher.clientconnected_receiver">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clientconnected_receiver</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection" title="sttp.transport.subscriberconnection.SubscriberConnection"><span class="pre">SubscriberConnection</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.Publisher.clientconnected_receiver" title="Link to this definition"></a></dt>
+<dd><p>Gets or sets a function to handle client connected events.</p>
+<p>Signature: <cite>def clientconnected_receiver(connection: SubscriberConnection)</cite></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.Publisher.clientdisconnected_receiver">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clientdisconnected_receiver</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection" title="sttp.transport.subscriberconnection.SubscriberConnection"><span class="pre">SubscriberConnection</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.Publisher.clientdisconnected_receiver" title="Link to this definition"></a></dt>
+<dd><p>Gets or sets a function to handle client disconnected events.</p>
+<p>Signature: <cite>def clientdisconnected_receiver(connection: SubscriberConnection)</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Publisher.default_clientconnected_receiver">
+<span class="sig-name descname"><span class="pre">default_clientconnected_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection" title="sttp.transport.subscriberconnection.SubscriberConnection"><span class="pre">SubscriberConnection</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.default_clientconnected_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Publisher.default_clientconnected_receiver" title="Link to this definition"></a></dt>
+<dd><p>Default client connected handler.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Publisher.default_clientdisconnected_receiver">
+<span class="sig-name descname"><span class="pre">default_clientdisconnected_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection" title="sttp.transport.subscriberconnection.SubscriberConnection"><span class="pre">SubscriberConnection</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.default_clientdisconnected_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Publisher.default_clientdisconnected_receiver" title="Link to this definition"></a></dt>
+<dd><p>Default client disconnected handler.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Publisher.default_errormessage_logger">
+<span class="sig-name descname"><span class="pre">default_errormessage_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.default_errormessage_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Publisher.default_errormessage_logger" title="Link to this definition"></a></dt>
+<dd><p>Default error message logger that writes to stderr.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Publisher.default_statusmessage_logger">
+<span class="sig-name descname"><span class="pre">default_statusmessage_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.default_statusmessage_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Publisher.default_statusmessage_logger" title="Link to this definition"></a></dt>
+<dd><p>Default status message logger that writes to stdout.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Publisher.define_metadata">
+<span class="sig-name descname"><span class="pre">define_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="sttp.data.html#sttp.data.dataset.DataSet" title="sttp.data.dataset.DataSet"><span class="pre">DataSet</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.define_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Publisher.define_metadata" title="Link to this definition"></a></dt>
+<dd><p>Defines the metadata for the publisher from a DataSet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>metadata</strong> (<a class="reference internal" href="sttp.data.html#sttp.data.dataset.DataSet" title="sttp.data.dataset.DataSet"><em>DataSet</em></a>) – DataSet containing metadata tables (MeasurementDetail, DeviceDetail, etc.)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Publisher.dispose">
+<span class="sig-name descname"><span class="pre">dispose</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.dispose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Publisher.dispose" title="Link to this definition"></a></dt>
+<dd><p>Cleanly shuts down a <cite>Publisher</cite> that is no longer being used, e.g.,
+during a normal application exit.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.Publisher.errormessage_logger">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">errormessage_logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.Publisher.errormessage_logger" title="Link to this definition"></a></dt>
+<dd><p>Gets or sets a function to handle error messages.</p>
+<p>Signature: <cite>def errormessage_logger(message: str)</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Publisher.filter_metadata">
+<span class="sig-name descname"><span class="pre">filter_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter_expression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.filter_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Publisher.filter_metadata" title="Link to this definition"></a></dt>
+<dd><p>Filters metadata using a filter expression and returns matching measurement metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filter_expression</strong> (<em>str</em>) – Filter expression to apply to metadata (e.g., “SignalAcronym &lt;&gt; ‘STAT’”)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of MeasurementMetadata objects matching the filter</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.Publisher.is_metadata_refresh_allowed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_metadata_refresh_allowed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.Publisher.is_metadata_refresh_allowed" title="Link to this definition"></a></dt>
+<dd><p>Gets or sets flag that determines if metadata refresh is allowed by clients.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.Publisher.is_nan_value_filter_allowed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_nan_value_filter_allowed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.Publisher.is_nan_value_filter_allowed" title="Link to this definition"></a></dt>
+<dd><p>Gets or sets flag that determines if NaN value filtering is allowed.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.Publisher.is_nan_value_filter_forced">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_nan_value_filter_forced</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.Publisher.is_nan_value_filter_forced" title="Link to this definition"></a></dt>
+<dd><p>Gets or sets flag that determines if NaN value filtering is forced.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.Publisher.maximum_allowed_connections">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maximum_allowed_connections</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sttp.Publisher.maximum_allowed_connections" title="Link to this definition"></a></dt>
+<dd><p>Gets or sets the maximum number of allowed client connections.
+Set to -1 for unlimited connections.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Publisher.publish_measurements">
+<span class="sig-name descname"><span class="pre">publish_measurements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="sttp.transport.html#sttp.transport.measurement.Measurement" title="sttp.transport.measurement.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.publish_measurements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Publisher.publish_measurements" title="Link to this definition"></a></dt>
+<dd><p>Publishes a list of measurements to subscribed clients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>measurements</strong> (<em>List</em><em>[</em><a class="reference internal" href="sttp.transport.html#sttp.transport.measurement.Measurement" title="sttp.transport.measurement.Measurement"><em>Measurement</em></a><em>]</em>) – List of measurements to publish</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Publisher.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ipv6</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Publisher.start" title="Link to this definition"></a></dt>
+<dd><p>Starts the publisher listening on the specified port.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>port</strong> (<em>int</em>) – TCP port number to listen on</p></li>
+<li><p><strong>ipv6</strong> (<em>bool</em><em>, </em><em>optional</em>) – Set to True to use IPv6, False for IPv4 (default)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.Publisher.started">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">started</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.Publisher.started" title="Link to this definition"></a></dt>
+<dd><p>Gets flag that determines if <cite>Publisher</cite> is currently started and listening for connections.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.Publisher.statusmessage_logger">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">statusmessage_logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.Publisher.statusmessage_logger" title="Link to this definition"></a></dt>
+<dd><p>Gets or sets a function to handle status messages.</p>
+<p>Signature: <cite>def statusmessage_logger(message: str)</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Publisher.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Publisher.stop" title="Link to this definition"></a></dt>
+<dd><p>Stops the publisher and disconnects all clients.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.Subscriber">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.</span></span><span class="sig-name descname"><span class="pre">Subscriber</span></span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents an STTP data subscriber.</p>
+<p class="rubric">Notes</p>
+<p>The <cite>Subscriber</cite> class exists as a simplified implementation of the <cite>DataSubscriber</cite>
+class found in the <cite>transport</cite> namespace. This class maintains an internal instance
+of the <cite>DataSubscriber</cite> class for subscription based functionality and is intended
+to simplify common uses of STTP data reception.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.Subscriber.activesignalindexcache">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">activesignalindexcache</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache" title="sttp.transport.signalindexcache.SignalIndexCache"><span class="pre">SignalIndexCache</span></a></em><a class="headerlink" href="#sttp.Subscriber.activesignalindexcache" title="Link to this definition"></a></dt>
+<dd><p>Gets the active signal index cache.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.adjustedvalue">
+<span class="sig-name descname"><span class="pre">adjustedvalue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="sttp.transport.html#sttp.transport.measurement.Measurement" title="sttp.transport.measurement.Measurement"><span class="pre">Measurement</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">float64</span></span></span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.adjustedvalue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.adjustedvalue" title="Link to this definition"></a></dt>
+<dd><p>Gets the Value of a <cite>Measurement</cite> with any linear adjustments applied from the
+measurement’s Adder and Multiplier metadata, if found.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.connect">
+<span class="sig-name descname"><span class="pre">connect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">address</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.config.Config" title="sttp.config.Config"><span class="pre">Config</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Exception</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.connect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.connect" title="Link to this definition"></a></dt>
+<dd><p>Starts the client-based connection cycle to an STTP publisher. Config parameter controls
+connection related settings. When the config defines <cite>AutoReconnect</cite> as True, the connection
+will automatically be retried when the connection drops. If the config parameter defines
+<cite>AutoRequestMetadata</cite> as True, then upon successful connection, meta-data will be requested.
+When the config defines both <cite>AutoRequestMetadata</cite> and <cite>AutoSubscribe</cite> as True, subscription
+will occur after reception of metadata. When the config defines <cite>AutoRequestMetadata</cite> as
+False and <cite>AutoSubscribe</cite> as True, subscription will occur at successful connection.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.Subscriber.connected">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connected</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.Subscriber.connected" title="Link to this definition"></a></dt>
+<dd><p>Gets flag that determines if <cite>Subscriber</cite> is currently connected to a data publisher.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.default_connectionestablished_receiver">
+<span class="sig-name descname"><span class="pre">default_connectionestablished_receiver</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.default_connectionestablished_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.default_connectionestablished_receiver" title="Link to this definition"></a></dt>
+<dd><p>Implements the default handler for the connection established callback.
+Default implementation simply writes connection feedback to status message callback.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.default_connectionterminated_receiver">
+<span class="sig-name descname"><span class="pre">default_connectionterminated_receiver</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.default_connectionterminated_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.default_connectionterminated_receiver" title="Link to this definition"></a></dt>
+<dd><p>Implements the default handler for the connection terminated callback.
+Default implementation simply writes connection terminated feedback to error message callback.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.default_errormessage_logger">
+<span class="sig-name descname"><span class="pre">default_errormessage_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.default_errormessage_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.default_errormessage_logger" title="Link to this definition"></a></dt>
+<dd><p>Implements the default handler for the error message callback.
+Default implementation synchronously writes output to stderr.
+Logging is recommended.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.default_statusmessage_logger">
+<span class="sig-name descname"><span class="pre">default_statusmessage_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.default_statusmessage_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.default_statusmessage_logger" title="Link to this definition"></a></dt>
+<dd><p>Implements the default handler for the status message callback.
+Default implementation synchronously writes output to stdio.
+Logging is recommended.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.disconnect">
+<span class="sig-name descname"><span class="pre">disconnect</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.disconnect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.disconnect" title="Link to this definition"></a></dt>
+<dd><p>Disconnects from an STTP publisher.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.dispose">
+<span class="sig-name descname"><span class="pre">dispose</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.dispose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.dispose" title="Link to this definition"></a></dt>
+<dd><p>Cleanly shuts down a <cite>Subscriber</cite> that is no longer being used, e.g.,
+during a normal application exit.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.errormessage">
+<span class="sig-name descname"><span class="pre">errormessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.errormessage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.errormessage" title="Link to this definition"></a></dt>
+<dd><p>Executes the defined error message logger callback.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.measurement_metadata">
+<span class="sig-name descname"><span class="pre">measurement_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="sttp.transport.html#sttp.transport.measurement.Measurement" title="sttp.transport.measurement.Measurement"><span class="pre">Measurement</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="sttp.metadata.record.html#sttp.metadata.record.measurement.MeasurementRecord" title="sttp.metadata.record.measurement.MeasurementRecord"><span class="pre">MeasurementRecord</span></a></span></span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.measurement_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.measurement_metadata" title="Link to this definition"></a></dt>
+<dd><p>Gets the <cite>MeasurementRecord</cite> for the specified measurement, based on its signal ID,
+from the local metadata cache; or, None if the measurement cannot be found.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.Subscriber.metadatacache">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">metadatacache</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="sttp.metadata.html#sttp.metadata.cache.MetadataCache" title="sttp.metadata.cache.MetadataCache"><span class="pre">MetadataCache</span></a></em><a class="headerlink" href="#sttp.Subscriber.metadatacache" title="Link to this definition"></a></dt>
+<dd><p>Gets the current metadata cache.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.read_measurements">
+<span class="sig-name descname"><span class="pre">read_measurements</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#sttp.reader.MeasurementReader" title="sttp.reader.MeasurementReader"><span class="pre">MeasurementReader</span></a></span></span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.read_measurements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.read_measurements" title="Link to this definition"></a></dt>
+<dd><p>Sets up a new <cite>MeasurementReader</cite> to start reading measurements.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.request_metadata">
+<span class="sig-name descname"><span class="pre">request_metadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.request_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.request_metadata" title="Link to this definition"></a></dt>
+<dd><p>Sends a request to the data publisher indicating that the <cite>Subscriber</cite> would
+like new metadata. Any defined MetadataFilters will be included in request.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.set_configurationchanged_receiver">
+<span class="sig-name descname"><span class="pre">set_configurationchanged_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_configurationchanged_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.set_configurationchanged_receiver" title="Link to this definition"></a></dt>
+<dd><p>Defines the callback that handles notifications that the data publisher configuration has changed.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.set_connectionestablished_receiver">
+<span class="sig-name descname"><span class="pre">set_connectionestablished_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_connectionestablished_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.set_connectionestablished_receiver" title="Link to this definition"></a></dt>
+<dd><p>Defines the callback that handles notification that a connection has been established.
+Default implementation simply writes connection feedback to status message handler.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.set_connectionterminated_receiver">
+<span class="sig-name descname"><span class="pre">set_connectionterminated_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_connectionterminated_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.set_connectionterminated_receiver" title="Link to this definition"></a></dt>
+<dd><p>Defines the callback that handles notification that a connection has been terminated.
+Default implementation simply writes connection terminated feedback to error message handler.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.set_data_starttime_receiver">
+<span class="sig-name descname"><span class="pre">set_data_starttime_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int64</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_data_starttime_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.set_data_starttime_receiver" title="Link to this definition"></a></dt>
+<dd><p>Defines the callback that handles notification of first received measurement.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.set_errormessage_logger">
+<span class="sig-name descname"><span class="pre">set_errormessage_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_errormessage_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.set_errormessage_logger" title="Link to this definition"></a></dt>
+<dd><p>Defines the callback that handles error message logging.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.set_historicalreadcomplete_receiver">
+<span class="sig-name descname"><span class="pre">set_historicalreadcomplete_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_historicalreadcomplete_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.set_historicalreadcomplete_receiver" title="Link to this definition"></a></dt>
+<dd><p>Defines the callback that handles notification that temporal processing has completed, i.e.,
+the end of a historical playback data stream has been reached.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.set_metadatanotification_receiver">
+<span class="sig-name descname"><span class="pre">set_metadatanotification_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="sttp.data.html#sttp.data.dataset.DataSet" title="sttp.data.dataset.DataSet"><span class="pre">DataSet</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_metadatanotification_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.set_metadatanotification_receiver" title="Link to this definition"></a></dt>
+<dd><p>Defines the callback that handles reception of the metadata received notification response.
+Receiver parameter defines full XML response received from publisher.
+Parsed metadata available via <cite>Subscriber.metadatacache</cite> property.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.set_newbufferblock_receiver">
+<span class="sig-name descname"><span class="pre">set_newbufferblock_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="sttp.transport.html#sttp.transport.bufferblock.BufferBlock" title="sttp.transport.bufferblock.BufferBlock"><span class="pre">BufferBlock</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_newbufferblock_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.set_newbufferblock_receiver" title="Link to this definition"></a></dt>
+<dd><p>Defines the callback that handles reception of new buffer blocks.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.set_newmeasurements_receiver">
+<span class="sig-name descname"><span class="pre">set_newmeasurements_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="sttp.transport.html#sttp.transport.measurement.Measurement" title="sttp.transport.measurement.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_newmeasurements_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.set_newmeasurements_receiver" title="Link to this definition"></a></dt>
+<dd><p>Defines the callback that handles reception of new measurements.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.set_notification_receiver">
+<span class="sig-name descname"><span class="pre">set_notification_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_notification_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.set_notification_receiver" title="Link to this definition"></a></dt>
+<dd><p>Defines the callback that handles reception of a notification.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.set_statusmessage_logger">
+<span class="sig-name descname"><span class="pre">set_statusmessage_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_statusmessage_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.set_statusmessage_logger" title="Link to this definition"></a></dt>
+<dd><p>Defines the callback that handles informational message logging.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.set_subscriptionupdated_receiver">
+<span class="sig-name descname"><span class="pre">set_subscriptionupdated_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="sttp.transport.html#sttp.transport.signalindexcache.SignalIndexCache" title="sttp.transport.signalindexcache.SignalIndexCache"><span class="pre">SignalIndexCache</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.set_subscriptionupdated_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.set_subscriptionupdated_receiver" title="Link to this definition"></a></dt>
+<dd><p>Defines the callback that handles notifications that a new <cite>SignalIndexCache</cite> has been received.
+Assignment will take effect immediately, even while subscription is active.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.statusmessage">
+<span class="sig-name descname"><span class="pre">statusmessage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.statusmessage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.statusmessage" title="Link to this definition"></a></dt>
+<dd><p>Executes the defined status message logger callback.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.subscribe">
+<span class="sig-name descname"><span class="pre">subscribe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filterexpression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#sttp.settings.Settings" title="sttp.settings.Settings"><span class="pre">Settings</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Ellipsis</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.subscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.subscribe" title="Link to this definition"></a></dt>
+<dd><p>Subscribe sets up a request indicating that the <cite>Subscriber</cite> would like to start receiving
+streaming data from a data publisher. If the subscriber is already connected, the updated
+filter expression and subscription settings will be requested immediately; otherwise, the
+settings will be used when the connection to the data publisher is established.</p>
+<p>The filterExpression defines the desired measurements for a subscription. Examples include:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Directly specified signal IDs (UUID values in string format):</dt><dd><p>38A47B0-F10B-4143-9A0A-0DBC4FFEF1E8; E4BBFE6A-35BD-4E5B-92C9-11FF913E7877</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Directly specified tag names:</dt><dd><p>DOM_GPLAINS-BUS1:VH; TVA_SHELBY-BUS1:VH</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Directly specified identifiers in “measurement key” format:</dt><dd><p>PPA:15; STAT:20</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>A filter expression against a selection view:</dt><dd><p>FILTER ActiveMeasurements WHERE Company=’GPA’ AND SignalType=’FREQ’</p>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Settings parameter controls subscription related settings.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.Subscriber.subscribed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subscribed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.Subscriber.subscribed" title="Link to this definition"></a></dt>
+<dd><p>Gets flag that determines if <cite>Subscriber</cite> is currently subscribed to a data stream.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.Subscriber.subscriberid">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">subscriberid</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">UUID</span></em><a class="headerlink" href="#sttp.Subscriber.subscriberid" title="Link to this definition"></a></dt>
+<dd><p>Gets the subscriber ID as assigned by the data publisher upon receipt of the <cite>SignalIndexCache</cite>.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.Subscriber.total_commandchannel_bytesreceived">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">total_commandchannel_bytesreceived</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uint64</span></em><a class="headerlink" href="#sttp.Subscriber.total_commandchannel_bytesreceived" title="Link to this definition"></a></dt>
+<dd><p>Gets the total number of bytes received via the command channel since last connection.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.Subscriber.total_datachannel_bytesreceived">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">total_datachannel_bytesreceived</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uint64</span></em><a class="headerlink" href="#sttp.Subscriber.total_datachannel_bytesreceived" title="Link to this definition"></a></dt>
+<dd><p>Gets the total number of bytes received via the data channel since last connection.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.Subscriber.total_measurementsreceived">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">total_measurementsreceived</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">uint64</span></em><a class="headerlink" href="#sttp.Subscriber.total_measurementsreceived" title="Link to this definition"></a></dt>
+<dd><p>Gets the total number of measurements received since last subscription.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.Subscriber.unsubscribe">
+<span class="sig-name descname"><span class="pre">unsubscribe</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/subscriber.html#Subscriber.unsubscribe"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.Subscriber.unsubscribe" title="Link to this definition"></a></dt>
+<dd><p>Sends a request to the data publisher indicating that the Subscriber would
+like to stop receiving streaming data.</p>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 </section>
 
