@@ -22,6 +22,14 @@ sttp.config module
    :undoc-members:
    :show-inheritance:
 
+sttp.publisher module
+---------------------
+
+.. automodule:: sttp.publisher
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 sttp.reader module
 ------------------
 

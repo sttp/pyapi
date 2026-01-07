@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
@@ -10,15 +12,11 @@
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
-        <script src="_static/documentation_options.js?v=b1f64a84"></script>
-        <script src="_static/doctools.js?v=92e14aea"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=b1f64a84"></script>
+      <script src="_static/doctools.js?v=92e14aea"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
@@ -75,6 +73,31 @@
 <li><a class="reference internal" href="#sttp.config.Config.retryinterval"><code class="docutils literal notranslate"><span class="pre">Config.retryinterval</span></code></a></li>
 <li><a class="reference internal" href="#sttp.config.Config.socket_timeout"><code class="docutils literal notranslate"><span class="pre">Config.socket_timeout</span></code></a></li>
 <li><a class="reference internal" href="#sttp.config.Config.version"><code class="docutils literal notranslate"><span class="pre">Config.version</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-sttp.publisher">sttp.publisher module</a><ul>
+<li><a class="reference internal" href="#sttp.publisher.Publisher"><code class="docutils literal notranslate"><span class="pre">Publisher</span></code></a><ul>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.clientconnected_receiver"><code class="docutils literal notranslate"><span class="pre">Publisher.clientconnected_receiver</span></code></a></li>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.clientdisconnected_receiver"><code class="docutils literal notranslate"><span class="pre">Publisher.clientdisconnected_receiver</span></code></a></li>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.default_clientconnected_receiver"><code class="docutils literal notranslate"><span class="pre">Publisher.default_clientconnected_receiver()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.default_clientdisconnected_receiver"><code class="docutils literal notranslate"><span class="pre">Publisher.default_clientdisconnected_receiver()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.default_errormessage_logger"><code class="docutils literal notranslate"><span class="pre">Publisher.default_errormessage_logger()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.default_statusmessage_logger"><code class="docutils literal notranslate"><span class="pre">Publisher.default_statusmessage_logger()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.define_metadata"><code class="docutils literal notranslate"><span class="pre">Publisher.define_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.dispose"><code class="docutils literal notranslate"><span class="pre">Publisher.dispose()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.errormessage_logger"><code class="docutils literal notranslate"><span class="pre">Publisher.errormessage_logger</span></code></a></li>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.filter_metadata"><code class="docutils literal notranslate"><span class="pre">Publisher.filter_metadata()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.is_metadata_refresh_allowed"><code class="docutils literal notranslate"><span class="pre">Publisher.is_metadata_refresh_allowed</span></code></a></li>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.is_nan_value_filter_allowed"><code class="docutils literal notranslate"><span class="pre">Publisher.is_nan_value_filter_allowed</span></code></a></li>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.is_nan_value_filter_forced"><code class="docutils literal notranslate"><span class="pre">Publisher.is_nan_value_filter_forced</span></code></a></li>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.maximum_allowed_connections"><code class="docutils literal notranslate"><span class="pre">Publisher.maximum_allowed_connections</span></code></a></li>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.publish_measurements"><code class="docutils literal notranslate"><span class="pre">Publisher.publish_measurements()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.start"><code class="docutils literal notranslate"><span class="pre">Publisher.start()</span></code></a></li>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.started"><code class="docutils literal notranslate"><span class="pre">Publisher.started</span></code></a></li>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.statusmessage_logger"><code class="docutils literal notranslate"><span class="pre">Publisher.statusmessage_logger</span></code></a></li>
+<li><a class="reference internal" href="#sttp.publisher.Publisher.stop"><code class="docutils literal notranslate"><span class="pre">Publisher.stop()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -1393,7 +1416,7 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.config.Config.DEFAULT_VERSION">
-<span class="sig-name descname"><span class="pre">DEFAULT_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#sttp.config.Config.DEFAULT_VERSION" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_VERSION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(2)</span></em><a class="headerlink" href="#sttp.config.Config.DEFAULT_VERSION" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1481,6 +1504,170 @@ starting from this interval.</p>
 </dd></dl>
 
 </section>
+<section id="module-sttp.publisher">
+<span id="sttp-publisher-module"></span><h2>sttp.publisher module<a class="headerlink" href="#module-sttp.publisher" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.publisher.</span></span><span class="sig-name descname"><span class="pre">Publisher</span></span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.publisher.Publisher" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents an STTP data publisher.</p>
+<p class="rubric">Notes</p>
+<p>The <cite>Publisher</cite> class exists as a simplified implementation wrapping the <cite>DataPublisher</cite>
+class found in the <cite>transport</cite> namespace. This class maintains an internal instance
+of the <cite>DataPublisher</cite> class and is intended to simplify common uses of STTP data
+publication, similar to how <cite>Subscriber</cite> wraps <cite>DataSubscriber</cite>.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.clientconnected_receiver">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clientconnected_receiver</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection" title="sttp.transport.subscriberconnection.SubscriberConnection"><span class="pre">SubscriberConnection</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.publisher.Publisher.clientconnected_receiver" title="Link to this definition"></a></dt>
+<dd><p>Gets or sets a function to handle client connected events.</p>
+<p>Signature: <cite>def clientconnected_receiver(connection: SubscriberConnection)</cite></p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.clientdisconnected_receiver">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">clientdisconnected_receiver</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection" title="sttp.transport.subscriberconnection.SubscriberConnection"><span class="pre">SubscriberConnection</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.publisher.Publisher.clientdisconnected_receiver" title="Link to this definition"></a></dt>
+<dd><p>Gets or sets a function to handle client disconnected events.</p>
+<p>Signature: <cite>def clientdisconnected_receiver(connection: SubscriberConnection)</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.default_clientconnected_receiver">
+<span class="sig-name descname"><span class="pre">default_clientconnected_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection" title="sttp.transport.subscriberconnection.SubscriberConnection"><span class="pre">SubscriberConnection</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.default_clientconnected_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.publisher.Publisher.default_clientconnected_receiver" title="Link to this definition"></a></dt>
+<dd><p>Default client connected handler.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.default_clientdisconnected_receiver">
+<span class="sig-name descname"><span class="pre">default_clientdisconnected_receiver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="sttp.transport.html#sttp.transport.SubscriberConnection" title="sttp.transport.subscriberconnection.SubscriberConnection"><span class="pre">SubscriberConnection</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.default_clientdisconnected_receiver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.publisher.Publisher.default_clientdisconnected_receiver" title="Link to this definition"></a></dt>
+<dd><p>Default client disconnected handler.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.default_errormessage_logger">
+<span class="sig-name descname"><span class="pre">default_errormessage_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.default_errormessage_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.publisher.Publisher.default_errormessage_logger" title="Link to this definition"></a></dt>
+<dd><p>Default error message logger that writes to stderr.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.default_statusmessage_logger">
+<span class="sig-name descname"><span class="pre">default_statusmessage_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.default_statusmessage_logger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.publisher.Publisher.default_statusmessage_logger" title="Link to this definition"></a></dt>
+<dd><p>Default status message logger that writes to stdout.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.define_metadata">
+<span class="sig-name descname"><span class="pre">define_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="sttp.data.html#sttp.data.dataset.DataSet" title="sttp.data.dataset.DataSet"><span class="pre">DataSet</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.define_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.publisher.Publisher.define_metadata" title="Link to this definition"></a></dt>
+<dd><p>Defines the metadata for the publisher from a DataSet.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>metadata</strong> (<a class="reference internal" href="sttp.data.html#sttp.data.dataset.DataSet" title="sttp.data.dataset.DataSet"><em>DataSet</em></a>) – DataSet containing metadata tables (MeasurementDetail, DeviceDetail, etc.)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.dispose">
+<span class="sig-name descname"><span class="pre">dispose</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.dispose"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.publisher.Publisher.dispose" title="Link to this definition"></a></dt>
+<dd><p>Cleanly shuts down a <cite>Publisher</cite> that is no longer being used, e.g.,
+during a normal application exit.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.errormessage_logger">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">errormessage_logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.publisher.Publisher.errormessage_logger" title="Link to this definition"></a></dt>
+<dd><p>Gets or sets a function to handle error messages.</p>
+<p>Signature: <cite>def errormessage_logger(message: str)</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.filter_metadata">
+<span class="sig-name descname"><span class="pre">filter_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filter_expression</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span></span></span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.filter_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.publisher.Publisher.filter_metadata" title="Link to this definition"></a></dt>
+<dd><p>Filters metadata using a filter expression and returns matching measurement metadata.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filter_expression</strong> (<em>str</em>) – Filter expression to apply to metadata (e.g., “SignalAcronym &lt;&gt; ‘STAT’”)</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of MeasurementMetadata objects matching the filter</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.is_metadata_refresh_allowed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_metadata_refresh_allowed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.publisher.Publisher.is_metadata_refresh_allowed" title="Link to this definition"></a></dt>
+<dd><p>Gets or sets flag that determines if metadata refresh is allowed by clients.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.is_nan_value_filter_allowed">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_nan_value_filter_allowed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.publisher.Publisher.is_nan_value_filter_allowed" title="Link to this definition"></a></dt>
+<dd><p>Gets or sets flag that determines if NaN value filtering is allowed.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.is_nan_value_filter_forced">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_nan_value_filter_forced</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.publisher.Publisher.is_nan_value_filter_forced" title="Link to this definition"></a></dt>
+<dd><p>Gets or sets flag that determines if NaN value filtering is forced.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.maximum_allowed_connections">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maximum_allowed_connections</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#sttp.publisher.Publisher.maximum_allowed_connections" title="Link to this definition"></a></dt>
+<dd><p>Gets or sets the maximum number of allowed client connections.
+Set to -1 for unlimited connections.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.publish_measurements">
+<span class="sig-name descname"><span class="pre">publish_measurements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurements</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="sttp.transport.html#sttp.transport.measurement.Measurement" title="sttp.transport.measurement.Measurement"><span class="pre">Measurement</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.publish_measurements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.publisher.Publisher.publish_measurements" title="Link to this definition"></a></dt>
+<dd><p>Publishes a list of measurements to subscribed clients.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>measurements</strong> (<em>List</em><em>[</em><a class="reference internal" href="sttp.transport.html#sttp.transport.measurement.Measurement" title="sttp.transport.measurement.Measurement"><em>Measurement</em></a><em>]</em>) – List of measurements to publish</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">port</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ipv6</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.publisher.Publisher.start" title="Link to this definition"></a></dt>
+<dd><p>Starts the publisher listening on the specified port.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>port</strong> (<em>int</em>) – TCP port number to listen on</p></li>
+<li><p><strong>ipv6</strong> (<em>bool</em><em>, </em><em>optional</em>) – Set to True to use IPv6, False for IPv4 (default)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.started">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">started</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#sttp.publisher.Publisher.started" title="Link to this definition"></a></dt>
+<dd><p>Gets flag that determines if <cite>Publisher</cite> is currently started and listening for connections.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.statusmessage_logger">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">statusmessage_logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#sttp.publisher.Publisher.statusmessage_logger" title="Link to this definition"></a></dt>
+<dd><p>Gets or sets a function to handle status messages.</p>
+<p>Signature: <cite>def statusmessage_logger(message: str)</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="sttp.publisher.Publisher.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/publisher.html#Publisher.stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.publisher.Publisher.stop" title="Link to this definition"></a></dt>
+<dd><p>Stops the publisher and disconnects all clients.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="module-sttp.reader">
 <span id="sttp-reader-module"></span><h2>sttp.reader module<a class="headerlink" href="#module-sttp.reader" title="Link to this heading"></a></h2>
 <dl class="py class">
@@ -1537,22 +1724,22 @@ class found in the <cite>transport</cite> namespace. Internally, the <cite>Subsc
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_LAGTIME">
-<span class="sig-name descname"><span class="pre">DEFAULT_LAGTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10.0</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_LAGTIME" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_LAGTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(10.0)</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_LAGTIME" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_LEADTIME">
-<span class="sig-name descname"><span class="pre">DEFAULT_LEADTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5.0</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_LEADTIME" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_LEADTIME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(5.0)</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_LEADTIME" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_PROCESSINGINTERVAL">
-<span class="sig-name descname"><span class="pre">DEFAULT_PROCESSINGINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">-1</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_PROCESSINGINTERVAL" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_PROCESSINGINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int32(-1)</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_PROCESSINGINTERVAL" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_PUBLISHINTERVAL">
-<span class="sig-name descname"><span class="pre">DEFAULT_PUBLISHINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1.0</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_PUBLISHINTERVAL" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_PUBLISHINTERVAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.float64(1.0)</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_PUBLISHINTERVAL" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -1582,7 +1769,7 @@ class found in the <cite>transport</cite> namespace. Internally, the <cite>Subsc
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.settings.Settings.DEFAULT_UDPPORT">
-<span class="sig-name descname"><span class="pre">DEFAULT_UDPPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_UDPPORT" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">DEFAULT_UDPPORT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint16(0)</span></em><a class="headerlink" href="#sttp.settings.Settings.DEFAULT_UDPPORT" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -2011,61 +2198,61 @@ Bit 64 (0x8000000000000000) is used to denote leap second, i.e., second 60, wher
 Bit 63 (0x4000000000000000) is used to denote leap second direction, 0 for add, 1 for delete.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.LEAPSECOND_DIRECTION">
-<span class="sig-name descname"><span class="pre">LEAPSECOND_DIRECTION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4611686018427387904</span></em><a class="headerlink" href="#sttp.ticks.Ticks.LEAPSECOND_DIRECTION" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">LEAPSECOND_DIRECTION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(4611686018427387904)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.LEAPSECOND_DIRECTION" title="Link to this definition"></a></dt>
 <dd><p>Flag (63rd bit) that indicates if leap second is positive or negative; 0 for add, 1 for delete.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.LEAPSECOND_FLAG">
-<span class="sig-name descname"><span class="pre">LEAPSECOND_FLAG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9223372036854775808</span></em><a class="headerlink" href="#sttp.ticks.Ticks.LEAPSECOND_FLAG" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">LEAPSECOND_FLAG</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(9223372036854775808)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.LEAPSECOND_FLAG" title="Link to this definition"></a></dt>
 <dd><p>Flag (64th bit) that marks a Ticks value as a leap second, i.e., second 60 (one beyond normal second 59).</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.PERDAY">
-<span class="sig-name descname"><span class="pre">PERDAY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">864000000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERDAY" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PERDAY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(864000000000)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERDAY" title="Link to this definition"></a></dt>
 <dd><p>Number of Ticks that occur in a day.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.PERHOUR">
-<span class="sig-name descname"><span class="pre">PERHOUR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">36000000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERHOUR" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PERHOUR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(36000000000)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERHOUR" title="Link to this definition"></a></dt>
 <dd><p>Number of Ticks that occur in an hour.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.PERMICROSECOND">
-<span class="sig-name descname"><span class="pre">PERMICROSECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMICROSECOND" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PERMICROSECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(10)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMICROSECOND" title="Link to this definition"></a></dt>
 <dd><p>Number of Ticks that occur in a microsecond.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.PERMILLISECOND">
-<span class="sig-name descname"><span class="pre">PERMILLISECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMILLISECOND" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PERMILLISECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(10000)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMILLISECOND" title="Link to this definition"></a></dt>
 <dd><p>Number of Ticks that occur in a millisecond.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.PERMINUTE">
-<span class="sig-name descname"><span class="pre">PERMINUTE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">600000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMINUTE" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PERMINUTE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(600000000)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERMINUTE" title="Link to this definition"></a></dt>
 <dd><p>Number of Ticks that occur in a minute.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.PERSECOND">
-<span class="sig-name descname"><span class="pre">PERSECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERSECOND" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">PERSECOND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(10000000)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.PERSECOND" title="Link to this definition"></a></dt>
 <dd><p>Number of Ticks that occur in a second.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.UNIXBASEOFFSET">
-<span class="sig-name descname"><span class="pre">UNIXBASEOFFSET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">621355968000000000</span></em><a class="headerlink" href="#sttp.ticks.Ticks.UNIXBASEOFFSET" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">UNIXBASEOFFSET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(621355968000000000)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.UNIXBASEOFFSET" title="Link to this definition"></a></dt>
 <dd><p>Ticks representation of the Unix epoch timestamp starting at January 1, 1970.</p>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.ticks.Ticks.VALUEMASK">
-<span class="sig-name descname"><span class="pre">VALUEMASK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4611686018427387903</span></em><a class="headerlink" href="#sttp.ticks.Ticks.VALUEMASK" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">VALUEMASK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.uint64(4611686018427387903)</span></em><a class="headerlink" href="#sttp.ticks.Ticks.VALUEMASK" title="Link to this definition"></a></dt>
 <dd><p>All bits (bits 1 to 62) that make up the value portion of a Ticks that represent time.</p>
 </dd></dl>
 
