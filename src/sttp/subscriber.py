@@ -154,6 +154,227 @@ class Subscriber:
 
         return self._datasubscriber.total_measurementsreceived
 
+    @property
+    def statusmessage_logger(self) -> Optional[Callable[[str], None]]:
+        """
+        Gets or sets a function to handle status messages.
+        
+        Signature: `def statusmessage_logger(message: str)`
+        """
+        return self._statusmessage_logger
+
+    @statusmessage_logger.setter
+    def statusmessage_logger(self, value: Optional[Callable[[str], None]]):
+        """
+        Defines the callback that handles informational message logging.
+        Assignment will take effect immediately, even while subscription is active.
+        Prefer using property setter over `set_statusmessage_logger` method.
+        """
+        self._statusmessage_logger = value
+
+    @property
+    def errormessage_logger(self) -> Optional[Callable[[str], None]]:
+        """
+        Gets or sets a function to handle error messages.
+        
+        Signature: `def errormessage_logger(message: str)`
+        """
+        return self._errormessage_logger
+
+    @errormessage_logger.setter
+    def errormessage_logger(self, value: Optional[Callable[[str], None]]):
+        """
+        Defines the callback that handles error message logging.
+        Assignment will take effect immediately, even while subscription is active.
+        Prefer using property setter over `set_errormessage_logger` method.
+        """
+        self._errormessage_logger = value
+
+    @property
+    def metadatanotification_receiver(self) -> Optional[Callable[[DataSet], None]]:
+        """
+        Gets or sets a function to handle metadata received notifications.
+        
+        Signature: `def metadatanotification_receiver(metadata: DataSet)`
+        """
+        return self._metadatanotification_receiver
+
+    @metadatanotification_receiver.setter
+    def metadatanotification_receiver(self, value: Optional[Callable[[DataSet], None]]):
+        """
+        Defines the callback that handles reception of the metadata received notification response.
+        Receiver parameter defines full XML response received from publisher.
+        Parsed metadata available via `Subscriber.metadatacache` property.
+        Assignment will take effect immediately, even while subscription is active.
+        Prefer using property setter over `set_metadatanotification_receiver` method.
+        """
+        self._metadatanotification_receiver = value
+
+    @property
+    def subscriptionupdated_receiver(self) -> Optional[Callable[[SignalIndexCache], None]]:
+        """
+        Gets or sets a function to handle subscription updated notifications.
+        
+        Signature: `def subscriptionupdated_receiver(signalindexcache: SignalIndexCache)`
+        """
+        return self._datasubscriber.subscriptionupdated_callback
+
+    @subscriptionupdated_receiver.setter
+    def subscriptionupdated_receiver(self, value: Optional[Callable[[SignalIndexCache], None]]):
+        """
+        Defines the callback that handles notifications that a new `SignalIndexCache` has been received.
+        Assignment will take effect immediately, even while subscription is active.
+        Prefer using property setter over `set_subscriptionupdated_receiver` method.
+        """
+        self._datasubscriber.subscriptionupdated_callback = value
+
+    @property
+    def data_starttime_receiver(self) -> Optional[Callable[[np.int64], None]]:
+        """
+        Gets or sets a function to handle data start time notifications.
+        
+        Signature: `def data_starttime_receiver(starttime: np.int64)`
+        """
+        return self._data_starttime_receiver
+
+    @data_starttime_receiver.setter
+    def data_starttime_receiver(self, value: Optional[Callable[[np.int64], None]]):
+        """
+        Defines the callback that handles notification of first received measurement.
+        Assignment will take effect immediately, even while subscription is active.
+        Prefer using property setter over `set_data_starttime_receiver` method.
+        """
+        self._data_starttime_receiver = value
+
+    @property
+    def configurationchanged_receiver(self) -> Optional[Callable[[], None]]:
+        """
+        Gets or sets a function to handle configuration changed notifications.
+        
+        Signature: `def configurationchanged_receiver()`
+        """
+        return self._configurationchanged_receiver
+
+    @configurationchanged_receiver.setter
+    def configurationchanged_receiver(self, value: Optional[Callable[[], None]]):
+        """
+        Defines the callback that handles notifications that the data publisher configuration has changed.
+        Assignment will take effect immediately, even while subscription is active.
+        Prefer using property setter over `set_configurationchanged_receiver` method.
+        """
+        self._configurationchanged_receiver = value
+
+    @property
+    def newmeasurements_receiver(self) -> Optional[Callable[[List[Measurement]], None]]:
+        """
+        Gets or sets a function to handle new measurements.
+        
+        Signature: `def newmeasurements_receiver(measurements: List[Measurement])`
+        """
+        return self._datasubscriber.newmeasurements_callback
+
+    @newmeasurements_receiver.setter
+    def newmeasurements_receiver(self, value: Optional[Callable[[List[Measurement]], None]]):
+        """
+        Defines the callback that handles reception of new measurements.
+        Assignment will take effect immediately, even while subscription is active.
+        Prefer using property setter over `set_newmeasurements_receiver` method.
+        """
+        self._datasubscriber.newmeasurements_callback = value
+
+    @property
+    def newbufferblock_receiver(self) -> Optional[Callable[[List[BufferBlock]], None]]:
+        """
+        Gets or sets a function to handle new buffer blocks.
+        
+        Signature: `def newbufferblock_receiver(bufferblocks: List[BufferBlock])`
+        """
+        return self._datasubscriber.newbufferblocks_callback
+
+    @newbufferblock_receiver.setter
+    def newbufferblock_receiver(self, value: Optional[Callable[[List[BufferBlock]], None]]):
+        """
+        Defines the callback that handles reception of new buffer blocks.
+        Assignment will take effect immediately, even while subscription is active.
+        Prefer using property setter over `set_newbufferblock_receiver` method.
+        """
+        self._datasubscriber.newbufferblocks_callback = value
+
+    @property
+    def notification_receiver(self) -> Optional[Callable[[str], None]]:
+        """
+        Gets or sets a function to handle notifications.
+        
+        Signature: `def notification_receiver(notification: str)`
+        """
+        return self._datasubscriber.notificationreceived_callback
+
+    @notification_receiver.setter
+    def notification_receiver(self, value: Optional[Callable[[str], None]]):
+        """
+        Defines the callback that handles reception of a notification.
+        Assignment will take effect immediately, even while subscription is active.
+        Prefer using property setter over `set_notification_receiver` method.
+        """
+        self._datasubscriber.notificationreceived_callback = value
+
+    @property
+    def historicalreadcomplete_receiver(self) -> Optional[Callable[[], None]]:
+        """
+        Gets or sets a function to handle historical read complete notifications.
+        
+        Signature: `def historicalreadcomplete_receiver()`
+        """
+        return self._historicalreadcomplete_receiver
+
+    @historicalreadcomplete_receiver.setter
+    def historicalreadcomplete_receiver(self, value: Optional[Callable[[], None]]):
+        """
+        Defines the callback that handles notification that temporal processing has completed, i.e.,
+        the end of a historical playback data stream has been reached.
+        Assignment will take effect immediately, even while subscription is active.
+        Prefer using property setter over `set_historicalreadcomplete_receiver` method.
+        """
+        self._historicalreadcomplete_receiver = value
+
+    @property
+    def connectionestablished_receiver(self) -> Optional[Callable[[], None]]:
+        """
+        Gets or sets a function to handle connection established notifications.
+        
+        Signature: `def connectionestablished_receiver()`
+        """
+        return self._connectionestablished_receiver
+
+    @connectionestablished_receiver.setter
+    def connectionestablished_receiver(self, value: Optional[Callable[[], None]]):
+        """
+        Defines the callback that handles notification that a connection has been established.
+        Default implementation simply writes connection feedback to status message handler.
+        Assignment will take effect immediately, even while subscription is active.
+        Prefer using property setter over `set_connectionestablished_receiver` method.
+        """
+        self._connectionestablished_receiver = value
+
+    @property
+    def connectionterminated_receiver(self) -> Optional[Callable[[], None]]:
+        """
+        Gets or sets a function to handle connection terminated notifications.
+        
+        Signature: `def connectionterminated_receiver()`
+        """
+        return self._connectionterminated_receiver
+
+    @connectionterminated_receiver.setter
+    def connectionterminated_receiver(self, value: Optional[Callable[[], None]]):
+        """
+        Defines the callback that handles notification that a connection has been terminated.
+        Default implementation simply writes connection terminated feedback to error message handler.
+        Assignment will take effect immediately, even while subscription is active.
+        Prefer using property setter over `set_connectionterminated_receiver` method.
+        """
+        self._connectionterminated_receiver = value
+
     def measurement_metadata(self, measurement: Measurement) -> MeasurementRecord:
         """
         Gets the `MeasurementRecord` for the specified measurement, based on its signal ID,
@@ -513,6 +734,9 @@ class Subscriber:
         """
         Defines the callback that handles informational message logging.
         Assignment will take effect immediately, even while subscription is active.
+        
+        .. deprecated::
+            Prefer using `statusmessage_logger` property setter for consistency with Publisher API.
         """
 
         self._statusmessage_logger = callback
@@ -521,6 +745,9 @@ class Subscriber:
         """
         Defines the callback that handles error message logging.
         Assignment will take effect immediately, even while subscription is active.
+        
+        .. deprecated::
+            Prefer using `errormessage_logger` property setter for consistency with Publisher API.
         """
 
         self._errormessage_logger = callback
@@ -531,6 +758,9 @@ class Subscriber:
         Receiver parameter defines full XML response received from publisher.
         Parsed metadata available via `Subscriber.metadatacache` property.
         Assignment will take effect immediately, even while subscription is active.
+        
+        .. deprecated::
+            Prefer using `metadatanotification_receiver` property setter for consistency with Publisher API.
         """
 
         self._metadatanotification_receiver = callback
@@ -539,6 +769,9 @@ class Subscriber:
         """
         Defines the callback that handles notifications that a new `SignalIndexCache` has been received.
         Assignment will take effect immediately, even while subscription is active.
+        
+        .. deprecated::
+            Prefer using `subscriptionupdated_receiver` property setter for consistency with Publisher API.
         """
 
         self._datasubscriber.subscriptionupdated_callback = callback
@@ -547,6 +780,9 @@ class Subscriber:
         """
         Defines the callback that handles notification of first received measurement.
         Assignment will take effect immediately, even while subscription is active.
+        
+        .. deprecated::
+            Prefer using `data_starttime_receiver` property setter for consistency with Publisher API.
         """
 
         self._data_starttime_receiver = callback
@@ -555,6 +791,9 @@ class Subscriber:
         """
         Defines the callback that handles notifications that the data publisher configuration has changed.
         Assignment will take effect immediately, even while subscription is active.
+        
+        .. deprecated::
+            Prefer using `configurationchanged_receiver` property setter for consistency with Publisher API.
         """
 
         self._configurationchanged_receiver = callback
@@ -563,6 +802,9 @@ class Subscriber:
         """
         Defines the callback that handles reception of new measurements.
         Assignment will take effect immediately, even while subscription is active.
+        
+        .. deprecated::
+            Prefer using `newmeasurements_receiver` property setter for consistency with Publisher API.
         """
 
         self._datasubscriber.newmeasurements_callback = callback
@@ -571,6 +813,9 @@ class Subscriber:
         """
         Defines the callback that handles reception of new buffer blocks.
         Assignment will take effect immediately, even while subscription is active.
+        
+        .. deprecated::
+            Prefer using `newbufferblock_receiver` property setter for consistency with Publisher API.
         """
 
         self._datasubscriber.newbufferblocks_callback = callback
@@ -579,6 +824,9 @@ class Subscriber:
         """
         Defines the callback that handles reception of a notification.
         Assignment will take effect immediately, even while subscription is active.
+        
+        .. deprecated::
+            Prefer using `notification_receiver` property setter for consistency with Publisher API.
         """
 
         self._datasubscriber.notificationreceived_callback = callback
@@ -588,6 +836,9 @@ class Subscriber:
         Defines the callback that handles notification that temporal processing has completed, i.e.,
         the end of a historical playback data stream has been reached.
         Assignment will take effect immediately, even while subscription is active.
+        
+        .. deprecated::
+            Prefer using `historicalreadcomplete_receiver` property setter for consistency with Publisher API.
         """
 
         self._historicalreadcomplete_receiver = callback
@@ -597,6 +848,9 @@ class Subscriber:
         Defines the callback that handles notification that a connection has been established.
         Default implementation simply writes connection feedback to status message handler.
         Assignment will take effect immediately, even while subscription is active.
+        
+        .. deprecated::
+            Prefer using `connectionestablished_receiver` property setter for consistency with Publisher API.
         """
 
         self._connectionestablished_receiver = callback
@@ -606,6 +860,9 @@ class Subscriber:
         Defines the callback that handles notification that a connection has been terminated.
         Default implementation simply writes connection terminated feedback to error message handler.
         Assignment will take effect immediately, even while subscription is active.
+        
+        .. deprecated::
+            Prefer using `connectionterminated_receiver` property setter for consistency with Publisher API.
         """
 
         self._connectionterminated_receiver = callback

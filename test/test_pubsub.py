@@ -115,12 +115,12 @@ def test_pubsub():
     def sub_disconnected():
         print(f"[SUB] Connection terminated")
     
-    subscriber.set_statusmessage_logger(sub_status)
-    subscriber.set_errormessage_logger(sub_error)
-    subscriber.set_data_starttime_receiver(sub_data_start)
-    subscriber.set_newmeasurements_receiver(sub_new_measurements)
-    subscriber.set_connectionestablished_receiver(sub_connected)
-    subscriber.set_connectionterminated_receiver(sub_disconnected)
+    subscriber.statusmessage_logger = sub_status
+    subscriber.errormessage_logger = sub_error
+    subscriber.data_starttime_receiver = sub_data_start
+    subscriber.newmeasurements_receiver = sub_new_measurements
+    subscriber.connectionestablished_receiver = sub_connected
+    subscriber.connectionterminated_receiver = sub_disconnected
     
     # Subscribe to measurements
     subscriber.subscribe("FILTER TOP 20 ActiveMeasurements WHERE SignalType <> 'STAT'")

@@ -47,9 +47,9 @@ class AdvancedSubscriber(Subscriber):
         self.settings = Settings()
         self.lastmessage = 0.0
 
-        self.set_subscriptionupdated_receiver(self.subscription_updated)
-        self.set_newmeasurements_receiver(self.new_measurements)
-        self.set_connectionterminated_receiver(self.connection_terminated)
+        self.subscriptionupdated_receiver = self.subscription_updated
+        self.newmeasurements_receiver = self.new_measurements
+        self.connectionterminated_receiver = self.connection_terminated
 
     def subscription_updated(self, signalindexcache: SignalIndexCache):
         self.statusmessage(f"Received signal index cache with {signalindexcache.count:,} mappings")

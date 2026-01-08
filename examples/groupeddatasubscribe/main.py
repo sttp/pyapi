@@ -112,9 +112,9 @@ class GroupedDataSubscriber(Subscriber):
         self._processmissedcount = 0
 
         # Set up event handlers for STTP API
-        self.set_subscriptionupdated_receiver(self._subscription_updated)
-        self.set_newmeasurements_receiver(self._new_measurements)
-        self.set_connectionterminated_receiver(self._connection_terminated)
+        self.subscriptionupdated_receiver = self._subscription_updated
+        self.newmeasurements_receiver = self._new_measurements
+        self.connectionterminated_receiver = self._connection_terminated
 
     @property
     def downsampledcount(self) -> int:

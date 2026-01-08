@@ -21,7 +21,7 @@ def main():
 
     try:
         # Start new data read at each connection
-        subscriber.set_connectionestablished_receiver(
+        subscriber.connectionestablished_receiver = (
             lambda: Thread(target=read_data, args=(subscriber,)).start())
 
         subscriber.subscribe("FILTER TOP 20 ActiveMeasurements WHERE True")
