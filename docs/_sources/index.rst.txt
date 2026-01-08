@@ -10,7 +10,7 @@ Python STTP API documentation
    :maxdepth: 4
    :caption: Contents:
 
-   _apidocs/modules
+   modules
 
 Indices and tables
 ==================

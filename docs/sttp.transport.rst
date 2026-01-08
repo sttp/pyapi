@@ -36,6 +36,14 @@ sttp.transport.constants module
    :undoc-members:
    :show-inheritance:
 
+sttp.transport.datapublisher module
+-----------------------------------
+
+.. automodule:: sttp.transport.datapublisher
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 sttp.transport.datasubscriber module
 ------------------------------------
 
@@ -52,6 +60,14 @@ sttp.transport.measurement module
    :undoc-members:
    :show-inheritance:
 
+sttp.transport.routingtables module
+-----------------------------------
+
+.. automodule:: sttp.transport.routingtables
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 sttp.transport.signalindexcache module
 --------------------------------------
 
@@ -64,6 +80,14 @@ sttp.transport.signalkind module
 --------------------------------
 
 .. automodule:: sttp.transport.signalkind
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+sttp.transport.subscriberconnection module
+------------------------------------------
+
+.. automodule:: sttp.transport.subscriberconnection
    :members:
    :undoc-members:
    :show-inheritance:

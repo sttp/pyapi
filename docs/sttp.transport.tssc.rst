@@ -12,6 +12,14 @@ sttp.transport.tssc.decoder module
    :undoc-members:
    :show-inheritance:
 
+sttp.transport.tssc.encoder module
+----------------------------------
+
+.. automodule:: sttp.transport.tssc.encoder
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 sttp.transport.tssc.pointmetadata module
 ----------------------------------------
 
