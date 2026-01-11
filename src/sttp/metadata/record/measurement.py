@@ -39,7 +39,7 @@ class SignalType(IntEnum):
     """
     Represents common signal types for STTP metadata. This list may
     not be exhaustive for some STTP deployments. If value is set to
-    `UNKN`, check the string based `SignalTypeName` in the `MeasurementRecord`.
+    `UNKN`, check the string based `signalacronym` in the `MeasurementRecord`.
     """
 
     IPHM = 1    # Current phase magnitude
@@ -55,7 +55,7 @@ class SignalType(IntEnum):
     STAT = 11   # Statistic value
     ALRM = 12   # Alarm state
     QUAL = 13   # Quality flags (16-bit)
-    UNKN = -1   # Unknown type, see `SignalTypeName`
+    UNKN = -1   # Unknown type, see `signalacronym`
 
     @classmethod
     def parse(cls, name: str) -> SignalType:
@@ -199,7 +199,7 @@ class MeasurementRecord:
     def signaltype(self) -> SignalType:
         """
         Gets the `SignalType` enumeration for this `MeasurementRecord`, if it can
-        be parsed from `signaltypename`; otherwise, returns `SignalType.UNKN`.
+        be parsed from `signalacronym`; otherwise, returns `SignalType.UNKN`.
         """
 
         return self._signaltype
