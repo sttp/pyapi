@@ -21,6 +21,9 @@
 #
 # ******************************************************************************************************
 
+# pyright: reportArgumentType=false
+# pyright: reportAttributeAccessIssue=false
+# pyright: reportReturnType=false
 # Ported from cppapi/src/lib/transport/SubscriberConnection.cpp : class SubscriberConnection
 # Differences: Python uses socket and threading; otherwise parity maintained.
 
@@ -35,7 +38,7 @@ from .constants import OperationalModes, OperationalEncoding, ServerCommand, Ser
 from .constants import DataPacketFlags, Defaults
 from .tssc.encoder import Encoder as TSSCEncoder
 from ..ticks import Ticks
-from typing import List, Optional, Set, TYPE_CHECKING, Tuple
+from typing import List, Set, TYPE_CHECKING, Tuple
 from uuid import UUID, uuid4
 from threading import Thread, Lock, Timer
 from time import time
@@ -107,7 +110,7 @@ class SubscriberConnection:
         self._is_nan_filtered = parent.is_nan_value_filter_forced if parent else False
         
         # Signal index cache
-        self._signal_index_cache: Optional[SignalIndexCache] = None
+        self._signal_index_cache: SignalIndexCache | None = None
         self._signal_index_cache_lock = Lock()
         
         # TSSC compression
@@ -126,8 +129,8 @@ class SubscriberConnection:
         self._total_measurements_sent = np.uint64(0)
         
         # Threading
-        self._read_thread: Optional[Thread] = None
-        self._ping_timer: Optional[Timer] = None
+        self._read_thread: Thread | None = None
+        self._ping_timer: Timer | None = None
         self._write_lock = Lock()
         
         # Cipher keys (for encrypted data channel - simplified for initial implementation)
@@ -155,11 +158,6 @@ class SubscriberConnection:
     def instance_id(self) -> UUID:
         """Gets the instance UUID."""
         return self._instance_id
-    
-    @property
-    def connection_id(self) -> str:
-        """Gets the connection identification string."""
-        return self._connection_id
     
     @property
     def hostname(self) -> str:
@@ -217,7 +215,7 @@ class SubscriberConnection:
         return self._using_payload_compression
     
     @property
-    def signal_index_cache(self) -> Optional[SignalIndexCache]:
+    def signal_index_cache(self) -> SignalIndexCache | None:
         """Gets the signal index cache."""
         with self._signal_index_cache_lock:
             return self._signal_index_cache
@@ -279,7 +277,7 @@ class SubscriberConnection:
         def _ping():
             if not self._stopped:
                 try:
-                    self.send_response(ServerResponse.NODATA, ServerCommand.SUBSCRIBE)
+                    self.send_response(ServerResponse.NOOP, ServerCommand.SUBSCRIBE)
                 except:
                     pass
                 self._ping_timer = Timer(5.0, _ping)
@@ -380,8 +378,8 @@ class SubscriberConnection:
                 f"Error handling command 0x{command:02X} from {self._connection_id}: {ex}"
             )
     
-    def send_response(self, response_code: np.uint8, command_code: np.uint8, 
-                      data: Optional[bytes] = None, message: Optional[str] = None) -> bool:
+    def send_response(self, response_code: ServerResponse, command_code: ServerCommand, 
+                      data: bytes | bytearray | None = None, message: str | None = None) -> bool:
         """Sends a response to the subscriber."""
         try:
             # Build response packet
@@ -397,8 +395,8 @@ class SubscriberConnection:
             # Followed by payload data
             
             packet = bytearray()
-            packet.append(response_code)
-            packet.append(command_code)
+            packet.append(np.uint8(response_code))
+            packet.append(np.uint8(command_code))
             packet.extend(BigEndian.from_uint32(len(data)))
             packet.extend(data)
             
@@ -474,7 +472,7 @@ class SubscriberConnection:
             
             # Read connection string
             if len(data) < offset + connection_string_length:
-                self._handle_subscribe_failure(f"Insufficient data for connection string")
+                self._handle_subscribe_failure("Insufficient data for connection string")
                 return
                 
             connection_string_bytes = data[offset:offset+connection_string_length]
@@ -645,7 +643,7 @@ class SubscriberConnection:
             modes = BigEndian.to_uint32(data)
             version = np.uint8(modes & OperationalModes.PRESTANDARDVERSIONMASK)
             
-            # Validate version (support versions 1-3 like C++ implementation)
+            # Validate version (1-3 are pre-standard versions supported)
             if version < 1 or version > 3:
                 message = f"Client connection rejected: requested protocol version {version} not supported. This STTP data publisher implementation only supports version 1 to 3 of the protocol."
                 self._parent._dispatch_error_message(
@@ -683,8 +681,10 @@ class SubscriberConnection:
             self.send_response(ServerResponse.SUCCEEDED, ServerCommand.DEFINEOPERATIONALMODES,
                              message=message)
             
+            flags_display = self._format_operational_modes(modes)
+
             self._parent._dispatch_status_message(
-                f"{self._connection_id} STTP v{version} operational modes set: 0x{modes:08X}"
+                f"{self._connection_id} STTP v{version} operational modes set: 0x{modes:08X} ({flags_display})"
             )
         except Exception as ex:
             self.send_response(ServerResponse.FAILED, ServerCommand.DEFINEOPERATIONALMODES,
@@ -878,12 +878,7 @@ class SubscriberConnection:
     # Helper methods
     
     def _parse_subscription_request(self, filter_expression: str) -> Set[UUID]:
-        """
-        Parses a subscription filter expression and returns matching signal IDs.
-        
-        Matches C++ SubscriberConnection::ParseSubscriptionRequest which filters
-        from m_filteringMetadata (ActiveMeasurements table).
-        """
+        """Parses a subscription filter expression and returns matching signal IDs."""
         signal_ids = set()
         
         try:
@@ -1025,3 +1020,43 @@ class SubscriberConnection:
             return data.decode('utf-16-be')
         else:
             return data.decode('utf-8')
+    
+    def _format_operational_modes(self, modes: np.uint32) -> str:
+        """Formats operational modes as a comma-separated list of flag names."""
+        flags = []
+        
+        # Check individual flags
+        if modes & OperationalModes.COMPRESSPAYLOADDATA:
+            flags.append('COMPRESSPAYLOADDATA')
+        if modes & OperationalModes.COMPRESSSIGNALINDEXCACHE:
+            flags.append('COMPRESSSIGNALINDEXCACHE')
+        if modes & OperationalModes.COMPRESSMETADATA:
+            flags.append('COMPRESSMETADATA')
+        if modes & OperationalModes.RECEIVEEXTERNALMETADATA:
+            flags.append('RECEIVEEXTERNALMETADATA')
+        if modes & OperationalModes.RECEIVEINTERNALMETADATA:
+            flags.append('RECEIVEINTERNALMETADATA')
+        
+        # Get version from mask (use PRESTANDARDVERSIONMASK for compatibility)
+        version = int(modes) & int(OperationalModes.PRESTANDARDVERSIONMASK)
+        
+        if version:
+            flags.append(f'VERSION={version}')
+        
+        # Get encoding from mask
+        encoding = int(modes) & int(OperationalModes.ENCODINGMASK)
+
+        if encoding == OperationalEncoding.UTF8:
+            flags.append('UTF8')
+        elif encoding == OperationalEncoding.UTF16LE:
+            flags.append('UTF16LE')
+        elif encoding == OperationalEncoding.UTF16BE:
+            flags.append('UTF16BE')
+        
+        # Get implementation extension if any
+        extension = (int(modes) & int(OperationalModes.IMPLEMENTATIONSPECIFICEXTENSIONMASK)) >> 16
+
+        if extension:
+            flags.append(f'EXTENSION=0x{extension:02X}')
+        
+        return ', '.join(flags) if flags else 'NOFLAGS'

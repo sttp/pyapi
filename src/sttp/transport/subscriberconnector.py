@@ -21,10 +21,12 @@
 #
 # ******************************************************************************************************
 
+# pyright: reportArgumentType=false
+
 from __future__ import annotations
 from gsf import Empty
 from .constants import ConnectStatus
-from typing import List, Callable, Optional, TYPE_CHECKING
+from typing import List, Callable, TYPE_CHECKING
 from threading import Lock, Thread, Event
 from concurrent.futures import ThreadPoolExecutor
 from sys import stderr
@@ -37,11 +39,12 @@ if TYPE_CHECKING:
 
 class SubscriberConnector:
     """
-    Represents a connector that will establish or automatically reestablish a connection from a `sttp.transport.datasubscriber.DataSubscriber` to a `DataPublisher`.
+    Represents a connector that will establish or automatically reestablish a connection from a
+    `DataSubscriber` to a `DataPublisher`.
     """
 
     DEFAULT_ERRORMESSAGE_CALLBACK: Callable[[str], None] = lambda msg: print(msg, file=stderr)
-    DEFAULT_RECONNECT_CALLBACK: Callable[['sttp.transport.datasubscriber.DataSubscriber'], None] = lambda _: ...
+    DEFAULT_RECONNECT_CALLBACK: Callable[[DataSubscriber], None] = lambda _: None
     DEFAULT_HOSTNAME = Empty.STRING
     DEFAULT_PORT = np.uint16(0)
     DEFAULT_MAXRETRIES = np.int32(-1)
@@ -51,7 +54,7 @@ class SubscriberConnector:
 
     def __init__(self,
                  errormessage_callback: Callable[[str], None] = ...,
-                 reconnect_callback: Callable[['sttp.transport.datasubscriber.DataSubscriber'], None] = ...,
+                 reconnect_callback: Callable[[DataSubscriber], None] = ..., 
                  hostname: str = ...,
                  port: np.uint16 = ...,
                  maxretries: np.int32 = ...,
@@ -103,7 +106,7 @@ class SubscriberConnector:
         self._connectattempt = np.int32(0)
         self._connectionrefused = False
         self._cancel = False
-        self._reconnectthread: Optional[Thread] = None
+        self._reconnectthread: Thread | None = None
         self._reconnectthread_mutex = Lock()
         self._waittimer = Event()
         self._waittimer_mutex = Lock()
@@ -118,7 +121,7 @@ class SubscriberConnector:
         self.cancel()
         self._threadpool.shutdown(wait=False)
 
-    def _autoreconnect(self, ds: 'sttp.transport.datasubscriber.DataSubscriber'):
+    def _autoreconnect(self, ds: DataSubscriber):
         if self._cancel or ds.disposing:
             return
 
@@ -138,7 +141,7 @@ class SubscriberConnector:
 
         reconnectthread.start()
 
-    def _run_reconnectthread(self, ds: 'sttp.transport.datasubscriber.DataSubscriber'):
+    def _run_reconnectthread(self, ds: DataSubscriber):
         # Reset connection attempt counter if last attempt was not refused
         if not self._connectionrefused:
             self.reset_connection()
@@ -193,14 +196,14 @@ class SubscriberConnector:
 
         waittimer.wait(retryinterval)
 
-    def connect(self, ds: 'sttp.transport.datasubscriber.DataSubscriber') -> ConnectStatus:
+    def connect(self, ds: DataSubscriber) -> ConnectStatus:
         """
-        Initiates a connection sequence for a `sttp.transport.datasubscriber.DataSubscriber`
+        Initiates a connection sequence for a `DataSubscriber`
         """
 
         return ConnectStatus.CANCELED if self._cancel else self._connect(ds, False)
 
-    def _connect(self, ds: 'sttp.transport.datasubscriber.DataSubscriber', autoreconnecting: bool) -> ConnectStatus:
+    def _connect(self, ds: DataSubscriber, autoreconnecting: bool) -> ConnectStatus:
         if self.autoreconnect:
             ds.autoreconnect_callback = lambda: self._autoreconnect(ds)
 

@@ -1,21 +1,23 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>gsf.streamencoder &mdash; sttp/pyapi 0.6.4 documentation</title>
+  <title>gsf.streamencoder &mdash; sttp/pyapi 0.7.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-      <script src="../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
-      <script src="../../_static/documentation_options.js?v=b1f64a84"></script>
-      <script src="../../_static/doctools.js?v=92e14aea"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -41,8 +43,11 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">src</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -92,9 +97,11 @@
 <span class="c1">#</span>
 <span class="c1">#******************************************************************************************************</span>
 
+<span class="c1"># pyright: reportArgumentType=false</span>
+
 <span class="kn">from</span> <span class="nn">.encoding7bit</span> <span class="kn">import</span> <span class="n">Encoding7Bit</span>
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">ByteSize</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Callable</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
@@ -112,7 +119,7 @@
 
     <span class="c1"># Source C# reference: GSF.IO.StreamExtensions</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">read</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">bytes</span><span class="p">],</span> <span class="n">write</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">bytes</span><span class="p">],</span> <span class="nb">int</span><span class="p">],</span> <span class="n">default_byteorder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">byteorder</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">read</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">int</span><span class="p">],</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="nb">bytearray</span><span class="p">],</span> <span class="n">write</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">bytes</span> <span class="o">|</span> <span class="nb">bytearray</span><span class="p">],</span> <span class="nb">int</span><span class="p">],</span> <span class="n">default_byteorder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">byteorder</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -134,7 +141,7 @@
 
 <div class="viewcode-block" id="StreamEncoder.write">
 <a class="viewcode-back" href="../../gsf.html#gsf.streamencoder.StreamEncoder.write">[docs]</a>
-    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_buffer</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source_buffer</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="nb">bytearray</span><span class="p">,</span> <span class="n">offset</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">(</span><span class="n">source_buffer</span><span class="p">[</span><span class="n">offset</span><span class="p">:</span><span class="n">offset</span> <span class="o">+</span> <span class="n">count</span><span class="p">])</span> <span class="o">!=</span> <span class="n">count</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to write </span><span class="si">{</span><span class="n">count</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> bytes to stream&quot;</span><span class="p">)</span>
 
@@ -197,14 +204,14 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_byte</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_write_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">signed</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_write_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">signed</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="c1"># sourcery skip: remove-unnecessary-cast</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">to_bytes</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_default_byteorder</span> <span class="k">if</span> <span class="n">byteorder</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">byteorder</span><span class="p">,</span> <span class="n">signed</span><span class="o">=</span><span class="n">signed</span><span class="p">))</span> <span class="o">!=</span> <span class="n">size</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to write </span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s2">-bytes to stream&quot;</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">size</span>
 
-    <span class="k">def</span> <span class="nf">_read_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_read_int</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dtype</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="c1"># call expects needed bytes to be available in base stream</span>
         <span class="n">buffer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
 
@@ -218,100 +225,100 @@
 
 <div class="viewcode-block" id="StreamEncoder.write_int16">
 <a class="viewcode-back" href="../../gsf.html#gsf.streamencoder.StreamEncoder.write_int16">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_int16</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">write_int16</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_int</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">INT16</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="StreamEncoder.read_int16">
 <a class="viewcode-back" href="../../gsf.html#gsf.streamencoder.StreamEncoder.read_int16">[docs]</a>
-    <span class="k">def</span> <span class="nf">read_int16</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_int</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">INT16</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">),</span> <span class="n">byteorder</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">read_int16</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_read_int</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">INT16</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">),</span> <span class="n">byteorder</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="StreamEncoder.write_uint16">
 <a class="viewcode-back" href="../../gsf.html#gsf.streamencoder.StreamEncoder.write_uint16">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_uint16</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">write_uint16</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_int</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT16</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="StreamEncoder.read_uint16">
 <a class="viewcode-back" href="../../gsf.html#gsf.streamencoder.StreamEncoder.read_uint16">[docs]</a>
-    <span class="k">def</span> <span class="nf">read_uint16</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_int</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT16</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">),</span> <span class="n">byteorder</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">read_uint16</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_read_int</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT16</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">),</span> <span class="n">byteorder</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="StreamEncoder.write_int32">
 <a class="viewcode-back" href="../../gsf.html#gsf.streamencoder.StreamEncoder.write_int32">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_int32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">write_int32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_int</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="StreamEncoder.read_int32">
 <a class="viewcode-back" href="../../gsf.html#gsf.streamencoder.StreamEncoder.read_int32">[docs]</a>
-    <span class="k">def</span> <span class="nf">read_int32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_int</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="n">byteorder</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">read_int32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_read_int</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">INT32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span> <span class="n">byteorder</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="StreamEncoder.write_uint32">
 <a class="viewcode-back" href="../../gsf.html#gsf.streamencoder.StreamEncoder.write_uint32">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_uint32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">write_uint32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_int</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT32</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="StreamEncoder.read_uint32">
 <a class="viewcode-back" href="../../gsf.html#gsf.streamencoder.StreamEncoder.read_uint32">[docs]</a>
-    <span class="k">def</span> <span class="nf">read_uint32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_int</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">),</span> <span class="n">byteorder</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">read_uint32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_read_int</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT32</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">),</span> <span class="n">byteorder</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="StreamEncoder.write_int64">
 <a class="viewcode-back" href="../../gsf.html#gsf.streamencoder.StreamEncoder.write_int64">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_int64</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">write_int64</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_int</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="StreamEncoder.read_int64">
 <a class="viewcode-back" href="../../gsf.html#gsf.streamencoder.StreamEncoder.read_int64">[docs]</a>
-    <span class="k">def</span> <span class="nf">read_int64</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_int</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="n">byteorder</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">read_int64</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_read_int</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">INT64</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">),</span> <span class="n">byteorder</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="StreamEncoder.write_uint64">
 <a class="viewcode-back" href="../../gsf.html#gsf.streamencoder.StreamEncoder.write_uint64">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_uint64</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">write_uint64</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_write_int</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT64</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="StreamEncoder.read_uint64">
 <a class="viewcode-back" href="../../gsf.html#gsf.streamencoder.StreamEncoder.read_uint64">[docs]</a>
-    <span class="k">def</span> <span class="nf">read_uint64</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_read_int</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT64</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">),</span> <span class="n">byteorder</span><span class="p">)</span></div>
+    <span class="k">def</span> <span class="nf">read_uint64</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">byteorder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_read_int</span><span class="p">(</span><span class="n">ByteSize</span><span class="o">.</span><span class="n">UINT64</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">),</span> <span class="n">byteorder</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="StreamEncoder.write7bit_uint32">
 <a class="viewcode-back" href="../../gsf.html#gsf.streamencoder.StreamEncoder.write7bit_uint32">[docs]</a>
     <span class="k">def</span> <span class="nf">write7bit_uint32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">WriteUInt32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_byte</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">write_uint32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_byte</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="StreamEncoder.read7bit_uint32">
 <a class="viewcode-back" href="../../gsf.html#gsf.streamencoder.StreamEncoder.read7bit_uint32">[docs]</a>
     <span class="k">def</span> <span class="nf">read7bit_uint32</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">:</span>
         <span class="c1"># call expects one to five bytes to be available in base stream</span>
-        <span class="k">return</span> <span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">ReadUInt32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">read_byte</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">read_uint32</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">read_byte</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="StreamEncoder.write7bit_uint64">
 <a class="viewcode-back" href="../../gsf.html#gsf.streamencoder.StreamEncoder.write7bit_uint64">[docs]</a>
     <span class="k">def</span> <span class="nf">write7bit_uint64</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">WriteUInt64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_byte</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">write_uint64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">write_byte</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="StreamEncoder.read7bit_uint64">
 <a class="viewcode-back" href="../../gsf.html#gsf.streamencoder.StreamEncoder.read7bit_uint64">[docs]</a>
     <span class="k">def</span> <span class="nf">read7bit_uint64</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">:</span>
         <span class="c1"># call expects one to nine bytes to be available in base stream</span>
-        <span class="k">return</span> <span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">ReadUInt64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">read_byte</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">Encoding7Bit</span><span class="o">.</span><span class="n">read_uint64</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">read_byte</span><span class="p">)</span></div>
 </div>
 
 </pre></div>

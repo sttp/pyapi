@@ -21,6 +21,7 @@
 #
 # ******************************************************************************************************
 
+# pyright: reportArgumentType=false
 # Ported from cppapi/src/lib/transport/DataPublisher.cpp : class DataPublisher
 # Differences: Python uses socket server and threading; otherwise parity maintained.
 
@@ -28,15 +29,10 @@ from ..data.dataset import DataSet
 from ..data.filterexpressionparser import FilterExpressionParser
 from .measurement import Measurement
 from .subscriberconnection import SubscriberConnection
-from sttp.metadata.record.measurement import MeasurementRecord as MetadataMeasurementRecord
-
-
-# Note: MeasurementRecord for filtering is imported from sttp.metadata.record.measurement
-# This provides full measurement metadata, matching C++ MeasurementMetadata
-
+from ..metadata.record.measurement import MeasurementRecord as MetadataMeasurementRecord
 from .routingtables import RoutingTables
-from .constants import SecurityMode
-from typing import List, Optional, Callable, Set
+from .constants import SecurityMode, ServerCommand, ServerResponse
+from typing import List, Callable, Set
 from uuid import UUID, uuid4
 from threading import Thread, RLock
 from concurrent.futures import ThreadPoolExecutor
@@ -72,8 +68,8 @@ class DataPublisher:
         self._reverse_connection = False
         
         # Metadata
-        self._metadata: Optional[DataSet] = None
-        self._filtering_metadata: Optional[DataSet] = None
+        self._metadata: DataSet | None = None
+        self._filtering_metadata: DataSet | None = None
         
         # Connections
         self._subscriber_connections: Set[SubscriberConnection] = set()
@@ -83,25 +79,25 @@ class DataPublisher:
         self._routing_tables = RoutingTables()
         
         # Server socket
-        self._server_socket: Optional[socket.socket] = None
-        self._accept_thread: Optional[Thread] = None
+        self._server_socket: socket.socket | None = None
+        self._accept_thread: Thread | None = None
         self._port = np.uint16(0)
         self._ipv6 = False
         
         # Thread pool for callbacks
         self._callback_executor = ThreadPoolExecutor(max_workers=4)
         self._callback_queue: Queue = Queue()
-        self._callback_thread: Optional[Thread] = None
+        self._callback_thread: Thread | None = None
         
         # Callbacks
-        self.statusmessage_callback: Optional[Callable[[str], None]] = None
-        self.errormessage_callback: Optional[Callable[[str], None]] = None
-        self.clientconnected_callback: Optional[Callable[[SubscriberConnection], None]] = None
-        self.clientdisconnected_callback: Optional[Callable[[SubscriberConnection], None]] = None
-        self.processingintervalchange_callback: Optional[Callable[[SubscriberConnection], None]] = None
-        self.temporalsubscription_requested_callback: Optional[Callable[[SubscriberConnection], None]] = None
-        self.temporalsubscription_canceled_callback: Optional[Callable[[SubscriberConnection], None]] = None
-        self.usercommand_callback: Optional[Callable[[SubscriberConnection, np.uint8, bytes], None]] = None
+        self.statusmessage_callback: Callable[[str], None] | None = None
+        self.errormessage_callback: Callable[[str], None] | None = None
+        self.clientconnected_callback: Callable[[SubscriberConnection], None] | None = None
+        self.clientdisconnected_callback: Callable[[SubscriberConnection], None] | None = None
+        self.processingintervalchange_callback: Callable[[SubscriberConnection], None] | None = None
+        self.temporalsubscription_requested_callback: Callable[[SubscriberConnection], None] | None = None
+        self.temporalsubscription_canceled_callback: Callable[[SubscriberConnection], None] | None = None
+        self.usercommand_callback: Callable[[SubscriberConnection, np.uint8, bytes], None] | None = None
         
         # User data
         self._user_data = None
@@ -123,12 +119,12 @@ class DataPublisher:
         self._node_id = value
     
     @property
-    def metadata(self) -> Optional[DataSet]:
+    def metadata(self) -> DataSet | None:
         """Gets the primary metadata."""
         return self._metadata
     
     @property
-    def filtering_metadata(self) -> Optional[DataSet]:
+    def filtering_metadata(self) -> DataSet | None:
         """Gets the filtering metadata."""
         return self._filtering_metadata
     
@@ -225,7 +221,7 @@ class DataPublisher:
         Builds the ActiveMeasurements filtering metadata table from the source metadata.
         """
         import os
-        from sttp.data.dataset import DataSet
+        from ..data.dataset import DataSet
         from decimal import Decimal
         
         self._metadata = metadata
@@ -461,7 +457,6 @@ class DataPublisher:
         Filters metadata using a filter expression against the MeasurementDetail table.
         
         This is for the publisher application to decide what measurements to publish.
-        Matches C++ DataPublisher::FilterMetadata which filters from m_metadata.
         
         Args:
             filter_expression: Filter expression (e.g., "SignalAcronym <> 'STAT'")
@@ -475,7 +470,7 @@ class DataPublisher:
             if not self._metadata:
                 raise RuntimeError("Cannot filter metadata, no metadata has been defined.")
             
-            # Find MeasurementDetail table from original metadata (matching C++)
+            # Find MeasurementDetail table from original metadata
             measurement_detail = self._metadata.table("MeasurementDetail")
             
             if not measurement_detail:
@@ -495,7 +490,7 @@ class DataPublisher:
             if not filtered_rows:
                 return results
             
-            # Get column indices from MeasurementDetail (matching C++)
+            # Get column indices from MeasurementDetail
             def get_column_index(table, column_name: str) -> int:
                 col = table.column_byname(column_name)
                 if col is None:
@@ -513,9 +508,9 @@ class DataPublisher:
             updated_on_idx = get_column_index(measurement_detail, "UpdatedOn")
             signal_acronym_idx = get_column_index(measurement_detail, "SignalAcronym")
             
-            # Build MeasurementRecord objects from filtered rows (matching C++)
+            # Build MeasurementRecord objects from filtered rows
             for row in filtered_rows:
-                # Skip disabled measurements (matching C++)
+                # Skip disabled measurements
                 if not row[enabled_idx]:
                     continue
                 
@@ -532,7 +527,7 @@ class DataPublisher:
                     except (ValueError, IndexError):
                         numeric_id = 0
                 
-                # Create MeasurementRecord with all metadata fields (matching C++)
+                # Create MeasurementRecord with all metadata fields
                 metadata = MetadataMeasurementRecord(
                     signalid=row[signal_id_idx] if row[signal_id_idx] else MetadataMeasurementRecord.DEFAULT_SIGNALID,
                     id=np.uint64(numeric_id),
@@ -545,8 +540,8 @@ class DataPublisher:
                     updatedon=row[updated_on_idx] if row[updated_on_idx] else MetadataMeasurementRecord.DEFAULT_UPDATEDON
                 )
                 
-                # Store phasor source index (C++ stores this in metadata->PhasorSourceIndex)
-                metadata.phasor_source_index = int(row[phasor_source_index_idx]) if row[phasor_source_index_idx] else 0
+                # Store phasor source index
+                metadata.phasorsourceindex = int(row[phasor_source_index_idx]) if row[phasor_source_index_idx] else 0
                 
                 results.append(metadata)
             
@@ -558,8 +553,6 @@ class DataPublisher:
             self._dispatch_error_message(f"Error filtering metadata: {ex}")
         
         return results
-
-    # Connection management
 
     # Connection management
     

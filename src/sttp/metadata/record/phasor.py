@@ -21,9 +21,11 @@
 #
 # ******************************************************************************************************
 
+# pyright: reportArgumentType=false
+
 from __future__ import annotations
 from gsf import Empty
-from typing import Optional, List, TYPE_CHECKING
+from typing import List, TYPE_CHECKING
 from enum import IntEnum
 from datetime import datetime
 
@@ -69,7 +71,7 @@ class PhasorRecord:
         self._basekv = PhasorRecord.DEFAULT_BASEKV if basekv is ... or basekv == 0 else basekv
         self._updatedon = PhasorRecord.DEFAULT_UPDATEDON if updatedon is ... else updatedon
 
-        self.device: Optional[DeviceRecord] = None
+        self.device: DeviceRecord | None = None
         """
         Defines the associated `DeviceRecord` for this `PhasorRecord`.
         """
@@ -144,7 +146,7 @@ class PhasorRecord:
         return self._updatedon
 
     @property
-    def angle_measurement(self) -> Optional[MeasurementRecord]:
+    def angle_measurement(self) -> MeasurementRecord | None:
         """
         Gets the associated angle `MeasurementRecord`, or `None` if not available.
         """
@@ -153,7 +155,7 @@ class PhasorRecord:
             self.measurements[CompositePhasorMeasurement.ANGLE]
 
     @property
-    def magnitude_measurement(self) -> Optional[MeasurementRecord]:
+    def magnitude_measurement(self) -> MeasurementRecord | None:
         """
         Gets the associated magnitude `MeasurementRecord`, or `None` if not available.
         """

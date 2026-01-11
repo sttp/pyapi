@@ -107,7 +107,7 @@ class SignalKindEnum:
         return ["PA", "PM", "FQ", "DF", "SF", "DV", "AV", "CV", "ST", "AL", "QF", "??"][signalkind]
 
     @staticmethod
-    def signaltype(signalkind: SignalKind, phasortype: str = ...) -> str:
+    def signaltype(signalkind: SignalKind, phasortype: str | None = None) -> str:
         """
         Gets the specific four-character signal type acronym for a 'SignalKind'
         enumeration value and phasor type, i.e., "V" voltage or "I" current.
@@ -121,12 +121,12 @@ class SignalKindEnum:
         if signalkind < SignalKind.ANGLE or signalkind > SignalKind.UNKNOWN:
             signalkind = SignalKind.UNKNOWN
 
-        phasortype = "?" if phasortype is ... else phasortype.upper()
+        phasortype = "?" if phasortype is None else phasortype.upper()
 
         return [f"{phasortype}PHA", f"{phasortype}PHM", "FREQ", "DFDT", "FLAG", "DIGI", "ALOG", "CALC", "STAT", "ALRM", "QUAL", "NULL"][signalkind]
 
     @staticmethod
-    def parse_acronym(acronym: str) -> SignalKind:  # sourcery skip: assign-if-exp, reintroduce-else
+    def parse_acronym(acronym: str) -> SignalKind:
         """
         Gets the `SignalKind` enumeration value for the specified two-character acronym.
         """
@@ -134,36 +134,36 @@ class SignalKindEnum:
         acronym = acronym.strip().upper()
 
         if acronym == "PA":  # Phase Angle
-            return SignalKind.Angle
+            return SignalKind.ANGLE
 
         if acronym == "PM":  # Phase Magnitude
-            return SignalKind.Magnitude
+            return SignalKind.MAGNITUDE
 
         if acronym == "FQ":  # Frequency
-            return SignalKind.Frequency
+            return SignalKind.FREQUENCY
 
         if acronym == "DF":  # dF/dt
-            return SignalKind.DfDt
+            return SignalKind.DFDT
 
         if acronym == "SF":  # Status Flags
-            return SignalKind.Status
+            return SignalKind.STATUS
 
         if acronym == "DV":  # Digital Value
-            return SignalKind.Digital
+            return SignalKind.DIGITAL
 
         if acronym == "AV":  # Analog Value
-            return SignalKind.Analog
+            return SignalKind.ANALOG
 
         if acronym == "CV":  # Calculated Value
-            return SignalKind.Calculation
+            return SignalKind.CALCULATION
 
         if acronym == "ST":  # Statistical Value
-            return SignalKind.Statistic
+            return SignalKind.STATISTIC
 
         if acronym == "AL":  # Alarm Value
-            return SignalKind.Alarm
+            return SignalKind.ALARM
 
         if acronym == "QF":  # Quality Flags
-            return SignalKind.Quality
+            return SignalKind.QUALITY
 
-        return SignalKind.Unknown
+        return SignalKind.UNKNOWN

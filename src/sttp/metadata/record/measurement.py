@@ -21,9 +21,11 @@
 #
 # ******************************************************************************************************
 
+# pyright: reportArgumentType=false
+
 from __future__ import annotations
 from gsf import Empty
-from typing import Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 from enum import IntEnum
 from datetime import datetime
 from uuid import UUID
@@ -57,7 +59,7 @@ class SignalType(IntEnum):
 
     @classmethod
     def parse(cls, name: str) -> SignalType:
-        return getattr(cls, name.upper(), None)
+        return getattr(cls, name.upper(), cls.UNKN)
 
 
 class MeasurementRecord:
@@ -117,13 +119,18 @@ class MeasurementRecord:
         self._description = MeasurementRecord.DEFAULT_DESCRIPTION if description is ... else description
         self._updatedOn = MeasurementRecord.DEFAULT_UPDATEDON if updatedon is ... else updatedon
 
-        self.device: Optional[DeviceRecord] = None
+        self.phasorsourceindex = 0
+        """
+        Defines any source index for associated phasors in this `MeasurementRecord`.
+        """
+
+        self.device: DeviceRecord | None = None
         """
         Defines the associated `DeviceRecord` for this `MeasurementRecord`.
         Set to `None` if not applicable.
         """
 
-        self.phasor: Optional[PhasorRecord] = None
+        self.phasor: PhasorRecord | None = None
         """
         Defines the associated `PhasorRecord` for this `MeasurementRecord`.
         Set to `None` if not applicable.
@@ -225,3 +232,5 @@ class MeasurementRecord:
         """
 
         return self._updatedOn
+    
+

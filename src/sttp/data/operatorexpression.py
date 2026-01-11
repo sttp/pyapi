@@ -31,7 +31,7 @@ class OperatorExpression(Expression):
     Represents an operator expression.
     """
 
-    def __init__(self, operatortype: ExpressionOperatorType, leftvalue: Expression, rightvalue: Expression):
+    def __init__(self, operatortype: ExpressionOperatorType, leftvalue: Expression, rightvalue: Expression | None):
         self._operatortype = operatortype
         self._leftvalue = leftvalue
         self._rightvalue = rightvalue
@@ -62,7 +62,7 @@ class OperatorExpression(Expression):
         return self._leftvalue
 
     @property
-    def rightvalue(self) -> Expression:
+    def rightvalue(self) -> Expression | None:
         """
         Gets the right value expression for this `OperatorExpression`.
         """

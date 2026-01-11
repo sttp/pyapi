@@ -123,7 +123,7 @@ class Ticks:
         """
         Determines if the deserialized Ticks value represents a leap second, i.e., second 60.
         """
-        return (ticks & Ticks.LEAPSECOND_FLAG) > 0
+        return bool((ticks & Ticks.LEAPSECOND_FLAG) > 0)
 
     @staticmethod
     def set_leapsecond(ticks: np.uint64) -> np.uint64:
@@ -137,7 +137,7 @@ class Ticks:
         """
         Determines if the deserialized Ticks value represents a negative leap second, i.e., checks flag on second 58 to see if second 59 will be missing.
         """
-        return Ticks.is_leapsecond(ticks) and (ticks & Ticks.LEAPSECOND_DIRECTION) > 0
+        return Ticks.is_leapsecond(ticks) and bool((ticks & Ticks.LEAPSECOND_DIRECTION) > 0)
 
     @staticmethod
     def set_negative_leapsecond(ticks: np.uint64) -> np.uint64:

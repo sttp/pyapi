@@ -21,10 +21,13 @@
 #
 # ******************************************************************************************************
 
+# pyright: reportReturnType=false
+
+from __future__ import annotations
 from gsf import Limits
 from gsf.endianorder import NativeEndian
 from .pointmetadata import PointMetadata, CodeWords
-from typing import Dict, Optional, Tuple
+from typing import Dict, Tuple
 import numpy as np
 
 INT32_0 = np.int32(0)
@@ -113,7 +116,7 @@ class Decoder:
         self._prevtimedelta4 = INT64_MAX
 
         self._lastpoint = self._new_pointmetadata()
-        self._points: Dict[np.int32, Optional[PointMetadata]] = {}
+        self._points: Dict[np.int32, PointMetadata | None] = {}
 
         # The number of bits in m_bitStreamCache that are valid. 0 Means the bitstream is empty
         self._bitstreamcount = INT32_0
@@ -146,7 +149,7 @@ class Decoder:
         self._position = 0
         self._lastposition = len(data)
 
-    def try_get_measurement(self) -> Tuple[np.int32, np.int64, np.uint32, np.float32, bool, Optional[Exception]]:  # sourcery skip: low-code-quality
+    def try_get_measurement(self) -> Tuple[np.int32, np.int64, np.uint32, np.float32, bool, Exception | None]:  # sourcery skip: low-code-quality
         if self._position == self._lastposition and self._bitstream_isempty():
             self._clear_bitstream()
             return 0, 0, 0, 0.0, False, None
@@ -228,7 +231,7 @@ class Decoder:
 
         return pointid, timestamp, stateflags, value, True, None
 
-    def _validate_nextcode(self, code: np.int32, nextcode: np.byte) -> Optional[Exception]:
+    def _validate_nextcode(self, code: np.int32, nextcode: np.byte) -> Exception | None:
         if code < np.int32(nextcode):
             message = [
                 f"expecting code >= {nextcode}"
@@ -240,7 +243,7 @@ class Decoder:
 
         return None
 
-    def _decode_pointid(self, code: np.byte, lastpoint: PointMetadata) -> Optional[Exception]:
+    def _decode_pointid(self, code: np.byte, lastpoint: PointMetadata) -> Exception | None:
         if code == CodeWords.POINTIDXOR4:
             lastpoint.prevnextpointid1 = self._read_bits4() ^ lastpoint.prevnextpointid1
         elif code == CodeWords.POINTIDXOR8:
@@ -334,7 +337,7 @@ class Decoder:
 
         return stateFlags
 
-    def _decode_value(self, code: np.byte, nextpoint: PointMetadata) -> Tuple[np.float32, Optional[Exception]]:
+    def _decode_value(self, code: np.byte, nextpoint: PointMetadata) -> Tuple[np.float32, Exception | None]:
         valueraw = UINT32_0
 
         def update_prevvalues(value: np.uint32):

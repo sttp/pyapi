@@ -23,7 +23,7 @@
 
 from gsf import Empty
 from enum import IntEnum
-from typing import Optional, Tuple
+from typing import Tuple
 
 
 class DataType(IntEnum):
@@ -31,77 +31,77 @@ class DataType(IntEnum):
     Enumeration of the possible data types for a `DataColumn`.
     """
 
-    STRING = 0,
+    STRING = 0
     """
     Represents a Python `str` data type.
     """
 
-    BOOLEAN = 1,
+    BOOLEAN = 1
     """
     Represents a Python `bool` data type.
     """
 
-    DATETIME = 2,
+    DATETIME = 2
     """
     Represents a Python `datetime` data type.
     """
 
-    SINGLE = 3,
+    SINGLE = 3
     """
     Represents a Python `numpy.float32` data type.
     """
 
-    DOUBLE = 4,
+    DOUBLE = 4
     """
     Represents a Python `numpy.float64` data type.
     """
 
-    DECIMAL = 5,
+    DECIMAL = 5
     """
     Represents a Python `decimal.Decimal` data type.
     """
 
-    GUID = 6,
+    GUID = 6
     """
     Represents a Python `uuid.UUID` data type.
     """
 
-    INT8 = 7,
+    INT8 = 7
     """
     Represents a Python `numpy.int8` data type.
     """
 
-    INT16 = 8,
+    INT16 = 8
     """
     Represents a Python `numpy.int16` data type.
     """
 
-    INT32 = 9,
+    INT32 = 9
     """
     Represents a Python `numpy.int32` data type.
     """
 
-    INT64 = 10,
+    INT64 = 10
     """
     Represents a Python `numpy.int64` data type.
     """
 
-    UINT8 = 11,
+    UINT8 = 11
     """
     Represents a Python `numpy.uint8` data type.
     """
 
-    UINT16 = 12,
+    UINT16 = 12
     """
     Represents a Python `numpy.uint16` data type.
     """
 
-    UINT32 = 13,
+    UINT32 = 13
     """
     Represents a Python `numpy.uint32` data type.
     """
 
-    UINT64 = 14,
+    UINT64 = 14
     """
     Represents a Python `numpy.uint64` data type.
     """
@@ -141,7 +141,7 @@ def default_datatype(datatype: DataType) -> object:  # sourcery skip: assign-if-
 
     return None
 
-def parse_xsddatatype(xsdtypename: str, extdatatype: Optional[str]) -> Tuple[DataType, bool]:
+def parse_xsddatatype(xsdtypename: str, extdatatype: str | None) -> Tuple[DataType, bool]:
     """
     Gets the `DataType` from the provided XSD data type. Return tuple includes boolean
     value that determines if parse was successful. See XML Schema Language Datatypes

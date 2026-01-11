@@ -30,16 +30,18 @@ import numpy as np
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src')))
 
-from sttp.metadata.record.measurement import SignalType
+from sttp.metadata.record.measurement import SignalType, MeasurementRecord
 from sttp.publisher import Publisher
 from sttp.transport.measurement import Measurement
 from sttp.transport.subscriberconnection import SubscriberConnection
 from sttp.data.dataset import DataSet
 from sttp.ticks import Ticks
+from typing import List
+from threading import Timer as ThreadTimer
 
-publisher = None
-publish_timer = None
-measurements_to_publish = []
+publisher: Publisher | None = None
+publish_timer: ThreadTimer | None = None
+measurements_to_publish: List[MeasurementRecord] = []
 
 
 def run_publisher(port: int) -> bool:
@@ -57,6 +59,7 @@ def run_publisher(port: int) -> bool:
         error_message = str(ex)
     
     if running:
+        assert publisher is not None
         print(f"\nListening on port: {port}...\n")
         
         # Register callbacks
@@ -68,6 +71,7 @@ def run_publisher(port: int) -> bool:
         # Define metadata - use path relative to this script file
         metadata_path = os.path.join(os.path.dirname(__file__), "Metadata.xml")
         dataset, err = DataSet.from_xml(open(metadata_path).read())
+        
         if err is not None:
             print(f"ERROR: Failed to load metadata: {err}")
             return False
@@ -75,8 +79,7 @@ def run_publisher(port: int) -> bool:
         publisher.define_metadata(dataset)
         
         # Filter metadata for measurements to publish from MeasurementDetail table
-        # This matches C++ SimplePublish: FilterMetadata("SignalAcronym <> 'STAT'")
-        measurements_to_publish = publisher.filter_metadata("SignalAcronym <> 'STAT'")
+        measurements_to_publish = publisher.filter_metadata("SignalAcronym <> 'STAT'")  # List[MeasurementRecord]
         
         print(f"Loaded {len(measurements_to_publish)} measurement metadata records for publication.\n")
         
@@ -85,6 +88,7 @@ def run_publisher(port: int) -> bool:
         publish_count = [0]  # Use list to avoid global issues
         
         def publish_data():
+            assert publisher is not None
             global publish_timer
             
             # If metadata can change, the following count should not be static:
@@ -113,11 +117,11 @@ def run_publisher(port: int) -> bool:
             # Publish measurements
             publisher.publish_measurements(measurements)
             
-            # Temporary diagnostic
-            if publish_count[0] % 100 == 1:  # Print every 100 cycles
-                print(f"Published cycle {publish_count[0]}: {len(measurements)} measurements")
-
+            # Feedback diagnostic
             publish_count[0] += 1
+
+            if publish_count[0] % 100 == 0:  # Print every 100 cycles
+                print(f"Published cycle {publish_count[0]}: {len(measurements)} measurements")
             
             # Schedule next publication
             publish_timer = Timer(0.033, publish_data)

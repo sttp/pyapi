@@ -1,25 +1,28 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.tssc package &mdash; sttp/pyapi 0.7.0 documentation</title>
+  <title>sttp.transport.tssc package &mdash; sttp/pyapi 0.7.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-      <script src="_static/jquery.js?v=5d32c60e"></script>
-      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=b1f64a84"></script>
-      <script src="_static/doctools.js?v=92e14aea"></script>
-      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="_static/doctools.js?v=92e14aea"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="sttp.transport package" href="sttp.transport.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,77 +45,32 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"><ul>
-<li><a class="reference internal" href="#">sttp.transport.tssc package</a><ul>
-<li><a class="reference internal" href="#submodules">Submodules</a></li>
-<li><a class="reference internal" href="#module-sttp.transport.tssc.decoder">sttp.transport.tssc.decoder module</a><ul>
-<li><a class="reference internal" href="#sttp.transport.tssc.decoder.Decoder"><code class="docutils literal notranslate"><span class="pre">Decoder</span></code></a><ul>
-<li><a class="reference internal" href="#sttp.transport.tssc.decoder.Decoder.sequencenumber"><code class="docutils literal notranslate"><span class="pre">Decoder.sequencenumber</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.decoder.Decoder.set_buffer"><code class="docutils literal notranslate"><span class="pre">Decoder.set_buffer()</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.decoder.Decoder.try_get_measurement"><code class="docutils literal notranslate"><span class="pre">Decoder.try_get_measurement()</span></code></a></li>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">src</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="gsf.html">gsf package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="sttp.html">sttp package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="sttp.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="sttp.data.html">sttp.data package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.metadata.html">sttp.metadata package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="sttp.transport.html">sttp.transport package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="sttp.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sttp.html#module-sttp.config">sttp.config module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sttp.html#module-sttp.publisher">sttp.publisher module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sttp.html#module-sttp.reader">sttp.reader module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sttp.html#module-sttp.settings">sttp.settings module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sttp.html#module-sttp.subscriber">sttp.subscriber module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sttp.html#module-sttp.ticks">sttp.ticks module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sttp.html#module-sttp.version">sttp.version module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="sttp.html#module-sttp">Module contents</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#module-sttp.transport.tssc.encoder">sttp.transport.tssc.encoder module</a><ul>
-<li><a class="reference internal" href="#sttp.transport.tssc.encoder.Encoder"><code class="docutils literal notranslate"><span class="pre">Encoder</span></code></a><ul>
-<li><a class="reference internal" href="#sttp.transport.tssc.encoder.Encoder.finish_block"><code class="docutils literal notranslate"><span class="pre">Encoder.finish_block()</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.encoder.Encoder.reset"><code class="docutils literal notranslate"><span class="pre">Encoder.reset()</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.encoder.Encoder.set_buffer"><code class="docutils literal notranslate"><span class="pre">Encoder.set_buffer()</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.encoder.Encoder.try_add_measurement"><code class="docutils literal notranslate"><span class="pre">Encoder.try_add_measurement()</span></code></a></li>
 </ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-sttp.transport.tssc.pointmetadata">sttp.transport.tssc.pointmetadata module</a><ul>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords"><code class="docutils literal notranslate"><span class="pre">CodeWords</span></code></a><ul>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.ENDOFSTREAM"><code class="docutils literal notranslate"><span class="pre">CodeWords.ENDOFSTREAM</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR12"><code class="docutils literal notranslate"><span class="pre">CodeWords.POINTIDXOR12</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR16"><code class="docutils literal notranslate"><span class="pre">CodeWords.POINTIDXOR16</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR20"><code class="docutils literal notranslate"><span class="pre">CodeWords.POINTIDXOR20</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR24"><code class="docutils literal notranslate"><span class="pre">CodeWords.POINTIDXOR24</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR32"><code class="docutils literal notranslate"><span class="pre">CodeWords.POINTIDXOR32</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR4"><code class="docutils literal notranslate"><span class="pre">CodeWords.POINTIDXOR4</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR8"><code class="docutils literal notranslate"><span class="pre">CodeWords.POINTIDXOR8</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.STATEFLAGS2"><code class="docutils literal notranslate"><span class="pre">CodeWords.STATEFLAGS2</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.STATEFLAGS7BIT32"><code class="docutils literal notranslate"><span class="pre">CodeWords.STATEFLAGS7BIT32</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA1FORWARD"><code class="docutils literal notranslate"><span class="pre">CodeWords.TIMEDELTA1FORWARD</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA1REVERSE"><code class="docutils literal notranslate"><span class="pre">CodeWords.TIMEDELTA1REVERSE</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA2FORWARD"><code class="docutils literal notranslate"><span class="pre">CodeWords.TIMEDELTA2FORWARD</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA2REVERSE"><code class="docutils literal notranslate"><span class="pre">CodeWords.TIMEDELTA2REVERSE</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA3FORWARD"><code class="docutils literal notranslate"><span class="pre">CodeWords.TIMEDELTA3FORWARD</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA3REVERSE"><code class="docutils literal notranslate"><span class="pre">CodeWords.TIMEDELTA3REVERSE</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA4FORWARD"><code class="docutils literal notranslate"><span class="pre">CodeWords.TIMEDELTA4FORWARD</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA4REVERSE"><code class="docutils literal notranslate"><span class="pre">CodeWords.TIMEDELTA4REVERSE</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMESTAMP2"><code class="docutils literal notranslate"><span class="pre">CodeWords.TIMESTAMP2</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEXOR7BIT"><code class="docutils literal notranslate"><span class="pre">CodeWords.TIMEXOR7BIT</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUE1"><code class="docutils literal notranslate"><span class="pre">CodeWords.VALUE1</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUE2"><code class="docutils literal notranslate"><span class="pre">CodeWords.VALUE2</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUE3"><code class="docutils literal notranslate"><span class="pre">CodeWords.VALUE3</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR12"><code class="docutils literal notranslate"><span class="pre">CodeWords.VALUEXOR12</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR16"><code class="docutils literal notranslate"><span class="pre">CodeWords.VALUEXOR16</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR20"><code class="docutils literal notranslate"><span class="pre">CodeWords.VALUEXOR20</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR24"><code class="docutils literal notranslate"><span class="pre">CodeWords.VALUEXOR24</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR28"><code class="docutils literal notranslate"><span class="pre">CodeWords.VALUEXOR28</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR32"><code class="docutils literal notranslate"><span class="pre">CodeWords.VALUEXOR32</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR4"><code class="docutils literal notranslate"><span class="pre">CodeWords.VALUEXOR4</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR8"><code class="docutils literal notranslate"><span class="pre">CodeWords.VALUEXOR8</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEZERO"><code class="docutils literal notranslate"><span class="pre">CodeWords.VALUEZERO</span></code></a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.PointMetadata"><code class="docutils literal notranslate"><span class="pre">PointMetadata</span></code></a><ul>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.PointMetadata.read_code"><code class="docutils literal notranslate"><span class="pre">PointMetadata.read_code()</span></code></a></li>
-<li><a class="reference internal" href="#sttp.transport.tssc.pointmetadata.PointMetadata.write_code"><code class="docutils literal notranslate"><span class="pre">PointMetadata.write_code()</span></code></a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a class="reference internal" href="#module-sttp.transport.tssc">Module contents</a></li>
-</ul>
-</li>
-</ul>
-</div>
+
         </div>
       </div>
     </nav>
@@ -127,6 +85,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">src</a></li>
+          <li class="breadcrumb-item"><a href="sttp.html">sttp package</a></li>
+          <li class="breadcrumb-item"><a href="sttp.transport.html">sttp.transport package</a></li>
       <li class="breadcrumb-item active">sttp.transport.tssc package</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/sttp.transport.tssc.rst.txt" rel="nofollow"> View page source</a>
@@ -146,7 +107,7 @@
 <span id="sttp-transport-tssc-decoder-module"></span><h2>sttp.transport.tssc.decoder module<a class="headerlink" href="#module-sttp.transport.tssc.decoder" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="sttp.transport.tssc.decoder.Decoder">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.tssc.decoder.</span></span><span class="sig-name descname"><span class="pre">Decoder</span></span><a class="reference internal" href="_modules/sttp/transport/tssc/decoder.html#Decoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.tssc.decoder.Decoder" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.tssc.decoder.</span></span><span class="sig-name descname"><span class="pre">Decoder</span></span><a class="reference internal" href="_modules/sttp/transport/tssc/decoder.html#Decoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.tssc.decoder.Decoder" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The decoder for the Time-Series Special Compression (TSSC) algorithm of STTP.</p>
 <dl class="py attribute">
@@ -173,7 +134,7 @@
 <span id="sttp-transport-tssc-encoder-module"></span><h2>sttp.transport.tssc.encoder module<a class="headerlink" href="#module-sttp.transport.tssc.encoder" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="sttp.transport.tssc.encoder.Encoder">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.tssc.encoder.</span></span><span class="sig-name descname"><span class="pre">Encoder</span></span><a class="reference internal" href="_modules/sttp/transport/tssc/encoder.html#Encoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.tssc.encoder.Encoder" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.tssc.encoder.</span></span><span class="sig-name descname"><span class="pre">Encoder</span></span><a class="reference internal" href="_modules/sttp/transport/tssc/encoder.html#Encoder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.tssc.encoder.Encoder" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>The encoder for the Time-Series Special Compression (TSSC) algorithm of STTP.</p>
 <dl class="py method">
@@ -207,173 +168,173 @@
 <span id="sttp-transport-tssc-pointmetadata-module"></span><h2>sttp.transport.tssc.pointmetadata module<a class="headerlink" href="#module-sttp.transport.tssc.pointmetadata" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.tssc.pointmetadata.</span></span><span class="sig-name descname"><span class="pre">CodeWords</span></span><a class="reference internal" href="_modules/sttp/transport/tssc/pointmetadata.html#CodeWords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.tssc.pointmetadata.</span></span><span class="sig-name descname"><span class="pre">CodeWords</span></span><a class="reference internal" href="_modules/sttp/transport/tssc/pointmetadata.html#CodeWords"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.ENDOFSTREAM">
-<span class="sig-name descname"><span class="pre">ENDOFSTREAM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(0)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.ENDOFSTREAM" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">ENDOFSTREAM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.ENDOFSTREAM" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR12">
-<span class="sig-name descname"><span class="pre">POINTIDXOR12</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(3)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR12" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">POINTIDXOR12</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR12" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR16">
-<span class="sig-name descname"><span class="pre">POINTIDXOR16</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(4)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR16" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">POINTIDXOR16</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR16" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR20">
-<span class="sig-name descname"><span class="pre">POINTIDXOR20</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(5)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR20" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">POINTIDXOR20</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR20" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR24">
-<span class="sig-name descname"><span class="pre">POINTIDXOR24</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(6)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR24" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">POINTIDXOR24</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR24" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR32">
-<span class="sig-name descname"><span class="pre">POINTIDXOR32</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(7)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR32" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">POINTIDXOR32</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR32" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR4">
-<span class="sig-name descname"><span class="pre">POINTIDXOR4</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(1)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR4" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">POINTIDXOR4</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR4" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR8">
-<span class="sig-name descname"><span class="pre">POINTIDXOR8</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(2)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR8" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">POINTIDXOR8</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.POINTIDXOR8" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.STATEFLAGS2">
-<span class="sig-name descname"><span class="pre">STATEFLAGS2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(18)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.STATEFLAGS2" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">STATEFLAGS2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">18</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.STATEFLAGS2" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.STATEFLAGS7BIT32">
-<span class="sig-name descname"><span class="pre">STATEFLAGS7BIT32</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(19)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.STATEFLAGS7BIT32" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">STATEFLAGS7BIT32</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">19</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.STATEFLAGS7BIT32" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA1FORWARD">
-<span class="sig-name descname"><span class="pre">TIMEDELTA1FORWARD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(8)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA1FORWARD" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">TIMEDELTA1FORWARD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA1FORWARD" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA1REVERSE">
-<span class="sig-name descname"><span class="pre">TIMEDELTA1REVERSE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(12)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA1REVERSE" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">TIMEDELTA1REVERSE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">12</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA1REVERSE" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA2FORWARD">
-<span class="sig-name descname"><span class="pre">TIMEDELTA2FORWARD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(9)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA2FORWARD" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">TIMEDELTA2FORWARD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA2FORWARD" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA2REVERSE">
-<span class="sig-name descname"><span class="pre">TIMEDELTA2REVERSE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(13)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA2REVERSE" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">TIMEDELTA2REVERSE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">13</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA2REVERSE" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA3FORWARD">
-<span class="sig-name descname"><span class="pre">TIMEDELTA3FORWARD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(10)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA3FORWARD" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">TIMEDELTA3FORWARD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA3FORWARD" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA3REVERSE">
-<span class="sig-name descname"><span class="pre">TIMEDELTA3REVERSE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(14)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA3REVERSE" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">TIMEDELTA3REVERSE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">14</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA3REVERSE" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA4FORWARD">
-<span class="sig-name descname"><span class="pre">TIMEDELTA4FORWARD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(11)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA4FORWARD" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">TIMEDELTA4FORWARD</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">11</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA4FORWARD" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA4REVERSE">
-<span class="sig-name descname"><span class="pre">TIMEDELTA4REVERSE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(15)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA4REVERSE" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">TIMEDELTA4REVERSE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">15</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEDELTA4REVERSE" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.TIMESTAMP2">
-<span class="sig-name descname"><span class="pre">TIMESTAMP2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(16)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMESTAMP2" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">TIMESTAMP2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">16</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMESTAMP2" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.TIMEXOR7BIT">
-<span class="sig-name descname"><span class="pre">TIMEXOR7BIT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(17)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEXOR7BIT" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">TIMEXOR7BIT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">17</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.TIMEXOR7BIT" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.VALUE1">
-<span class="sig-name descname"><span class="pre">VALUE1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(20)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUE1" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">VALUE1</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUE1" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.VALUE2">
-<span class="sig-name descname"><span class="pre">VALUE2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(21)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUE2" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">VALUE2</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">21</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUE2" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.VALUE3">
-<span class="sig-name descname"><span class="pre">VALUE3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(22)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUE3" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">VALUE3</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">22</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUE3" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR12">
-<span class="sig-name descname"><span class="pre">VALUEXOR12</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(26)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR12" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">VALUEXOR12</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">26</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR12" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR16">
-<span class="sig-name descname"><span class="pre">VALUEXOR16</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(27)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR16" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">VALUEXOR16</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">27</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR16" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR20">
-<span class="sig-name descname"><span class="pre">VALUEXOR20</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(28)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR20" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">VALUEXOR20</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">28</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR20" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR24">
-<span class="sig-name descname"><span class="pre">VALUEXOR24</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(29)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR24" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">VALUEXOR24</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">29</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR24" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR28">
-<span class="sig-name descname"><span class="pre">VALUEXOR28</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(30)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR28" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">VALUEXOR28</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">30</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR28" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR32">
-<span class="sig-name descname"><span class="pre">VALUEXOR32</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(31)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR32" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">VALUEXOR32</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">31</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR32" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR4">
-<span class="sig-name descname"><span class="pre">VALUEXOR4</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(24)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR4" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">VALUEXOR4</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">24</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR4" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR8">
-<span class="sig-name descname"><span class="pre">VALUEXOR8</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(25)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR8" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">VALUEXOR8</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">25</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEXOR8" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.CodeWords.VALUEZERO">
-<span class="sig-name descname"><span class="pre">VALUEZERO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">np.int8(23)</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEZERO" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">VALUEZERO</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">23</span></em><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.CodeWords.VALUEZERO" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.PointMetadata">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.tssc.pointmetadata.</span></span><span class="sig-name descname"><span class="pre">PointMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writebits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int32</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int32</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readbit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int32</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readbits5</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int32</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/tssc/pointmetadata.html#PointMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.PointMetadata" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">sttp.transport.tssc.pointmetadata.</span></span><span class="sig-name descname"><span class="pre">PointMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">writebits</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">int32</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int32</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readbit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int32</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">readbits5</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int32</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sttp/transport/tssc/pointmetadata.html#PointMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#sttp.transport.tssc.pointmetadata.PointMetadata" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="sttp.transport.tssc.pointmetadata.PointMetadata.read_code">
@@ -396,7 +357,9 @@
 
            </div>
           </div>
-          <footer>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="sttp.transport.html" class="btn btn-neutral float-left" title="sttp.transport package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
 
   <hr/>
 

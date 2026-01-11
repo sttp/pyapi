@@ -32,13 +32,13 @@ from src.sttp.data.tableidfields import TableIDFields
 from decimal import Decimal
 from uuid import UUID, uuid1
 from datetime import datetime, timezone
-from .test_dataset import TestDataSet
+from test_dataset import TestDataSet
 
 
 class TestExpressionTree(unittest.TestCase):
 
-    def _test_evaluate_literal_expression(self, name: str, expected: object, expr: str = ...):
-        result, err = FilterExpressionParser.evaluate_expression(str(expected) if expr is ... else expr)
+    def _test_evaluate_literal_expression(self, name: str, expected: object, expr: str | None = None):
+        result, err = FilterExpressionParser.evaluate_expression(str(expected) if expr is None else expr)
 
         if err is not None:
             self.fail(f"test_evaluate_{name}_literal_expression: error parsing expression: {err}")
@@ -102,9 +102,11 @@ class TestExpressionTree(unittest.TestCase):
         self._test_evaluate_literal_expression("datetime", Convert.from_str(value, datetime), f"#{value}#")
 
         value = Convert.from_str(datetime.now().isoformat(), datetime)
+        assert isinstance(value, datetime)
         self._test_evaluate_literal_expression("datetime", value, f"#{value.isoformat()}#")
 
         value = Convert.from_str(datetime.now(timezone.utc).isoformat(), datetime)
+        assert isinstance(value, datetime)
         self._test_evaluate_literal_expression("datetime", value, f"#{value.isoformat()}#")
 
     def test_signalidset_expressions(self):
@@ -116,60 +118,72 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_signalidset_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
 
+        assert idset is not None
+
         if len(idset) != 1:
             self.fail(f"test_signalidset_expressions: expected 1 result, received {len(idset)}")
 
         if next(iter(idset)) != freqid:
-            self.fail(f"test_signalidset_expressions: retrieve Guid value does not match source - expected {freqid}, received {idset[0]}")
+            self.fail(f"test_signalidset_expressions: retrieve Guid value does not match source - expected {freqid}, received {next(iter(idset))}")
 
         idset, err = FilterExpressionParser.select_signalidset(dataset, "FILTER ActiveMeasurements WHERE SignalType = 'STAT'", "ActiveMeasurements")
 
         if err is not None:
             self.fail(f"test_signalidset_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
 
+        assert idset is not None
+
         if len(idset) != 1:
             self.fail(f"test_signalidset_expressions: expected 1 result, received {len(idset)}")
 
         if next(iter(idset)) != statid:
-            self.fail(f"test_signalidset_expressions: retrieve Guid value does not match source - expected {statid}, received {idset[0]}")
+            self.fail(f"test_signalidset_expressions: retrieve Guid value does not match source - expected {statid}, received {next(iter(idset))}")
 
         idset, err = FilterExpressionParser.select_signalidset(dataset, str(statid), "ActiveMeasurements")
 
         if err is not None:
             self.fail(f"test_signalidset_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
 
+        assert idset is not None
+
         if len(idset) != 1:
             self.fail(f"test_signalidset_expressions: expected 1 result, received {len(idset)}")
 
         if next(iter(idset)) != statid:
-            self.fail(f"test_signalidset_expressions: retrieve Guid value does not match source - expected {statid}, received {idset[0]}")
+            self.fail(f"test_signalidset_expressions: retrieve Guid value does not match source - expected {statid}, received {next(iter(idset))}")
 
         idset, err = FilterExpressionParser.select_signalidset(dataset, f";;{statid};;;", "ActiveMeasurements")
 
         if err is not None:
             self.fail(f"test_signalidset_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
 
+        assert idset is not None
+
         if len(idset) != 1:
             self.fail(f"test_signalidset_expressions: expected 1 result, received {len(idset)}")
 
         if next(iter(idset)) != statid:
-            self.fail(f"test_signalidset_expressions: retrieve Guid value does not match source - expected {statid}, received {idset[0]}")
+            self.fail(f"test_signalidset_expressions: retrieve Guid value does not match source - expected {statid}, received {next(iter(idset))}")
 
         idset, err = FilterExpressionParser.select_signalidset(dataset, "{" + str(freqid) + "}", "ActiveMeasurements")
 
         if err is not None:
             self.fail(f"test_signalidset_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
 
+        assert idset is not None
+
         if len(idset) != 1:
             self.fail(f"test_signalidset_expressions: expected 1 result, received {len(idset)}")
 
         if next(iter(idset)) != freqid:
-            self.fail(f"test_signalidset_expressions: retrieve Guid value does not match source - expected {freqid}, received {idset[0]}")
+            self.fail(f"test_signalidset_expressions: retrieve Guid value does not match source - expected {freqid}, received {next(iter(idset))}")
 
         idset, err = FilterExpressionParser.select_signalidset(dataset, f"{freqid};{statid};{statid}", "ActiveMeasurements")
 
         if err is not None:
             self.fail(f"test_signalidset_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+        assert idset is not None
 
         if len(idset) != 2:
             self.fail(f"test_signalidset_expressions: expected 1 result, received {len(idset)}")
@@ -182,6 +196,8 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_signalidset_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
 
+        assert idset is not None
+
         if len(idset) != 2:
             self.fail(f"test_signalidset_expressions: expected 1 result, received {len(idset)}")
 
@@ -193,16 +209,20 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_signalidset_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
 
+        assert idset is not None
+
         if len(idset) != 1:
             self.fail(f"test_signalidset_expressions: expected 1 result, received {len(idset)}")
 
         if next(iter(idset)) != freqid:
-            self.fail(f"test_signalidset_expressions: retrieve Guid value does not match source - expected {freqid}, received {idset[0]}")
+            self.fail(f"test_signalidset_expressions: retrieve Guid value does not match source - expected {freqid}, received {next(iter(idset))}")
 
         idset, err = FilterExpressionParser.select_signalidset(dataset, f"FILTER ActiveMeasurements WHERE signalID = '{freqid}' Or SIGNALID = {{{statid}}}", "ActiveMeasurements")
 
         if err is not None:
             self.fail(f"test_signalidset_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+        assert idset is not None
 
         if len(idset) != 2:
             self.fail(f"test_signalidset_expressions: expected 1 result, received {len(idset)}")
@@ -248,6 +268,8 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
 
+        assert rows is not None
+
         if len(rows) != 2:
             self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
 
@@ -265,6 +287,8 @@ class TestExpressionTree(unittest.TestCase):
 
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        assert rows is not None
 
         if len(rows) != 2:
             self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
@@ -284,6 +308,8 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
 
+        assert rows is not None
+
         if len(rows) != 2:
             self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
 
@@ -301,6 +327,8 @@ class TestExpressionTree(unittest.TestCase):
 
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        assert rows is not None
 
         if len(rows) != 2:
             self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
@@ -320,6 +348,8 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
 
+        assert rows is not None
+
         if len(rows) != 2:
             self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
 
@@ -337,6 +367,8 @@ class TestExpressionTree(unittest.TestCase):
 
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        assert rows is not None
 
         if len(rows) != 2:
             self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
@@ -357,6 +389,8 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
 
+        assert rows is not None
+
         if len(rows) != 2:
             self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
 
@@ -373,6 +407,8 @@ class TestExpressionTree(unittest.TestCase):
 
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        assert rows is not None
 
         if len(rows) != 2:
             self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
@@ -391,6 +427,8 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
 
+        assert rows is not None
+
         if len(rows) != 2:
             self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
 
@@ -407,6 +445,8 @@ class TestExpressionTree(unittest.TestCase):
 
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        assert rows is not None
 
         if len(rows) != 2:
             self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
@@ -425,6 +465,8 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
 
+        assert rows is not None
+
         if len(rows) != 2:
             self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
 
@@ -441,6 +483,8 @@ class TestExpressionTree(unittest.TestCase):
 
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        assert rows is not None
 
         if len(rows) != 2:
             self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
@@ -459,6 +503,8 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
 
+        assert rows is not None
+
         if len(rows) != 2:
             self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
 
@@ -476,6 +522,8 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
 
+        assert rows is not None
+
         if len(rows) != 1:
             self.fail(f"test_selectdatarows_expressions: expected 1 result, received {len(rows)}")
 
@@ -490,6 +538,8 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
 
+        assert rows is not None
+
         if len(rows) != 1:
             self.fail(f"test_selectdatarows_expressions: expected 1 result, received {len(rows)}")
 
@@ -503,6 +553,8 @@ class TestExpressionTree(unittest.TestCase):
 
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        assert rows is not None
 
         if len(rows) != 2:
             self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
@@ -521,6 +573,8 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
 
+        assert rows is not None
+
         if len(rows) != 2:
             self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
 
@@ -538,6 +592,8 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
 
+        assert rows is not None
+
         if len(rows) != 1:
             self.fail(f"test_selectdatarows_expressions: expected 1 result, received {len(rows)}")
 
@@ -551,6 +607,8 @@ class TestExpressionTree(unittest.TestCase):
 
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        assert rows is not None
 
         if len(rows) != 1:
             self.fail(f"test_selectdatarows_expressions: expected 1 result, received {len(rows)}")
@@ -566,6 +624,8 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
 
+        assert rows is not None
+
         if len(rows) != 1:
             self.fail(f"test_selectdatarows_expressions: expected 1 result, received {len(rows)}")
 
@@ -579,6 +639,8 @@ class TestExpressionTree(unittest.TestCase):
 
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        assert rows is not None
 
         if len(rows) != 2:
             self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
@@ -598,6 +660,8 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
 
+        assert rows is not None
+
         if len(rows) != 0:
             self.fail(f"test_selectdatarows_expressions: expected 0 results, received {len(rows)}")
 
@@ -609,6 +673,8 @@ class TestExpressionTree(unittest.TestCase):
 
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        assert rows is not None
 
         if len(rows) != 2:
             self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
@@ -626,6 +692,8 @@ class TestExpressionTree(unittest.TestCase):
 
         if err is not None:
             self.fail(f"test_selectdatarows_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+        assert rows is not None
 
         if len(rows) != 2:
             self.fail(f"test_selectdatarows_expressions: expected 2 result, received {len(rows)}")
@@ -664,16 +732,24 @@ class TestExpressionTree(unittest.TestCase):
             if table.columncount != 11:
                 self.fail(f"test_metadata_expressions: expected 11 columns, received {table.columncount}")
 
-            if table.column_byname("ID") is None:
+            column = table.column_byname("ID")
+
+            if column is None:
                 self.fail("test_metadata_expressions: missing expected table column")
 
-            if table.column_byname("id").datatype != DataType.STRING:
+            column = table.column_byname("id")
+
+            if column is None or column.datatype != DataType.STRING:
                 self.fail("test_metadata_expressions: column type does not match expected")
 
-            if table.column_byname("SignalID") is None:
+            column = table.column_byname("SignalID")
+
+            if column is None:
                 self.fail("test_metadata_expressions: missing expected table column")
 
-            if table.column_byname("signalID").datatype != DataType.GUID:
+            column = table.column_byname("signalID")
+            
+            if column is None or column.datatype != DataType.GUID:
                 self.fail("test_metadata_expressions: column type does not match expected")
 
             if table.rowcount == 0:
@@ -687,16 +763,20 @@ class TestExpressionTree(unittest.TestCase):
             if table.columncount != 19 + i:  # Second test adds a computed column
                 self.fail(f"test_metadata_expressions: expected {19 + i} columns, received {table.columncount}")
 
-            if table.column_byname("ACRONYM") is None:
+            column = table.column_byname("ACRONYM")
+            if column is None:
                 self.fail("test_metadata_expressions: missing expected table column")
 
-            if table.column_byname("Acronym").datatype != DataType.STRING:
+            column = table.column_byname("Acronym")
+            if column is None or column.datatype != DataType.STRING:
                 self.fail("test_metadata_expressions: column type does not match expected")
 
-            if table.column_byname("Name") is None:
+            column = table.column_byname("Name")
+            if column is None:
                 self.fail("test_metadata_expressions: missing expected table column")
 
-            if table.column_byname("Name").datatype != DataType.STRING:
+            column = table.column_byname("Name")
+            if column is None or column.datatype != DataType.STRING:
                 self.fail("test_metadata_expressions: column type does not match expected")
 
             if table.rowcount != 1:
@@ -734,6 +814,8 @@ class TestExpressionTree(unittest.TestCase):
             if err is not None:
                 self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
 
+            assert idset is not None
+
             if len(idset) != 1:
                 self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
 
@@ -741,6 +823,8 @@ class TestExpressionTree(unittest.TestCase):
 
             if err is not None:
                 self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            assert idset is not None
 
             if len(idset) != 8:
                 self.fail(f"test_metadata_expressions: expected 8 results, received {len(idset)}")
@@ -750,6 +834,8 @@ class TestExpressionTree(unittest.TestCase):
             if err is not None:
                 self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
 
+            assert idset is not None
+
             if len(idset) != 0:
                 self.fail(f"test_metadata_expressions: expected 0 results, received {len(idset)}")
 
@@ -757,6 +843,8 @@ class TestExpressionTree(unittest.TestCase):
 
             if err is not None:
                 self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            assert idset is not None
 
             if len(idset) == 0:
                 self.fail(f"test_metadata_expressions: expected non-zero result set, received {len(idset)}")
@@ -771,6 +859,8 @@ class TestExpressionTree(unittest.TestCase):
             if err is not None:
                 self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
 
+            assert idset is not None
+
             if len(idset) != 1:
                 self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
 
@@ -778,6 +868,8 @@ class TestExpressionTree(unittest.TestCase):
 
             if err is not None:
                 self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            assert idset is not None
 
             if len(idset) != 1:
                 self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
@@ -787,6 +879,8 @@ class TestExpressionTree(unittest.TestCase):
             if err is not None:
                 self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
 
+            assert idset is not None
+
             if len(idset) != 1:
                 self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
 
@@ -794,6 +888,8 @@ class TestExpressionTree(unittest.TestCase):
 
             if err is not None:
                 self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            assert idset is not None
 
             if len(idset) != 1:
                 self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
@@ -803,6 +899,8 @@ class TestExpressionTree(unittest.TestCase):
             if err is not None:
                 self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
 
+            assert idset is not None
+
             if len(idset) != 1:
                 self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
 
@@ -810,6 +908,8 @@ class TestExpressionTree(unittest.TestCase):
 
             if err is not None:
                 self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            assert idset is not None
 
             if len(idset) != 1:
                 self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
@@ -819,6 +919,8 @@ class TestExpressionTree(unittest.TestCase):
             if err is not None:
                 self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
 
+            assert idset is not None
+
             if len(idset) != 1:
                 self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
 
@@ -826,6 +928,8 @@ class TestExpressionTree(unittest.TestCase):
 
             if err is not None:
                 self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
+
+            assert idset is not None
 
             if len(idset) != 1:
                 self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
@@ -835,6 +939,8 @@ class TestExpressionTree(unittest.TestCase):
             if err is not None:
                 self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_signalidset: {err}")
 
+            assert idset is not None
+
             if len(idset) != 1:
                 self.fail(f"test_metadata_expressions: expected 1 result, received {len(idset)}")
 
@@ -842,6 +948,8 @@ class TestExpressionTree(unittest.TestCase):
 
             if err is not None:
                 self.fail(f"test_metadata_expressions: error executing FilterExpressionParser.select_datarows: {err}")
+
+            assert rows is not None
 
             if len(rows) != 1:
                 self.fail(f"test_metadata_expressions: expected 1 result, received {len(rows)}")
@@ -861,6 +969,8 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_basic_expressions: error executing table select: {err}")
 
+        assert datarows is not None
+
         if len(datarows) != 116:
             self.fail(f"test_basic_expressions: expected 116 results, received {len(datarows)}")
 
@@ -868,6 +978,8 @@ class TestExpressionTree(unittest.TestCase):
 
         if err is not None:
             self.fail(f"test_basic_expressions: error executing table select: {err}")
+
+        assert datarows is not None
 
         if len(datarows) != 2:
             self.fail(f"test_basic_expressions: expected 2 results, received {len(datarows)}")
@@ -2029,6 +2141,8 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_misc_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
 
+        assert value_expression is not None
+
         if value_expression.valuetype != ExpressionValueType.INT32:
             self.fail(f"test_misc_expressions: expected value type of int32, received {value_expression.valuetype}")
 
@@ -2047,6 +2161,8 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_misc_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
 
+        assert value_expression is not None
+
         if value_expression.valuetype != ExpressionValueType.GUID:
             self.fail(f"test_misc_expressions: expected value type of guid, received {value_expression.valuetype}")
 
@@ -2064,6 +2180,8 @@ class TestExpressionTree(unittest.TestCase):
         if err is not None:
             self.fail(f"test_misc_expressions: error executing FilterExpressionParser.evaluate_datarowexpression: {err}")
 
+        assert value_expression is not None
+
         if value_expression.valuetype != ExpressionValueType.INT32:
             self.fail(f"test_misc_expressions: expected value type of int32, received {value_expression.valuetype}")
 
@@ -2080,6 +2198,8 @@ class TestExpressionTree(unittest.TestCase):
 
         parser, err = FilterExpressionParser.from_dataset(dataset, f"{statid}; {{{freqid}}};'{statid}';Filter ActiveMeasurements Where True", "ActiveMeasurements")
 
+        assert parser is not None
+
         if err is not None:
             self.fail(f"test_filterexpression_statement_count: error executing FilterExpressionParser.from_dataset: {err}")
 
@@ -2092,6 +2212,8 @@ class TestExpressionTree(unittest.TestCase):
             self.fail(f"test_filterexpression_statement_count: error executing parser.evaluate: {err}")
 
         idset = parser.filtered_signalidset
+
+        assert idset is not None
 
         if len(idset) != 2:
             self.fail(f"test_filterexpression_statement_count: expected 2 signal IDs, received {len(idset)}")

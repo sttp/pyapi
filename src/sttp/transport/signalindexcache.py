@@ -25,7 +25,7 @@ from __future__ import annotations
 from gsf import Empty, Limits
 from gsf.endianorder import BigEndian
 from .tssc.decoder import Decoder
-from typing import Dict, List, Set, Tuple, Optional, TYPE_CHECKING
+from typing import Dict, List, Set, Tuple, TYPE_CHECKING
 from uuid import UUID
 import numpy as np
 
@@ -46,9 +46,9 @@ class SignalIndexCache:
         self._idlist: List[np.uint64] = []
         self._signalidcache: Dict[UUID, np.int32] = {}
         self._binarylength = np.uint32(0)
-        self._tsscdecoder: Optional[Decoder] = None
+        self._tsscdecoder: Decoder | None = None
 
-    def _add_record(self, ds: DataSubscriber, signalindex: np.int32, signalid: UUID, source: str, id: np.uint64, charsizeestimate: np.uint32 = 1):
+    def _add_record(self, ds: DataSubscriber, signalindex: np.int32, signalid: UUID, source: str, id: np.uint64, charsizeestimate = np.uint32(1)):
         index = np.uint32(len(self._signalidlist))
         self._reference[signalindex] = index
         self._signalidlist.append(signalid)
@@ -127,7 +127,7 @@ class SignalIndexCache:
         if (signalindex := self._signalidcache.get(signalid)) is not None:
             return signalindex
 
-        return -1
+        return np.int32(-1)
 
     @property
     def count(self) -> np.uint32:
@@ -137,7 +137,7 @@ class SignalIndexCache:
 
         return np.uint32(len(self._signalidcache))
 
-    def decode(self, ds: 'sttp.transport.datasubscriber.DataSubscriber', buffer: bytes) -> Tuple[UUID, Optional[Exception]]:
+    def decode(self, ds: DataSubscriber, buffer: bytes) -> Tuple[UUID, Exception | None]:
         """
         Parses a `SignalIndexCache` from the specified byte buffer received from a `DataPublisher`.
         """

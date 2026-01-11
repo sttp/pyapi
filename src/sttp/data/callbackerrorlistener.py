@@ -22,7 +22,7 @@
 # ******************************************************************************************************
 
 from antlr4.error.ErrorListener import ErrorListener
-from typing import Callable, Optional
+from typing import Callable
 
 
 class CallbackErrorListener(ErrorListener):
@@ -31,7 +31,7 @@ class CallbackErrorListener(ErrorListener):
     any parsing exceptions to a user defined callback.
     """
 
-    def __init__(self, callback: Optional[Callable[[str], None]] = None):
+    def __init__(self, callback: Callable[[str], None] | None = None):
         self.parsingexception_callback = callback
         """
         Defines a callback for reporting ANTLR parsing exceptions.

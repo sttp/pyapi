@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # ******************************************************************************************************
-#  test_pubsub.py - Test script for Publisher/Subscriber interoperability
+#  test_pubsub.py - Pytest test for Publisher/Subscriber interoperability
 #
 #  Copyright © 2026, Grid Protection Alliance.  All Rights Reserved.
 #
@@ -23,20 +23,13 @@ from sttp.data.dataset import DataSet
 from sttp.ticks import Ticks
 import numpy as np
 
-# Global state
-measurements_received = []
-received_count = 0
-publish_count = 0
 
-
-def test_pubsub():
+def test_publisher_subscriber_interoperability():
     """Test Python publisher with Python subscriber."""
-    global measurements_received, received_count
-    
-    print("=" * 80)
-    print("STTP Publisher/Subscriber Interoperability Test")
-    print("=" * 80)
-    print()
+    # Local state for this test
+    measurements_received = []
+    received_count = [0]  # Use list to allow modification in nested function
+    publish_count = [0]
     
     # Load metadata (from examples directory in parent folder)
     metadata_path = os.path.join(os.path.dirname(__file__), 
@@ -45,12 +38,9 @@ def test_pubsub():
         metadata_xml = f.read()
     
     metadata, err = DataSet.from_xml(metadata_xml)
-    if err:
-        print(f"ERROR: Failed to load metadata: {err}")
-        return False
+    assert not err, f"Failed to load metadata: {err}"
     
     # Create publisher
-    print("Creating publisher...")
     publisher = Publisher()
     
     # Configure publisher callbacks
@@ -73,23 +63,16 @@ def test_pubsub():
     
     # Start publisher
     port = 7166
-    try:
-        publisher.start(port)
-        print(f"[PUB] Listening on port {port}")
-    except Exception as ex:
-        print(f"ERROR: Failed to start publisher: {ex}")
-        return False
+    publisher.start(port)
     
     # Define metadata
     publisher.define_metadata(metadata)
     
     # Filter measurements to publish
     measurements_to_publish = publisher.filter_metadata("SignalAcronym <> 'STAT'")
-    print(f"[PUB] Loaded {len(measurements_to_publish)} measurements for publication")
-    print()
+    assert len(measurements_to_publish) > 0, "No measurements found for publication"
     
     # Create subscriber
-    print("Creating subscriber...")
     subscriber = Subscriber()
     
     # Configure subscriber callbacks
@@ -103,11 +86,8 @@ def test_pubsub():
         print(f"[SUB] Data start time: {timestamp}")
     
     def sub_new_measurements(measurements):
-        global measurements_received, received_count
-        received_count += len(measurements)
+        received_count[0] += len(measurements)
         measurements_received.extend(measurements)
-        if received_count % 100 == 0:
-            print(f"[SUB] Received {received_count} measurements")
     
     def sub_connected():
         print(f"[SUB] Connection established")
@@ -126,27 +106,14 @@ def test_pubsub():
     subscriber.subscribe("FILTER TOP 20 ActiveMeasurements WHERE SignalType <> 'STAT'")
     
     # Connect to publisher
-    print(f"[SUB] Connecting to localhost:{port}...")
     time.sleep(0.5)  # Give publisher time to start
-    
-    try:
-        subscriber.connect(f"localhost:{port}")
-    except Exception as ex:
-        print(f"ERROR: Failed to connect subscriber: {ex}")
-        publisher.stop()
-        return False
-    
-    print()
+    subscriber.connect(f"localhost:{port}")
     
     # Give connection time to establish
     time.sleep(1.0)
     
     # Publish measurements
-    print("Publishing measurements...")
-    print()
-    
     def publish_data():
-        global publish_count
         for round in range(10):
             timestamp = Ticks.utcnow()
             measurements = []
@@ -159,10 +126,7 @@ def test_pubsub():
                 measurements.append(measurement)
             
             publisher.publish_measurements(measurements)
-            publish_count += len(measurements)
-            
-            if (round + 1) % 2 == 0:
-                print(f"[PUB] Published {publish_count} measurements")
+            publish_count[0] += len(measurements)
             
             time.sleep(0.1)
     
@@ -177,43 +141,22 @@ def test_pubsub():
     # Give subscriber time to receive final measurements
     time.sleep(1.0)
     
-    # Display results
-    print()
-    print("=" * 80)
-    print("Test Results:")
-    print("=" * 80)
-    print(f"Measurements published: {publish_count}")
-    print(f"Measurements received:  {received_count}")
-    
-    if received_count > 0:
-        print(f"\n✓ SUCCESS: Received {received_count} measurements")
-        print(f"  First measurement: SignalID={measurements_received[0].signalid}, Value={measurements_received[0].value:.6f}")
-        if len(measurements_received) > 1:
-            print(f"  Last measurement:  SignalID={measurements_received[-1].signalid}, Value={measurements_received[-1].value:.6f}")
-        success = True
-    else:
-        print(f"\n✗ FAILURE: No measurements received")
-        success = False
-    
     # Cleanup
-    print()
-    print("Cleaning up...")
     subscriber.dispose()
     publisher.stop()
     
-    print()
-    return success
+    # Verify results
+    assert publish_count[0] > 0, "No measurements were published"
+    assert received_count[0] > 0, f"No measurements received (published {publish_count[0]})"
+    assert len(measurements_received) == received_count[0], "Measurement count mismatch"
+    
+    # Verify measurement structure
+    assert measurements_received[0].signalid is not None, "First measurement missing signalid"
+    assert measurements_received[0].value is not None, "First measurement missing value"
+    assert measurements_received[0].timestamp > 0, "First measurement has invalid timestamp"
 
 
 if __name__ == "__main__":
-    try:
-        success = test_pubsub()
-        sys.exit(0 if success else 1)
-    except KeyboardInterrupt:
-        print("\nTest interrupted")
-        sys.exit(1)
-    except Exception as ex:
-        print(f"\nTest failed with exception: {ex}")
-        import traceback
-        traceback.print_exc()
-        sys.exit(1)
+    # Allow running directly for manual testing
+    import pytest
+    sys.exit(pytest.main([__file__, "-v"]))

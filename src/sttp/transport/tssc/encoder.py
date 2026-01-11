@@ -21,12 +21,15 @@
 #
 # ******************************************************************************************************
 
+# pyright: reportOptionalMemberAccess=false
+# pyright: reportOptionalSubscript=false
 # Ported from cppapi/src/lib/transport/tssc/TSSCEncoder.cpp : class TSSCEncoder
 # Differences: Python uses bytearray for buffer; otherwise parity maintained.
 
+from __future__ import annotations
 from gsf import Limits
 from .pointmetadata import PointMetadata, CodeWords
-from typing import List, Optional
+from typing import List
 import numpy as np
 import struct
 
@@ -53,7 +56,7 @@ class Encoder:
         """
         Creates a new TSSC encoder.
         """
-        self._data: Optional[bytearray] = None
+        self._data: bytearray | None = None
         self._position = np.uint32(0)
         self._last_position = np.uint32(0)
 
@@ -65,8 +68,8 @@ class Encoder:
         self._prev_timedelta3 = INT64_MAX
         self._prev_timedelta4 = INT64_MAX
 
-        self._last_point: Optional[PointMetadata] = self._new_point_metadata()
-        self._points: List[Optional[PointMetadata]] = []
+        self._last_point: PointMetadata | None = self._new_point_metadata()
+        self._points: List[PointMetadata | None] = []
 
         # Bitstream state
         self._bitstream_buffer_index = np.int32(-1)

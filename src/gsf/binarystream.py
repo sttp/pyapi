@@ -21,10 +21,11 @@
 #
 #******************************************************************************************************
 
+# pyright: reportArgumentType=false
+
 from .streamencoder import StreamEncoder
 from .encoding7bit import Encoding7Bit
 from . import ByteSize, Validate
-from typing import Optional
 from uuid import UUID
 import sys
 import numpy as np
@@ -126,7 +127,7 @@ class BinaryStream:
 
         return original_count
 
-    def write(self, buffer: bytes, offset: int, count: int) -> int:
+    def write(self, buffer: bytes | bytearray, offset: int, count: int) -> int:
         if self._send_buffer_freespace() < count:
             self.flush()
 
@@ -163,7 +164,7 @@ class BinaryStream:
         return bytes(buffer[:count])
 
     def read_buffer(self) -> bytes:
-        return self.read_bytes(self.read7bit_uint32())
+        return self.read_bytes(int(self.read7bit_uint32()))
 
     def read_string(self) -> str:
         return self.read_buffer().decode("utf-8")
@@ -196,11 +197,11 @@ class BinaryStream:
             return np.uint8(value)
 
         self.read_all(self._buffer, 0, size)
-        return self._buffer[0]
+        return np.uint8(self._buffer[0])
 
     def write_buffer(self, value: bytes) -> int:
-        count = len(value)
-        return self.write7bit_uint32(count) + self.write(value, 0, count)
+        count = np.uint32(len(value))
+        return self.write7bit_uint32(count) + self.write(value, 0, int(count))
 
     def write_string(self, value: str) -> int:
         return self.write_buffer(value.encode("utf-8"))
@@ -246,7 +247,7 @@ class BinaryStream:
 
         return 1
 
-    def _read_int(self, size: int, dtype: np.dtype, byteorder: Optional[str]) -> int:
+    def _read_int(self, size: int, dtype: np.dtype, byteorder: str | None) -> int:
         if not (byteorder is None and self._default_is_native) and byteorder != sys.byteorder:
             dtype = dtype.newbyteorder()
 
@@ -255,10 +256,10 @@ class BinaryStream:
             self._receive_position += size
             return value
 
-        self.ReadAll(self._buffer, 0, size)
+        self.read_all(self._buffer, 0, size)
         return np.frombuffer(self._buffer[:size], dtype)[0]
 
-    def _write_int(self, size: int, value: int, signed: bool, byteorder: Optional[str]) -> int:
+    def _write_int(self, size: int, value: int, signed: bool, byteorder: str | None) -> int:
         # sourcery skip: class-extract-method, remove-unnecessary-cast
         buffer = int(value).to_bytes(size, self._default_byteorder if byteorder is None else byteorder, signed=signed)
 
@@ -274,40 +275,40 @@ class BinaryStream:
 
         return self.write(self._buffer, 0, size)
 
-    def read_int16(self, byteorder: Optional[str] = None) -> np.int16:
-        return self._read_int(ByteSize.INT16, np.dtype(np.int16), byteorder)
+    def read_int16(self, byteorder: str | None = None) -> np.int16:
+        return np.int16(self._read_int(ByteSize.INT16, np.dtype(np.int16), byteorder))
 
-    def write_int16(self, value: np.int16, byteorder: Optional[str] = None) -> int:
+    def write_int16(self, value: np.int16, byteorder: str | None = None) -> int:
         return self._write_int(ByteSize.INT16, value, True, byteorder)
 
-    def read_uint16(self, byteorder: Optional[str] = None) -> np.uint16:
-        return self._read_int(ByteSize.UINT16, np.dtype(np.uint16), byteorder)
+    def read_uint16(self, byteorder: str | None = None) -> np.uint16:
+        return np.uint16(self._read_int(ByteSize.UINT16, np.dtype(np.uint16), byteorder))
 
-    def write_uint16(self, value: np.uint16, byteorder: Optional[str] = None) -> int:
+    def write_uint16(self, value: np.uint16, byteorder: str | None = None) -> int:
         return self._write_int(ByteSize.UINT16, value, False, byteorder)
 
-    def read_int32(self, byteorder: Optional[str] = None) -> np.int32:
-        return self._read_int(ByteSize.INT32, np.dtype(np.int32), byteorder)
+    def read_int32(self, byteorder: str | None = None) -> np.int32:
+        return np.int32(self._read_int(ByteSize.INT32, np.dtype(np.int32), byteorder))
 
-    def write_int32(self, value: np.int32, byteorder: Optional[str] = None) -> int:
+    def write_int32(self, value: np.int32, byteorder: str | None = None) -> int:
         return self._write_int(ByteSize.INT32, value, True, byteorder)
 
-    def read_uint32(self, byteorder: Optional[str] = None) -> np.uint32:
-        return self._read_int(ByteSize.UINT32, np.dtype(np.uint32), byteorder)
+    def read_uint32(self, byteorder: str | None = None) -> np.uint32:
+        return np.uint32(self._read_int(ByteSize.UINT32, np.dtype(np.uint32), byteorder))
 
-    def write_uint32(self, value: np.uint32, byteorder: Optional[str] = None) -> int:
+    def write_uint32(self, value: np.uint32, byteorder: str | None = None) -> int:
         return self._write_int(ByteSize.UINT32, value, False, byteorder)
 
-    def read_int64(self, byteorder: Optional[str] = None) -> np.int64:
-        return self._read_int(ByteSize.INT64, np.dtype(np.int64), byteorder)
+    def read_int64(self, byteorder: str | None = None) -> np.int64:
+        return np.int64(self._read_int(ByteSize.INT64, np.dtype(np.int64), byteorder))
 
-    def write_int64(self, value: np.int64, byteorder: Optional[str] = None) -> int:
+    def write_int64(self, value: np.int64, byteorder: str | None = None) -> int:
         return self._write_int(ByteSize.INT64, value, True, byteorder)
 
-    def read_uint64(self, byteorder: Optional[str] = None) -> np.uint64:
-        return self._read_int(ByteSize.UINT64, np.dtype(np.uint64), byteorder)
+    def read_uint64(self, byteorder: str | None = None) -> np.uint64:
+        return np.uint64(self._read_int(ByteSize.UINT64, np.dtype(np.uint64), byteorder))
 
-    def write_uint64(self, value: np.uint64, byteorder: Optional[str] = None) -> int:
+    def write_uint64(self, value: np.uint64, byteorder: str | None = None) -> int:
         return self._write_int(ByteSize.UINT64, value, False, byteorder)
 
     def _send_buffer_read(self, length: int) -> bytes:

@@ -21,6 +21,8 @@
 #
 # ******************************************************************************************************
 
+# pyright: reportArgumentType=false
+
 from __future__ import annotations
 from gsf import Empty, normalize_enumname
 from .datatype import DataType

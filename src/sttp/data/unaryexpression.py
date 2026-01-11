@@ -27,7 +27,7 @@ from .valueexpression import ValueExpression
 from .constants import ExpressionType, ExpressionUnaryType, ExpressionValueType
 from .errors import EvaluateError
 from decimal import Decimal
-from typing import Optional, Tuple
+from typing import Tuple
 import numpy as np
 
 class UnaryExpression(Expression):
@@ -64,7 +64,7 @@ class UnaryExpression(Expression):
 
         return self._value
 
-    def applyto_bool(self, value: bool) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
+    def applyto_bool(self, value: bool) -> Tuple[ValueExpression | None, Exception | None]:
         """
         Applies the `UnaryExpression` prefix to a boolean and returns `ValueExpression` of result, if possible.
         """
@@ -74,7 +74,7 @@ class UnaryExpression(Expression):
 
         return None, EvaluateError(f"cannot apply unary type \"{normalize_enumname(self._unarytype)}\" to \"Boolean\" value")
 
-    def applyto_int32(self, value: np.int32) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
+    def applyto_int32(self, value: np.int32) -> Tuple[ValueExpression | None, Exception | None]:
         """
         Applies the `UnaryExpression` prefix to a 32-bit integer value and returns `ValueExpression` of result.
         """
@@ -87,7 +87,7 @@ class UnaryExpression(Expression):
 
         return ValueExpression(ExpressionValueType.INT32, ~value), None
 
-    def applyto_int64(self, value: np.int64) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
+    def applyto_int64(self, value: np.int64) -> Tuple[ValueExpression | None, Exception | None]:
         """
         Applies the `UnaryExpression` prefix to a 64-bit integer value and returns `ValueExpression` of result.
         """
@@ -100,7 +100,7 @@ class UnaryExpression(Expression):
 
         return ValueExpression(ExpressionValueType.INT64, ~value), None
 
-    def applyto_decimal(self, value: Decimal) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
+    def applyto_decimal(self, value: Decimal) -> Tuple[ValueExpression | None, Exception | None]:
         """
         Applies the `UnaryExpression` prefix to a `Decimal` value and returns `ValueExpression` of result, if possible.
         """
@@ -113,7 +113,7 @@ class UnaryExpression(Expression):
 
         return None, EvaluateError(f"cannot apply unary type \"~\" to \"Decimal\" value")
 
-    def applyto_double(self, value: np.float64) -> Tuple[Optional[ValueExpression], Optional[Exception]]:
+    def applyto_double(self, value: np.float64) -> Tuple[ValueExpression | None, Exception | None]:
         """
         Applies the `UnaryExpression` prefix to a `Double` value and returns `ValueExpression` of result, if possible.
         """

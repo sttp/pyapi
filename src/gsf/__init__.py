@@ -103,8 +103,12 @@ class ByteSize:
 
 
 def normalize_enumname(value: Enum) -> str:
-    parts = str(value).split(".")
-    return parts[1].capitalize() if len(parts) == 2 else str(value).capitalize()
+    # For IntFlag and Flag enums, use .name property when available
+    value_name = value.name if hasattr(value, 'name') and value.name is not None else str(value)
+    
+    # Fallback to string parsing for regular enums
+    parts = value_name.split(".")
+    return parts[1] if len(parts) == 2 else value_name
 
 class Validate:
     @staticmethod
@@ -129,25 +133,34 @@ class Validate:
 
 class Convert:
     @staticmethod
-    def from_str(value: str, dtype: np.dtype) -> object:
+    def from_str(value: str, dtype: np.dtype | type[datetime] | type[int] | type[float]) -> object:
         """
         Converts a string value to the specified type.
         """
 
-        if dtype == datetime:
+        if dtype is datetime:
             dt = parser.parse(value)
 
-            if dt.tzinfo is not None and dt.tzinfo.utcoffset(dt).seconds != 0:
+            utc_offset = dt.tzinfo.utcoffset(dt) if dt.tzinfo is not None else None
+
+            if utc_offset is not None and utc_offset.seconds != 0:
                 dt = dt.astimezone(tzoffset(None, 0))
 
             return dt.replace(tzinfo=None)
+
+        assert isinstance(dtype, type)
 
         if dtype in [float, np.float32, np.float64]:
             return np.float64(value).astype(dtype)
 
         if dtype in [int, np.int8, np.int16, np.int32, np.int64, np.uint8, np.uint16, np.uint32, np.uint64]:
             if "X" in value.upper():
-                return np.uint64(int(value, base=16)).astype(dtype)
+                result = np.uint64(int(value, base=16)).astype(dtype)
+
+                if dtype == int:
+                    return int(result)
+                
+                return result
 
             if dtype == int:
                 return int(value)

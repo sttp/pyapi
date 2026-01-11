@@ -21,6 +21,8 @@
 #
 # ******************************************************************************************************
 
+# pyright: reportArgumentType=false
+
 from gsf import Empty
 from ..data.dataset import DataSet
 from ..data.datarow import DataRow
@@ -28,7 +30,7 @@ from ..data.datatype import default_datatype
 from .record.measurement import MeasurementRecord, SignalType
 from .record.device import DeviceRecord
 from .record.phasor import PhasorRecord
-from typing import List, Dict, Tuple, Optional
+from typing import List, Dict, Tuple
 from uuid import UUID, uuid1
 import numpy as np
 
@@ -249,7 +251,7 @@ class MetadataCache:
 
         self.phasorRecords = phasor_records
 
-    def _get_rowvalue(self, row: DataRow, columnname: str, default: Optional[object] = None):
+    def _get_rowvalue(self, row: DataRow, columnname: str, default: object | None = None):
         value, err = row.value_byname(columnname)
 
         if value is None or err is not None:
@@ -286,52 +288,52 @@ class MetadataCache:
 
         self.measurement_records.append(measurement)
 
-    def find_measurement_signalid(self, signalid: UUID) -> Optional[MeasurementRecord]:
+    def find_measurement_signalid(self, signalid: UUID) -> MeasurementRecord | None:
         return self.signalid_measurement_map.get(signalid)
 
-    def find_measurement_id(self, id: np.uint64) -> Optional[MeasurementRecord]:
+    def find_measurement_id(self, id: np.uint64) -> MeasurementRecord | None:
         return self.id_measurement_map.get(id)
 
-    def find_measurement_pointtag(self, pointtag: str) -> Optional[MeasurementRecord]:
+    def find_measurement_pointtag(self, pointtag: str) -> MeasurementRecord | None:
         return self.pointtag_measurement_map.get(pointtag)
 
-    def find_measurement_signalreference(self, signalreference: str) -> Optional[MeasurementRecord]:
+    def find_measurement_signalreference(self, signalreference: str) -> MeasurementRecord | None:
         return self.signalref_measurement_map.get(signalreference)
 
-    def find_measurements_signaltype(self, signaltype: SignalType, instancename: Optional[str] = None) -> List[MeasurementRecord]:
-        return self.find_measurements_signaltypename(signaltype.name, instancename)
+    def find_measurements_signaltype(self, signaltype: SignalType, source: str | None = None) -> List[MeasurementRecord]:
+        return self.find_measurements_signaltypename(signaltype.name, source)
 
-    def find_measurements_signaltypename(self, signaltypename: str, instancename: Optional[str] = None) -> List[MeasurementRecord]:
+    def find_measurements_signaltypename(self, signaltypename: str, source: str | None = None) -> List[MeasurementRecord]:
         signaltypename = signaltypename.upper()
 
         return [ record for record in self.measurement_records if
                 record.signaltypename.upper() == signaltypename and
-                (instancename is None or record.instancename == instancename) ]
+                (source is None or record.source == source) ]
 
-    def find_measurements(self, searchval: str, instancename: Optional[str] = None) -> List[MeasurementRecord]:
+    def find_measurements(self, searchval: str, source: str | None = None) -> List[MeasurementRecord]:
         records = set()
 
         if searchval in self.pointtag_measurement_map:
             record = self.pointtag_measurement_map[searchval]
 
-            if instancename is None or record.instancename == instancename:
+            if source is None or record.source == source:
                 records.add(record)
 
         if (record := self.signalref_measurement_map.get(searchval)) is not None:
-            if instancename is None or record.instancename == instancename:
+            if source is None or record.source == source:
                 records.add(record)
 
         for record in self.measurement_records:
             if (searchval in record.description or searchval in record.deviceacronym) and \
-                    (instancename is None or record.instancename == instancename):
+                    (source is None or record.source == source):
                 records.add(record)
 
         return list(records)
 
-    def find_device_acronym(self, deviceacronym: str) -> Optional[DeviceRecord]:
+    def find_device_acronym(self, deviceacronym: str) -> DeviceRecord | None:
         return self.deviceacronym_device_map.get(deviceacronym)
 
-    def find_device_id(self, deviceid: UUID) -> Optional[DeviceRecord]:
+    def find_device_id(self, deviceid: UUID) -> DeviceRecord | None:
         return self.deviceid_device_map.get(deviceid)
 
     def find_devices(self, searchval: str) -> List[DeviceRecord]:

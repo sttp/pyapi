@@ -1,21 +1,23 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.signalkind &mdash; sttp/pyapi 0.6.4 documentation</title>
+  <title>sttp.transport.signalkind &mdash; sttp/pyapi 0.7.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
-      <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
-      <script src="../../../_static/doctools.js?v=92e14aea"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -41,8 +43,11 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">src</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -187,7 +192,7 @@
 <div class="viewcode-block" id="SignalKindEnum.signaltype">
 <a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.signalkind.SignalKindEnum.signaltype">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">signaltype</span><span class="p">(</span><span class="n">signalkind</span><span class="p">:</span> <span class="n">SignalKind</span><span class="p">,</span> <span class="n">phasortype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">signaltype</span><span class="p">(</span><span class="n">signalkind</span><span class="p">:</span> <span class="n">SignalKind</span><span class="p">,</span> <span class="n">phasortype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the specific four-character signal type acronym for a &#39;SignalKind&#39;</span>
 <span class="sd">        enumeration value and phasor type, i.e., &quot;V&quot; voltage or &quot;I&quot; current.</span>
@@ -201,7 +206,7 @@
         <span class="k">if</span> <span class="n">signalkind</span> <span class="o">&lt;</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">ANGLE</span> <span class="ow">or</span> <span class="n">signalkind</span> <span class="o">&gt;</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">UNKNOWN</span><span class="p">:</span>
             <span class="n">signalkind</span> <span class="o">=</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">UNKNOWN</span>
 
-        <span class="n">phasortype</span> <span class="o">=</span> <span class="s2">&quot;?&quot;</span> <span class="k">if</span> <span class="n">phasortype</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">phasortype</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+        <span class="n">phasortype</span> <span class="o">=</span> <span class="s2">&quot;?&quot;</span> <span class="k">if</span> <span class="n">phasortype</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">phasortype</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">phasortype</span><span class="si">}</span><span class="s2">PHA&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">phasortype</span><span class="si">}</span><span class="s2">PHM&quot;</span><span class="p">,</span> <span class="s2">&quot;FREQ&quot;</span><span class="p">,</span> <span class="s2">&quot;DFDT&quot;</span><span class="p">,</span> <span class="s2">&quot;FLAG&quot;</span><span class="p">,</span> <span class="s2">&quot;DIGI&quot;</span><span class="p">,</span> <span class="s2">&quot;ALOG&quot;</span><span class="p">,</span> <span class="s2">&quot;CALC&quot;</span><span class="p">,</span> <span class="s2">&quot;STAT&quot;</span><span class="p">,</span> <span class="s2">&quot;ALRM&quot;</span><span class="p">,</span> <span class="s2">&quot;QUAL&quot;</span><span class="p">,</span> <span class="s2">&quot;NULL&quot;</span><span class="p">][</span><span class="n">signalkind</span><span class="p">]</span></div>
 
@@ -209,7 +214,7 @@
 <div class="viewcode-block" id="SignalKindEnum.parse_acronym">
 <a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.signalkind.SignalKindEnum.parse_acronym">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">parse_acronym</span><span class="p">(</span><span class="n">acronym</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SignalKind</span><span class="p">:</span>  <span class="c1"># sourcery skip: assign-if-exp, reintroduce-else</span>
+    <span class="k">def</span> <span class="nf">parse_acronym</span><span class="p">(</span><span class="n">acronym</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SignalKind</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the `SignalKind` enumeration value for the specified two-character acronym.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -217,39 +222,39 @@
         <span class="n">acronym</span> <span class="o">=</span> <span class="n">acronym</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;PA&quot;</span><span class="p">:</span>  <span class="c1"># Phase Angle</span>
-            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Angle</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">ANGLE</span>
 
         <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;PM&quot;</span><span class="p">:</span>  <span class="c1"># Phase Magnitude</span>
-            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Magnitude</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">MAGNITUDE</span>
 
         <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;FQ&quot;</span><span class="p">:</span>  <span class="c1"># Frequency</span>
-            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Frequency</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">FREQUENCY</span>
 
         <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;DF&quot;</span><span class="p">:</span>  <span class="c1"># dF/dt</span>
-            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">DfDt</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">DFDT</span>
 
         <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;SF&quot;</span><span class="p">:</span>  <span class="c1"># Status Flags</span>
-            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Status</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">STATUS</span>
 
         <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;DV&quot;</span><span class="p">:</span>  <span class="c1"># Digital Value</span>
-            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Digital</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">DIGITAL</span>
 
         <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;AV&quot;</span><span class="p">:</span>  <span class="c1"># Analog Value</span>
-            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Analog</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">ANALOG</span>
 
         <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;CV&quot;</span><span class="p">:</span>  <span class="c1"># Calculated Value</span>
-            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Calculation</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">CALCULATION</span>
 
         <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;ST&quot;</span><span class="p">:</span>  <span class="c1"># Statistical Value</span>
-            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Statistic</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">STATISTIC</span>
 
         <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;AL&quot;</span><span class="p">:</span>  <span class="c1"># Alarm Value</span>
-            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Alarm</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">ALARM</span>
 
         <span class="k">if</span> <span class="n">acronym</span> <span class="o">==</span> <span class="s2">&quot;QF&quot;</span><span class="p">:</span>  <span class="c1"># Quality Flags</span>
-            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Quality</span>
+            <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">QUALITY</span>
 
-        <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">Unknown</span></div>
+        <span class="k">return</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">UNKNOWN</span></div>
 </div>
 
 </pre></div>

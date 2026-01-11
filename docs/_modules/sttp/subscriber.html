@@ -1,21 +1,23 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.subscriber &mdash; sttp/pyapi 0.7.0 documentation</title>
+  <title>sttp.subscriber &mdash; sttp/pyapi 0.7.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-      <script src="../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=b1f64a84"></script>
-      <script src="../../_static/doctools.js?v=92e14aea"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -41,8 +43,11 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">src</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -91,6 +96,9 @@
 <span class="c1">#</span>
 <span class="c1"># ******************************************************************************************************</span>
 
+<span class="c1"># pyright: reportAttributeAccessIssue=false</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 <span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">Limits</span>
 <span class="kn">from</span> <span class="nn">gsf.endianorder</span> <span class="kn">import</span> <span class="n">BigEndian</span>
 <span class="kn">from</span> <span class="nn">.data.dataset</span> <span class="kn">import</span> <span class="n">DataSet</span>
@@ -104,7 +112,7 @@
 <span class="kn">from</span> <span class="nn">.reader</span> <span class="kn">import</span> <span class="n">MeasurementReader</span>
 <span class="kn">from</span> <span class="nn">.metadata.cache</span> <span class="kn">import</span> <span class="n">MetadataCache</span>
 <span class="kn">from</span> <span class="nn">.metadata.record.measurement</span> <span class="kn">import</span> <span class="n">MeasurementRecord</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Callable</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span>
 <span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
 <span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span>
 <span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Lock</span>
@@ -138,17 +146,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span> <span class="o">=</span> <span class="n">DataSubscriber</span><span class="p">()</span>
 
         <span class="c1"># Callback references</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_statusmessage_logger</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_statusmessage_logger</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_errormessage_logger</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_errormessage_logger</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_metadatanotification_receiver</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">DataSet</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_data_starttime_receiver</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_configurationchanged_receiver</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_historicalreadcomplete_receiver</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_connectionestablished_receiver</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_connectionestablished_receiver</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_connectionterminated_receiver</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_connectionterminated_receiver</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_statusmessage_logger</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_statusmessage_logger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_errormessage_logger</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_errormessage_logger</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_metadatanotification_receiver</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">DataSet</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data_starttime_receiver</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_configurationchanged_receiver</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_historicalreadcomplete_receiver</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connectionestablished_receiver</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_connectionestablished_receiver</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connectionterminated_receiver</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_connectionterminated_receiver</span>
 
         <span class="c1"># MeasurementReader reference</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">MeasurementReader</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span><span class="p">:</span> <span class="n">MeasurementReader</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># Lock used to synchronize console writes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_consolelock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
@@ -229,9 +237,230 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span><span class="o">.</span><span class="n">total_measurementsreceived</span>
 
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">statusmessage_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets or sets a function to handle status messages.</span>
+<span class="sd">        </span>
+<span class="sd">        Signature: `def statusmessage_logger(message: str)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_statusmessage_logger</span>
+
+    <span class="nd">@statusmessage_logger</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">statusmessage_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the callback that handles informational message logging.</span>
+<span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        Prefer using property setter over `set_statusmessage_logger` method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_statusmessage_logger</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">errormessage_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets or sets a function to handle error messages.</span>
+<span class="sd">        </span>
+<span class="sd">        Signature: `def errormessage_logger(message: str)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_errormessage_logger</span>
+
+    <span class="nd">@errormessage_logger</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">errormessage_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the callback that handles error message logging.</span>
+<span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        Prefer using property setter over `set_errormessage_logger` method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_errormessage_logger</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">metadatanotification_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">DataSet</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets or sets a function to handle metadata received notifications.</span>
+<span class="sd">        </span>
+<span class="sd">        Signature: `def metadatanotification_receiver(metadata: DataSet)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadatanotification_receiver</span>
+
+    <span class="nd">@metadatanotification_receiver</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">metadatanotification_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">DataSet</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the callback that handles reception of the metadata received notification response.</span>
+<span class="sd">        Receiver parameter defines full XML response received from publisher.</span>
+<span class="sd">        Parsed metadata available via `Subscriber.metadatacache` property.</span>
+<span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        Prefer using property setter over `set_metadatanotification_receiver` method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_metadatanotification_receiver</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">subscriptionupdated_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">SignalIndexCache</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets or sets a function to handle subscription updated notifications.</span>
+<span class="sd">        </span>
+<span class="sd">        Signature: `def subscriptionupdated_receiver(signalindexcache: SignalIndexCache)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span><span class="o">.</span><span class="n">subscriptionupdated_callback</span>
+
+    <span class="nd">@subscriptionupdated_receiver</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">subscriptionupdated_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">SignalIndexCache</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the callback that handles notifications that a new `SignalIndexCache` has been received.</span>
+<span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        Prefer using property setter over `set_subscriptionupdated_receiver` method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span><span class="o">.</span><span class="n">subscriptionupdated_callback</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">data_starttime_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets or sets a function to handle data start time notifications.</span>
+<span class="sd">        </span>
+<span class="sd">        Signature: `def data_starttime_receiver(starttime: np.int64)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_starttime_receiver</span>
+
+    <span class="nd">@data_starttime_receiver</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">data_starttime_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the callback that handles notification of first received measurement.</span>
+<span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        Prefer using property setter over `set_data_starttime_receiver` method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_data_starttime_receiver</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">configurationchanged_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets or sets a function to handle configuration changed notifications.</span>
+<span class="sd">        </span>
+<span class="sd">        Signature: `def configurationchanged_receiver()`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configurationchanged_receiver</span>
+
+    <span class="nd">@configurationchanged_receiver</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">configurationchanged_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the callback that handles notifications that the data publisher configuration has changed.</span>
+<span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        Prefer using property setter over `set_configurationchanged_receiver` method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_configurationchanged_receiver</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">newmeasurements_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">List</span><span class="p">[</span><span class="n">Measurement</span><span class="p">]],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets or sets a function to handle new measurements.</span>
+<span class="sd">        </span>
+<span class="sd">        Signature: `def newmeasurements_receiver(measurements: List[Measurement])`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span><span class="o">.</span><span class="n">newmeasurements_callback</span>
+
+    <span class="nd">@newmeasurements_receiver</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">newmeasurements_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">List</span><span class="p">[</span><span class="n">Measurement</span><span class="p">]],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the callback that handles reception of new measurements.</span>
+<span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        Prefer using property setter over `set_newmeasurements_receiver` method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span><span class="o">.</span><span class="n">newmeasurements_callback</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">newbufferblock_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">List</span><span class="p">[</span><span class="n">BufferBlock</span><span class="p">]],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets or sets a function to handle new buffer blocks.</span>
+<span class="sd">        </span>
+<span class="sd">        Signature: `def newbufferblock_receiver(bufferblocks: List[BufferBlock])`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span><span class="o">.</span><span class="n">newbufferblocks_callback</span>
+
+    <span class="nd">@newbufferblock_receiver</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">newbufferblock_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">List</span><span class="p">[</span><span class="n">BufferBlock</span><span class="p">]],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the callback that handles reception of new buffer blocks.</span>
+<span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        Prefer using property setter over `set_newbufferblock_receiver` method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span><span class="o">.</span><span class="n">newbufferblocks_callback</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">notification_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets or sets a function to handle notifications.</span>
+<span class="sd">        </span>
+<span class="sd">        Signature: `def notification_receiver(notification: str)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span><span class="o">.</span><span class="n">notificationreceived_callback</span>
+
+    <span class="nd">@notification_receiver</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">notification_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the callback that handles reception of a notification.</span>
+<span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        Prefer using property setter over `set_notification_receiver` method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span><span class="o">.</span><span class="n">notificationreceived_callback</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">historicalreadcomplete_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets or sets a function to handle historical read complete notifications.</span>
+<span class="sd">        </span>
+<span class="sd">        Signature: `def historicalreadcomplete_receiver()`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_historicalreadcomplete_receiver</span>
+
+    <span class="nd">@historicalreadcomplete_receiver</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">historicalreadcomplete_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the callback that handles notification that temporal processing has completed, i.e.,</span>
+<span class="sd">        the end of a historical playback data stream has been reached.</span>
+<span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        Prefer using property setter over `set_historicalreadcomplete_receiver` method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_historicalreadcomplete_receiver</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">connectionestablished_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets or sets a function to handle connection established notifications.</span>
+<span class="sd">        </span>
+<span class="sd">        Signature: `def connectionestablished_receiver()`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectionestablished_receiver</span>
+
+    <span class="nd">@connectionestablished_receiver</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">connectionestablished_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the callback that handles notification that a connection has been established.</span>
+<span class="sd">        Default implementation simply writes connection feedback to status message handler.</span>
+<span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        Prefer using property setter over `set_connectionestablished_receiver` method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connectionestablished_receiver</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">connectionterminated_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets or sets a function to handle connection terminated notifications.</span>
+<span class="sd">        </span>
+<span class="sd">        Signature: `def connectionterminated_receiver()`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectionterminated_receiver</span>
+
+    <span class="nd">@connectionterminated_receiver</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">connectionterminated_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the callback that handles notification that a connection has been terminated.</span>
+<span class="sd">        Default implementation simply writes connection terminated feedback to error message handler.</span>
+<span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        Prefer using property setter over `set_connectionterminated_receiver` method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_connectionterminated_receiver</span> <span class="o">=</span> <span class="n">value</span>
+
 <div class="viewcode-block" id="Subscriber.measurement_metadata">
 <a class="viewcode-back" href="../../sttp.html#sttp.subscriber.Subscriber.measurement_metadata">[docs]</a>
-    <span class="k">def</span> <span class="nf">measurement_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurement</span><span class="p">:</span> <span class="n">Measurement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MeasurementRecord</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">measurement_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurement</span><span class="p">:</span> <span class="n">Measurement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">MeasurementRecord</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the `MeasurementRecord` for the specified measurement, based on its signal ID,</span>
 <span class="sd">        from the local metadata cache; or, None if the measurement cannot be found.</span>
@@ -244,7 +473,7 @@
 <a class="viewcode-back" href="../../sttp.html#sttp.subscriber.Subscriber.adjustedvalue">[docs]</a>
     <span class="k">def</span> <span class="nf">adjustedvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurement</span><span class="p">:</span> <span class="n">Measurement</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Gets the Value of a `sttp.transport.measurement.Measurement` with any linear adjustments applied from the</span>
+<span class="sd">        Gets the Value of a `Measurement` with any linear adjustments applied from the</span>
 <span class="sd">        measurement&#39;s Adder and Multiplier metadata, if found.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -253,7 +482,7 @@
 
 <div class="viewcode-block" id="Subscriber.connect">
 <a class="viewcode-back" href="../../sttp.html#sttp.subscriber.Subscriber.connect">[docs]</a>
-    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span> <span class="o">=</span> <span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">address</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">config</span><span class="p">:</span> <span class="n">Config</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="ne">Exception</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Starts the client-based connection cycle to an STTP publisher. Config parameter controls</span>
 <span class="sd">        connection related settings. When the config defines `AutoReconnect` as True, the connection</span>
@@ -263,6 +492,8 @@
 <span class="sd">        will occur after reception of metadata. When the config defines `AutoRequestMetadata` as</span>
 <span class="sd">        False and `AutoSubscribe` as True, subscription will occur at successful connection.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="n">lastcolonindex</span> <span class="o">=</span> <span class="n">address</span><span class="o">.</span><span class="n">rindex</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
@@ -285,7 +516,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connect</span><span class="p">(</span><span class="n">hostname</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">(</span><span class="n">port</span><span class="p">))</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hostname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">_connect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hostname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="ne">Exception</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span>
         <span class="n">con</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">connector</span>
 
@@ -317,7 +548,7 @@
         <span class="n">ds</span><span class="o">.</span><span class="n">configurationchanged_callback</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_configurationchanged</span>
         <span class="n">ds</span><span class="o">.</span><span class="n">processingcomplete_callback</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_processingcomplete</span>
 
-        <span class="n">err</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">err</span><span class="p">:</span> <span class="ne">Exception</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># Connect and subscribe to publisher</span>
         <span class="n">status</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
@@ -375,7 +606,7 @@
 
 <div class="viewcode-block" id="Subscriber.subscribe">
 <a class="viewcode-back" href="../../sttp.html#sttp.subscriber.Subscriber.subscribe">[docs]</a>
-    <span class="k">def</span> <span class="nf">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">Settings</span> <span class="o">=</span> <span class="o">...</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filterexpression</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">settings</span><span class="p">:</span> <span class="n">Settings</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Subscribe sets up a request indicating that the `Subscriber` would like to start receiving</span>
 <span class="sd">        streaming data from a data publisher. If the subscriber is already connected, the updated</span>
@@ -402,7 +633,8 @@
         <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span>
         <span class="n">sub</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">subscription</span>
 
-        <span class="n">settings</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">()</span> <span class="k">if</span> <span class="n">settings</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">settings</span>
+        <span class="k">if</span> <span class="n">settings</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">settings</span> <span class="o">=</span> <span class="n">Settings</span><span class="p">()</span>
 
         <span class="n">sub</span><span class="o">.</span><span class="n">filterexpression</span> <span class="o">=</span> <span class="n">filterexpression</span>
         <span class="n">sub</span><span class="o">.</span><span class="n">throttled</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">throttled</span>
@@ -574,7 +806,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Implements the default handler for the status message callback.</span>
 <span class="sd">        Default implementation synchronously writes output to stdio.</span>
-<span class="sd">        Logging is recommended.</span>
+<span class="sd">        Using user implementation with logging is recommended.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_consolelock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
@@ -591,7 +823,7 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Implements the default handler for the error message callback.</span>
 <span class="sd">        Default implementation synchronously writes output to stderr.</span>
-<span class="sd">        Logging is recommended.</span>
+<span class="sd">        Using user implementation with logging is recommended.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_consolelock</span><span class="o">.</span><span class="n">acquire</span><span class="p">()</span>
@@ -628,10 +860,13 @@
 
 <div class="viewcode-block" id="Subscriber.set_statusmessage_logger">
 <a class="viewcode-back" href="../../sttp.html#sttp.subscriber.Subscriber.set_statusmessage_logger">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_statusmessage_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]):</span>
+    <span class="k">def</span> <span class="nf">set_statusmessage_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the callback that handles informational message logging.</span>
 <span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        </span>
+<span class="sd">        .. deprecated::</span>
+<span class="sd">            Prefer using `statusmessage_logger` property setter for consistency with Publisher API.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_statusmessage_logger</span> <span class="o">=</span> <span class="n">callback</span></div>
@@ -639,10 +874,13 @@
 
 <div class="viewcode-block" id="Subscriber.set_errormessage_logger">
 <a class="viewcode-back" href="../../sttp.html#sttp.subscriber.Subscriber.set_errormessage_logger">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_errormessage_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]):</span>
+    <span class="k">def</span> <span class="nf">set_errormessage_logger</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the callback that handles error message logging.</span>
 <span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        </span>
+<span class="sd">        .. deprecated::</span>
+<span class="sd">            Prefer using `errormessage_logger` property setter for consistency with Publisher API.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_errormessage_logger</span> <span class="o">=</span> <span class="n">callback</span></div>
@@ -650,12 +888,15 @@
 
 <div class="viewcode-block" id="Subscriber.set_metadatanotification_receiver">
 <a class="viewcode-back" href="../../sttp.html#sttp.subscriber.Subscriber.set_metadatanotification_receiver">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_metadatanotification_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">DataSet</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]):</span>
+    <span class="k">def</span> <span class="nf">set_metadatanotification_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">DataSet</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the callback that handles reception of the metadata received notification response.</span>
 <span class="sd">        Receiver parameter defines full XML response received from publisher.</span>
 <span class="sd">        Parsed metadata available via `Subscriber.metadatacache` property.</span>
 <span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        </span>
+<span class="sd">        .. deprecated::</span>
+<span class="sd">            Prefer using `metadatanotification_receiver` property setter for consistency with Publisher API.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_metadatanotification_receiver</span> <span class="o">=</span> <span class="n">callback</span></div>
@@ -663,10 +904,13 @@
 
 <div class="viewcode-block" id="Subscriber.set_subscriptionupdated_receiver">
 <a class="viewcode-back" href="../../sttp.html#sttp.subscriber.Subscriber.set_subscriptionupdated_receiver">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_subscriptionupdated_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">SignalIndexCache</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]):</span>
+    <span class="k">def</span> <span class="nf">set_subscriptionupdated_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">SignalIndexCache</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the callback that handles notifications that a new `SignalIndexCache` has been received.</span>
 <span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        </span>
+<span class="sd">        .. deprecated::</span>
+<span class="sd">            Prefer using `subscriptionupdated_receiver` property setter for consistency with Publisher API.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span><span class="o">.</span><span class="n">subscriptionupdated_callback</span> <span class="o">=</span> <span class="n">callback</span></div>
@@ -674,10 +918,13 @@
 
 <div class="viewcode-block" id="Subscriber.set_data_starttime_receiver">
 <a class="viewcode-back" href="../../sttp.html#sttp.subscriber.Subscriber.set_data_starttime_receiver">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_data_starttime_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]):</span>
+    <span class="k">def</span> <span class="nf">set_data_starttime_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the callback that handles notification of first received measurement.</span>
 <span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        </span>
+<span class="sd">        .. deprecated::</span>
+<span class="sd">            Prefer using `data_starttime_receiver` property setter for consistency with Publisher API.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_data_starttime_receiver</span> <span class="o">=</span> <span class="n">callback</span></div>
@@ -685,10 +932,13 @@
 
 <div class="viewcode-block" id="Subscriber.set_configurationchanged_receiver">
 <a class="viewcode-back" href="../../sttp.html#sttp.subscriber.Subscriber.set_configurationchanged_receiver">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_configurationchanged_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]]):</span>
+    <span class="k">def</span> <span class="nf">set_configurationchanged_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the callback that handles notifications that the data publisher configuration has changed.</span>
 <span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        </span>
+<span class="sd">        .. deprecated::</span>
+<span class="sd">            Prefer using `configurationchanged_receiver` property setter for consistency with Publisher API.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_configurationchanged_receiver</span> <span class="o">=</span> <span class="n">callback</span></div>
@@ -696,10 +946,13 @@
 
 <div class="viewcode-block" id="Subscriber.set_newmeasurements_receiver">
 <a class="viewcode-back" href="../../sttp.html#sttp.subscriber.Subscriber.set_newmeasurements_receiver">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_newmeasurements_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">List</span><span class="p">[</span><span class="n">Measurement</span><span class="p">]],</span> <span class="kc">None</span><span class="p">]]):</span>
+    <span class="k">def</span> <span class="nf">set_newmeasurements_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">List</span><span class="p">[</span><span class="n">Measurement</span><span class="p">]],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the callback that handles reception of new measurements.</span>
 <span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        </span>
+<span class="sd">        .. deprecated::</span>
+<span class="sd">            Prefer using `newmeasurements_receiver` property setter for consistency with Publisher API.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span><span class="o">.</span><span class="n">newmeasurements_callback</span> <span class="o">=</span> <span class="n">callback</span></div>
@@ -707,10 +960,13 @@
 
 <div class="viewcode-block" id="Subscriber.set_newbufferblock_receiver">
 <a class="viewcode-back" href="../../sttp.html#sttp.subscriber.Subscriber.set_newbufferblock_receiver">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_newbufferblock_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">List</span><span class="p">[</span><span class="n">BufferBlock</span><span class="p">]],</span> <span class="kc">None</span><span class="p">]]):</span>
+    <span class="k">def</span> <span class="nf">set_newbufferblock_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">List</span><span class="p">[</span><span class="n">BufferBlock</span><span class="p">]],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the callback that handles reception of new buffer blocks.</span>
 <span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        </span>
+<span class="sd">        .. deprecated::</span>
+<span class="sd">            Prefer using `newbufferblock_receiver` property setter for consistency with Publisher API.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span><span class="o">.</span><span class="n">newbufferblocks_callback</span> <span class="o">=</span> <span class="n">callback</span></div>
@@ -718,10 +974,13 @@
 
 <div class="viewcode-block" id="Subscriber.set_notification_receiver">
 <a class="viewcode-back" href="../../sttp.html#sttp.subscriber.Subscriber.set_notification_receiver">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_notification_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]):</span>
+    <span class="k">def</span> <span class="nf">set_notification_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the callback that handles reception of a notification.</span>
 <span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        </span>
+<span class="sd">        .. deprecated::</span>
+<span class="sd">            Prefer using `notification_receiver` property setter for consistency with Publisher API.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span><span class="o">.</span><span class="n">notificationreceived_callback</span> <span class="o">=</span> <span class="n">callback</span></div>
@@ -729,11 +988,14 @@
 
 <div class="viewcode-block" id="Subscriber.set_historicalreadcomplete_receiver">
 <a class="viewcode-back" href="../../sttp.html#sttp.subscriber.Subscriber.set_historicalreadcomplete_receiver">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_historicalreadcomplete_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]]):</span>
+    <span class="k">def</span> <span class="nf">set_historicalreadcomplete_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the callback that handles notification that temporal processing has completed, i.e.,</span>
 <span class="sd">        the end of a historical playback data stream has been reached.</span>
 <span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        </span>
+<span class="sd">        .. deprecated::</span>
+<span class="sd">            Prefer using `historicalreadcomplete_receiver` property setter for consistency with Publisher API.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_historicalreadcomplete_receiver</span> <span class="o">=</span> <span class="n">callback</span></div>
@@ -741,11 +1003,14 @@
 
 <div class="viewcode-block" id="Subscriber.set_connectionestablished_receiver">
 <a class="viewcode-back" href="../../sttp.html#sttp.subscriber.Subscriber.set_connectionestablished_receiver">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_connectionestablished_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]]):</span>
+    <span class="k">def</span> <span class="nf">set_connectionestablished_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the callback that handles notification that a connection has been established.</span>
 <span class="sd">        Default implementation simply writes connection feedback to status message handler.</span>
 <span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        </span>
+<span class="sd">        .. deprecated::</span>
+<span class="sd">            Prefer using `connectionestablished_receiver` property setter for consistency with Publisher API.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_connectionestablished_receiver</span> <span class="o">=</span> <span class="n">callback</span></div>
@@ -753,11 +1018,14 @@
 
 <div class="viewcode-block" id="Subscriber.set_connectionterminated_receiver">
 <a class="viewcode-back" href="../../sttp.html#sttp.subscriber.Subscriber.set_connectionterminated_receiver">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_connectionterminated_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]]):</span>
+    <span class="k">def</span> <span class="nf">set_connectionterminated_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the callback that handles notification that a connection has been terminated.</span>
 <span class="sd">        Default implementation simply writes connection terminated feedback to error message handler.</span>
 <span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        </span>
+<span class="sd">        .. deprecated::</span>
+<span class="sd">            Prefer using `connectionterminated_receiver` property setter for consistency with Publisher API.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_connectionterminated_receiver</span> <span class="o">=</span> <span class="n">callback</span></div>

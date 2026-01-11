@@ -21,6 +21,11 @@
 #
 # ******************************************************************************************************
 
+# pyright: reportArgumentType=false
+# pyright: reportReturnType=false
+# pyright: reportAssignmentType=false
+# pyright: reportOperatorIssue=false
+
 from __future__ import annotations
 from gsf import Convert, Empty, normalize_enumname
 from .datatype import DataType, default_datatype
@@ -30,7 +35,7 @@ from .errors import EvaluateError
 from decimal import Decimal
 from datetime import datetime
 from uuid import UUID
-from typing import Callable, Iterator, Optional, Tuple, Union, TYPE_CHECKING
+from typing import Callable, Iterator, Tuple, TYPE_CHECKING
 import numpy as np
 
 if TYPE_CHECKING:
@@ -55,7 +60,7 @@ class DataRow:
         self._parent = parent
         self._values = np.empty(parent.columncount, object)
 
-    def __getitem__(self, key: Union[int, str]) -> object:
+    def __getitem__(self, key: int | str) -> object:
         if isinstance(key, str):
             value, err = self.value_byname(key)
         else:
@@ -66,7 +71,7 @@ class DataRow:
 
         return value
 
-    def __setitem__(self, key: Union[int, str], value: object):
+    def __setitem__(self, key: int | str, value: object):
         if isinstance(key, str):
             err = self.set_value_byname(key, value)
         else:
@@ -92,13 +97,13 @@ class DataRow:
 
         return self._parent
 
-    def _get_columnindex(self, columnname: str) -> Tuple[int, Optional[Exception]]:
+    def _get_columnindex(self, columnname: str) -> Tuple[int, Exception | None]:
         if (column := self._parent.column_byname(columnname)) is None:
             return -1, ValueError(f"column name \"{columnname}\" was not found in table \"{self._parent.name}\"")
 
         return column.index, None
 
-    def _validate_columntype(self, columnindex: int, targettype: Union[int, DataType], read: bool) -> Tuple[Optional[DataColumn], Optional[Exception]]:
+    def _validate_columntype(self, columnindex: int, targettype: int | DataType, read: bool) -> Tuple[DataColumn | None, Exception | None]:
         if (column := self._parent.column(columnindex)) is None:
             return None, IndexError(f"column index {columnindex} is out of range for table \"{self._parent.name}\"")
 
@@ -117,7 +122,7 @@ class DataRow:
 
         return column, None
 
-    def _expressiontree(self, column: DataColumn) -> Tuple[Optional[ExpressionTree], Optional[Exception]]:
+    def _expressiontree(self, column: DataColumn) -> Tuple[ExpressionTree | None, Exception | None]:
         columnindex = column.index
         value = self._values[columnindex]
 
@@ -134,7 +139,7 @@ class DataRow:
 
         return value, None
 
-    def _get_computedvalue(self, column: DataColumn) -> Tuple[Optional[object], Optional[Exception]]:
+    def _get_computedvalue(self, column: DataColumn) -> Tuple[object | None, Exception | None]:
         expressiontree, err = self._expressiontree(column)
 
         if err is not None:
@@ -170,14 +175,14 @@ class DataRow:
 
         return None, TypeError("unexpected expression value type encountered")
 
-    def _convert_fromstring(self, value: str, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
+    def _convert_fromstring(self, value: str, targettype: DataType) -> Tuple[object | None, Exception | None]:
         try:
             if targettype == DataType.STRING:
                 return value, None
             if targettype == DataType.BOOLEAN:
                 return bool(value), None
             if targettype == DataType.DATETIME:
-                return Convert.from_str(value, datetime)
+                return Convert.from_str(value, datetime), None
             if targettype == DataType.GUID:
                 return UUID(value), None
             if targettype == DataType.SINGLE:
@@ -207,7 +212,7 @@ class DataRow:
         except Exception as ex:
             return None, ValueError(f"failed to convert \"String\" expression value to \"{normalize_enumname(targettype)}\" column: {ex}")
 
-    def _convert_fromguid(self, value: UUID, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
+    def _convert_fromguid(self, value: UUID, targettype: DataType) -> Tuple[object | None, Exception | None]:
         try:
             if targettype == DataType.STRING:
                 return str(value), None
@@ -221,9 +226,9 @@ class DataRow:
 
             return None, TypeError("unexpected column data type encountered")
         except Exception as ex:
-            return None, ValueError(f'failed to convert \"Guid\" expression value to \"{normalize_enumname(targettype)}\" column: {ex}')
+            return None, ValueError(f'failed to convert "Guid" expression value to "{normalize_enumname(targettype)}" column: {ex}')
 
-    def _convert_fromvalue(self, value: object, sourcetype: DataType, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
+    def _convert_fromvalue(self, value: object, sourcetype: DataType, targettype: DataType) -> Tuple[object | None, Exception | None]:
         try:
             if targettype == DataType.STRING:
                 return str(value), None
@@ -258,22 +263,22 @@ class DataRow:
         except Exception as ex:
             return None, ValueError(f"failed to convert \"{normalize_enumname(sourcetype)}\" expression value to \"{normalize_enumname(targettype)}\" column: {ex}")
 
-    def _convert_frombool(self, value: bool, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
+    def _convert_frombool(self, value: bool, targettype: DataType) -> Tuple[object | None, Exception | None]:
         return self._convert_fromvalue(1 if value else 0, DataType.BOOLEAN, targettype)
 
-    def _convert_fromint32(self, value: np.int32, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
+    def _convert_fromint32(self, value: np.int32, targettype: DataType) -> Tuple[object | None, Exception | None]:
         return self._convert_fromvalue(value.item(), DataType.INT32, targettype)
 
-    def _convert_fromint64(self, value: np.int64, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
+    def _convert_fromint64(self, value: np.int64, targettype: DataType) -> Tuple[object | None, Exception | None]:
         return self._convert_fromvalue(value.item(), DataType.INT64, targettype)
 
-    def _convert_fromdecimal(self, value: Decimal, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
+    def _convert_fromdecimal(self, value: Decimal, targettype: DataType) -> Tuple[object | None, Exception | None]:
         return self._convert_fromvalue(value, DataType.DECIMAL, targettype)
 
-    def _convert_fromdouble(self, value: np.float64, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
+    def _convert_fromdouble(self, value: np.float64, targettype: DataType) -> Tuple[object | None, Exception | None]:
         return self._convert_fromvalue(value.item(), DataType.DOUBLE, targettype)
 
-    def _convert_fromdatetime(self, value: datetime, targettype: DataType) -> Tuple[Optional[object], Optional[Exception]]:
+    def _convert_fromdatetime(self, value: datetime, targettype: DataType) -> Tuple[object | None, Exception | None]:
         try:
             if targettype == DataType.STRING:
                 return xsdformat(value), None
@@ -284,7 +289,7 @@ class DataRow:
 
         return self._convert_fromvalue(int(value.timestamp()), DataType.DATETIME, targettype)
 
-    def value(self, columnindex: int) -> Tuple[Optional[object], Optional[Exception]]:
+    def value(self, columnindex: int) -> Tuple[object | None, Exception | None]:
         """
         Reads the record value at the specified column index.
         """
@@ -299,7 +304,7 @@ class DataRow:
 
         return self._values[columnindex], None
 
-    def value_byname(self, columnname: str) -> Tuple[Optional[object], Optional[Exception]]:
+    def value_byname(self, columnname: str) -> Tuple[object | None, Exception | None]:
         """
         Reads the record value for the specified column name.
         """
@@ -307,7 +312,7 @@ class DataRow:
         index, err = self._get_columnindex(columnname)
         return (None, err) if err is not None else (self._values[index], None)
 
-    def set_value(self, columnindex: int, value: object) -> Optional[Exception]:
+    def set_value(self, columnindex: int, value: object) -> Exception | None:
         # sourcery skip: assign-if-exp
         """
         Assigns the record value at the specified column index.
@@ -321,7 +326,7 @@ class DataRow:
         self._values[columnindex] = value
         return None
 
-    def set_value_byname(self, columnname: str, value: object) -> Optional[Exception]:
+    def set_value_byname(self, columnname: str, value: object) -> Exception | None:
         """
         Assigns the record value for the specified column name.
         """
@@ -345,7 +350,7 @@ class DataRow:
 
         return self.columnvalue_as_string(self._parent.column_byname(columnname))
 
-    def columnvalue_as_string(self, column: Optional[DataColumn]) -> str:
+    def columnvalue_as_string(self, column: DataColumn | None) -> str:
         """
         Reads the record value for the specified data column converted
         to a string. For any errors, an empty string will be returned.
@@ -390,19 +395,19 @@ class DataRow:
 
         return Empty.STRING
 
-    def _checkstate(self, null: bool, err: Optional[Exception]) -> Tuple[bool, str]:
+    def _checkstate(self, null: bool, err: Exception | None) -> Tuple[bool, str]:
         if err is not None:
             return True, Empty.STRING
 
         return (True, "<NULL>") if null else (False, Empty.STRING)
 
-    def _string_from_typevalue(self, index: int, getvalue: Callable[[int], Tuple[object, bool, Optional[Exception]]], strconv: Callable[[object], str] = str) -> str:
+    def _string_from_typevalue(self, index: int, getvalue: Callable[[int], Tuple[object, bool, Exception | None]], strconv: Callable[[object], str] = str) -> str:
         value, null, err = getvalue(index)
         invalid, result = self._checkstate(null, err)
         
         return result if invalid else strconv(value)
 
-    def _typevalue(self, columnindex: int, targettype: DataType) -> Tuple[object, bool, Optional[Exception]]:
+    def _typevalue(self, columnindex: int, targettype: DataType) -> Tuple[object, bool, Exception | None]:
         column, err = self._validate_columntype(columnindex, targettype, True)
         default = default_datatype(targettype)
 
@@ -421,7 +426,7 @@ class DataRow:
 
         return (default, True, None) if value is None else (value, False, None)
 
-    def _typevalue_byname(self, columnname: str, targettype: DataType) -> Tuple[object, bool, Optional[Exception]]:
+    def _typevalue_byname(self, columnname: str, targettype: DataType) -> Tuple[object, bool, Exception | None]:
         index, err = self._get_columnindex(columnname)
 
         if err is not None:
@@ -429,7 +434,7 @@ class DataRow:
 
         return self._typevalue(index, targettype)
 
-    def stringvalue(self, columnindex: int) -> Tuple[str, bool, Optional[Exception]]:
+    def stringvalue(self, columnindex: int) -> Tuple[str, bool, Exception | None]:
         """
         Gets the string-based record value at the specified column index.
         Second parameter in tuple return value indicates if original value was None.
@@ -438,7 +443,7 @@ class DataRow:
 
         return self._typevalue(columnindex, DataType.STRING)
 
-    def stringvalue_byname(self, columnname: str) -> Tuple[str, bool, Optional[Exception]]:
+    def stringvalue_byname(self, columnname: str) -> Tuple[str, bool, Exception | None]:
         """
         Gets the string-based record value for the specified column name.
         Second parameter in tuple return value indicates if original value was None.
@@ -447,7 +452,7 @@ class DataRow:
 
         return self._typevalue_byname(columnname, DataType.STRING)
 
-    def booleanvalue(self, columnindex: int) -> Tuple[bool, bool, Optional[Exception]]:
+    def booleanvalue(self, columnindex: int) -> Tuple[bool, bool, Exception | None]:
         """
         Gets the boolean-based record value at the specified column index.
         Second parameter in tuple return value indicates if original value was None.
@@ -456,7 +461,7 @@ class DataRow:
 
         return self._typevalue(columnindex, DataType.BOOLEAN)
 
-    def booleanvalue_byname(self, columnname: str) -> Tuple[bool, bool, Optional[Exception]]:
+    def booleanvalue_byname(self, columnname: str) -> Tuple[bool, bool, Exception | None]:
         """
         Gets the boolean-based record value for the specified column name.
         Second parameter in tuple return value indicates if original value was None.
@@ -465,7 +470,7 @@ class DataRow:
 
         return self._typevalue_byname(columnname, DataType.BOOLEAN)
 
-    def datetimevalue(self, columnindex: int) -> Tuple[datetime, bool, Optional[Exception]]:
+    def datetimevalue(self, columnindex: int) -> Tuple[datetime, bool, Exception | None]:
         """
         Gets the datetime-based record value at the specified column index.
         Second parameter in tuple return value indicates if original value was None.
@@ -474,7 +479,7 @@ class DataRow:
 
         return self._typevalue(columnindex, DataType.DATETIME)
 
-    def datetimevalue_byname(self, columnname: str) -> Tuple[datetime, bool, Optional[Exception]]:
+    def datetimevalue_byname(self, columnname: str) -> Tuple[datetime, bool, Exception | None]:
         """
         Gets the datetime-based record value for the specified column name.
         Second parameter in tuple return value indicates if original value was None.
@@ -483,7 +488,7 @@ class DataRow:
 
         return self._typevalue_byname(columnname, DataType.DATETIME)
 
-    def singlevalue(self, columnindex: int) -> Tuple[np.float32, bool, Optional[Exception]]:
+    def singlevalue(self, columnindex: int) -> Tuple[np.float32, bool, Exception | None]:
         """
         Gets the single-based record value at the specified column index.
         Second parameter in tuple return value indicates if original value was None.
@@ -492,7 +497,7 @@ class DataRow:
 
         return self._typevalue(columnindex, DataType.SINGLE)
 
-    def singlevalue_byname(self, columnname: str) -> Tuple[np.float32, bool, Optional[Exception]]:
+    def singlevalue_byname(self, columnname: str) -> Tuple[np.float32, bool, Exception | None]:
         """
         Gets the single-based record value for the specified column name.
         Second parameter in tuple return value indicates if original value was None.
@@ -501,7 +506,7 @@ class DataRow:
 
         return self._typevalue_byname(columnname, DataType.SINGLE)
 
-    def doublevalue(self, columnindex: int) -> Tuple[np.float64, bool, Optional[Exception]]:
+    def doublevalue(self, columnindex: int) -> Tuple[np.float64, bool, Exception | None]:
         """
         Gets the double-based record value at the specified column index.
         Second parameter in tuple return value indicates if original value was None.
@@ -510,7 +515,7 @@ class DataRow:
 
         return self._typevalue(columnindex, DataType.DOUBLE)
 
-    def doublevalue_byname(self, columnname: str) -> Tuple[np.float64, bool, Optional[Exception]]:
+    def doublevalue_byname(self, columnname: str) -> Tuple[np.float64, bool, Exception | None]:
         """
         Gets the double-based record value for the specified column name.
         Second parameter in tuple return value indicates if original value was None.
@@ -519,7 +524,7 @@ class DataRow:
 
         return self._typevalue_byname(columnname, DataType.DOUBLE)
 
-    def decimalvalue(self, columnindex: int) -> Tuple[Decimal, bool, Optional[Exception]]:
+    def decimalvalue(self, columnindex: int) -> Tuple[Decimal, bool, Exception | None]:
         """
         Gets the decimal-based record value at the specified column index.
         Second parameter in tuple return value indicates if original value was None.
@@ -528,7 +533,7 @@ class DataRow:
 
         return self._typevalue(columnindex, DataType.DECIMAL)
 
-    def decimalvalue_byname(self, columnname: str) -> Tuple[Decimal, bool, Optional[Exception]]:
+    def decimalvalue_byname(self, columnname: str) -> Tuple[Decimal, bool, Exception | None]:
         """
         Gets the decimal-based record value for the specified column name.
         Second parameter in tuple return value indicates if original value was None.
@@ -537,7 +542,7 @@ class DataRow:
 
         return self._typevalue_byname(columnname, DataType.DECIMAL)
 
-    def guidvalue(self, columnindex: int) -> Tuple[UUID, bool, Optional[Exception]]:
+    def guidvalue(self, columnindex: int) -> Tuple[UUID, bool, Exception | None]:
         """
         Gets the guid-based record value at the specified column index.
         Second parameter in tuple return value indicates if original value was None.
@@ -546,7 +551,7 @@ class DataRow:
 
         return self._typevalue(columnindex, DataType.GUID)
 
-    def guidvalue_byname(self, columnname: str) -> Tuple[UUID, bool, Optional[Exception]]:
+    def guidvalue_byname(self, columnname: str) -> Tuple[UUID, bool, Exception | None]:
         """
         Gets the guid-based record value for the specified column name.
         Second parameter in tuple return value indicates if original value was None.
@@ -555,7 +560,7 @@ class DataRow:
 
         return self._typevalue_byname(columnname, DataType.GUID)
 
-    def int8value(self, columnindex: int) -> Tuple[np.int8, bool, Optional[Exception]]:
+    def int8value(self, columnindex: int) -> Tuple[np.int8, bool, Exception | None]:
         """
         Gets the int8-based record value at the specified column index.
         Second parameter in tuple return value indicates if original value was None.
@@ -564,7 +569,7 @@ class DataRow:
 
         return self._typevalue(columnindex, DataType.INT8)
 
-    def int8value_byname(self, columnname: str) -> Tuple[np.int8, bool, Optional[Exception]]:
+    def int8value_byname(self, columnname: str) -> Tuple[np.int8, bool, Exception | None]:
         """
         Gets the int8-based record value for the specified column name.
         Second parameter in tuple return value indicates if original value was None.
@@ -573,7 +578,7 @@ class DataRow:
 
         return self._typevalue_byname(columnname, DataType.INT8)
 
-    def int16value(self, columnindex: int) -> Tuple[np.int16, bool, Optional[Exception]]:
+    def int16value(self, columnindex: int) -> Tuple[np.int16, bool, Exception | None]:
         """
         Gets the int16-based record value at the specified column index.
         Second parameter in tuple return value indicates if original value was None.
@@ -582,7 +587,7 @@ class DataRow:
 
         return self._typevalue(columnindex, DataType.INT16)
 
-    def int16value_byname(self, columnname: str) -> Tuple[np.int16, bool, Optional[Exception]]:
+    def int16value_byname(self, columnname: str) -> Tuple[np.int16, bool, Exception | None]:
         """
         Gets the int16-based record value for the specified column name.
         Second parameter in tuple return value indicates if original value was None.
@@ -591,7 +596,7 @@ class DataRow:
 
         return self._typevalue_byname(columnname, DataType.INT16)
 
-    def int32value(self, columnindex: int) -> Tuple[np.int32, bool, Optional[Exception]]:
+    def int32value(self, columnindex: int) -> Tuple[np.int32, bool, Exception | None]:
         """
         Gets the int32-based record value at the specified column index.
         Second parameter in tuple return value indicates if original value was None.
@@ -600,7 +605,7 @@ class DataRow:
 
         return self._typevalue(columnindex, DataType.INT32)
 
-    def int32value_byname(self, columnname: str) -> Tuple[np.int32, bool, Optional[Exception]]:
+    def int32value_byname(self, columnname: str) -> Tuple[np.int32, bool, Exception | None]:
         """
         Gets the int32-based record value for the specified column name.
         Second parameter in tuple return value indicates if original value was None.
@@ -609,7 +614,7 @@ class DataRow:
 
         return self._typevalue_byname(columnname, DataType.INT32)
 
-    def int64value(self, columnindex: int) -> Tuple[np.int64, bool, Optional[Exception]]:
+    def int64value(self, columnindex: int) -> Tuple[np.int64, bool, Exception | None]:
         """
         Gets the int64-based record value at the specified column index.
         Second parameter in tuple return value indicates if original value was None.
@@ -618,7 +623,7 @@ class DataRow:
 
         return self._typevalue(columnindex, DataType.INT64)
 
-    def int64value_byname(self, columnname: str) -> Tuple[np.int64, bool, Optional[Exception]]:
+    def int64value_byname(self, columnname: str) -> Tuple[np.int64, bool, Exception | None]:
         """
         Gets the int64-based record value for the specified column name.
         Second parameter in tuple return value indicates if original value was None.
@@ -627,7 +632,7 @@ class DataRow:
 
         return self._typevalue_byname(columnname, DataType.INT64)
 
-    def uint8value(self, columnindex: int) -> Tuple[np.uint8, bool, Optional[Exception]]:
+    def uint8value(self, columnindex: int) -> Tuple[np.uint8, bool, Exception | None]:
         """
         Gets the uint8-based record value at the specified column index.
         Second parameter in tuple return value indicates if original value was None.
@@ -636,7 +641,7 @@ class DataRow:
 
         return self._typevalue(columnindex, DataType.UINT8)
 
-    def uint8value_byname(self, columnname: str) -> Tuple[np.uint8, bool, Optional[Exception]]:
+    def uint8value_byname(self, columnname: str) -> Tuple[np.uint8, bool, Exception | None]:
         """
         Gets the uint8-based record value for the specified column name.
         Second parameter in tuple return value indicates if original value was None.
@@ -645,7 +650,7 @@ class DataRow:
 
         return self._typevalue_byname(columnname, DataType.UINT8)
 
-    def uint16value(self, columnindex: int) -> Tuple[np.uint16, bool, Optional[Exception]]:
+    def uint16value(self, columnindex: int) -> Tuple[np.uint16, bool, Exception | None]:
         """
         Gets the uint16-based record value at the specified column index.
         Second parameter in tuple return value indicates if original value was None.
@@ -654,7 +659,7 @@ class DataRow:
 
         return self._typevalue(columnindex, DataType.UINT16)
 
-    def uint16value_byname(self, columnname: str) -> Tuple[np.uint16, bool, Optional[Exception]]:
+    def uint16value_byname(self, columnname: str) -> Tuple[np.uint16, bool, Exception | None]:
         """
         Gets the uint16-based record value for the specified column name.
         Second parameter in tuple return value indicates if original value was None.
@@ -663,7 +668,7 @@ class DataRow:
 
         return self._typevalue_byname(columnname, DataType.UINT16)
 
-    def uint32value(self, columnindex: int) -> Tuple[np.uint32, bool, Optional[Exception]]:
+    def uint32value(self, columnindex: int) -> Tuple[np.uint32, bool, Exception | None]:
         """
         Gets the uint32-based record value at the specified column index.
         Second parameter in tuple return value indicates if original value was None.
@@ -672,7 +677,7 @@ class DataRow:
 
         return self._typevalue(columnindex, DataType.UINT32)
 
-    def uint32value_byname(self, columnname: str) -> Tuple[np.uint32, bool, Optional[Exception]]:
+    def uint32value_byname(self, columnname: str) -> Tuple[np.uint32, bool, Exception | None]:
         """
         Gets the uint32-based record value for the specified column name.
         Second parameter in tuple return value indicates if original value was None.
@@ -681,7 +686,7 @@ class DataRow:
 
         return self._typevalue_byname(columnname, DataType.UINT32)
 
-    def uint64value(self, columnindex: int) -> Tuple[np.uint64, bool, Optional[Exception]]:
+    def uint64value(self, columnindex: int) -> Tuple[np.uint64, bool, Exception | None]:
         """
         Gets the uint64-based record value at the specified column index.
         Second parameter in tuple return value indicates if original value was None.
@@ -690,7 +695,7 @@ class DataRow:
 
         return self._typevalue(columnindex, DataType.UINT64)
 
-    def uint64value_byname(self, columnname: str) -> Tuple[np.uint64, bool, Optional[Exception]]:
+    def uint64value_byname(self, columnname: str) -> Tuple[np.uint64, bool, Exception | None]:
         """
         Gets the uint64-based record value for the specified column name.
         Second parameter in tuple return value indicates if original value was None.
@@ -721,7 +726,7 @@ class DataRow:
         return "".join(image)
 
     @staticmethod
-    def compare_datarowcolumns(leftrow: DataRow, rightrow: DataRow, columnindex: int, exactmatch: bool) -> Tuple[int, Optional[Exception]]:  # sourcery skip: low-code-quality
+    def compare_datarowcolumns(leftrow: DataRow, rightrow: DataRow, columnindex: int, exactmatch: bool) -> Tuple[int, Exception | None]:  # sourcery skip: low-code-quality
         """
         Returns an integer comparing two `DataRow` column values for the specified column index.
         The result will be 0 if `leftrow`==`rightrow`, -1 if `leftrow` < `rightrow`, and +1 if `leftrow` > `rightrow`.
@@ -747,9 +752,9 @@ class DataRow:
             return 1 if lefthasvalue else -1, None
 
         def typecompare(
-                leftrow_getvalue: Callable[[int], Tuple[object, bool, Optional[Exception]]],
-                rightrow_getvalue: Callable[[int], Tuple[object, bool, Optional[Exception]]]) -> \
-                            Tuple[int, Optional[Exception]]:
+                leftrow_getvalue: Callable[[int], Tuple[object, bool, Exception | None]],
+                rightrow_getvalue: Callable[[int], Tuple[object, bool, Exception | None]]) -> \
+                            Tuple[int, Exception | None]:
 
             leftvalue, leftnull, lefterr = leftrow_getvalue(columnindex)
             rightvalue, rightnull, righterr = rightrow_getvalue(columnindex)
@@ -767,10 +772,11 @@ class DataRow:
 
         if lefttype == DataType.STRING:
             if exactmatch:
-                def upperstringvalue(index: int, getvalue: Callable[[int], Tuple[object, bool, Optional[Exception]]]) -> Tuple[str, bool, Optional[Exception]]:
+                def upperstringvalue(index: int, getvalue: Callable[[int], Tuple[object, bool, Exception | None]]) -> Tuple[str, bool, Exception | None]:
                     value, null, err = getvalue(index)
 
                     if not null and err is None:
+                        assert isinstance(value, str)
                         return value.upper(), False, None
 
                     return value, null, err

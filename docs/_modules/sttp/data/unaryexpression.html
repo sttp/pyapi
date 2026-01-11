@@ -1,21 +1,23 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.data.unaryexpression &mdash; sttp/pyapi 0.6.4 documentation</title>
+  <title>sttp.data.unaryexpression &mdash; sttp/pyapi 0.7.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
-      <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
-      <script src="../../../_static/doctools.js?v=92e14aea"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -41,8 +43,11 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">src</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -97,7 +102,7 @@
 <span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">ExpressionType</span><span class="p">,</span> <span class="n">ExpressionUnaryType</span><span class="p">,</span> <span class="n">ExpressionValueType</span>
 <span class="kn">from</span> <span class="nn">.errors</span> <span class="kn">import</span> <span class="n">EvaluateError</span>
 <span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <div class="viewcode-block" id="UnaryExpression">
@@ -138,7 +143,7 @@
 
 <div class="viewcode-block" id="UnaryExpression.applyto_bool">
 <a class="viewcode-back" href="../../../sttp.data.html#sttp.data.unaryexpression.UnaryExpression.applyto_bool">[docs]</a>
-    <span class="k">def</span> <span class="nf">applyto_bool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">ValueExpression</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+    <span class="k">def</span> <span class="nf">applyto_bool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ValueExpression</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="ne">Exception</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Applies the `UnaryExpression` prefix to a boolean and returns `ValueExpression` of result, if possible.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -151,7 +156,7 @@
 
 <div class="viewcode-block" id="UnaryExpression.applyto_int32">
 <a class="viewcode-back" href="../../../sttp.data.html#sttp.data.unaryexpression.UnaryExpression.applyto_int32">[docs]</a>
-    <span class="k">def</span> <span class="nf">applyto_int32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">ValueExpression</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+    <span class="k">def</span> <span class="nf">applyto_int32</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ValueExpression</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="ne">Exception</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Applies the `UnaryExpression` prefix to a 32-bit integer value and returns `ValueExpression` of result.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -167,7 +172,7 @@
 
 <div class="viewcode-block" id="UnaryExpression.applyto_int64">
 <a class="viewcode-back" href="../../../sttp.data.html#sttp.data.unaryexpression.UnaryExpression.applyto_int64">[docs]</a>
-    <span class="k">def</span> <span class="nf">applyto_int64</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">ValueExpression</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+    <span class="k">def</span> <span class="nf">applyto_int64</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ValueExpression</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="ne">Exception</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Applies the `UnaryExpression` prefix to a 64-bit integer value and returns `ValueExpression` of result.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -183,7 +188,7 @@
 
 <div class="viewcode-block" id="UnaryExpression.applyto_decimal">
 <a class="viewcode-back" href="../../../sttp.data.html#sttp.data.unaryexpression.UnaryExpression.applyto_decimal">[docs]</a>
-    <span class="k">def</span> <span class="nf">applyto_decimal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">ValueExpression</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+    <span class="k">def</span> <span class="nf">applyto_decimal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ValueExpression</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="ne">Exception</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Applies the `UnaryExpression` prefix to a `Decimal` value and returns `ValueExpression` of result, if possible.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -199,7 +204,7 @@
 
 <div class="viewcode-block" id="UnaryExpression.applyto_double">
 <a class="viewcode-back" href="../../../sttp.data.html#sttp.data.unaryexpression.UnaryExpression.applyto_double">[docs]</a>
-    <span class="k">def</span> <span class="nf">applyto_double</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">Optional</span><span class="p">[</span><span class="n">ValueExpression</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">Exception</span><span class="p">]]:</span>
+    <span class="k">def</span> <span class="nf">applyto_double</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">ValueExpression</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span> <span class="ne">Exception</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Applies the `UnaryExpression` prefix to a `Double` value and returns `ValueExpression` of result, if possible.</span>
 <span class="sd">        &quot;&quot;&quot;</span>

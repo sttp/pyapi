@@ -21,11 +21,14 @@
 #
 # ******************************************************************************************************
 
+# pyright: reportArgumentType=false
+# pyright: reportReturnType=false
+
 from __future__ import annotations
 from gsf import Convert, Empty
 from .datatable import DataTable
 from .datatype import DataType, parse_xsddatatype
-from typing import Dict, Iterator, List, Tuple, Union, Optional
+from typing import Dict, Iterator, List, Tuple
 from decimal import Decimal
 from datetime import datetime
 from uuid import UUID
@@ -111,7 +114,7 @@ class DataSet:
 
         self._tables[table.name.upper()] = table
 
-    def table(self, tablename: str) -> Optional[DataTable]:
+    def table(self, tablename: str) -> DataTable | None:
         """
         Gets the `DataTable` for the specified table name if it exists;
         otherwise, None is returned. Lookup is case-insensitive.
@@ -161,7 +164,7 @@ class DataSet:
     def __repr__(self):
         image: List[str] = [f"{self.name} ["]
 
-        for i, table in enumerate(self._tables):
+        for i, table in enumerate(self._tables.values()):
             if i > 0:
                 image.append(", ")
 
@@ -171,7 +174,7 @@ class DataSet:
         return "".join(image)
 
     @staticmethod
-    def from_xml(buffer: Union[str, bytes]) -> Tuple[DataSet, Optional[Exception]]:
+    def from_xml(buffer: str | bytes) -> Tuple[DataSet, Exception | None]:
         """
         Creates a new `DataSet` as read from the XML in the specified buffer.
         """
@@ -180,12 +183,12 @@ class DataSet:
         err = dataset.parse_xml(buffer)
         return dataset, err
 
-    def parse_xml(self, buffer: Union[str, bytes]) -> Optional[Exception]:
+    def parse_xml(self, buffer: str | bytes) -> Exception | None:
         """
         Loads the `DataSet` from the XML in the specified buffer.
         """
 
-        err: Optional[Exception] = None
+        err: Exception | None = None
 
         try:
             doc = ElementTree.fromstring(buffer)
@@ -197,15 +200,18 @@ class DataSet:
 
         bufferio = StringIO(buffer) if isinstance(buffer, str) else BytesIO(buffer)
         
-        namespaces: Dict[str, str] = dict(
-            [node for _, node in ElementTree.iterparse(bufferio, events=["start-ns"])])
+        # ElementTree.iterparse always returns str tuples for namespaces, even with BytesIO
+        namespaces = {
+            node[0]: node[1] 
+            for _, node in ElementTree.iterparse(bufferio, events=["start-ns"])
+        }
 
         if namespaces.get(Empty.STRING) is not None:
             del namespaces[Empty.STRING]
 
         return self.parse_xmldoc(doc, namespaces)
 
-    def parse_xmldoc(self, root: Element, namespaces: Dict[str, str]) -> Optional[Exception]:
+    def parse_xmldoc(self, root: Element, namespaces: Dict[str, str]) -> Exception | None:
         """
         Loads the `DataSet` from an existing root XML document element.
         """

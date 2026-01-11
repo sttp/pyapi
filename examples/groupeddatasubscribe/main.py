@@ -37,7 +37,7 @@ from sttp.settings import Settings
 from sttp.ticks import Ticks
 from sttp.transport.measurement import Measurement
 from sttp.transport.signalindexcache import SignalIndexCache
-from typing import Callable, List, Dict, Optional
+from typing import Callable, List, Dict
 from uuid import UUID
 from time import time
 
@@ -98,8 +98,8 @@ class GroupedDataSubscriber(Subscriber):
         every few seconds.
         """
         
-        self._groupeddata: Dict[np.uint64, Dict[UUID, Measurement]] = {} 
-        self._groupeddata_receiver: Optional[Callable[[GroupedDataSubscriber, np.uint64, Dict[np.uint64, Dict[UUID, Measurement]]], None]] = None
+        self._groupeddata: Dict[np.uint64, Dict[np.uint64, Dict[UUID, Measurement]]] = {} 
+        self._groupeddata_receiver: Callable[[GroupedDataSubscriber, np.uint64, Dict[np.uint64, Dict[UUID, Measurement]]]] | None = None
 
         self._lastmessage = 0.0
 
@@ -126,7 +126,7 @@ class GroupedDataSubscriber(Subscriber):
             return self._downsampledcount
 
     @downsampledcount.setter
-    def downsampledcount(self, value: np.int32):
+    def downsampledcount(self, value: int):
         """
         Sets the count of downsampled measurements.
         """
@@ -144,7 +144,7 @@ class GroupedDataSubscriber(Subscriber):
             return self._processmissedcount
         
     @processmissedcount.setter
-    def processmissedcount(self, value: np.int32):
+    def processmissedcount(self, value: int):
         """
         Sets the count of missed data processing.
         """
@@ -152,7 +152,7 @@ class GroupedDataSubscriber(Subscriber):
         with self._processmissedcount_lock:
             self._processmissedcount = value
 
-    def set_groupeddata_receiver(self, callback: Optional[Callable[[GroupedDataSubscriber, np.uint64, Dict[np.uint64, Dict[UUID, Measurement]]], None]]):
+    def set_groupeddata_receiver(self, callback: Callable[[GroupedDataSubscriber, np.uint64, Dict[np.uint64, Dict[UUID, Measurement]]], None] | None):
         """
         Defines the callback function that processes grouped data that has been received.
 
@@ -171,7 +171,7 @@ class GroupedDataSubscriber(Subscriber):
         leadtime = self.leadtime * Ticks.PERSECOND
         lagtime = self.lagtime * Ticks.PERSECOND
 
-        return distance >= -leadtime and distance <= lagtime
+        return bool(distance >= -leadtime and distance <= lagtime)
 
     def _round_to_nearestsecond(self, timestamp: np.uint64) -> np.uint64:
         """
@@ -261,7 +261,9 @@ class GroupedDataSubscriber(Subscriber):
 
             for measurement in measurements:
                 metadata = self.measurement_metadata(measurement)
-                message.append(f"\t{metadata.id}\t{measurement.signalid}\t{measurement.value:.6}\n")
+                
+                if metadata is not None:
+                    message.append(f"\t{metadata.id}\t{measurement.signalid}\t{measurement.value:.6}\n")
 
             self.statusmessage("".join(message))
         finally:

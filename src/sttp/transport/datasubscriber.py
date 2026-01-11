@@ -21,6 +21,8 @@
 #
 # ******************************************************************************************************
 
+# pyright: reportArgumentType=false
+
 from gsf import Empty, Limits, normalize_enumname
 from gsf.endianorder import BigEndian
 from gsf.binarystream import BinaryStream
@@ -38,7 +40,7 @@ from .signalindexcache import SignalIndexCache
 from .tssc.decoder import Decoder
 from ..ticks import Ticks
 from ..version import Version
-from typing import List, Callable, Optional, Tuple
+from typing import List, Callable, Tuple
 from time import time
 from uuid import UUID
 from threading import Lock, Thread
@@ -93,16 +95,16 @@ class DataSubscriber:
         self._connected = False
         self._subscribed = False
 
-        self._commandchannel_socket: Optional[socket.socket] = None
-        self._commandchannel_responsethread: Optional[Thread] = None
-        self._datachannel_socket: Optional[socket.socket] = None
-        self._datachannel_responsethread: Optional[Thread] = None
+        self._commandchannel_socket: socket.socket | None = None
+        self._commandchannel_responsethread: Thread | None = None
+        self._datachannel_socket: socket.socket | None = None
+        self._datachannel_responsethread: Thread | None = None
 
         self._connect_action_mutex = Lock()
         self._connection_terminationthread_mutex = Lock()
-        self._connection_terminationthread: Optional[Thread] = None
+        self._connection_terminationthread: Thread | None = None
 
-        self._disconnectthread: Optional[Thread] = None
+        self._disconnectthread: Thread | None = None
         self._disconnectthread_mutex = Lock()
         self._disconnecting = False
         self._disconnected = False
@@ -113,62 +115,62 @@ class DataSubscriber:
         self._total_datachannel_bytesreceived = np.uint64(0)
         self._total_measurementsreceived = np.uint64(0)
 
-        self.statusmessage_callback: Optional[Callable[[str], None]] = None
+        self.statusmessage_callback: Callable[[str], None] | None = None
         """
         Called when a informational message should be logged.
         """
 
-        self.errormessage_callback: Optional[Callable[[str], None]] = None
+        self.errormessage_callback: Callable[[str], None] | None = None
         """
         Called when an error message should be logged.
         """
 
-        self.connectionterminated_callback: Optional[Callable[[], None]] = None
+        self.connectionterminated_callback: Callable[[], None] | None = None
         """
         Called when `DataSubscriber` terminates its connection.
         """
 
-        self.autoreconnect_callback: Optional[Callable[[], None]] = None
+        self.autoreconnect_callback: Callable[[], None] | None = None
         """
         Called when `DataSubscriber` automatically reconnects.
         """
 
-        self.metadatareceived_callback: Optional[Callable[[bytes], None]] = None
+        self.metadatareceived_callback: Callable[[bytes], None] | None = None
         """
         Called when `DataSubscriber` receives a metadata response.
         """
 
-        self.subscriptionupdated_callback: Optional[Callable[[SignalIndexCache], None]] = None
+        self.subscriptionupdated_callback: Callable[[SignalIndexCache], None] | None = None
         """
         Called when `DataSubscriber` receives a new signal index cache.
         """
 
-        self.data_starttime_callback: Optional[Callable[[np.uint64], None]] = None
+        self.data_starttime_callback: Callable[[np.uint64], None] | None = None
         """
         Called with timestamp of first received measurement in a subscription.
         """
 
-        self.configurationchanged_callback: Optional[Callable[[], None]] = None
+        self.configurationchanged_callback: Callable[[], None] | None = None
         """
         Called when the `DataPublisher` sends a notification that configuration has changed.
         """
 
-        self.newmeasurements_callback: Optional[Callable[[List[Measurement]], None]] = None
+        self.newmeasurements_callback: Callable[[List[Measurement]], None] | None = None
         """
         Called when `DataSubscriber` receives a set of new measurements from the `DataPublisher`.
         """
 
-        self.newbufferblocks_callback: Optional[Callable[[List[BufferBlock]], None]] = None
+        self.newbufferblocks_callback: Callable[[List[BufferBlock]], None] | None = None
         """
         Called when `DataSubscriber` receives a set of new buffer block measurements from the `DataPublisher`.
         """
 
-        self.processingcomplete_callback: Optional[Callable[[str], None]] = None
+        self.processingcomplete_callback: Callable[[str], None] | None = None
         """
         Called when the `DataPublisher` sends a notification that temporal processing has completed, i.e., the end of a historical playback data stream has been reached.
         """
 
-        self.notificationreceived_callback: Optional[Callable[[str], None]] = None
+        self.notificationreceived_callback: Callable[[str], None] | None = None
         """
         Called when the `DataPublisher` sends a notification that requires receipt.
         """
@@ -224,8 +226,8 @@ class DataSubscriber:
         self._signalindexcache_mutex = Lock()
         self._cacheindex = 0
         self._timeindex = 0
-        self._basetimeoffsets = np.zeros(2, dtype=np.int64)
-        self._key_ivs: Optional[List[List[bytes]]] = None
+        self._basetimeoffsets = np.zeros(2, dtype=np.uint64)
+        self._key_ivs: List[List[bytes]] | None = None
         self._last_missingcachewarning = 0.0
         self._tssc_resetrequested = False
         self._tssc_lastoosreport = 0.0
@@ -321,7 +323,7 @@ class DataSubscriber:
 
         return measurement.value
 
-    def connect(self, hostname: str, port: np.uint16) -> Optional[Exception]:
+    def connect(self, hostname: str, port: np.uint16) -> Exception | None:
         """
         Requests the the `DataSubscriber` initiate a connection to the `DataPublisher`.
         """
@@ -329,7 +331,7 @@ class DataSubscriber:
         #  User requests to connection are not an auto-reconnect attempt
         return self._connect(hostname, port, False)
 
-    def _connect(self, hostname: str, port: np.uint16, autoreconnecting: bool) -> Optional[Exception]:  # sourcery skip: extract-method
+    def _connect(self, hostname: str, port: np.uint16, autoreconnecting: bool) -> Exception | None:  # sourcery skip: extract-method
         if self._connected:
             return RuntimeError("subscriber is already connected; disconnect first")
 
@@ -341,7 +343,7 @@ class DataSubscriber:
         if disconnectthread is not None and disconnectthread.is_alive():
             disconnectthread.join()
 
-        err: Optional[Exception] = None
+        err: Exception | None = None
 
         # Let any pending connect or disconnect operation complete before new connect,
         # this prevents destruction disconnect before connection is completed
@@ -394,7 +396,7 @@ class DataSubscriber:
 
         return err
 
-    def subscribe(self) -> Optional[Exception]:
+    def subscribe(self) -> Exception | None:
         """
         Notifies the `DataPublisher` that a `DataSubscriber` would like to start receiving streaming data.
         """
@@ -630,6 +632,8 @@ class DataSubscriber:
                 except (TimeoutError, socket.timeout, OSError):
                     continue
 
+            return bytes()
+
         reader = BinaryStream(StreamEncoder(recv_data, lambda _: ...))
         buffer = bytearray(MAXPACKET_SIZE)
 
@@ -677,6 +681,8 @@ class DataSubscriber:
                     return self._datachannel_socket.recvfrom(length)[0]
                 except (socket.timeout, OSError):
                     continue
+
+            return bytes()
 
         reader = StreamEncoder(recv_data, lambda _: ...)
         buffer = bytearray(MAXPACKET_SIZE)
@@ -959,7 +965,7 @@ class DataSubscriber:
 
             self._total_measurementsreceived += count
 
-    def _parse_tssc_measurements(self, signalindexcache: SignalIndexCache, data: bytes, count: np.uint32) -> Tuple[List[Measurement], Optional[Exception]]:
+    def _parse_tssc_measurements(self, signalindexcache: SignalIndexCache, data: bytes, count: np.uint32) -> Tuple[List[Measurement], Exception | None]:
         decoder = signalindexcache._tsscdecoder
         newdecoder = False
 
@@ -1002,7 +1008,7 @@ class DataSubscriber:
 
         decoder.set_buffer(data[3:])
 
-        measurements = [Measurement] * count
+        measurements : List[Measurement | None] = [None] * count
         index = 0
         success = True
 
@@ -1027,9 +1033,9 @@ class DataSubscriber:
         if decoder.sequencenumber > Limits.MAXUINT16:
             decoder.sequencenumber = 1
 
-        return measurements, None
+        return measurements, None # type: ignore
 
-    def _parse_compact_measurements(self, signalindexcache: SignalIndexCache, data: bytes, count: np.uint32) -> Tuple[List[Measurement], Optional[Exception]]:
+    def _parse_compact_measurements(self, signalindexcache: SignalIndexCache, data: bytes, count: np.uint32) -> Tuple[List[Measurement], Exception | None]:
         if signalindexcache.count == 0:
             if self._last_missingcachewarning + MISSINGCACHEWARNING_INTERVAL < time():
                 # Warning message for missing signal index cache
@@ -1047,7 +1053,7 @@ class DataSubscriber:
 
         for _ in range(count):
             # Deserialize compact measurement format
-            measurement = CompactMeasurement(signalindexcache, includetime, use_millisecondresolution, self._basetimeoffsets)
+            measurement = CompactMeasurement(signalindexcache, includetime, use_millisecondresolution, list(self._basetimeoffsets))
             (bytesdecoded, err) = measurement.decode(data[index:])
 
             if err is not None:
@@ -1058,7 +1064,7 @@ class DataSubscriber:
 
         return measurements, None
 
-    def _handle_bufferblock(self, data: bytes):  # sourcery skip: low-code-quality, extract-method
+    def _handle_bufferblock(self, data: bytes):
         # Buffer block received - wrap as a BufferBlockMeasurement and expose back to consumer
         sequencenumber = BigEndian.to_uint32(data)
         buffercacheindex = int(sequencenumber - self._bufferblock_expectedsequencenumber)
@@ -1078,7 +1084,7 @@ class DataSubscriber:
             signalindexCache = self._signalindexcache[signalindexcacheindex]
             self._signalindexcache_mutex.release()
 
-            signalid = signalindexCache.signalid(signalindex)
+            signalid = signalindexCache.signalid(np.int32(signalindex))
             bufferblockmeasurement = BufferBlock(signalid)
 
             # Determine if this is the next buffer block in the sequence
@@ -1105,7 +1111,7 @@ class DataSubscriber:
                 if self.newbufferblocks_callback is not None:
                     # Do not use thread pool here, processing sequence may be important.
                     # Execute callback directly from socket processing thread:
-                    self.newbufferblocks_callback(bufferblockmeasurements)
+                    self.newbufferblocks_callback(list(bufferblockmeasurements))
             else:
                 # Ensure that the list has at least as many elements as it needs to cache this measurement.
                 # This edge case handles possible dropouts and/or out of order packet deliver when data
@@ -1122,16 +1128,16 @@ class DataSubscriber:
         self._dispatch_statusmessage(f"NOTIFICATION: {message}")
 
         if self.notificationreceived_callback is not None:
-            self.notificationreceived_callback()
+            self.notificationreceived_callback(message)
 
     def send_servercommand_withmessage(self, commandcode: ServerCommand, message: str):
         """
         Sends a server command code to the `DataPublisher` along with the specified string message as payload.
         """
 
-        self.send_servercommand(self.encodestr(message))
+        self.send_servercommand(commandcode, self.encodestr(message))
 
-    def send_servercommand(self, commandcode: ServerCommand, data: bytes = None):
+    def send_servercommand(self, commandcode: ServerCommand, data: bytes | bytearray | None = None):
         """
         Sends a server command code to the `DataPublisher` with specified payload.
         """
@@ -1222,7 +1228,7 @@ class DataSubscriber:
         Gets the total number of bytes received via the command channel since last connection.
         """
 
-        return self._total_commandchannel_bytesreceived
+        return np.uint64(self._total_commandchannel_bytesreceived)
 
     @property
     def total_datachannel_bytesreceived(self) -> np.uint64:
@@ -1230,7 +1236,7 @@ class DataSubscriber:
         Gets the total number of bytes received via the data channel since last connection.
         """
 
-        return self._total_datachannel_bytesreceived
+        return np.uint64(self._total_datachannel_bytesreceived)
 
     @property
     def total_measurementsreceived(self) -> np.uint64:
@@ -1238,4 +1244,4 @@ class DataSubscriber:
         Gets the total number of measurements received since last subscription.
         """
 
-        return self._total_measurementsreceived
+        return np.uint64(self._total_measurementsreceived)

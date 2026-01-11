@@ -83,10 +83,17 @@ def read_data(subscriber: Subscriber):
         message = [
             f"{subscriber.total_measurementsreceived:,}",
             " measurements received so far. Current measurement:\n    ",
-            str(subscriber.measurement_metadata(measurement).pointtag),
-            " -> ",
-            str(measurement),
         ]
+        
+        assert measurement is not None
+        metadata = subscriber.measurement_metadata(measurement)
+        
+        if metadata is not None and metadata.pointtag:
+            message.append(metadata.pointtag)
+        else:
+            message.append("<unknown>")
+        
+        message.extend([" -> ", str(measurement)])
 
         subscriber.statusmessage("".join(message))
         lastmessage = time()

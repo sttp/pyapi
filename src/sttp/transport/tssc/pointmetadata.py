@@ -21,8 +21,11 @@
 #
 # ******************************************************************************************************
 
+# pyright: reportReturnType=false
+
+from __future__ import annotations
 from gsf import Limits
-from typing import Callable, Tuple, Optional
+from typing import Callable, Tuple
 import numpy as np
 
 
@@ -79,9 +82,9 @@ UINT32_0 = np.uint32(0)
 
 class PointMetadata:
     def __init__(self,
-                 writebits: Optional[Callable[[np.int32, np.int32], None]],
-                 readbit: Optional[Callable[[], np.int32]],
-                 readbits5: Optional[Callable[[], np.int32]]
+                 writebits: Callable[[np.int32, np.int32], None] | None,
+                 readbit: Callable[[], np.int32] | None,
+                 readbits5: Callable[[], np.int32] | None
                  ):
         self.prevnextpointid1 = INT32_0
         self.prevstateflags1 = UINT32_0
@@ -109,7 +112,9 @@ class PointMetadata:
         self._readbit = readbit
         self._readbits5 = readbits5
 
-    def write_code(self, code: np.int32) -> Optional[Exception]:
+    def write_code(self, code: np.int32) -> Exception | None:
+        assert self._writebits is not None
+
         if self._mode == 1:
             self._writebits(code, INT32_5)
         elif self._mode == 2:
@@ -138,7 +143,10 @@ class PointMetadata:
 
         return self._update_codestatistics(code)
 
-    def read_code(self) -> Tuple[np.int32, Optional[Exception]]:  # sourcery skip: assign-if-exp
+    def read_code(self) -> Tuple[np.int32, Exception | None]:
+        assert self._readbit is not None
+        assert self._readbits5 is not None
+
         if self._mode == 1:
             code = self._readbits5()
         elif self._mode == 2:
@@ -168,7 +176,7 @@ class PointMetadata:
         err = self._update_codestatistics(code)
         return code, err
 
-    def _update_codestatistics(self, code: np.int32) -> Optional[Exception]:
+    def _update_codestatistics(self, code: np.int32) -> Exception | None:
         self._commands_sent_sincelastchange += 1
         self._commandstats[code] += BYTE_1
 
@@ -185,7 +193,7 @@ class PointMetadata:
 
         return None
 
-    def _adapt_commands(self) -> Optional[Exception]:
+    def _adapt_commands(self) -> Exception | None:
         code1 = BYTE_0
         count1 = 0
 

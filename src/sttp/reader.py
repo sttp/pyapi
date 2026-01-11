@@ -23,19 +23,19 @@
 
 from __future__ import annotations
 from .transport.measurement import Measurement
-from typing import List, Optional, Tuple, TYPE_CHECKING
+from typing import List, Tuple, TYPE_CHECKING
 from queue import Full, Queue
 import contextlib
 
 if TYPE_CHECKING:
-    from subscriber import Subscriber
+    from .subscriber import Subscriber
 
 class MeasurementReader:
     """
     Defines an STTP measurement reader.
     """
 
-    def __init__(self, subscriber: 'sttp.subscriber.Subscriber'):
+    def __init__(self, subscriber: Subscriber):
         """
         Creates a new `MeasurementReader`.
         """
@@ -70,7 +70,7 @@ class MeasurementReader:
             self._queue.put(measurement)
             self._queue.join()
 
-    def next_measurement(self) -> Tuple[Optional[Measurement], bool]:
+    def next_measurement(self) -> Tuple[Measurement | None, bool]:
         """
         Blocks current thread until a new measurement arrived.
         """

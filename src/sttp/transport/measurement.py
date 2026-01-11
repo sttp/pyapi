@@ -21,6 +21,8 @@
 #
 #******************************************************************************************************
 
+# pyright: reportArgumentType=false
+
 from gsf import Empty, normalize_enumname
 from ..ticks import Ticks
 from .constants import StateFlags
@@ -72,7 +74,7 @@ class Measurement:
         Gets the integer-based time from a `Measurement` ticks-based timestamp, i.e.,
         the 62-bit time value excluding any leap-second flags.
         """
-        return Ticks.timestampvalue(self.timestamp)
+        return np.int64(Ticks.timestampvalue(self.timestamp))
 
     @property
     def datetime(self) -> datetime:

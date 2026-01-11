@@ -21,9 +21,11 @@
 #
 #******************************************************************************************************
 
+# pyright: reportArgumentType=false
+
 from .encoding7bit import Encoding7Bit
 from . import ByteSize
-from typing import Callable, Optional
+from typing import Callable
 import sys
 import numpy as np
 
@@ -39,7 +41,7 @@ class StreamEncoder:
 
     # Source C# reference: GSF.IO.StreamExtensions
 
-    def __init__(self, read: Callable[[int], bytes], write: Callable[[bytes], int], default_byteorder: str = sys.byteorder):
+    def __init__(self, read: Callable[[int], bytes | bytearray], write: Callable[[bytes | bytearray], int], default_byteorder: str = sys.byteorder):
         """
         Parameters
         ----------
@@ -59,7 +61,7 @@ class StreamEncoder:
     def default_byteorder(self) -> str:
         return self._default_byteorder
 
-    def write(self, source_buffer: bytes, offset: int, count: int) -> int:
+    def write(self, source_buffer: bytes | bytearray, offset: int, count: int) -> int:
         if self._write(source_buffer[offset:offset + count]) != count:
             raise RuntimeError(f"Failed to write {count:,} bytes to stream")
 
@@ -106,14 +108,14 @@ class StreamEncoder:
         # call expects one byte to be available in base stream
         return self.read_byte() != 0
 
-    def _write_int(self, size: int, value: int, signed: bool, byteorder: Optional[str]) -> int:
+    def _write_int(self, size: int, value: int, signed: bool, byteorder: str | None) -> int:
         # sourcery skip: remove-unnecessary-cast
         if self._write(int(value).to_bytes(size, self._default_byteorder if byteorder is None else byteorder, signed=signed)) != size:
             raise RuntimeError(f"Failed to write {size}-bytes to stream")
 
         return size
 
-    def _read_int(self, size: int, dtype: np.dtype, byteorder: Optional[str]) -> int:
+    def _read_int(self, size: int, dtype: np.dtype, byteorder: str | None) -> int:
         # call expects needed bytes to be available in base stream
         buffer = self._read(size)
 
@@ -125,52 +127,52 @@ class StreamEncoder:
 
         return np.frombuffer(buffer, dtype)[0]
 
-    def write_int16(self, value: np.int16, byteorder: Optional[str] = None) -> int:
+    def write_int16(self, value: np.int16, byteorder: str | None = None) -> int:
         return self._write_int(ByteSize.INT16, value, True, byteorder)
 
-    def read_int16(self, byteorder: Optional[str] = None) -> np.int16:
-        return self._read_int(ByteSize.INT16, np.dtype(np.int16), byteorder)
+    def read_int16(self, byteorder: str | None = None) -> np.int16:
+        return np.int16(self._read_int(ByteSize.INT16, np.dtype(np.int16), byteorder))
 
-    def write_uint16(self, value: np.uint16, byteorder: Optional[str] = None) -> int:
+    def write_uint16(self, value: np.uint16, byteorder: str | None = None) -> int:
         return self._write_int(ByteSize.UINT16, value, False, byteorder)
 
-    def read_uint16(self, byteorder: Optional[str] = None) -> np.uint16:
-        return self._read_int(ByteSize.UINT16, np.dtype(np.uint16), byteorder)
+    def read_uint16(self, byteorder: str | None = None) -> np.uint16:
+        return np.uint16(self._read_int(ByteSize.UINT16, np.dtype(np.uint16), byteorder))
 
-    def write_int32(self, value: np.int32, byteorder: Optional[str] = None) -> int:
+    def write_int32(self, value: np.int32, byteorder: str | None = None) -> int:
         return self._write_int(ByteSize.INT32, value, True, byteorder)
 
-    def read_int32(self, byteorder: Optional[str] = None) -> np.int32:
-        return self._read_int(ByteSize.INT32, np.dtype(np.int32), byteorder)
+    def read_int32(self, byteorder: str | None = None) -> np.int32:
+        return np.int32(self._read_int(ByteSize.INT32, np.dtype(np.int32), byteorder))
 
-    def write_uint32(self, value: np.uint32, byteorder: Optional[str] = None) -> int:
+    def write_uint32(self, value: np.uint32, byteorder: str | None = None) -> int:
         return self._write_int(ByteSize.UINT32, value, False, byteorder)
 
-    def read_uint32(self, byteorder: Optional[str] = None) -> np.uint32:
-        return self._read_int(ByteSize.UINT32, np.dtype(np.uint32), byteorder)
+    def read_uint32(self, byteorder: str | None = None) -> np.uint32:
+        return np.uint32(self._read_int(ByteSize.UINT32, np.dtype(np.uint32), byteorder))
 
-    def write_int64(self, value: np.int64, byteorder: Optional[str] = None) -> int:
+    def write_int64(self, value: np.int64, byteorder: str | None = None) -> int:
         return self._write_int(ByteSize.INT64, value, True, byteorder)
 
-    def read_int64(self, byteorder: Optional[str] = None) -> np.int64:
-        return self._read_int(ByteSize.INT64, np.dtype(np.int64), byteorder)
+    def read_int64(self, byteorder: str | None = None) -> np.int64:
+        return np.int64(self._read_int(ByteSize.INT64, np.dtype(np.int64), byteorder))
 
-    def write_uint64(self, value: np.uint64, byteorder: Optional[str] = None) -> int:
+    def write_uint64(self, value: np.uint64, byteorder: str | None = None) -> int:
         return self._write_int(ByteSize.UINT64, value, False, byteorder)
 
-    def read_uint64(self, byteorder: Optional[str] = None) -> np.uint64:
-        return self._read_int(ByteSize.UINT64, np.dtype(np.uint64), byteorder)
+    def read_uint64(self, byteorder: str | None = None) -> np.uint64:
+        return np.uint64(self._read_int(ByteSize.UINT64, np.dtype(np.uint64), byteorder))
 
     def write7bit_uint32(self, value: np.uint32) -> int:
-        return Encoding7Bit.WriteUInt32(self.write_byte, value)
+        return Encoding7Bit.write_uint32(self.write_byte, value)
 
     def read7bit_uint32(self) -> np.uint32:
         # call expects one to five bytes to be available in base stream
-        return Encoding7Bit.ReadUInt32(self.read_byte)
+        return Encoding7Bit.read_uint32(self.read_byte)
 
     def write7bit_uint64(self, value: np.uint64) -> int:
-        return Encoding7Bit.WriteUInt64(self.write_byte, value)
+        return Encoding7Bit.write_uint64(self.write_byte, value)
 
     def read7bit_uint64(self) -> np.uint64:
         # call expects one to nine bytes to be available in base stream
-        return Encoding7Bit.ReadUInt64(self.read_byte)
+        return Encoding7Bit.read_uint64(self.read_byte)

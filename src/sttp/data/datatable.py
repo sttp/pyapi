@@ -21,12 +21,15 @@
 #
 # ******************************************************************************************************
 
+# pyright: reportArgumentType=false
+# pyright: reportIndexIssue=false
+
 from __future__ import annotations
 from gsf import Empty
 from .datacolumn import DataColumn
 from .datarow import DataRow
 from .datatype import DataType
-from typing import Callable, Dict, Iterator, List, Optional, Tuple, TYPE_CHECKING
+from typing import Callable, Dict, Iterator, List, Tuple, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .dataset import DataSet
@@ -106,7 +109,7 @@ class DataTable:
         self._columnindexes[column.name.upper()] = column.index
         self._columns.append(column)
 
-    def column(self, columnindex: int) -> Optional[DataColumn]:
+    def column(self, columnindex: int) -> DataColumn | None:
         """
         Gets the `DataColumn` at the specified column index if the index is in range;
         otherwise, None is returned.
@@ -117,7 +120,7 @@ class DataTable:
 
         return self._columns[columnindex]
 
-    def column_byname(self, columnname: str) -> Optional[DataColumn]:
+    def column_byname(self, columnname: str) -> DataColumn | None:
         """
         Gets the `DataColumn` for the specified column name if the name exists;
         otherwise, None is returned. Lookup is case-insensitive.
@@ -176,7 +179,7 @@ class DataTable:
 
         self._rows.append(row)
 
-    def row(self, rowindex: int) -> Optional[DataRow]:
+    def row(self, rowindex: int) -> DataRow | None:
         """
         Gets the `DataRow` at the specified row index if the index is in range;
         otherwise, None is returned.
@@ -271,7 +274,7 @@ class DataTable:
 
         return "".join(image)
 
-    def select(self, filterexpression: str, sortorder: Optional[str] = None, limit: int = -1) -> Tuple[Optional[List[DataRow]], Optional[Exception]]:
+    def select(self, filterexpression: str, sortorder: str | None = None, limit: int = -1) -> Tuple[List[DataRow] | None, Exception | None]:
         """
         Returns the rows matching the filter expression criteria in the specified sort order.
         

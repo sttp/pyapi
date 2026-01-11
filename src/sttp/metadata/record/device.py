@@ -21,6 +21,8 @@
 #
 # ******************************************************************************************************
 
+# pyright: reportArgumentType=false
+
 from __future__ import annotations
 from gsf import Empty
 from typing import Set, TYPE_CHECKING

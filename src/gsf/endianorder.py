@@ -21,8 +21,9 @@
 #
 #******************************************************************************************************
 
+# pyright: reportArgumentType=false
+
 from gsf import static_init, ByteSize
-from typing import Union
 import struct
 import sys
 import numpy as np
@@ -40,7 +41,7 @@ class NativeEndian:
         cls.swaporder = False
 
     @classmethod
-    def _from_buffer(cls, buffer: bytes, bytesize: int, dtype: np.dtype) -> Union[int, float]:
+    def _from_buffer(cls, buffer: bytes, bytesize: int, dtype: np.dtype) -> int | float:
         if len(buffer) < bytesize:
             raise ValueError(f"Buffer size too small, {bytesize} bytes required to convert bytes to {bytesize * 8}-bit type")
 
@@ -60,7 +61,7 @@ class NativeEndian:
 
     @classmethod
     def to_int16(cls, buffer: bytes) -> np.int16:
-        return cls._from_buffer(buffer, ByteSize.INT16, np.dtype(np.int16))
+        return np.int16(cls._from_buffer(buffer, ByteSize.INT16, np.dtype(np.int16)))
 
     @classmethod
     def from_int16(cls, value: np.int16) -> bytes:
@@ -68,7 +69,7 @@ class NativeEndian:
 
     @classmethod
     def to_uint16(cls, buffer: bytes) -> np.uint16:
-        return cls._from_buffer(buffer, ByteSize.UINT16, np.dtype(np.uint16))
+        return np.uint16(cls._from_buffer(buffer, ByteSize.UINT16, np.dtype(np.uint16)))
 
     @classmethod
     def from_uint16(cls, value: np.uint16) -> bytes:
@@ -76,7 +77,7 @@ class NativeEndian:
 
     @classmethod
     def to_int32(cls, buffer: bytes) -> np.int32:
-        return cls._from_buffer(buffer, ByteSize.INT32, np.dtype(np.int32))
+        return np.int32(cls._from_buffer(buffer, ByteSize.INT32, np.dtype(np.int32)))
 
     @classmethod
     def from_int32(cls, value: np.int32) -> bytes:
@@ -84,7 +85,7 @@ class NativeEndian:
 
     @classmethod
     def to_uint32(cls, buffer: bytes) -> np.uint32:
-        return cls._from_buffer(buffer, ByteSize.UINT32, np.dtype(np.uint32))
+        return np.uint32(cls._from_buffer(buffer, ByteSize.UINT32, np.dtype(np.uint32)))
 
     @classmethod
     def from_uint32(cls, value: np.uint32) -> bytes:
@@ -92,7 +93,7 @@ class NativeEndian:
 
     @classmethod
     def to_int64(cls, buffer: bytes) -> np.int64:
-        return cls._from_buffer(buffer, ByteSize.INT64, np.dtype(np.int64))
+        return np.int64(cls._from_buffer(buffer, ByteSize.INT64, np.dtype(np.int64)))
 
     @classmethod
     def from_int64(cls, value: np.int64) -> bytes:
@@ -100,7 +101,7 @@ class NativeEndian:
 
     @classmethod
     def to_uint64(cls, buffer: bytes) -> np.uint64:
-        return cls._from_buffer(buffer, ByteSize.UINT64, np.dtype(np.uint64))
+        return np.uint64(cls._from_buffer(buffer, ByteSize.UINT64, np.dtype(np.uint64)))
 
     @classmethod
     def from_uint64(cls, value: np.uint64) -> bytes:
@@ -108,7 +109,7 @@ class NativeEndian:
 
     @classmethod
     def to_float16(cls, buffer: bytes) -> np.float16:
-        return cls._from_buffer(buffer, ByteSize.FLOAT16, np.dtype(np.float16))
+        return np.float16(cls._from_buffer(buffer, ByteSize.FLOAT16, np.dtype(np.float16)))
 
     @classmethod
     def from_float16(cls, value: np.float16) -> bytes:
@@ -116,7 +117,7 @@ class NativeEndian:
 
     @classmethod
     def to_float32(cls, buffer: bytes) -> np.float32:
-        return cls._from_buffer(buffer, ByteSize.FLOAT32, np.dtype(np.float32))
+        return np.float32(cls._from_buffer(buffer, ByteSize.FLOAT32, np.dtype(np.float32)))
 
     @classmethod
     def from_float32(cls, value: np.float32) -> bytes:
@@ -124,7 +125,7 @@ class NativeEndian:
 
     @classmethod
     def to_float64(cls, buffer: bytes) -> np.float64:
-        return cls._from_buffer(buffer, ByteSize.FLOAT64, np.dtype(np.float64))
+        return np.float64(cls._from_buffer(buffer, ByteSize.FLOAT64, np.dtype(np.float64)))
 
     @classmethod
     def from_float64(cls, value: np.float64) -> bytes:

@@ -1,0 +1,22 @@
+{
+    "include": [
+        "src",
+        "test"
+    ],
+    "exclude": [
+        "**/__pycache__",
+        "**/node_modules",
+        "**/.venv",
+        ".venv"
+    ],
+    "reportGeneralTypeIssues": "warning",
+    "reportOptionalMemberAccess": "warning",
+    "reportOptionalSubscript": "warning",
+    "reportPrivateImportUsage": "warning",
+    "pythonPlatform": "All",
+    "typeCheckingMode": "basic",
+    "strictParameterNoneValue": false,
+    "reportIncompatibleMethodOverride": "warning",
+    "reportIncompatibleVariableOverride": "warning",
+    "pythonVersion": "3.10"
+}

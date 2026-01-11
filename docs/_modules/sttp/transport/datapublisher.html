@@ -1,21 +1,23 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.datapublisher &mdash; sttp/pyapi 0.7.0 documentation</title>
+  <title>sttp.transport.datapublisher &mdash; sttp/pyapi 0.7.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
-      <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
-      <script src="../../../_static/doctools.js?v=92e14aea"></script>
-      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -41,8 +43,11 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">src</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -91,6 +96,7 @@
 <span class="c1">#</span>
 <span class="c1"># ******************************************************************************************************</span>
 
+<span class="c1"># pyright: reportArgumentType=false</span>
 <span class="c1"># Ported from cppapi/src/lib/transport/DataPublisher.cpp : class DataPublisher</span>
 <span class="c1"># Differences: Python uses socket server and threading; otherwise parity maintained.</span>
 
@@ -98,15 +104,10 @@
 <span class="kn">from</span> <span class="nn">..data.filterexpressionparser</span> <span class="kn">import</span> <span class="n">FilterExpressionParser</span>
 <span class="kn">from</span> <span class="nn">.measurement</span> <span class="kn">import</span> <span class="n">Measurement</span>
 <span class="kn">from</span> <span class="nn">.subscriberconnection</span> <span class="kn">import</span> <span class="n">SubscriberConnection</span>
-<span class="kn">from</span> <span class="nn">sttp.metadata.record.measurement</span> <span class="kn">import</span> <span class="n">MeasurementRecord</span> <span class="k">as</span> <span class="n">MetadataMeasurementRecord</span>
-
-
-<span class="c1"># Note: MeasurementRecord for filtering is imported from sttp.metadata.record.measurement</span>
-<span class="c1"># This provides full measurement metadata, matching C++ MeasurementMetadata</span>
-
+<span class="kn">from</span> <span class="nn">..metadata.record.measurement</span> <span class="kn">import</span> <span class="n">MeasurementRecord</span> <span class="k">as</span> <span class="n">MetadataMeasurementRecord</span>
 <span class="kn">from</span> <span class="nn">.routingtables</span> <span class="kn">import</span> <span class="n">RoutingTables</span>
-<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">SecurityMode</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Set</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">SecurityMode</span><span class="p">,</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="n">ServerResponse</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Set</span>
 <span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span><span class="p">,</span> <span class="n">uuid4</span>
 <span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span><span class="p">,</span> <span class="n">RLock</span>
 <span class="kn">from</span> <span class="nn">concurrent.futures</span> <span class="kn">import</span> <span class="n">ThreadPoolExecutor</span>
@@ -116,7 +117,7 @@
 
 
 <div class="viewcode-block" id="DataPublisher">
-<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.DataPublisher">[docs]</a>
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datapublisher.DataPublisher">[docs]</a>
 <span class="k">class</span> <span class="nc">DataPublisher</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Represents a data publisher that accepts subscriber connections and publishes measurements.</span>
@@ -144,8 +145,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_reverse_connection</span> <span class="o">=</span> <span class="kc">False</span>
         
         <span class="c1"># Metadata</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DataSet</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_filtering_metadata</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DataSet</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">:</span> <span class="n">DataSet</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_filtering_metadata</span><span class="p">:</span> <span class="n">DataSet</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
         
         <span class="c1"># Connections</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_subscriber_connections</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="n">SubscriberConnection</span><span class="p">]</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
@@ -155,25 +156,25 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_routing_tables</span> <span class="o">=</span> <span class="n">RoutingTables</span><span class="p">()</span>
         
         <span class="c1"># Server socket</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_server_socket</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_accept_thread</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Thread</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_server_socket</span><span class="p">:</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_accept_thread</span><span class="p">:</span> <span class="n">Thread</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_port</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_ipv6</span> <span class="o">=</span> <span class="kc">False</span>
         
         <span class="c1"># Thread pool for callbacks</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_callback_executor</span> <span class="o">=</span> <span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_callback_queue</span><span class="p">:</span> <span class="n">Queue</span> <span class="o">=</span> <span class="n">Queue</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_callback_thread</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Thread</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_callback_thread</span><span class="p">:</span> <span class="n">Thread</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
         
         <span class="c1"># Callbacks</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">statusmessage_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">errormessage_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">clientconnected_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">SubscriberConnection</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">clientdisconnected_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">SubscriberConnection</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">processingintervalchange_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">SubscriberConnection</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">temporalsubscription_requested_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">SubscriberConnection</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">temporalsubscription_canceled_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">SubscriberConnection</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">usercommand_callback</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">SubscriberConnection</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">],</span> <span class="kc">None</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statusmessage_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">errormessage_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clientconnected_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">SubscriberConnection</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clientdisconnected_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">SubscriberConnection</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">processingintervalchange_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">SubscriberConnection</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temporalsubscription_requested_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">SubscriberConnection</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">temporalsubscription_canceled_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">SubscriberConnection</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">usercommand_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">SubscriberConnection</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
         
         <span class="c1"># User data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_user_data</span> <span class="o">=</span> <span class="kc">None</span>
@@ -195,12 +196,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_node_id</span> <span class="o">=</span> <span class="n">value</span>
     
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DataSet</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataSet</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the primary metadata.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span>
     
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">filtering_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">DataSet</span><span class="p">]:</span>
+    <span class="k">def</span> <span class="nf">filtering_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DataSet</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the filtering metadata.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_filtering_metadata</span>
     
@@ -292,14 +293,14 @@
     <span class="c1"># Metadata management</span>
     
 <div class="viewcode-block" id="DataPublisher.define_metadata">
-<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.DataPublisher.define_metadata">[docs]</a>
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datapublisher.DataPublisher.define_metadata">[docs]</a>
     <span class="k">def</span> <span class="nf">define_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">metadata</span><span class="p">:</span> <span class="n">DataSet</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines the publisher metadata from a DataSet.</span>
 <span class="sd">        Builds the ActiveMeasurements filtering metadata table from the source metadata.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">import</span> <span class="nn">os</span>
-        <span class="kn">from</span> <span class="nn">sttp.data.dataset</span> <span class="kn">import</span> <span class="n">DataSet</span>
+        <span class="kn">from</span> <span class="nn">..data.dataset</span> <span class="kn">import</span> <span class="n">DataSet</span>
         <span class="kn">from</span> <span class="nn">decimal</span> <span class="kn">import</span> <span class="n">Decimal</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span> <span class="o">=</span> <span class="n">metadata</span>
@@ -532,13 +533,12 @@
 
     
 <div class="viewcode-block" id="DataPublisher.filter_metadata">
-<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.DataPublisher.filter_metadata">[docs]</a>
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datapublisher.DataPublisher.filter_metadata">[docs]</a>
     <span class="k">def</span> <span class="nf">filter_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_expression</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MetadataMeasurementRecord</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Filters metadata using a filter expression against the MeasurementDetail table.</span>
 <span class="sd">        </span>
 <span class="sd">        This is for the publisher application to decide what measurements to publish.</span>
-<span class="sd">        Matches C++ DataPublisher::FilterMetadata which filters from m_metadata.</span>
 <span class="sd">        </span>
 <span class="sd">        Args:</span>
 <span class="sd">            filter_expression: Filter expression (e.g., &quot;SignalAcronym &lt;&gt; &#39;STAT&#39;&quot;)</span>
@@ -552,7 +552,7 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Cannot filter metadata, no metadata has been defined.&quot;</span><span class="p">)</span>
             
-            <span class="c1"># Find MeasurementDetail table from original metadata (matching C++)</span>
+            <span class="c1"># Find MeasurementDetail table from original metadata</span>
             <span class="n">measurement_detail</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s2">&quot;MeasurementDetail&quot;</span><span class="p">)</span>
             
             <span class="k">if</span> <span class="ow">not</span> <span class="n">measurement_detail</span><span class="p">:</span>
@@ -572,7 +572,7 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">filtered_rows</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">results</span>
             
-            <span class="c1"># Get column indices from MeasurementDetail (matching C++)</span>
+            <span class="c1"># Get column indices from MeasurementDetail</span>
             <span class="k">def</span> <span class="nf">get_column_index</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">column_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
                 <span class="n">col</span> <span class="o">=</span> <span class="n">table</span><span class="o">.</span><span class="n">column_byname</span><span class="p">(</span><span class="n">column_name</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">col</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -590,9 +590,9 @@
             <span class="n">updated_on_idx</span> <span class="o">=</span> <span class="n">get_column_index</span><span class="p">(</span><span class="n">measurement_detail</span><span class="p">,</span> <span class="s2">&quot;UpdatedOn&quot;</span><span class="p">)</span>
             <span class="n">signal_acronym_idx</span> <span class="o">=</span> <span class="n">get_column_index</span><span class="p">(</span><span class="n">measurement_detail</span><span class="p">,</span> <span class="s2">&quot;SignalAcronym&quot;</span><span class="p">)</span>
             
-            <span class="c1"># Build MeasurementRecord objects from filtered rows (matching C++)</span>
+            <span class="c1"># Build MeasurementRecord objects from filtered rows</span>
             <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">filtered_rows</span><span class="p">:</span>
-                <span class="c1"># Skip disabled measurements (matching C++)</span>
+                <span class="c1"># Skip disabled measurements</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">row</span><span class="p">[</span><span class="n">enabled_idx</span><span class="p">]:</span>
                     <span class="k">continue</span>
                 
@@ -609,7 +609,7 @@
                     <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
                         <span class="n">numeric_id</span> <span class="o">=</span> <span class="mi">0</span>
                 
-                <span class="c1"># Create MeasurementRecord with all metadata fields (matching C++)</span>
+                <span class="c1"># Create MeasurementRecord with all metadata fields</span>
                 <span class="n">metadata</span> <span class="o">=</span> <span class="n">MetadataMeasurementRecord</span><span class="p">(</span>
                     <span class="n">signalid</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="n">signal_id_idx</span><span class="p">]</span> <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="n">signal_id_idx</span><span class="p">]</span> <span class="k">else</span> <span class="n">MetadataMeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_SIGNALID</span><span class="p">,</span>
                     <span class="nb">id</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="n">numeric_id</span><span class="p">),</span>
@@ -622,8 +622,8 @@
                     <span class="n">updatedon</span><span class="o">=</span><span class="n">row</span><span class="p">[</span><span class="n">updated_on_idx</span><span class="p">]</span> <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="n">updated_on_idx</span><span class="p">]</span> <span class="k">else</span> <span class="n">MetadataMeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_UPDATEDON</span>
                 <span class="p">)</span>
                 
-                <span class="c1"># Store phasor source index (C++ stores this in metadata-&gt;PhasorSourceIndex)</span>
-                <span class="n">metadata</span><span class="o">.</span><span class="n">phasor_source_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">phasor_source_index_idx</span><span class="p">])</span> <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="n">phasor_source_index_idx</span><span class="p">]</span> <span class="k">else</span> <span class="mi">0</span>
+                <span class="c1"># Store phasor source index</span>
+                <span class="n">metadata</span><span class="o">.</span><span class="n">phasorsourceindex</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">phasor_source_index_idx</span><span class="p">])</span> <span class="k">if</span> <span class="n">row</span><span class="p">[</span><span class="n">phasor_source_index_idx</span><span class="p">]</span> <span class="k">else</span> <span class="mi">0</span>
                 
                 <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
             
@@ -638,11 +638,9 @@
 
 
     <span class="c1"># Connection management</span>
-
-    <span class="c1"># Connection management</span>
     
 <div class="viewcode-block" id="DataPublisher.start">
-<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.DataPublisher.start">[docs]</a>
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datapublisher.DataPublisher.start">[docs]</a>
     <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">ipv6</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Starts the data publisher listening on the specified port.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_started</span><span class="p">:</span>
@@ -678,7 +676,7 @@
 
     
 <div class="viewcode-block" id="DataPublisher.stop">
-<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.DataPublisher.stop">[docs]</a>
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datapublisher.DataPublisher.stop">[docs]</a>
     <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Stops the data publisher.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stopped</span><span class="p">:</span>
@@ -777,7 +775,7 @@
     <span class="c1"># Measurement publication</span>
     
 <div class="viewcode-block" id="DataPublisher.publish_measurements">
-<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.DataPublisher.publish_measurements">[docs]</a>
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datapublisher.DataPublisher.publish_measurements">[docs]</a>
     <span class="k">def</span> <span class="nf">publish_measurements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurements</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Measurement</span><span class="p">]):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Publishes measurements to subscribed clients.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_started</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shuttingdown</span><span class="p">:</span>
@@ -822,7 +820,7 @@
     <span class="c1"># Cleanup</span>
     
 <div class="viewcode-block" id="DataPublisher.dispose">
-<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.DataPublisher.dispose">[docs]</a>
+<a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datapublisher.DataPublisher.dispose">[docs]</a>
     <span class="k">def</span> <span class="nf">dispose</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Disposes of the data publisher.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>

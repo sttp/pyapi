@@ -21,7 +21,8 @@
 #
 # ******************************************************************************************************
 
-from types import EllipsisType
+# pyright: reportArgumentType=false
+
 from .transport.constants import Defaults
 import numpy as np
 
@@ -55,22 +56,22 @@ class Settings:
     DEFAULT_EXTRA_CONNECTIONSTRING_PARAMETERS = Defaults.EXTRA_CONNECTIONSTRING_PARAMETERS
 
     def __init__(self,
-                 throttled: bool | EllipsisType = ...,
-                 publishinterval: float | EllipsisType = ...,
-                 udpport: np.uint16 | EllipsisType = ...,
-                 udpinterface: str | EllipsisType = ...,
-                 includetime: bool | EllipsisType = ...,
-                 enabletimereasonabilitycheck: bool | EllipsisType = ...,
-                 lagtime: np.float64 | EllipsisType = ...,
-                 leadtime: np.float64 | EllipsisType = ...,
-                 uselocalclockasrealtime: bool | EllipsisType = ...,
-                 usemillisecondresolution: bool | EllipsisType = ...,
-                 requestnanvaluefilter: bool | EllipsisType = ...,
-                 starttime: str | EllipsisType = ...,
-                 stoptime: str | EllipsisType = ...,
-                 constraintparameters: str | EllipsisType = ...,
-                 processinginterval: int | EllipsisType = ...,
-                 extra_connectionstring_parameters: str | EllipsisType = ...
+                 throttled: bool = ...,
+                 publishinterval: float = ...,
+                 udpport: np.uint16 = ...,
+                 udpinterface: str = ...,
+                 includetime: bool = ...,
+                 enabletimereasonabilitycheck: bool = ...,
+                 lagtime: np.float64 = ...,
+                 leadtime: np.float64 = ...,
+                 uselocalclockasrealtime: bool = ...,
+                 usemillisecondresolution: bool = ...,
+                 requestnanvaluefilter: bool = ...,
+                 starttime: str = ...,
+                 stoptime: str = ...,
+                 constraintparameters: str = ...,
+                 processinginterval: int = ...,
+                 extra_connectionstring_parameters: str = ...
                  ):
         """
         Creates a new `Settings` instance.

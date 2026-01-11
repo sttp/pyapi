@@ -21,7 +21,8 @@
 #
 # ******************************************************************************************************
 
-from types import EllipsisType
+# pyright: reportArgumentType=false
+
 from .transport.constants import Defaults
 import numpy as np
 
@@ -44,18 +45,18 @@ class Config:
     DEFAULT_VERSION = Defaults.VERSION
 
     def __init__(self,
-                 maxretries: int | EllipsisType = ...,
-                 retryinterval: float | EllipsisType = ...,
-                 maxretryinterval: float | EllipsisType = ...,
-                 autoreconnect: bool | EllipsisType = ...,
-                 autorequestmetadata: bool | EllipsisType = ...,
-                 autosubscribe: bool | EllipsisType = ...,
-                 compress_payloaddata: bool | EllipsisType = ...,
-                 compress_metadata: bool | EllipsisType = ...,
-                 compress_signalindexcache: bool | EllipsisType = ...,
-                 metadatafilters: str | EllipsisType = ...,
-                 socket_timeout: float | EllipsisType = ...,
-                 version: np.byte | EllipsisType = ...
+                 maxretries: int = ...,
+                 retryinterval: float = ...,
+                 maxretryinterval: float = ...,
+                 autoreconnect: bool = ...,
+                 autorequestmetadata: bool = ...,
+                 autosubscribe: bool = ...,
+                 compress_payloaddata: bool = ...,
+                 compress_metadata: bool = ...,
+                 compress_signalindexcache: bool = ...,
+                 metadatafilters: str = ...,
+                 socket_timeout: float = ...,
+                 version: np.byte = ...
                 ):
         """
         Creates a new `Config` instance.

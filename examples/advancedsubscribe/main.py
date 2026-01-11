@@ -22,7 +22,9 @@
 # ******************************************************************************************************
 
 import os  # nopep8
-import sys  # nopep8
+import sys
+import numpy as np  # nopep8
+
 sys.path.append(f"{os.path.dirname(os.path.realpath(__file__))}/../../src")  # nopep8
 
 from gsf import Limits
@@ -45,7 +47,7 @@ class AdvancedSubscriber(Subscriber):
 
         self.config = Config()
         self.settings = Settings()
-        self.lastmessage = 0.0
+        self.lastmessage: float = 0.0
 
         self.subscriptionupdated_receiver = self.subscription_updated
         self.newmeasurements_receiver = self.new_measurements
@@ -71,7 +73,9 @@ class AdvancedSubscriber(Subscriber):
 
             for measurement in measurements:
                 metadata = self.measurement_metadata(measurement)
-                message.append(f"\t{metadata.id}\t{measurement.signalid}\t{measurement.value:.6}\n")
+
+                if metadata is not None:
+                    message.append(f"\t{metadata.id}\t{measurement.signalid}\t{measurement.value:.6}\n")
 
             self.statusmessage("".join(message))
         finally:
@@ -97,11 +101,11 @@ def main():
 
     subscriber = AdvancedSubscriber()
     subscriber.config.compress_payloaddata = False
-    subscriber.settings.udpport = 9600
+    subscriber.settings.udpport = np.uint16(9600)
     subscriber.settings.use_millisecondresolution = True
 
     try:
-        subscriber.subscribe("FILTER TOP 20 ActiveMeasurements WHERE True", subscriber.settings)
+        subscriber.subscribe("FILTER TOP 20 ActiveMeasurements WHERE SignalType <> 'STAT'", subscriber.settings)
         subscriber.connect(f"{args.hostname}:{args.port}", subscriber.config)
 
         # Exit when enter key is pressed

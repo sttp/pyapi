@@ -21,6 +21,8 @@
 #
 #******************************************************************************************************
 
+# pyright: reportArgumentType=false
+
 from enum import IntFlag
 from gsf import Limits
 from gsf.endianorder import BigEndian
@@ -28,7 +30,7 @@ from ..ticks import Ticks
 from .measurement import Measurement
 from .constants import StateFlags
 from .signalindexcache import SignalIndexCache
-from typing import List, Tuple, Optional
+from typing import List, Tuple
 from uuid import UUID
 import numpy as np
 
@@ -48,18 +50,18 @@ class CompactStateFlags(IntFlag):
     TIMEINDEX = 0x80
 
 
-DATARANGEMASK: StateFlags = 0x000000FC
-DATAQUALITYMASK: StateFlags = 0x0000EF03
-TIMEQUALITYMASK: StateFlags = 0x00BF0000
-SYSTEMISSUEMASK: StateFlags = 0xE0000000
-CALCULATEDVALUEMASK: StateFlags = 0x00001000
-DISCARDEDVALUEMASK: StateFlags = 0x00400000
+DATARANGEMASK = StateFlags(0x000000FC)
+DATAQUALITYMASK = StateFlags(0x0000EF03)
+TIMEQUALITYMASK = StateFlags(0x00BF0000)
+SYSTEMISSUEMASK = StateFlags(0xE0000000)
+CALCULATEDVALUEMASK = StateFlags(0x00001000)
+DISCARDEDVALUEMASK = StateFlags(0x00400000)
 
-FIXEDLENGTH: np.uint32 = 9
+FIXEDLENGTH = np.uint32(9)
 
 
 def _map_to_fullflags(compactflags: CompactStateFlags) -> StateFlags:
-    fullflags: StateFlags = StateFlags.NORMAL
+    fullflags = StateFlags.NORMAL
 
     if (compactflags & CompactStateFlags.DATARANGE) > 0:
         fullflags |= DATARANGEMASK
@@ -83,7 +85,7 @@ def _map_to_fullflags(compactflags: CompactStateFlags) -> StateFlags:
 
 
 def _map_to_compactflags(fullflags: StateFlags) -> CompactStateFlags:
-    compactflags: CompactStateFlags = 0
+    compactflags = CompactStateFlags(0)
 
     if (fullflags & DATARANGEMASK) > 0:
         compactflags |= CompactStateFlags.DATARANGE
@@ -115,7 +117,7 @@ class CompactMeasurement(Measurement):
                  signalindexcache: SignalIndexCache,
                  includetime: bool,
                  usemillisecondresolution: bool,
-                 basetimeoffsets: List[np.int64],
+                 basetimeoffsets: List[np.uint64],
                  signalid: UUID = ...,
                  value: np.float64 = ...,
                  timestamp: np.uint64 = ...,
@@ -236,7 +238,7 @@ class CompactMeasurement(Measurement):
 
         self.signalid = self._signalindexcache.signalid(value)
 
-    def decode(self, buffer: bytes) -> Tuple[int, Optional[Exception]]:
+    def decode(self, buffer: bytes) -> Tuple[int, Exception | None]:
         """
         Parses a `CompactMeasurement` from the specified byte buffer.
         """
@@ -253,7 +255,7 @@ class CompactMeasurement(Measurement):
         #		 [Time]    0/2/4/8
 
         # Decode state flags
-        self.set_compact_stateflags(buffer[0])
+        self.set_compact_stateflags(np.byte(buffer[0]))
         index = 1
 
         # Decode runtime ID

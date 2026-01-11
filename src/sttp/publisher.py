@@ -28,7 +28,8 @@ from .data.dataset import DataSet
 from .transport.datapublisher import DataPublisher
 from .transport.measurement import Measurement
 from .transport.subscriberconnection import SubscriberConnection
-from typing import List, Optional, Callable
+from .metadata.record.measurement import MeasurementRecord
+from typing import List, Callable
 from threading import Lock
 import sys
 
@@ -53,10 +54,10 @@ class Publisher:
         self._datapublisher = DataPublisher()
         
         # Callback references
-        self._statusmessage_logger: Optional[Callable[[str], None]] = self.default_statusmessage_logger
-        self._errormessage_logger: Optional[Callable[[str], None]] = self.default_errormessage_logger
-        self._clientconnected_receiver: Optional[Callable[[SubscriberConnection], None]] = self.default_clientconnected_receiver
-        self._clientdisconnected_receiver: Optional[Callable[[SubscriberConnection], None]] = self.default_clientdisconnected_receiver
+        self._statusmessage_logger: Callable[[str], None] | None = self.default_statusmessage_logger
+        self._errormessage_logger: Callable[[str], None] | None = self.default_errormessage_logger
+        self._clientconnected_receiver: Callable[[SubscriberConnection], None] | None = self.default_clientconnected_receiver
+        self._clientdisconnected_receiver: Callable[[SubscriberConnection], None] | None = self.default_clientdisconnected_receiver
         
         # Lock used to synchronize console writes
         self._consolelock = Lock()
@@ -83,7 +84,7 @@ class Publisher:
         return self._datapublisher.is_started
 
     @property
-    def statusmessage_logger(self) -> Optional[Callable[[str], None]]:
+    def statusmessage_logger(self) -> Callable[[str], None] | None:
         """
         Gets or sets a function to handle status messages.
         
@@ -92,11 +93,11 @@ class Publisher:
         return self._statusmessage_logger
 
     @statusmessage_logger.setter
-    def statusmessage_logger(self, value: Optional[Callable[[str], None]]):
+    def statusmessage_logger(self, value: Callable[[str], None] | None):
         self._statusmessage_logger = value
 
     @property
-    def errormessage_logger(self) -> Optional[Callable[[str], None]]:
+    def errormessage_logger(self) -> Callable[[str], None] | None:
         """
         Gets or sets a function to handle error messages.
         
@@ -105,11 +106,11 @@ class Publisher:
         return self._errormessage_logger
 
     @errormessage_logger.setter
-    def errormessage_logger(self, value: Optional[Callable[[str], None]]):
+    def errormessage_logger(self, value: Callable[[str], None] | None):
         self._errormessage_logger = value
 
     @property
-    def clientconnected_receiver(self) -> Optional[Callable[[SubscriberConnection], None]]:
+    def clientconnected_receiver(self) -> Callable[[SubscriberConnection], None] | None:
         """
         Gets or sets a function to handle client connected events.
         
@@ -118,11 +119,11 @@ class Publisher:
         return self._clientconnected_receiver
 
     @clientconnected_receiver.setter
-    def clientconnected_receiver(self, value: Optional[Callable[[SubscriberConnection], None]]):
+    def clientconnected_receiver(self, value: Callable[[SubscriberConnection], None] | None):
         self._clientconnected_receiver = value
 
     @property
-    def clientdisconnected_receiver(self) -> Optional[Callable[[SubscriberConnection], None]]:
+    def clientdisconnected_receiver(self) -> Callable[[SubscriberConnection], None] | None:
         """
         Gets or sets a function to handle client disconnected events.
         
@@ -131,7 +132,7 @@ class Publisher:
         return self._clientdisconnected_receiver
 
     @clientdisconnected_receiver.setter
-    def clientdisconnected_receiver(self, value: Optional[Callable[[SubscriberConnection], None]]):
+    def clientdisconnected_receiver(self, value: Callable[[SubscriberConnection], None] | None):
         self._clientdisconnected_receiver = value
 
     def start(self, port: int, ipv6: bool = False):
@@ -164,7 +165,7 @@ class Publisher:
         """
         self._datapublisher.define_metadata(metadata)
 
-    def filter_metadata(self, filter_expression: str) -> List:
+    def filter_metadata(self, filter_expression: str) -> List[MeasurementRecord]:
         """
         Filters metadata using a filter expression and returns matching measurement metadata.
         
@@ -175,8 +176,8 @@ class Publisher:
             
         Returns
         -------
-        List
-            List of MeasurementMetadata objects matching the filter
+        List[MeasurementRecord]
+            List of MeasurementRecord objects matching the filter
         """
         return self._datapublisher.filter_metadata(filter_expression)
 

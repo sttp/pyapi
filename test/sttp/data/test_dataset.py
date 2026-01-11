@@ -35,7 +35,7 @@ class TestDataSet(unittest.TestCase):
     def _create_datacolumn(datatable: DataTable, columnname: str, datatype: DataType) -> int:
         datacolumn = datatable.create_column(columnname, datatype)
         datatable.add_column(datacolumn)
-        return datatable.column_byname(columnname).index
+        return datatable.column_byname(columnname).index # type: ignore
 
     @staticmethod
     def _create_dataset() -> Tuple[DataSet, int, int, UUID, UUID]:
