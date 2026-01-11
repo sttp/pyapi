@@ -120,7 +120,7 @@ class MetadataCache:
                 id,
                 # `source`: Source instance name of measurement (from measurement key)
                 source,
-                # `signaltypename`: Extract the measurement signal type name
+                # `signalacronym`: Extract the measurement signal type acronym
                 get_rowvalue("SignalAcronym", "UNKN"),
                 # `signalreference`: Extract the measurement signal reference
                 get_rowvalue("SignalReference"),
@@ -301,13 +301,13 @@ class MetadataCache:
         return self.signalref_measurement_map.get(signalreference)
 
     def find_measurements_signaltype(self, signaltype: SignalType, source: str | None = None) -> List[MeasurementRecord]:
-        return self.find_measurements_signaltypename(signaltype.name, source)
+        return self.find_measurements_signalacronym(signaltype.name, source)
 
-    def find_measurements_signaltypename(self, signaltypename: str, source: str | None = None) -> List[MeasurementRecord]:
-        signaltypename = signaltypename.upper()
+    def find_measurements_signalacronym(self, signalacronym: str, source: str | None = None) -> List[MeasurementRecord]:
+        signalacronym = signalacronym.upper()
 
         return [ record for record in self.measurement_records if
-                record.signaltypename.upper() == signaltypename and
+                record.signalacronym.upper() == signalacronym and
                 (source is None or record.source == source) ]
 
     def find_measurements(self, searchval: str, source: str | None = None) -> List[MeasurementRecord]:

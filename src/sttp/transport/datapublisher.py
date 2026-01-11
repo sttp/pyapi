@@ -535,7 +535,7 @@ class DataPublisher:
                     pointtag=row[point_tag_idx] if row[point_tag_idx] else MetadataMeasurementRecord.DEFAULT_POINTTAG,
                     signalreference=row[signal_reference_idx] if row[signal_reference_idx] else MetadataMeasurementRecord.DEFAULT_SIGNALREFERENCE,
                     deviceacronym=row[device_acronym_idx] if row[device_acronym_idx] else MetadataMeasurementRecord.DEFAULT_DEVICEACRONYM,
-                    signaltypename=row[signal_acronym_idx] if row[signal_acronym_idx] else MetadataMeasurementRecord.DEFAULT_SIGNALTYPENAME,
+                    signalacronym=row[signal_acronym_idx] if row[signal_acronym_idx] else MetadataMeasurementRecord.DEFAULT_SIGNALACRONYM,
                     description=row[description_idx] if row[description_idx] else MetadataMeasurementRecord.DEFAULT_DESCRIPTION,
                     updatedon=row[updated_on_idx] if row[updated_on_idx] else MetadataMeasurementRecord.DEFAULT_UPDATEDON
                 )

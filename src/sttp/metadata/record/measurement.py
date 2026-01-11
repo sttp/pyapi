@@ -77,7 +77,7 @@ class MeasurementRecord:
     DEFAULT_MULTIPLIER = np.float64(1.0)
     DEFAULT_ID = np.uint64(0)
     DEFAULT_SOURCE = Empty.STRING
-    DEFAULT_SIGNALTYPENAME = "UNKN"
+    DEFAULT_SIGNALACRONYM = "UNKN"
     DEFAULT_SIGNALREFERENCE = Empty.STRING
     DEFAULT_POINTTAG = Empty.STRING
     DEFAULT_DEVICEACRONYM = Empty.STRING
@@ -90,7 +90,7 @@ class MeasurementRecord:
                  multiplier: np.float64 = ...,
                  id: np.uint64 = ...,
                  source: str = ...,
-                 signaltypename: str = ...,
+                 signalacronym: str = ...,
                  signalreference: str = ...,
                  pointtag: str = ...,
                  deviceacronym: str = ...,
@@ -106,10 +106,10 @@ class MeasurementRecord:
         self._multiplier = MeasurementRecord.DEFAULT_MULTIPLIER if multiplier is ... else multiplier
         self._id = MeasurementRecord.DEFAULT_ID if id is ... else id
         self._source = MeasurementRecord.DEFAULT_SOURCE if source is ... else source
-        self._signaltypename = MeasurementRecord.DEFAULT_SIGNALTYPENAME if signaltypename is ... else signaltypename
+        self._signalacronym = MeasurementRecord.DEFAULT_SIGNALACRONYM if signalacronym is ... else signalacronym
 
         try:
-            self._signaltype = SignalType.parse(self._signaltypename)
+            self._signaltype = SignalType.parse(self._signalacronym)
         except Exception:
             self._signaltype = SignalType.UNKN
 
@@ -177,13 +177,24 @@ class MeasurementRecord:
         return self._source
 
     @property
+    def signalacronym(self) -> str:  # <MeasurementDetail>/<SignalAcronym>
+        """
+        Gets the signal type acronym for this `MeasurementRecord`, e.g., "FREQ".
+        """
+
+        return self._signalacronym
+    
+    @property
     def signaltypename(self) -> str:  # <MeasurementDetail>/<SignalAcronym>
         """
-        Gets the signal type name for this `MeasurementRecord`, e.g., "FREQ".
+        Gets the signal type acronym for this `MeasurementRecord`, e.g., "FREQ".
+        
+        .. deprecated::
+            Use `signalacronym` instead.
         """
 
-        return self._signaltypename
-
+        return self._signalacronym
+    
     @property
     def signaltype(self) -> SignalType:
         """
