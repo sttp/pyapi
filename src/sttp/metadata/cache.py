@@ -88,7 +88,7 @@ class MetadataCache:
         Defines list of device records in the cache.
         """
 
-        self.phasorRecords: List[PhasorRecord] = []
+        self.phasor_records: List[PhasorRecord] = []
         """
         Defines list of phasor records in the cache.
         """
@@ -249,7 +249,7 @@ class MetadataCache:
                     magnitude.phasor = phasor
                     phasor.measurements.append(magnitude)  # Must be index 1
 
-        self.phasorRecords = phasor_records
+        self.phasor_records = phasor_records
 
     def _get_rowvalue(self, row: DataRow, columnname: str, default: object | None = None):
         value, err = row.value_byname(columnname)
