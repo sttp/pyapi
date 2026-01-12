@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Index &mdash; sttp/pyapi 0.7.1 documentation</title>
+  <title>Index &mdash; sttp/pyapi 0.7.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=8209df7b" />
 
@@ -829,6 +829,8 @@
         <li><a href="sttp.transport.html#sttp.transport.subscriberconnector.SubscriberConnector.DEFAULT_RETRYINTERVAL">(sttp.transport.subscriberconnector.SubscriberConnector attribute)</a>
 </li>
       </ul></li>
+      <li><a href="sttp.metadata.record.html#sttp.metadata.record.measurement.MeasurementRecord.DEFAULT_SIGNALACRONYM">DEFAULT_SIGNALACRONYM (sttp.metadata.record.measurement.MeasurementRecord attribute)</a>
+</li>
       <li><a href="sttp.metadata.record.html#sttp.metadata.record.measurement.MeasurementRecord.DEFAULT_SIGNALID">DEFAULT_SIGNALID (sttp.metadata.record.measurement.MeasurementRecord attribute)</a>
 
       <ul>
@@ -840,8 +842,6 @@
 </li>
       </ul></li>
       <li><a href="sttp.metadata.record.html#sttp.metadata.record.measurement.MeasurementRecord.DEFAULT_SIGNALREFERENCE">DEFAULT_SIGNALREFERENCE (sttp.metadata.record.measurement.MeasurementRecord attribute)</a>
-</li>
-      <li><a href="sttp.metadata.record.html#sttp.metadata.record.measurement.MeasurementRecord.DEFAULT_SIGNALTYPENAME">DEFAULT_SIGNALTYPENAME (sttp.metadata.record.measurement.MeasurementRecord attribute)</a>
 </li>
       <li><a href="sttp.html#sttp.config.Config.DEFAULT_SOCKET_TIMEOUT">DEFAULT_SOCKET_TIMEOUT (sttp.config.Config attribute)</a>
 
@@ -1327,9 +1327,9 @@
 </li>
       <li><a href="sttp.metadata.html#sttp.metadata.cache.MetadataCache.find_measurements">find_measurements() (sttp.metadata.cache.MetadataCache method)</a>
 </li>
-      <li><a href="sttp.metadata.html#sttp.metadata.cache.MetadataCache.find_measurements_signaltype">find_measurements_signaltype() (sttp.metadata.cache.MetadataCache method)</a>
+      <li><a href="sttp.metadata.html#sttp.metadata.cache.MetadataCache.find_measurements_signalacronym">find_measurements_signalacronym() (sttp.metadata.cache.MetadataCache method)</a>
 </li>
-      <li><a href="sttp.metadata.html#sttp.metadata.cache.MetadataCache.find_measurements_signaltypename">find_measurements_signaltypename() (sttp.metadata.cache.MetadataCache method)</a>
+      <li><a href="sttp.metadata.html#sttp.metadata.cache.MetadataCache.find_measurements_signaltype">find_measurements_signaltype() (sttp.metadata.cache.MetadataCache method)</a>
 </li>
       <li><a href="sttp.transport.tssc.html#sttp.transport.tssc.encoder.Encoder.finish_block">finish_block() (sttp.transport.tssc.encoder.Encoder method)</a>
 </li>
@@ -2229,9 +2229,9 @@
 </li>
       <li><a href="sttp.metadata.record.html#sttp.metadata.record.measurement.MeasurementRecord.phasor">phasor (sttp.metadata.record.measurement.MeasurementRecord attribute)</a>
 </li>
-      <li><a href="sttp.metadata.record.html#sttp.metadata.record.phasor.PhasorRecord">PhasorRecord (class in sttp.metadata.record.phasor)</a>
+      <li><a href="sttp.metadata.html#sttp.metadata.cache.MetadataCache.phasor_records">phasor_records (sttp.metadata.cache.MetadataCache attribute)</a>
 </li>
-      <li><a href="sttp.metadata.html#sttp.metadata.cache.MetadataCache.phasorRecords">phasorRecords (sttp.metadata.cache.MetadataCache attribute)</a>
+      <li><a href="sttp.metadata.record.html#sttp.metadata.record.phasor.PhasorRecord">PhasorRecord (class in sttp.metadata.record.phasor)</a>
 </li>
       <li><a href="sttp.metadata.record.html#sttp.metadata.record.device.DeviceRecord.phasors">phasors (sttp.metadata.record.device.DeviceRecord attribute)</a>
 </li>
@@ -2687,6 +2687,8 @@
         <li><a href="sttp.transport.html#sttp.transport.subscriberconnection.SubscriberConnection.signal_index_cache">(sttp.transport.subscriberconnection.SubscriberConnection property)</a>
 </li>
       </ul></li>
+      <li><a href="sttp.metadata.record.html#sttp.metadata.record.measurement.MeasurementRecord.signalacronym">signalacronym (sttp.metadata.record.measurement.MeasurementRecord property)</a>
+</li>
       <li><a href="sttp.metadata.record.html#sttp.metadata.record.measurement.MeasurementRecord.signalid">signalid (sttp.metadata.record.measurement.MeasurementRecord property)</a>
 
       <ul>
@@ -2890,6 +2892,8 @@
         <li><a href="sttp.data.html#module-sttp.data">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     sttp.data.callbackerrorlistener
 
@@ -2897,8 +2901,6 @@
         <li><a href="sttp.data.html#module-sttp.data.callbackerrorlistener">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     sttp.data.columnexpression
 

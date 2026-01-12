@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.metadata.cache &mdash; sttp/pyapi 0.7.1 documentation</title>
+  <title>sttp.metadata.cache &mdash; sttp/pyapi 0.7.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
 
@@ -165,7 +165,7 @@
 <span class="sd">        Defines list of device records in the cache.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">phasorRecords</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PhasorRecord</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phasor_records</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">PhasorRecord</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines list of phasor records in the cache.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -197,7 +197,7 @@
                 <span class="nb">id</span><span class="p">,</span>
                 <span class="c1"># `source`: Source instance name of measurement (from measurement key)</span>
                 <span class="n">source</span><span class="p">,</span>
-                <span class="c1"># `signaltypename`: Extract the measurement signal type name</span>
+                <span class="c1"># `signalacronym`: Extract the measurement signal type acronym</span>
                 <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;SignalAcronym&quot;</span><span class="p">,</span> <span class="s2">&quot;UNKN&quot;</span><span class="p">),</span>
                 <span class="c1"># `signalreference`: Extract the measurement signal reference</span>
                 <span class="n">get_rowvalue</span><span class="p">(</span><span class="s2">&quot;SignalReference&quot;</span><span class="p">),</span>
@@ -326,7 +326,7 @@
                     <span class="n">magnitude</span><span class="o">.</span><span class="n">phasor</span> <span class="o">=</span> <span class="n">phasor</span>
                     <span class="n">phasor</span><span class="o">.</span><span class="n">measurements</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">magnitude</span><span class="p">)</span>  <span class="c1"># Must be index 1</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">phasorRecords</span> <span class="o">=</span> <span class="n">phasor_records</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phasor_records</span> <span class="o">=</span> <span class="n">phasor_records</span>
 
     <span class="k">def</span> <span class="nf">_get_rowvalue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">:</span> <span class="n">DataRow</span><span class="p">,</span> <span class="n">columnname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="nb">object</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">value</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">value_byname</span><span class="p">(</span><span class="n">columnname</span><span class="p">)</span>
@@ -395,16 +395,16 @@
 <div class="viewcode-block" id="MetadataCache.find_measurements_signaltype">
 <a class="viewcode-back" href="../../../sttp.metadata.html#sttp.metadata.cache.MetadataCache.find_measurements_signaltype">[docs]</a>
     <span class="k">def</span> <span class="nf">find_measurements_signaltype</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signaltype</span><span class="p">:</span> <span class="n">SignalType</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MeasurementRecord</span><span class="p">]:</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_measurements_signaltypename</span><span class="p">(</span><span class="n">signaltype</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">source</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_measurements_signalacronym</span><span class="p">(</span><span class="n">signaltype</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">source</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="MetadataCache.find_measurements_signaltypename">
-<a class="viewcode-back" href="../../../sttp.metadata.html#sttp.metadata.cache.MetadataCache.find_measurements_signaltypename">[docs]</a>
-    <span class="k">def</span> <span class="nf">find_measurements_signaltypename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signaltypename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MeasurementRecord</span><span class="p">]:</span>
-        <span class="n">signaltypename</span> <span class="o">=</span> <span class="n">signaltypename</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+<div class="viewcode-block" id="MetadataCache.find_measurements_signalacronym">
+<a class="viewcode-back" href="../../../sttp.metadata.html#sttp.metadata.cache.MetadataCache.find_measurements_signalacronym">[docs]</a>
+    <span class="k">def</span> <span class="nf">find_measurements_signalacronym</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">signalacronym</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MeasurementRecord</span><span class="p">]:</span>
+        <span class="n">signalacronym</span> <span class="o">=</span> <span class="n">signalacronym</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="p">[</span> <span class="n">record</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">measurement_records</span> <span class="k">if</span>
-                <span class="n">record</span><span class="o">.</span><span class="n">signaltypename</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="n">signaltypename</span> <span class="ow">and</span>
+                <span class="n">record</span><span class="o">.</span><span class="n">signalacronym</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="n">signalacronym</span> <span class="ow">and</span>
                 <span class="p">(</span><span class="n">source</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">record</span><span class="o">.</span><span class="n">source</span> <span class="o">==</span> <span class="n">source</span><span class="p">)</span> <span class="p">]</span></div>
 
 

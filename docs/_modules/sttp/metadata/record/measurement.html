@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.metadata.record.measurement &mdash; sttp/pyapi 0.7.1 documentation</title>
+  <title>sttp.metadata.record.measurement &mdash; sttp/pyapi 0.7.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=8209df7b" />
 
@@ -116,7 +116,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Represents common signal types for STTP metadata. This list may</span>
 <span class="sd">    not be exhaustive for some STTP deployments. If value is set to</span>
-<span class="sd">    `UNKN`, check the string based `SignalTypeName` in the `MeasurementRecord`.</span>
+<span class="sd">    `UNKN`, check the string based `signalacronym` in the `MeasurementRecord`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">IPHM</span> <span class="o">=</span> <span class="mi">1</span>    <span class="c1"># Current phase magnitude</span>
@@ -132,7 +132,7 @@
     <span class="n">STAT</span> <span class="o">=</span> <span class="mi">11</span>   <span class="c1"># Statistic value</span>
     <span class="n">ALRM</span> <span class="o">=</span> <span class="mi">12</span>   <span class="c1"># Alarm state</span>
     <span class="n">QUAL</span> <span class="o">=</span> <span class="mi">13</span>   <span class="c1"># Quality flags (16-bit)</span>
-    <span class="n">UNKN</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>   <span class="c1"># Unknown type, see `SignalTypeName`</span>
+    <span class="n">UNKN</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>   <span class="c1"># Unknown type, see `signalacronym`</span>
 
 <div class="viewcode-block" id="SignalType.parse">
 <a class="viewcode-back" href="../../../../sttp.metadata.record.html#sttp.metadata.record.measurement.SignalType.parse">[docs]</a>
@@ -160,7 +160,7 @@
     <span class="n">DEFAULT_MULTIPLIER</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
     <span class="n">DEFAULT_ID</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">DEFAULT_SOURCE</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
-    <span class="n">DEFAULT_SIGNALTYPENAME</span> <span class="o">=</span> <span class="s2">&quot;UNKN&quot;</span>
+    <span class="n">DEFAULT_SIGNALACRONYM</span> <span class="o">=</span> <span class="s2">&quot;UNKN&quot;</span>
     <span class="n">DEFAULT_SIGNALREFERENCE</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
     <span class="n">DEFAULT_POINTTAG</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
     <span class="n">DEFAULT_DEVICEACRONYM</span> <span class="o">=</span> <span class="n">Empty</span><span class="o">.</span><span class="n">STRING</span>
@@ -173,7 +173,7 @@
                  <span class="n">multiplier</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="nb">id</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="n">source</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
-                 <span class="n">signaltypename</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+                 <span class="n">signalacronym</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="n">signalreference</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="n">pointtag</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
                  <span class="n">deviceacronym</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
@@ -189,10 +189,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_multiplier</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_MULTIPLIER</span> <span class="k">if</span> <span class="n">multiplier</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">multiplier</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_ID</span> <span class="k">if</span> <span class="nb">id</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="nb">id</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_source</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_SOURCE</span> <span class="k">if</span> <span class="n">source</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">source</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_signaltypename</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_SIGNALTYPENAME</span> <span class="k">if</span> <span class="n">signaltypename</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">signaltypename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_signalacronym</span> <span class="o">=</span> <span class="n">MeasurementRecord</span><span class="o">.</span><span class="n">DEFAULT_SIGNALACRONYM</span> <span class="k">if</span> <span class="n">signalacronym</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">signalacronym</span>
 
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_signaltype</span> <span class="o">=</span> <span class="n">SignalType</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_signaltypename</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_signaltype</span> <span class="o">=</span> <span class="n">SignalType</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_signalacronym</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_signaltype</span> <span class="o">=</span> <span class="n">SignalType</span><span class="o">.</span><span class="n">UNKN</span>
 
@@ -260,18 +260,29 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_source</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">signaltypename</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;MeasurementDetail&gt;/&lt;SignalAcronym&gt;</span>
+    <span class="k">def</span> <span class="nf">signalacronym</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;MeasurementDetail&gt;/&lt;SignalAcronym&gt;</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Gets the signal type name for this `MeasurementRecord`, e.g., &quot;FREQ&quot;.</span>
+<span class="sd">        Gets the signal type acronym for this `MeasurementRecord`, e.g., &quot;FREQ&quot;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signaltypename</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signalacronym</span>
+    
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">signaltypename</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>  <span class="c1"># &lt;MeasurementDetail&gt;/&lt;SignalAcronym&gt;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the signal type acronym for this `MeasurementRecord`, e.g., &quot;FREQ&quot;.</span>
+<span class="sd">        </span>
+<span class="sd">        .. deprecated::</span>
+<span class="sd">            Use `signalacronym` instead.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signalacronym</span>
+    
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">signaltype</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SignalType</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets the `SignalType` enumeration for this `MeasurementRecord`, if it can</span>
-<span class="sd">        be parsed from `signaltypename`; otherwise, returns `SignalType.UNKN`.</span>
+<span class="sd">        be parsed from `signalacronym`; otherwise, returns `SignalType.UNKN`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signaltype</span>
