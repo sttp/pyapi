@@ -915,14 +915,18 @@ class OperationalEncoding(IntEnum):
     """
     Targets little-endian 16-bit Unicode character encoding for strings.
 
-    Obsolete: STTP currently only supports UTF-8 string encoding.
+    .. deprecated::
+        Only used for backwards compatibility with pre-standard STTP implementations.
+        STTP currently only supports UTF-8 string encoding.
     """
 
     UTF16BE = 0x00000100
     """
     Targets big-endian 16-bit Unicode character encoding for strings.
 
-    Obsolete: STTP currently only supports UTF-8 string encoding.
+    .. deprecated::
+        Only used for backwards compatibility with pre-standard STTP implementations.
+        STTP currently only supports UTF-8 string encoding.
     """
 
     UTF8 = 0x00000200
@@ -935,8 +939,9 @@ class CompressionModes(IntFlag):
     """
     Enumeration of the possible compression modes supported by STTP.
 
-    Obsolete: Only used for backwards compatibility with pre-standard STTP implementations.
-    OperationalModes now supports custom compression types
+    .. deprecated::
+        Only used for backwards compatibility with pre-standard STTP implementations.
+        OperationalModes now supports custom compression types
     """
 
     GZIP = 0x00000020
