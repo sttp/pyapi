@@ -186,166 +186,259 @@ class StateFlags(IntFlag):
     NORMAL = 0x0
     """
     Measurement flag for a normal state.
+    
+    Required measurement quality state.
     """
 
     BADDATA = 0x1
     """
     Measurement flag for a bad data state.
+    
+    Required measurement quality state.
     """
 
     SUSPECTDATA = 0x2
     """
     Measurement flag for a suspect data state.
+    
+    Recommended measurement quality state.
     """
 
     OVERRANGEERROR = 0x4
     """
     Measurement flag for an over range error, i.e., unreasonable high value.
+    
+    Recommended measurement quality state.
     """
 
     UNDERRANGEERROR = 0x8
     """
     Measurement flag for an under range error, i.e., unreasonable low value.
+    
+    Recommended measurement quality state.
     """
 
     ALARMHIGH = 0x10
     """
     Measurement flag for an alarm for high value.
+    
+    Recommended measurement quality state.
     """
 
     ALARMLOW = 0x20
     """
     Measurement flag for an alarm for low value.
+    
+    Recommended measurement quality state.
     """
 
     WARNINGHIGH = 0x40
     """
     Measurement flag for a warning for high value.
+    
+    Recommended measurement quality state.
     """
 
     WARNINGLOW = 0x80
     """
     Measurement flag for a warning for low value.
+    
+    Recommended measurement quality state.
     """
 
     FLATLINEALARM = 0x100
     """
     Measurement flag for an alarm for flat-lined value, i.e., latched value test alarm.
+    
+    Recommended measurement quality state.
     """
 
     COMPARISONALARM = 0x200
     """
     Measurement flag for a comparison alarm, i.e., outside threshold of comparison with a real-time value.
+    
+    Recommended measurement quality state.
     """
 
     ROCALARM = 0x400
     """
     Measurement flag for a rate-of-change alarm.
+
+    Recommended measurement quality state.
     """
 
     RECEIVEDASBAD = 0x800
     """
     Measurement flag for a bad value received.
+
+    Recommended measurement quality state.
     """
 
     CALCULATEDVALUE = 0x1000
     """
     Measurement flag for a calculated value state.
+
+    Required measurement quality state.
     """
 
     CALCULATIONERROR = 0x2000
     """
     Measurement flag for a calculation error with the value.
+
+    Recommended measurement quality state.
     """
 
     CALCULATIONWARNING = 0x4000
     """
     Measurement flag for a calculation warning with the value.
+
+    Recommended measurement quality state.
     """
 
     RESERVEDQUALITYFLAG = 0x8000
     """
     Measurement flag for a reserved quality.
+
+    Recommended measurement quality state.
     """
 
     BADTIME = 0x10000
     """
     Measurement flag for a bad time state.
+
+    Required measurement quality state.
     """
 
     SUSPECTTIME = 0x20000
     """
     Measurement flag for a suspect time state.
+
+    Recommended measurement quality state.
     """
 
     LATETIMEALARM = 0x40000
     """
     Measurement flag for a late time alarm.
+
+    Recommended measurement quality state.
     """
 
     FUTURETIMEALARM = 0x80000
     """
     Measurement flag for a future time alarm.
+
+    Recommended measurement quality state.
     """
 
     UPSAMPLED = 0x100000
     """
     Measurement flag for an up-sampled state.
+
+    Recommended measurement quality state.
     """
 
     DOWNSAMPLED = 0x200000
     """
     Measurement flag for a down-sampled state.
+
+    Recommended measurement quality state.
     """
 
     DISCARDEDVALUE = 0x400000
     """
     Measurement flag for a discarded value state.
+
+    Recommended measurement quality state.
     """
 
     RESERVEDTIMEFLAG = 0x800000
     """
     Measurement flag for a reserved time state.
+
+    Recommended measurement quality state.
     """
 
     USERDEFINEDFLAG1 = 0x1000000
     """
     Measurement flag for user defined state 1.
+
+    Recommended measurement quality state.
     """
 
     USERDEFINEDFLAG2 = 0x2000000
     """
     Measurement flag for user defined state 2.
+
+    Recommended measurement quality state.
     """
 
-    USERDEFINEDFLAG3 = 0x4000000
+    USERDEFINEDFLAG3 = 0x4000000 # Replaced by BASETIMEOFFSET
     """
     Measurement flag for user defined state 3.
+        
+    .. deprecated::
+        Value redfined as `BASETIMEOFFSET` in IEEE 2664-2024.
     """
 
-    USERDEFINEDFLAG4 = 0x8000000
+    USERDEFINEDFLAG4 = 0x8000000 # Replaced by TIMEINDEX
     """
     Measurement flag for user defined state 4.
+        
+    .. deprecated::
+        Value redfined as `TIMEINDEX` in IEEE 2664-2024.
     """
 
-    USERDEFINEDFLAG5 = 0x10000000
+    USERDEFINEDFLAG5 = 0x10000000 # Replaced by SIMULATEDDATA
     """
     Measurement flag for user defined state 5.
+        
+    .. deprecated::
+        Value redfined as `SIMULATEDDATA` in IEEE 2664-2024.
+    """
+
+    BASETIMEOFFSET = 0x4000000 # Replaces USERDEFINEDFLAG3
+    """
+    Measurement flag for  base time offset. If set, specifies if
+    offset is active for current measurement.
+
+    Required measurement quality state.
+    """
+
+    TIMEINDEX = 0x8000000 # Replaces USERDEFINEDFLAG4
+    """
+    Measurement flag for base time offset index to use for current 
+    measurement (when active): Bit set = use odd time index 
+    (i.e., 1), Bit clear = use even time index (i.e., 0).
+
+    Required measurement quality state.
+    """
+
+    SIMULATEDDATA = 0x10000000 # Replaces USERDEFINEDFLAG5
+    """
+    Measurement flag for simulated data.
+    
+    Recommended measurement quality state.
     """
 
     SYSTEMERROR = 0x20000000
     """
     Measurement flag for a system error state.
+
+    Required measurement quality state.
     """
 
     SYSTEMWARNING = 0x40000000
     """
     Measurement flag for a system warning state.
+    
+    Recommended measurement quality state.
     """
 
     MEASUREMENTERROR = 0x80000000
     """
     Measurement flag for a measurement error state.
+    
+    Recommended measurement quality state.
     """
 
 
