@@ -25,6 +25,7 @@
 # Differences: Simplified Python wrapper; otherwise parity maintained.
 
 from .data.dataset import DataSet
+from .transport.constants import ServerResponse, ServerCommand 
 from .transport.datapublisher import DataPublisher
 from .transport.measurement import Measurement
 from .transport.subscriberconnection import SubscriberConnection
@@ -58,6 +59,7 @@ class Publisher:
         self._errormessage_logger: Callable[[str], None] | None = self.default_errormessage_logger
         self._clientconnected_receiver: Callable[[SubscriberConnection], None] | None = self.default_clientconnected_receiver
         self._clientdisconnected_receiver: Callable[[SubscriberConnection], None] | None = self.default_clientdisconnected_receiver
+        self._usercommand_receiver: Callable[[SubscriberConnection, ServerCommand, bytes], None] | None = None
         
         # Lock used to synchronize console writes
         self._consolelock = Lock()
@@ -67,6 +69,7 @@ class Publisher:
         self._datapublisher.errormessage_callback = self._handle_error_message
         self._datapublisher.clientconnected_callback = self._handle_client_connected
         self._datapublisher.clientdisconnected_callback = self._handle_client_disconnected
+        self._datapublisher.usercommand_callback = self._handle_user_command
 
     def dispose(self):
         """
@@ -135,6 +138,34 @@ class Publisher:
     def clientdisconnected_receiver(self, value: Callable[[SubscriberConnection], None] | None):
         self._clientdisconnected_receiver = value
 
+    @property
+    def usercommand_receiver(self) -> Callable[[SubscriberConnection, ServerCommand, bytes], None] | None:
+        """
+        Gets or sets a function to handle user-defined commands from clients.
+        
+        Signature: `def usercommand_receiver(connection: SubscriberConnection, command: ServerCommand, data: bytes)`
+        """
+        return self._usercommand_receiver
+    
+    @usercommand_receiver.setter
+    def usercommand_receiver(self, value: Callable[[SubscriberConnection, ServerCommand, bytes], None] | None):
+        self._usercommand_receiver = value
+
+    @property
+    def subscriber_connections(self) -> List[SubscriberConnection]:
+        """
+        Gets a list of currently connected clients.
+        
+        Returns
+        -------
+        List[SubscriberConnection]
+            List of currently connected clients
+        """
+        with self._datapublisher._subscriber_connections_lock:
+            connections = list(self._datapublisher._subscriber_connections)
+        
+        return connections
+
     def start(self, port: int, ipv6: bool = False):
         """
         Starts the publisher listening on the specified port.
@@ -191,6 +222,42 @@ class Publisher:
             List of measurements to publish
         """
         self._datapublisher.publish_measurements(measurements)
+
+    def send_userresponse(self, connection: SubscriberConnection, responsecode: ServerResponse, commandcode: ServerCommand, data: bytes | bytearray | None = None):
+        """
+        Sends a user response to a specific connected client.
+        
+        Parameters
+        ----------
+        connection : SubscriberConnection
+            Client connection to send the response to
+        responsecode : ServerResponse
+            Response to send
+        commandcode : ServerCommand
+            Command associated with the response
+        data : bytes | bytearray | None
+            Additional data to send with the response
+        """
+        connection.send_response(responsecode, commandcode, data)
+
+    def broadcast_userresponse(self, responsecode: ServerResponse, commandcode: ServerCommand, data: bytes | bytearray | None = None):
+        """
+        Broadcasts a user response to all connected clients.
+        
+        Parameters
+        ----------
+        responsecode : ServerResponse
+            Response to broadcast
+        commandcode : ServerCommand
+            Command associated with the response
+        data : bytes | bytearray | None
+            Additional data to send with the response
+        """
+        
+        with self._datapublisher._subscriber_connections_lock:
+            for connection in self._datapublisher._subscriber_connections:
+                self.send_userresponse(connection, responsecode, commandcode, data)
+
 
     # Configuration properties (delegate to DataPublisher)
     
@@ -260,6 +327,11 @@ class Publisher:
         """Internal handler for client disconnected events."""
         if self._clientdisconnected_receiver:
             self._clientdisconnected_receiver(connection)
+
+    def _handle_user_command(self, connection: SubscriberConnection, commandcode: ServerCommand, data: bytes):
+        """Internal handler for user-defined commands."""
+        if self._usercommand_receiver:
+            self._usercommand_receiver(connection, commandcode, data)
 
     # Default callback implementations
 

@@ -378,7 +378,7 @@ class SubscriberConnection:
                 f"Error handling command 0x{command:02X} from {self._connection_id}: {ex}"
             )
     
-    def send_response(self, response_code: ServerResponse, command_code: ServerCommand, 
+    def send_response(self, responsecode: ServerResponse, commandcode: ServerCommand, 
                       data: bytes | bytearray | None = None, message: str | None = None) -> bool:
         """Sends a response to the subscriber."""
         try:
@@ -395,8 +395,8 @@ class SubscriberConnection:
             # Followed by payload data
             
             packet = bytearray()
-            packet.append(np.uint8(response_code))
-            packet.append(np.uint8(command_code))
+            packet.append(np.uint8(responsecode))
+            packet.append(np.uint8(commandcode))
             packet.extend(BigEndian.from_uint32(len(data)))
             packet.extend(data)
             
@@ -415,7 +415,7 @@ class SubscriberConnection:
             )
             return False
 
-    def send_data_packet(self, command_code: np.uint8, data: bytes) -> bool:
+    def send_data_packet(self, commandcode: np.uint8, data: bytes) -> bool:
         """Sends a data packet (server command) to the subscriber."""
         try:
             # Data packet structure (5 bytes header + data):
@@ -424,7 +424,7 @@ class SubscriberConnection:
             # Followed by payload data
             
             packet = bytearray()
-            packet.append(command_code)
+            packet.append(commandcode)
             packet.extend(BigEndian.from_uint32(len(data)))
             packet.extend(data)
             
@@ -705,11 +705,11 @@ class SubscriberConnection:
         """Handles base time update confirmation."""
         pass
     
-    def _handle_user_command(self, command: np.uint8, data: bytearray):
+    def _handle_user_command(self, commandcode: ServerCommand, data: bytearray):
         """Handles user-defined command."""
         # Dispatch to parent for handling
         if self._parent.usercommand_callback:
-            self._parent.usercommand_callback(self, command, bytes(data))
+            self._parent.usercommand_callback(self, commandcode, bytes(data))
 
     # Measurement publication
     

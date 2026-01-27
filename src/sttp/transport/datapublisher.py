@@ -97,7 +97,7 @@ class DataPublisher:
         self.processingintervalchange_callback: Callable[[SubscriberConnection], None] | None = None
         self.temporalsubscription_requested_callback: Callable[[SubscriberConnection], None] | None = None
         self.temporalsubscription_canceled_callback: Callable[[SubscriberConnection], None] | None = None
-        self.usercommand_callback: Callable[[SubscriberConnection, np.uint8, bytes], None] | None = None
+        self.usercommand_callback: Callable[[SubscriberConnection, ServerCommand, bytes], None] | None = None
         
         # User data
         self._user_data = None
@@ -629,6 +629,8 @@ class DataPublisher:
         """Background thread that accepts client connections."""
         while self._started and not self._shuttingdown:
             try:
+                assert self._server_socket is not None
+                
                 client_socket, address = self._server_socket.accept()
                 
                 # Check connection limit
