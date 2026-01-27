@@ -603,9 +603,25 @@ class Subscriber:
             self._reader = MeasurementReader(self)
 
         return self._reader
+    
+    def send_usercommand(self, commandcode: ServerCommand, data: bytes | bytearray | None = None):
+        """
+        Sends a user-defined command to the data publisher.
+
+        Parameters
+        ----------
+        commandcode : ServerCommand
+            Command to send
+        data : bytes | bytearray | None
+            Additional data to send with the command
+        """
+
+        if commandcode < ServerCommand.USERCOMMAND00 or commandcode > ServerCommand.USERCOMMAND15:
+            raise ValueError(f"commandcode {commandcode} is not a valid user-defined command")
+
+        self._datasubscriber.send_servercommand(commandcode, data)
 
     # Local callback handlers:
-
     def statusmessage(self, message: str):
         """
         Executes the defined status message logger callback.
@@ -623,7 +639,6 @@ class Subscriber:
             self._errormessage_logger(message)
 
     # Intermediate callback handlers:
-
     def _handle_reconnect(self, ds: DataSubscriber):
         if ds.connected:
             if self._connectionestablished_receiver is not None:
