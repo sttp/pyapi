@@ -175,6 +175,11 @@ class DataSubscriber:
         Called when the `DataPublisher` sends a notification that requires receipt.
         """
 
+        self.userresponsereceived_callback: Callable[[ServerResponse, ServerCommand, bytes], None] | None = None
+        """
+        Called when the `DataPublisher` sends a user-defined response.
+        """
+
         self.compress_payloaddata = DataSubscriber.DEFAULT_COMPRESS_PAYLOADDATA if compress_payloaddata is ... else compress_payloaddata
         """
         Determines whether payload data is compressed, defaults to TSSC.
@@ -740,11 +745,16 @@ class DataSubscriber:
             self._handle_bufferblock(data)
         elif responsecode == ServerResponse.NOTIFY:
             self._handle_notification(data)
+        elif self._is_user_response(responsecode):
+            self._handle_userresponse(responsecode, commandcode, data)
         elif responsecode == ServerResponse.NOOP:
             # NoOP Handled
             pass
         else:
             self._dispatch_errormessage(f"Encountered unexpected server response code: {str(responsecode)}")
+
+    def _is_user_response(self, responsecode: ServerResponse) -> bool:
+        return ServerResponse.USERRESPONSE00 <= responsecode <= ServerResponse.USERRESPONSE15
 
     def _handle_succeeded(self, commandcode: ServerCommand, data: bytes):
         has_response_message = False
@@ -1129,6 +1139,10 @@ class DataSubscriber:
 
         if self.notificationreceived_callback is not None:
             self.notificationreceived_callback(message)
+
+    def _handle_userresponse(self, responsecode: ServerResponse, commandcode: ServerCommand, data: bytes):
+        if self.userresponsereceived_callback is not None:
+            self.userresponsereceived_callback(responsecode, commandcode, data)
 
     def send_servercommand_withmessage(self, commandcode: ServerCommand, message: str):
         """

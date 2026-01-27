@@ -917,7 +917,7 @@ class OperationalEncoding(IntEnum):
 
     .. deprecated::
         Only used for backwards compatibility with pre-standard STTP implementations.
-        STTP currently only supports UTF-8 string encoding.
+        IEEE 2664 currently only supports UTF-8 string encoding.
     """
 
     UTF16BE = 0x00000100
@@ -926,7 +926,7 @@ class OperationalEncoding(IntEnum):
 
     .. deprecated::
         Only used for backwards compatibility with pre-standard STTP implementations.
-        STTP currently only supports UTF-8 string encoding.
+        IEEE 2664 currently only supports UTF-8 string encoding.
     """
 
     UTF8 = 0x00000200

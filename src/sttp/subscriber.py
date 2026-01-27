@@ -28,7 +28,7 @@ from gsf import Limits
 from gsf.endianorder import BigEndian
 from .data.dataset import DataSet
 from .transport.bufferblock import BufferBlock
-from .transport.constants import ConnectStatus, ServerCommand, Defaults
+from .transport.constants import ConnectStatus, Defaults, ServerCommand, ServerResponse
 from .transport.datasubscriber import DataSubscriber
 from .transport.measurement import Measurement
 from .transport.signalindexcache import SignalIndexCache
@@ -320,6 +320,24 @@ class Subscriber:
         Prefer using property setter over `set_notification_receiver` method.
         """
         self._datasubscriber.notificationreceived_callback = value
+
+    @property
+    def userresponse_receiver(self) -> Callable[[ServerResponse, ServerCommand, bytes], None] | None:
+        """
+        Gets or sets a function to handle user-defined responses.
+        
+        Signature: `def userresponse_receiver(responsecode: ServerResponse, commandcode: ServerCommand, data: bytes)`
+        """
+        return self._datasubscriber.userresponsereceived_callback
+
+    @userresponse_receiver.setter
+    def userresponse_receiver(self, value: Callable[[ServerResponse, ServerCommand, bytes], None] | None):
+        """
+        Defines the callback that handles reception of a user-defined response.
+        Assignment will take effect immediately, even while subscription is active.
+        Prefer using property setter over `set_userresponse_receiver` method.
+        """
+        self._datasubscriber.userresponsereceived_callback = value
 
     @property
     def historicalreadcomplete_receiver(self) -> Callable[[], None] | None:
