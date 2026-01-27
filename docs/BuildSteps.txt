@@ -9,12 +9,12 @@ Make sure root-level README.md exists, if not:
     before a new build to ensure the README.md will contain the latest updates.
 
 For updates, always increment version number in:
-    setup.cfg
+    pyproject.toml
     src/sttp/version.py
     docs/conf.py
 
 Any new dependencies should be sync'd and added to:
-    setup.cfg ([options] / install_requires)
+    pyproject.toml (dependencies)
     requirements.txt
 
 It is always best to delete the following folders before a new build:
