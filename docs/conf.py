@@ -11,11 +11,11 @@ sys.path.insert(0, os.path.abspath("../src"))
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'sttp/pyapi'
-copyright = '2022, Grid Protection Alliance'
+copyright = '2026, Grid Protection Alliance'
 author = 'J. Ritchie Carroll'
 
 # The full version, including alpha/beta/rc tags
-release = '0.7.2'
+release = '0.7.3'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
