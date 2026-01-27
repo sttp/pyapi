@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.constants &mdash; sttp/pyapi 0.7.0 documentation</title>
+  <title>sttp.transport.constants &mdash; sttp/pyapi 0.7.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=bbec6902"></script>
-        <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
-        <script src="../../../_static/doctools.js?v=92e14aea"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
+      <script src="../../../_static/doctools.js?v=92e14aea"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -43,8 +41,11 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <!-- Local TOC -->
-              <div class="local-toc"></div>
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">src</a></li>
+</ul>
+
         </div>
       </div>
     </nav>
@@ -263,166 +264,259 @@
     <span class="n">NORMAL</span> <span class="o">=</span> <span class="mh">0x0</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a normal state.</span>
+<span class="sd">    </span>
+<span class="sd">    Required measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">BADDATA</span> <span class="o">=</span> <span class="mh">0x1</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a bad data state.</span>
+<span class="sd">    </span>
+<span class="sd">    Required measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">SUSPECTDATA</span> <span class="o">=</span> <span class="mh">0x2</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a suspect data state.</span>
+<span class="sd">    </span>
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">OVERRANGEERROR</span> <span class="o">=</span> <span class="mh">0x4</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for an over range error, i.e., unreasonable high value.</span>
+<span class="sd">    </span>
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">UNDERRANGEERROR</span> <span class="o">=</span> <span class="mh">0x8</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for an under range error, i.e., unreasonable low value.</span>
+<span class="sd">    </span>
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">ALARMHIGH</span> <span class="o">=</span> <span class="mh">0x10</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for an alarm for high value.</span>
+<span class="sd">    </span>
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">ALARMLOW</span> <span class="o">=</span> <span class="mh">0x20</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for an alarm for low value.</span>
+<span class="sd">    </span>
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">WARNINGHIGH</span> <span class="o">=</span> <span class="mh">0x40</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a warning for high value.</span>
+<span class="sd">    </span>
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">WARNINGLOW</span> <span class="o">=</span> <span class="mh">0x80</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a warning for low value.</span>
+<span class="sd">    </span>
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">FLATLINEALARM</span> <span class="o">=</span> <span class="mh">0x100</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for an alarm for flat-lined value, i.e., latched value test alarm.</span>
+<span class="sd">    </span>
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">COMPARISONALARM</span> <span class="o">=</span> <span class="mh">0x200</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a comparison alarm, i.e., outside threshold of comparison with a real-time value.</span>
+<span class="sd">    </span>
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">ROCALARM</span> <span class="o">=</span> <span class="mh">0x400</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a rate-of-change alarm.</span>
+
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">RECEIVEDASBAD</span> <span class="o">=</span> <span class="mh">0x800</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a bad value received.</span>
+
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">CALCULATEDVALUE</span> <span class="o">=</span> <span class="mh">0x1000</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a calculated value state.</span>
+
+<span class="sd">    Required measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">CALCULATIONERROR</span> <span class="o">=</span> <span class="mh">0x2000</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a calculation error with the value.</span>
+
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">CALCULATIONWARNING</span> <span class="o">=</span> <span class="mh">0x4000</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a calculation warning with the value.</span>
+
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">RESERVEDQUALITYFLAG</span> <span class="o">=</span> <span class="mh">0x8000</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a reserved quality.</span>
+
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">BADTIME</span> <span class="o">=</span> <span class="mh">0x10000</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a bad time state.</span>
+
+<span class="sd">    Required measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">SUSPECTTIME</span> <span class="o">=</span> <span class="mh">0x20000</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a suspect time state.</span>
+
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">LATETIMEALARM</span> <span class="o">=</span> <span class="mh">0x40000</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a late time alarm.</span>
+
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">FUTURETIMEALARM</span> <span class="o">=</span> <span class="mh">0x80000</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a future time alarm.</span>
+
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">UPSAMPLED</span> <span class="o">=</span> <span class="mh">0x100000</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for an up-sampled state.</span>
+
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">DOWNSAMPLED</span> <span class="o">=</span> <span class="mh">0x200000</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a down-sampled state.</span>
+
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">DISCARDEDVALUE</span> <span class="o">=</span> <span class="mh">0x400000</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a discarded value state.</span>
+
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">RESERVEDTIMEFLAG</span> <span class="o">=</span> <span class="mh">0x800000</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a reserved time state.</span>
+
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">USERDEFINEDFLAG1</span> <span class="o">=</span> <span class="mh">0x1000000</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for user defined state 1.</span>
+
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">USERDEFINEDFLAG2</span> <span class="o">=</span> <span class="mh">0x2000000</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for user defined state 2.</span>
+
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">USERDEFINEDFLAG3</span> <span class="o">=</span> <span class="mh">0x4000000</span>
+    <span class="n">USERDEFINEDFLAG3</span> <span class="o">=</span> <span class="mh">0x4000000</span> <span class="c1"># Replaced by BASETIMEOFFSET</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for user defined state 3.</span>
+<span class="sd">        </span>
+<span class="sd">    .. deprecated::</span>
+<span class="sd">        Value redfined as `BASETIMEOFFSET` in IEEE 2664-2024.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">USERDEFINEDFLAG4</span> <span class="o">=</span> <span class="mh">0x8000000</span>
+    <span class="n">USERDEFINEDFLAG4</span> <span class="o">=</span> <span class="mh">0x8000000</span> <span class="c1"># Replaced by TIMEINDEX</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for user defined state 4.</span>
+<span class="sd">        </span>
+<span class="sd">    .. deprecated::</span>
+<span class="sd">        Value redfined as `TIMEINDEX` in IEEE 2664-2024.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">USERDEFINEDFLAG5</span> <span class="o">=</span> <span class="mh">0x10000000</span>
+    <span class="n">USERDEFINEDFLAG5</span> <span class="o">=</span> <span class="mh">0x10000000</span> <span class="c1"># Replaced by SIMULATEDDATA</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for user defined state 5.</span>
+<span class="sd">        </span>
+<span class="sd">    .. deprecated::</span>
+<span class="sd">        Value redfined as `SIMULATEDDATA` in IEEE 2664-2024.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">BASETIMEOFFSET</span> <span class="o">=</span> <span class="mh">0x4000000</span> <span class="c1"># Replaces USERDEFINEDFLAG3</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for  base time offset. If set, specifies if</span>
+<span class="sd">    offset is active for current measurement.</span>
+
+<span class="sd">    Required measurement quality state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">TIMEINDEX</span> <span class="o">=</span> <span class="mh">0x8000000</span> <span class="c1"># Replaces USERDEFINEDFLAG4</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for base time offset index to use for current </span>
+<span class="sd">    measurement (when active): Bit set = use odd time index </span>
+<span class="sd">    (i.e., 1), Bit clear = use even time index (i.e., 0).</span>
+
+<span class="sd">    Required measurement quality state.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SIMULATEDDATA</span> <span class="o">=</span> <span class="mh">0x10000000</span> <span class="c1"># Replaces USERDEFINEDFLAG5</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Measurement flag for simulated data.</span>
+<span class="sd">    </span>
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">SYSTEMERROR</span> <span class="o">=</span> <span class="mh">0x20000000</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a system error state.</span>
+
+<span class="sd">    Required measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">SYSTEMWARNING</span> <span class="o">=</span> <span class="mh">0x40000000</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a system warning state.</span>
+<span class="sd">    </span>
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">MEASUREMENTERROR</span> <span class="o">=</span> <span class="mh">0x80000000</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Measurement flag for a measurement error state.</span>
+<span class="sd">    </span>
+<span class="sd">    Recommended measurement quality state.</span>
 <span class="sd">    &quot;&quot;&quot;</span></div>
 
 
@@ -914,14 +1008,18 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Targets little-endian 16-bit Unicode character encoding for strings.</span>
 
-<span class="sd">    Obsolete: STTP currently only supports UTF-8 string encoding.</span>
+<span class="sd">    .. deprecated::</span>
+<span class="sd">        Only used for backwards compatibility with pre-standard STTP implementations.</span>
+<span class="sd">        IEEE 2664 currently only supports UTF-8 string encoding.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">UTF16BE</span> <span class="o">=</span> <span class="mh">0x00000100</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Targets big-endian 16-bit Unicode character encoding for strings.</span>
 
-<span class="sd">    Obsolete: STTP currently only supports UTF-8 string encoding.</span>
+<span class="sd">    .. deprecated::</span>
+<span class="sd">        Only used for backwards compatibility with pre-standard STTP implementations.</span>
+<span class="sd">        IEEE 2664 currently only supports UTF-8 string encoding.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">UTF8</span> <span class="o">=</span> <span class="mh">0x00000200</span>
@@ -937,8 +1035,9 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Enumeration of the possible compression modes supported by STTP.</span>
 
-<span class="sd">    Obsolete: Only used for backwards compatibility with pre-standard STTP implementations.</span>
-<span class="sd">    OperationalModes now supports custom compression types</span>
+<span class="sd">    .. deprecated::</span>
+<span class="sd">        Only used for backwards compatibility with pre-standard STTP implementations.</span>
+<span class="sd">        OperationalModes now supports custom compression types</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">GZIP</span> <span class="o">=</span> <span class="mh">0x00000020</span>

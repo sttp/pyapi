@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.datasubscriber &mdash; sttp/pyapi 0.7.1 documentation</title>
+  <title>sttp.transport.datasubscriber &mdash; sttp/pyapi 0.7.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
-        <script src="../../../_static/doctools.js?v=92e14aea"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
+      <script src="../../../_static/doctools.js?v=92e14aea"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -250,6 +248,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">notificationreceived_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Called when the `DataPublisher` sends a notification that requires receipt.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">userresponsereceived_callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">ServerResponse</span><span class="p">,</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Called when the `DataPublisher` sends a user-defined response.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">compress_payloaddata</span> <span class="o">=</span> <span class="n">DataSubscriber</span><span class="o">.</span><span class="n">DEFAULT_COMPRESS_PAYLOADDATA</span> <span class="k">if</span> <span class="n">compress_payloaddata</span> <span class="ow">is</span> <span class="o">...</span> <span class="k">else</span> <span class="n">compress_payloaddata</span>
@@ -844,11 +847,16 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_handle_bufferblock</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">responsecode</span> <span class="o">==</span> <span class="n">ServerResponse</span><span class="o">.</span><span class="n">NOTIFY</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_handle_notification</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_user_response</span><span class="p">(</span><span class="n">responsecode</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_handle_userresponse</span><span class="p">(</span><span class="n">responsecode</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">responsecode</span> <span class="o">==</span> <span class="n">ServerResponse</span><span class="o">.</span><span class="n">NOOP</span><span class="p">:</span>
             <span class="c1"># NoOP Handled</span>
             <span class="k">pass</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_dispatch_errormessage</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Encountered unexpected server response code: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">responsecode</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_is_user_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">responsecode</span><span class="p">:</span> <span class="n">ServerResponse</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ServerResponse</span><span class="o">.</span><span class="n">USERRESPONSE00</span> <span class="o">&lt;=</span> <span class="n">responsecode</span> <span class="o">&lt;=</span> <span class="n">ServerResponse</span><span class="o">.</span><span class="n">USERRESPONSE15</span>
 
     <span class="k">def</span> <span class="nf">_handle_succeeded</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">:</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
         <span class="n">has_response_message</span> <span class="o">=</span> <span class="kc">False</span>
@@ -1233,6 +1241,10 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">notificationreceived_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">notificationreceived_callback</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_handle_userresponse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">responsecode</span><span class="p">:</span> <span class="n">ServerResponse</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">:</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">userresponsereceived_callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">userresponsereceived_callback</span><span class="p">(</span><span class="n">responsecode</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
 <div class="viewcode-block" id="DataSubscriber.send_servercommand_withmessage">
 <a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.datasubscriber.DataSubscriber.send_servercommand_withmessage">[docs]</a>

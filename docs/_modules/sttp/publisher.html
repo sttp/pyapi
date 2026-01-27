@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.publisher &mdash; sttp/pyapi 0.7.1 documentation</title>
+  <title>sttp.publisher &mdash; sttp/pyapi 0.7.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=b1f64a84"></script>
-        <script src="../../_static/doctools.js?v=92e14aea"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b1f64a84"></script>
+      <script src="../../_static/doctools.js?v=92e14aea"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -100,6 +98,7 @@
 <span class="c1"># Differences: Simplified Python wrapper; otherwise parity maintained.</span>
 
 <span class="kn">from</span> <span class="nn">.data.dataset</span> <span class="kn">import</span> <span class="n">DataSet</span>
+<span class="kn">from</span> <span class="nn">.transport.constants</span> <span class="kn">import</span> <span class="n">ServerResponse</span><span class="p">,</span> <span class="n">ServerCommand</span> 
 <span class="kn">from</span> <span class="nn">.transport.datapublisher</span> <span class="kn">import</span> <span class="n">DataPublisher</span>
 <span class="kn">from</span> <span class="nn">.transport.measurement</span> <span class="kn">import</span> <span class="n">Measurement</span>
 <span class="kn">from</span> <span class="nn">.transport.subscriberconnection</span> <span class="kn">import</span> <span class="n">SubscriberConnection</span>
@@ -135,6 +134,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_errormessage_logger</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">str</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_errormessage_logger</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_clientconnected_receiver</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">SubscriberConnection</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_clientconnected_receiver</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_clientdisconnected_receiver</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">SubscriberConnection</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">default_clientdisconnected_receiver</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_usercommand_receiver</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">SubscriberConnection</span><span class="p">,</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
         
         <span class="c1"># Lock used to synchronize console writes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_consolelock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
@@ -144,6 +144,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_datapublisher</span><span class="o">.</span><span class="n">errormessage_callback</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_error_message</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_datapublisher</span><span class="o">.</span><span class="n">clientconnected_callback</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_client_connected</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_datapublisher</span><span class="o">.</span><span class="n">clientdisconnected_callback</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_client_disconnected</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_datapublisher</span><span class="o">.</span><span class="n">usercommand_callback</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_user_command</span>
 
 <div class="viewcode-block" id="Publisher.dispose">
 <a class="viewcode-back" href="../../sttp.html#sttp.publisher.Publisher.dispose">[docs]</a>
@@ -214,6 +215,34 @@
     <span class="nd">@clientdisconnected_receiver</span><span class="o">.</span><span class="n">setter</span>
     <span class="k">def</span> <span class="nf">clientdisconnected_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">SubscriberConnection</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_clientdisconnected_receiver</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">usercommand_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">SubscriberConnection</span><span class="p">,</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets or sets a function to handle user-defined commands from clients.</span>
+<span class="sd">        </span>
+<span class="sd">        Signature: `def usercommand_receiver(connection: SubscriberConnection, command: ServerCommand, data: bytes)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_usercommand_receiver</span>
+    
+    <span class="nd">@usercommand_receiver</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">usercommand_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">SubscriberConnection</span><span class="p">,</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_usercommand_receiver</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">subscriber_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">SubscriberConnection</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets a list of currently connected clients.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        List[SubscriberConnection]</span>
+<span class="sd">            List of currently connected clients</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datapublisher</span><span class="o">.</span><span class="n">_subscriber_connections_lock</span><span class="p">:</span>
+            <span class="n">connections</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_datapublisher</span><span class="o">.</span><span class="n">_subscriber_connections</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">connections</span>
 
 <div class="viewcode-block" id="Publisher.start">
 <a class="viewcode-back" href="../../sttp.html#sttp.publisher.Publisher.start">[docs]</a>
@@ -287,6 +316,48 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_datapublisher</span><span class="o">.</span><span class="n">publish_measurements</span><span class="p">(</span><span class="n">measurements</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="Publisher.send_userresponse">
+<a class="viewcode-back" href="../../sttp.html#sttp.publisher.Publisher.send_userresponse">[docs]</a>
+    <span class="k">def</span> <span class="nf">send_userresponse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">:</span> <span class="n">SubscriberConnection</span><span class="p">,</span> <span class="n">responsecode</span><span class="p">:</span> <span class="n">ServerResponse</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">:</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="nb">bytearray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sends a user response to a specific connected client.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        connection : SubscriberConnection</span>
+<span class="sd">            Client connection to send the response to</span>
+<span class="sd">        responsecode : ServerResponse</span>
+<span class="sd">            Response to send</span>
+<span class="sd">        commandcode : ServerCommand</span>
+<span class="sd">            Command associated with the response</span>
+<span class="sd">        data : bytes | bytearray | None</span>
+<span class="sd">            Additional data to send with the response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">connection</span><span class="o">.</span><span class="n">send_response</span><span class="p">(</span><span class="n">responsecode</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Publisher.broadcast_userresponse">
+<a class="viewcode-back" href="../../sttp.html#sttp.publisher.Publisher.broadcast_userresponse">[docs]</a>
+    <span class="k">def</span> <span class="nf">broadcast_userresponse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">responsecode</span><span class="p">:</span> <span class="n">ServerResponse</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">:</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="nb">bytearray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Broadcasts a user response to all connected clients.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        responsecode : ServerResponse</span>
+<span class="sd">            Response to broadcast</span>
+<span class="sd">        commandcode : ServerCommand</span>
+<span class="sd">            Command associated with the response</span>
+<span class="sd">        data : bytes | bytearray | None</span>
+<span class="sd">            Additional data to send with the response</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datapublisher</span><span class="o">.</span><span class="n">_subscriber_connections_lock</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">connection</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datapublisher</span><span class="o">.</span><span class="n">_subscriber_connections</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">send_userresponse</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">responsecode</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
+
+
+
     <span class="c1"># Configuration properties (delegate to DataPublisher)</span>
     
     <span class="nd">@property</span>
@@ -355,6 +426,11 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Internal handler for client disconnected events.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clientdisconnected_receiver</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_clientdisconnected_receiver</span><span class="p">(</span><span class="n">connection</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_handle_user_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection</span><span class="p">:</span> <span class="n">SubscriberConnection</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">:</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Internal handler for user-defined commands.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_usercommand_receiver</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_usercommand_receiver</span><span class="p">(</span><span class="n">connection</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
 
     <span class="c1"># Default callback implementations</span>
 

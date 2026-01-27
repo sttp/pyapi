@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.subscriberconnection &mdash; sttp/pyapi 0.7.1 documentation</title>
+  <title>sttp.transport.subscriberconnection &mdash; sttp/pyapi 0.7.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
-        <script src="../../../_static/doctools.js?v=92e14aea"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=b1f64a84"></script>
+      <script src="../../../_static/doctools.js?v=92e14aea"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -463,7 +461,7 @@
     
 <div class="viewcode-block" id="SubscriberConnection.send_response">
 <a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriberconnection.SubscriberConnection.send_response">[docs]</a>
-    <span class="k">def</span> <span class="nf">send_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response_code</span><span class="p">:</span> <span class="n">ServerResponse</span><span class="p">,</span> <span class="n">command_code</span><span class="p">:</span> <span class="n">ServerCommand</span><span class="p">,</span> 
+    <span class="k">def</span> <span class="nf">send_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">responsecode</span><span class="p">:</span> <span class="n">ServerResponse</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">:</span> <span class="n">ServerCommand</span><span class="p">,</span> 
                       <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="nb">bytearray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Sends a response to the subscriber.&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
@@ -480,8 +478,8 @@
             <span class="c1"># Followed by payload data</span>
             
             <span class="n">packet</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
-            <span class="n">packet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">response_code</span><span class="p">))</span>
-            <span class="n">packet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">command_code</span><span class="p">))</span>
+            <span class="n">packet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">responsecode</span><span class="p">))</span>
+            <span class="n">packet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">commandcode</span><span class="p">))</span>
             <span class="n">packet</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">BigEndian</span><span class="o">.</span><span class="n">from_uint32</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
             <span class="n">packet</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             
@@ -503,7 +501,7 @@
 
 <div class="viewcode-block" id="SubscriberConnection.send_data_packet">
 <a class="viewcode-back" href="../../../sttp.transport.html#sttp.transport.subscriberconnection.SubscriberConnection.send_data_packet">[docs]</a>
-    <span class="k">def</span> <span class="nf">send_data_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command_code</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">send_data_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Sends a data packet (server command) to the subscriber.&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># Data packet structure (5 bytes header + data):</span>
@@ -512,7 +510,7 @@
             <span class="c1"># Followed by payload data</span>
             
             <span class="n">packet</span> <span class="o">=</span> <span class="nb">bytearray</span><span class="p">()</span>
-            <span class="n">packet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">command_code</span><span class="p">)</span>
+            <span class="n">packet</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">commandcode</span><span class="p">)</span>
             <span class="n">packet</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">BigEndian</span><span class="o">.</span><span class="n">from_uint32</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)))</span>
             <span class="n">packet</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
             
@@ -794,11 +792,11 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Handles base time update confirmation.&quot;&quot;&quot;</span>
         <span class="k">pass</span>
     
-    <span class="k">def</span> <span class="nf">_handle_user_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytearray</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_handle_user_command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">:</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytearray</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Handles user-defined command.&quot;&quot;&quot;</span>
         <span class="c1"># Dispatch to parent for handling</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="n">usercommand_callback</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="n">usercommand_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parent</span><span class="o">.</span><span class="n">usercommand_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
 
     <span class="c1"># Measurement publication</span>
     

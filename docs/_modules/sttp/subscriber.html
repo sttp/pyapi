@@ -1,23 +1,21 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.subscriber &mdash; sttp/pyapi 0.7.1 documentation</title>
+  <title>sttp.subscriber &mdash; sttp/pyapi 0.7.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=b1f64a84"></script>
-        <script src="../../_static/doctools.js?v=92e14aea"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=b1f64a84"></script>
+      <script src="../../_static/doctools.js?v=92e14aea"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -103,7 +101,7 @@
 <span class="kn">from</span> <span class="nn">gsf.endianorder</span> <span class="kn">import</span> <span class="n">BigEndian</span>
 <span class="kn">from</span> <span class="nn">.data.dataset</span> <span class="kn">import</span> <span class="n">DataSet</span>
 <span class="kn">from</span> <span class="nn">.transport.bufferblock</span> <span class="kn">import</span> <span class="n">BufferBlock</span>
-<span class="kn">from</span> <span class="nn">.transport.constants</span> <span class="kn">import</span> <span class="n">ConnectStatus</span><span class="p">,</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="n">Defaults</span>
+<span class="kn">from</span> <span class="nn">.transport.constants</span> <span class="kn">import</span> <span class="n">ConnectStatus</span><span class="p">,</span> <span class="n">Defaults</span><span class="p">,</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="n">ServerResponse</span>
 <span class="kn">from</span> <span class="nn">.transport.datasubscriber</span> <span class="kn">import</span> <span class="n">DataSubscriber</span>
 <span class="kn">from</span> <span class="nn">.transport.measurement</span> <span class="kn">import</span> <span class="n">Measurement</span>
 <span class="kn">from</span> <span class="nn">.transport.signalindexcache</span> <span class="kn">import</span> <span class="n">SignalIndexCache</span>
@@ -402,6 +400,24 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span><span class="o">.</span><span class="n">notificationreceived_callback</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">userresponse_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">ServerResponse</span><span class="p">,</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets or sets a function to handle user-defined responses.</span>
+<span class="sd">        </span>
+<span class="sd">        Signature: `def userresponse_receiver(responsecode: ServerResponse, commandcode: ServerCommand, data: bytes)`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span><span class="o">.</span><span class="n">userresponsereceived_callback</span>
+
+    <span class="nd">@userresponse_receiver</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">userresponse_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">ServerResponse</span><span class="p">,</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines the callback that handles reception of a user-defined response.</span>
+<span class="sd">        Assignment will take effect immediately, even while subscription is active.</span>
+<span class="sd">        Prefer using property setter over `set_userresponse_receiver` method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span><span class="o">.</span><span class="n">userresponsereceived_callback</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">historicalreadcomplete_receiver</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[],</span> <span class="kc">None</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets or sets a function to handle historical read complete notifications.</span>
@@ -689,9 +705,28 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_reader</span></div>
 
+    
+<div class="viewcode-block" id="Subscriber.send_usercommand">
+<a class="viewcode-back" href="../../sttp.html#sttp.subscriber.Subscriber.send_usercommand">[docs]</a>
+    <span class="k">def</span> <span class="nf">send_usercommand</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">commandcode</span><span class="p">:</span> <span class="n">ServerCommand</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span> <span class="o">|</span> <span class="nb">bytearray</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sends a user-defined command to the data publisher.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        commandcode : ServerCommand</span>
+<span class="sd">            Command to send</span>
+<span class="sd">        data : bytes | bytearray | None</span>
+<span class="sd">            Additional data to send with the command</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">commandcode</span> <span class="o">&lt;</span> <span class="n">ServerCommand</span><span class="o">.</span><span class="n">USERCOMMAND00</span> <span class="ow">or</span> <span class="n">commandcode</span> <span class="o">&gt;</span> <span class="n">ServerCommand</span><span class="o">.</span><span class="n">USERCOMMAND15</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;commandcode </span><span class="si">{</span><span class="n">commandcode</span><span class="si">}</span><span class="s2"> is not a valid user-defined command&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_datasubscriber</span><span class="o">.</span><span class="n">send_servercommand</span><span class="p">(</span><span class="n">commandcode</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span></div>
+
 
     <span class="c1"># Local callback handlers:</span>
-
 <div class="viewcode-block" id="Subscriber.statusmessage">
 <a class="viewcode-back" href="../../sttp.html#sttp.subscriber.Subscriber.statusmessage">[docs]</a>
     <span class="k">def</span> <span class="nf">statusmessage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
@@ -715,7 +750,6 @@
 
 
     <span class="c1"># Intermediate callback handlers:</span>
-
     <span class="k">def</span> <span class="nf">_handle_reconnect</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">:</span> <span class="n">DataSubscriber</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_connectionestablished_receiver</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>

@@ -1,24 +1,22 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="./">
 <head>
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>src &mdash; sttp/pyapi 0.7.2 documentation</title>
+  <title>src &mdash; sttp/pyapi 0.7.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="_static/jquery.js?v=5d32c60e"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="_static/documentation_options.js?v=b1f64a84"></script>
-        <script src="_static/doctools.js?v=92e14aea"></script>
-        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=b1f64a84"></script>
+      <script src="_static/doctools.js?v=92e14aea"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -363,6 +361,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="sttp.html#module-sttp.publisher">sttp.publisher module</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="sttp.html#sttp.publisher.Publisher"><code class="docutils literal notranslate"><span class="pre">Publisher</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.publisher.Publisher.broadcast_userresponse"><code class="docutils literal notranslate"><span class="pre">Publisher.broadcast_userresponse()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.publisher.Publisher.clientconnected_receiver"><code class="docutils literal notranslate"><span class="pre">Publisher.clientconnected_receiver</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.publisher.Publisher.clientdisconnected_receiver"><code class="docutils literal notranslate"><span class="pre">Publisher.clientdisconnected_receiver</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.publisher.Publisher.default_clientconnected_receiver"><code class="docutils literal notranslate"><span class="pre">Publisher.default_clientconnected_receiver()</span></code></a></li>
@@ -378,10 +377,13 @@
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.publisher.Publisher.is_nan_value_filter_forced"><code class="docutils literal notranslate"><span class="pre">Publisher.is_nan_value_filter_forced</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.publisher.Publisher.maximum_allowed_connections"><code class="docutils literal notranslate"><span class="pre">Publisher.maximum_allowed_connections</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.publisher.Publisher.publish_measurements"><code class="docutils literal notranslate"><span class="pre">Publisher.publish_measurements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.publisher.Publisher.send_userresponse"><code class="docutils literal notranslate"><span class="pre">Publisher.send_userresponse()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.publisher.Publisher.start"><code class="docutils literal notranslate"><span class="pre">Publisher.start()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.publisher.Publisher.started"><code class="docutils literal notranslate"><span class="pre">Publisher.started</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.publisher.Publisher.statusmessage_logger"><code class="docutils literal notranslate"><span class="pre">Publisher.statusmessage_logger</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.publisher.Publisher.stop"><code class="docutils literal notranslate"><span class="pre">Publisher.stop()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.publisher.Publisher.subscriber_connections"><code class="docutils literal notranslate"><span class="pre">Publisher.subscriber_connections</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.publisher.Publisher.usercommand_receiver"><code class="docutils literal notranslate"><span class="pre">Publisher.usercommand_receiver</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -459,6 +461,7 @@
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.subscriber.Subscriber.notification_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.notification_receiver</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.subscriber.Subscriber.read_measurements"><code class="docutils literal notranslate"><span class="pre">Subscriber.read_measurements()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.subscriber.Subscriber.request_metadata"><code class="docutils literal notranslate"><span class="pre">Subscriber.request_metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.subscriber.Subscriber.send_usercommand"><code class="docutils literal notranslate"><span class="pre">Subscriber.send_usercommand()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.subscriber.Subscriber.set_configurationchanged_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.set_configurationchanged_receiver()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.subscriber.Subscriber.set_connectionestablished_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.set_connectionestablished_receiver()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.subscriber.Subscriber.set_connectionterminated_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.set_connectionterminated_receiver()</span></code></a></li>
@@ -481,6 +484,7 @@
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.subscriber.Subscriber.total_datachannel_bytesreceived"><code class="docutils literal notranslate"><span class="pre">Subscriber.total_datachannel_bytesreceived</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.subscriber.Subscriber.total_measurementsreceived"><code class="docutils literal notranslate"><span class="pre">Subscriber.total_measurementsreceived</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.subscriber.Subscriber.unsubscribe"><code class="docutils literal notranslate"><span class="pre">Subscriber.unsubscribe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.subscriber.Subscriber.userresponse_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.userresponse_receiver</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -524,6 +528,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="sttp.html#module-sttp">Module contents</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="sttp.html#sttp.Publisher"><code class="docutils literal notranslate"><span class="pre">Publisher</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Publisher.broadcast_userresponse"><code class="docutils literal notranslate"><span class="pre">Publisher.broadcast_userresponse()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Publisher.clientconnected_receiver"><code class="docutils literal notranslate"><span class="pre">Publisher.clientconnected_receiver</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Publisher.clientdisconnected_receiver"><code class="docutils literal notranslate"><span class="pre">Publisher.clientdisconnected_receiver</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Publisher.default_clientconnected_receiver"><code class="docutils literal notranslate"><span class="pre">Publisher.default_clientconnected_receiver()</span></code></a></li>
@@ -539,10 +544,13 @@
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Publisher.is_nan_value_filter_forced"><code class="docutils literal notranslate"><span class="pre">Publisher.is_nan_value_filter_forced</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Publisher.maximum_allowed_connections"><code class="docutils literal notranslate"><span class="pre">Publisher.maximum_allowed_connections</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Publisher.publish_measurements"><code class="docutils literal notranslate"><span class="pre">Publisher.publish_measurements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Publisher.send_userresponse"><code class="docutils literal notranslate"><span class="pre">Publisher.send_userresponse()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Publisher.start"><code class="docutils literal notranslate"><span class="pre">Publisher.start()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Publisher.started"><code class="docutils literal notranslate"><span class="pre">Publisher.started</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Publisher.statusmessage_logger"><code class="docutils literal notranslate"><span class="pre">Publisher.statusmessage_logger</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Publisher.stop"><code class="docutils literal notranslate"><span class="pre">Publisher.stop()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Publisher.subscriber_connections"><code class="docutils literal notranslate"><span class="pre">Publisher.subscriber_connections</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Publisher.usercommand_receiver"><code class="docutils literal notranslate"><span class="pre">Publisher.usercommand_receiver</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="sttp.html#sttp.Subscriber"><code class="docutils literal notranslate"><span class="pre">Subscriber</span></code></a><ul>
@@ -571,6 +579,7 @@
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Subscriber.notification_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.notification_receiver</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Subscriber.read_measurements"><code class="docutils literal notranslate"><span class="pre">Subscriber.read_measurements()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Subscriber.request_metadata"><code class="docutils literal notranslate"><span class="pre">Subscriber.request_metadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Subscriber.send_usercommand"><code class="docutils literal notranslate"><span class="pre">Subscriber.send_usercommand()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Subscriber.set_configurationchanged_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.set_configurationchanged_receiver()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Subscriber.set_connectionestablished_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.set_connectionestablished_receiver()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Subscriber.set_connectionterminated_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.set_connectionterminated_receiver()</span></code></a></li>
@@ -593,6 +602,7 @@
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Subscriber.total_datachannel_bytesreceived"><code class="docutils literal notranslate"><span class="pre">Subscriber.total_datachannel_bytesreceived</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Subscriber.total_measurementsreceived"><code class="docutils literal notranslate"><span class="pre">Subscriber.total_measurementsreceived</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Subscriber.unsubscribe"><code class="docutils literal notranslate"><span class="pre">Subscriber.unsubscribe()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="sttp.html#sttp.Subscriber.userresponse_receiver"><code class="docutils literal notranslate"><span class="pre">Subscriber.userresponse_receiver</span></code></a></li>
 </ul>
 </li>
 </ul>
