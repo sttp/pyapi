@@ -1,6 +1,45 @@
 [build-system]
 requires = [
-    "setuptools>=42",
+    "setuptools>=61.0,<75.0",
     "wheel"
 ]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "sttpapi"
+version = "0.7.3"
+description = "Streaming Telemetry Transport Protocol API"
+readme = "README.md"
+keywords = ["STTP", "IEEE 2664", "streaming", "telemetry", "time-series", "protocol", "synchrophasor", "point-on-wave", "data exchange"]
+license = {text = "MIT"}
+authors = [
+    {name = "J. Ritchie Carroll", email = "rcarroll@gridprotectionalliance.org"}
+]
+requires-python = ">=3.10"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator",
+    "Programming Language :: Python :: 3.10",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "numpy>=2.0.0",
+    "pycryptodome>=3.15.0",
+    "python-dateutil>=2.8.2",
+    "antlr4-python3-runtime>=4.13",
+]
+
+[project.urls]
+Homepage = "https://github.com/sttp/pyapi"
+Documentation = "https://sttp.github.io/pyapi/"
+"Bug Tracker" = "https://github.com/sttp/pyapi/issues"
+"Source Code" = "https://github.com/sttp/pyapi"
+Download = "https://pypi.org/project/sttpapi/"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
