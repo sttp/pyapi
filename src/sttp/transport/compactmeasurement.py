@@ -45,7 +45,7 @@ class CompactStateFlags(IntFlag):
     TIMEQUALITY = 0x04
     SYSTEMISSUE = 0x08
     CALCULATEDVALUE = 0x10
-    DISCARDEDVALUE = 0x20
+    ALARMVALUE = 0x20
     BASETIMEOFFSET = 0x40
     TIMEINDEX = 0x80
 
@@ -55,7 +55,7 @@ DATAQUALITYMASK = StateFlags(0x0000EF03)
 TIMEQUALITYMASK = StateFlags(0x00BF0000)
 SYSTEMISSUEMASK = StateFlags(0xE0000000)
 CALCULATEDVALUEMASK = StateFlags(0x00001000)
-DISCARDEDVALUEMASK = StateFlags(0x00400000)
+ALARMVALUEMASK = StateFlags(0x00400000)
 
 FIXEDLENGTH = np.uint32(9)
 
@@ -78,8 +78,8 @@ def _map_to_fullflags(compactflags: CompactStateFlags) -> StateFlags:
     if (compactflags & CompactStateFlags.CALCULATEDVALUE) > 0:
         fullflags |= CALCULATEDVALUEMASK
 
-    if (compactflags & CompactStateFlags.DISCARDEDVALUE) > 0:
-        fullflags |= DISCARDEDVALUEMASK
+    if (compactflags & CompactStateFlags.ALARMVALUE) > 0:
+        fullflags |= ALARMVALUEMASK
 
     return fullflags
 
@@ -102,8 +102,8 @@ def _map_to_compactflags(fullflags: StateFlags) -> CompactStateFlags:
     if (fullflags & CALCULATEDVALUEMASK) > 0:
         compactflags |= CompactStateFlags.CALCULATEDVALUE
 
-    if (fullflags & DISCARDEDVALUEMASK) > 0:
-        compactflags |= CompactStateFlags.DISCARDEDVALUE
+    if (fullflags & ALARMVALUEMASK) > 0:
+        compactflags |= CompactStateFlags.ALARMVALUE
 
     return compactflags
 
