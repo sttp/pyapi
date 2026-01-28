@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.transport.subscriberconnection &mdash; sttp/pyapi 0.7.3 documentation</title>
+  <title>sttp.transport.subscriberconnection &mdash; sttp/pyapi 0.7.4 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=8209df7b" />
 
@@ -667,9 +667,9 @@
             <span class="n">metadata_xml</span> <span class="o">=</span> <span class="n">metadata</span><span class="o">.</span><span class="n">to_xml</span><span class="p">()</span>
             <span class="n">metadata_bytes</span> <span class="o">=</span> <span class="n">metadata_xml</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
             
-            <span class="c1"># Save to file for debugging</span>
-            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;C:</span><span class="se">\\</span><span class="s2">temp</span><span class="se">\\</span><span class="s2">publisher_metadata.xml&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-                <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">metadata_xml</span><span class="p">)</span>
+            <span class="c1"># # Save to file for debugging</span>
+            <span class="c1"># with open(&quot;C:\\temp\\publisher_metadata.xml&quot;, &quot;w&quot;, encoding=&quot;utf-8&quot;) as f:</span>
+            <span class="c1">#     f.write(metadata_xml)</span>
             
             <span class="c1"># Compress if requested</span>
             <span class="n">compress_metadata</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_operational_modes</span><span class="p">)</span> <span class="o">&amp;</span> <span class="nb">int</span><span class="p">(</span><span class="n">OperationalModes</span><span class="o">.</span><span class="n">COMPRESSMETADATA</span><span class="p">))</span>
