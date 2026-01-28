@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sttpapi"
-version = "0.7.3"
+version = "0.7.4"
 description = "Streaming Telemetry Transport Protocol API"
 readme = "README.md"
 keywords = ["STTP", "IEEE 2664", "streaming", "telemetry", "time-series", "protocol", "synchrophasor", "point-on-wave", "data exchange"]
