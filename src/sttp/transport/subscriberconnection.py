@@ -580,9 +580,9 @@ class SubscriberConnection:
             metadata_xml = metadata.to_xml()
             metadata_bytes = metadata_xml.encode('utf-8')
             
-            # Save to file for debugging
-            with open("C:\\temp\\publisher_metadata.xml", "w", encoding="utf-8") as f:
-                f.write(metadata_xml)
+            # # Save to file for debugging
+            # with open("C:\\temp\\publisher_metadata.xml", "w", encoding="utf-8") as f:
+            #     f.write(metadata_xml)
             
             # Compress if requested
             compress_metadata = bool(int(self._operational_modes) & int(OperationalModes.COMPRESSMETADATA))
