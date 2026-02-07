@@ -1,21 +1,23 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.publisher &mdash; sttp/pyapi 0.7.3 documentation</title>
+  <title>sttp.publisher &mdash; sttp/pyapi 0.7.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-      <script src="../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../_static/documentation_options.js?v=b1f64a84"></script>
-      <script src="../../_static/doctools.js?v=92e14aea"></script>
-      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -98,6 +100,8 @@
 <span class="c1"># Differences: Simplified Python wrapper; otherwise parity maintained.</span>
 
 <span class="kn">from</span> <span class="nn">.data.dataset</span> <span class="kn">import</span> <span class="n">DataSet</span>
+<span class="kn">from</span> <span class="nn">.metadata.signaltype</span> <span class="kn">import</span> <span class="n">SignalType</span>
+<span class="kn">from</span> <span class="nn">.metadata.signalreference</span> <span class="kn">import</span> <span class="n">SignalKind</span><span class="p">,</span> <span class="n">SignalReference</span>
 <span class="kn">from</span> <span class="nn">.transport.constants</span> <span class="kn">import</span> <span class="n">ServerResponse</span><span class="p">,</span> <span class="n">ServerCommand</span> 
 <span class="kn">from</span> <span class="nn">.transport.datapublisher</span> <span class="kn">import</span> <span class="n">DataPublisher</span>
 <span class="kn">from</span> <span class="nn">.transport.measurement</span> <span class="kn">import</span> <span class="n">Measurement</span>
@@ -105,8 +109,13 @@
 <span class="kn">from</span> <span class="nn">.metadata.record.measurement</span> <span class="kn">import</span> <span class="n">MeasurementRecord</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Callable</span>
 <span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Lock</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
+<span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span>
+<span class="kn">from</span> <span class="nn">xml.etree</span> <span class="kn">import</span> <span class="n">ElementTree</span> <span class="k">as</span> <span class="n">ET</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
-
 
 <div class="viewcode-block" id="Publisher">
 <a class="viewcode-back" href="../../sttp.html#sttp.publisher.Publisher">[docs]</a>
@@ -145,6 +154,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_datapublisher</span><span class="o">.</span><span class="n">clientconnected_callback</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_client_connected</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_datapublisher</span><span class="o">.</span><span class="n">clientdisconnected_callback</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_client_disconnected</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_datapublisher</span><span class="o">.</span><span class="n">usercommand_callback</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_handle_user_command</span>
+
+        <span class="c1"># Define metadata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_path</span> <span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="Publisher.dispose">
 <a class="viewcode-back" href="../../sttp.html#sttp.publisher.Publisher.dispose">[docs]</a>
@@ -230,6 +242,32 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_usercommand_receiver</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">metadata_path</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets or sets the file path to for persisted metadata used by the publisher.</span>
+<span class="sd">        Setting this property will cause the publisher to verify that the file exists, and if not,</span>
+<span class="sd">        attempt to create it from the included `MetadataTemplate.xml` file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_path</span>
+    
+    <span class="nd">@metadata_path</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">metadata_path</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_metadata_path</span> <span class="o">=</span> <span class="n">value</span>
+
+        <span class="c1"># Verify metadata file exists, creating from template if not found</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata_path</span><span class="p">):</span>
+            <span class="n">template_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s2">&quot;MetadataTemplate.xml&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">template_path</span><span class="p">):</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">template_path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">template_file</span><span class="p">:</span>
+                    <span class="n">template_content</span> <span class="o">=</span> <span class="n">template_file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata_path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">metadata_file</span><span class="p">:</span>
+                    <span class="n">metadata_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">template_content</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cannot create metadata &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata_path</span><span class="si">}</span><span class="s2">&#39;: template not found at &#39;</span><span class="si">{</span><span class="n">template_path</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+
+
+    <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">subscriber_connections</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">SubscriberConnection</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Gets a list of currently connected clients.</span>
@@ -283,12 +321,37 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_datapublisher</span><span class="o">.</span><span class="n">define_metadata</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span></div>
 
 
+<div class="viewcode-block" id="Publisher.load_metadata">
+<a class="viewcode-back" href="../../sttp.html#sttp.publisher.Publisher.load_metadata">[docs]</a>
+    <span class="k">def</span> <span class="nf">load_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="ne">Exception</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Loads metadata from the file specified by the &#39;metadata_path&#39; property.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Exception | None</span>
+<span class="sd">            Returns an exception if loading metadata fails, otherwise None on success.        </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_metadata_path</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="c1"># Load metadata from XML file and define it for the publisher</span>
+        <span class="n">dataset</span><span class="p">,</span> <span class="n">err</span> <span class="o">=</span> <span class="n">DataSet</span><span class="o">.</span><span class="n">from_xml</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="n">err</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">define_metadata</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load metadata from &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata_path</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="Publisher.filter_metadata">
 <a class="viewcode-back" href="../../sttp.html#sttp.publisher.Publisher.filter_metadata">[docs]</a>
     <span class="k">def</span> <span class="nf">filter_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filter_expression</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">MeasurementRecord</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Filters metadata using a filter expression and returns matching measurement metadata.</span>
-<span class="sd">        </span>
+<span class="sd">        Filters metadata using a filter expression against the &#39;MeasurementDetail&#39; table</span>
+<span class="sd">        and returns matching measurement metadata.</span>
+
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
 <span class="sd">        filter_expression : str</span>
@@ -301,6 +364,439 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_datapublisher</span><span class="o">.</span><span class="n">filter_metadata</span><span class="p">(</span><span class="n">filter_expression</span><span class="p">)</span></div>
 
+            
+<div class="viewcode-block" id="Publisher.define_output_source">
+<a class="viewcode-back" href="../../sttp.html#sttp.publisher.Publisher.define_output_source">[docs]</a>
+    <span class="k">def</span> <span class="nf">define_output_source</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">acronym</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines an output source in the publisher metadata, i.e., a virtual device in the</span>
+<span class="sd">        configuration used to group output measurements. This source device will be persisted</span>
+<span class="sd">        to the XML metadata file defined at &#39;metadata_path&#39; for future runs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            Name of the output source</span>
+<span class="sd">        </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        str</span>
+<span class="sd">            Device `Acronym` of the output source</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_metadata_path</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    
+        <span class="c1"># Generate valid acronym, use name if acronym not provided</span>
+        <span class="k">if</span> <span class="n">acronym</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">acronym</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_valid_acronym</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">acronym</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_valid_acronym</span><span class="p">(</span><span class="n">acronym</span><span class="p">)</span>
+        
+        <span class="c1"># Parse existing metadata</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">)</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
+        
+        <span class="c1"># Check if device with this acronym already exists</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;.//DeviceDetail&#39;</span><span class="p">):</span>
+            <span class="n">existing_acronym</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;Acronym&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">existing_acronym</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">existing_acronym</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="n">acronym</span><span class="p">:</span>
+                <span class="c1"># Record already exists, return acronym</span>
+                <span class="k">return</span> <span class="n">acronym</span>
+                
+        <span class="c1"># Create new DeviceDetail element</span>
+        <span class="n">device_detail</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s1">&#39;DeviceDetail&#39;</span><span class="p">)</span>
+        
+        <span class="c1"># Add child elements</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">device_detail</span><span class="p">,</span> <span class="s1">&#39;UniqueID&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">device_detail</span><span class="p">,</span> <span class="s1">&#39;IsConcentrator&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">device_detail</span><span class="p">,</span> <span class="s1">&#39;Acronym&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">acronym</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">device_detail</span><span class="p">,</span> <span class="s1">&#39;Name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">device_detail</span><span class="p">,</span> <span class="s1">&#39;AccessID&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;0&#39;</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">device_detail</span><span class="p">,</span> <span class="s1">&#39;ParentAcronym&#39;</span><span class="p">)</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">device_detail</span><span class="p">,</span> <span class="s1">&#39;ProtocolName&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;STTP&#39;</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">device_detail</span><span class="p">,</span> <span class="s1">&#39;FramesPerSecond&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">device_detail</span><span class="p">,</span> <span class="s1">&#39;CompanyAcronym&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;GPA&#39;</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">device_detail</span><span class="p">,</span> <span class="s1">&#39;VendorAcronym&#39;</span><span class="p">)</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">device_detail</span><span class="p">,</span> <span class="s1">&#39;VendorDeviceName&#39;</span><span class="p">)</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">device_detail</span><span class="p">,</span> <span class="s1">&#39;Longitude&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;0.0&#39;</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">device_detail</span><span class="p">,</span> <span class="s1">&#39;Latitude&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;0.0&#39;</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">device_detail</span><span class="p">,</span> <span class="s1">&#39;InterconnectionName&#39;</span><span class="p">)</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">device_detail</span><span class="p">,</span> <span class="s1">&#39;ContactList&#39;</span><span class="p">)</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">device_detail</span><span class="p">,</span> <span class="s1">&#39;Enabled&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span>
+        
+        <span class="c1"># Format timestamp with timezone offset</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+
+        <span class="c1"># Get local offset</span>
+        <span class="n">local_offset</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">astimezone</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%z&#39;</span><span class="p">)</span>
+        <span class="n">formatted_offset</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">local_offset</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">local_offset</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;%Y-%m-%dT%H:%M:%S.%f&#39;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">formatted_offset</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">device_detail</span><span class="p">,</span> <span class="s1">&#39;UpdatedOn&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">timestamp</span>
+        
+        <span class="c1"># Insert the new DeviceDetail after schema but before SchemaVersion/MeasurementDetail</span>
+        <span class="c1"># Order should be: DeviceDetail, xs:schema, SchemaVersion, MeasurementDetail</span>
+        <span class="n">insert_index</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">schema_found</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+            <span class="c1"># Track if we&#39;ve seen the schema</span>
+            <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">tag</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;schema&#39;</span><span class="p">):</span>
+                <span class="n">schema_found</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="c1"># If we&#39;ve seen the schema, insert after it but before other elements</span>
+            <span class="k">elif</span> <span class="n">schema_found</span> <span class="ow">and</span> <span class="n">child</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;SchemaVersion&#39;</span><span class="p">,</span> <span class="s1">&#39;MeasurementDetail&#39;</span><span class="p">,</span> <span class="s1">&#39;PhasorDetail&#39;</span><span class="p">):</span>
+                <span class="n">insert_index</span> <span class="o">=</span> <span class="n">i</span>
+                <span class="k">break</span>
+            <span class="c1"># If there&#39;s already a DeviceDetail after the schema, insert after the last one</span>
+            <span class="k">elif</span> <span class="n">schema_found</span> <span class="ow">and</span> <span class="n">child</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;DeviceDetail&#39;</span><span class="p">:</span>
+                <span class="n">insert_index</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+        
+        <span class="c1"># If no schema found or no insertion point determined, insert at beginning</span>
+        <span class="k">if</span> <span class="n">insert_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">insert_index</span> <span class="o">=</span> <span class="mi">0</span>
+        
+        <span class="n">root</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">insert_index</span><span class="p">,</span> <span class="n">device_detail</span><span class="p">)</span>
+        
+        <span class="c1"># Indent the entire tree to ensure proper formatting</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="s2">&quot;  &quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Save the updated XML</span>
+        <span class="n">tree</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">xml_declaration</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="n">acronym</span></div>
+
+
+<div class="viewcode-block" id="Publisher.define_output_measurement">
+<a class="viewcode-back" href="../../sttp.html#sttp.publisher.Publisher.define_output_measurement">[docs]</a>
+    <span class="k">def</span> <span class="nf">define_output_measurement</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deviceacronym</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pointtag</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">description</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">signaltype</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">SignalType</span> <span class="o">=</span> <span class="n">SignalType</span><span class="o">.</span><span class="n">CALC</span><span class="p">,</span> <span class="n">sourceindex</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UUID</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines an output measurement in the publisher metadata. This measurement will</span>
+<span class="sd">        be persisted to the XML metadata file defined at &#39;metadata_path&#39; for future runs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        deviceacronym : str</span>
+<span class="sd">            Device `Acronym` of the output measurement</span>
+<span class="sd">        pointtag : str</span>
+<span class="sd">            Name of the output measurement</span>
+<span class="sd">        description : str</span>
+<span class="sd">            Description of the output measurement</span>
+<span class="sd">        signaltype : str | SignalType, optional</span>
+<span class="sd">            Signal type of the output measurement (default is `CALC`)</span>
+<span class="sd">        sourceindex : int | None, optional</span>
+<span class="sd">            If this measurement is part of a collection, value represents</span>
+<span class="sd">            the source index of the measurement in the collection</span>
+<span class="sd">            (default is None)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        UUID</span>
+<span class="sd">            Signal ID of the output measurement</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_metadata_path</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="c1"># Ensure valid device acronym</span>
+        <span class="n">deviceacronym</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_valid_acronym</span><span class="p">(</span><span class="n">deviceacronym</span><span class="p">)</span>
+
+        <span class="c1"># Ensure valid point tag</span>
+        <span class="n">pointtag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_valid_acronym</span><span class="p">(</span><span class="n">pointtag</span><span class="p">)</span>
+
+        <span class="c1"># Parse existing metadata</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">)</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
+
+        <span class="c1"># Check if measurement with this point tag already exists</span>
+        <span class="k">for</span> <span class="n">measurement</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;.//MeasurementDetail&#39;</span><span class="p">):</span>
+            <span class="n">existing_point_tag</span> <span class="o">=</span> <span class="n">measurement</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;PointTag&#39;</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">existing_point_tag</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">existing_point_tag</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="n">pointtag</span><span class="p">:</span>
+                <span class="c1"># Record already exists, return signal ID</span>
+                <span class="n">signal_id_elem</span> <span class="o">=</span> <span class="n">measurement</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;SignalID&#39;</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="n">signal_id_elem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">signal_id_elem</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">UUID</span><span class="p">(</span><span class="n">signal_id_elem</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="c1"># Find the next available index for this device</span>
+        <span class="n">max_index</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">measurement</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;.//MeasurementDetail&#39;</span><span class="p">):</span>
+            <span class="n">device_elem</span> <span class="o">=</span> <span class="n">measurement</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;DeviceAcronym&#39;</span><span class="p">)</span>
+            <span class="n">id_elem</span> <span class="o">=</span> <span class="n">measurement</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">device_elem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">device_elem</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="n">deviceacronym</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">id_elem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">id_elem</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
+                    <span class="c1"># Parse the index from ID field (format: DEVICE:INDEX)</span>
+                    <span class="n">parts</span> <span class="o">=</span> <span class="n">id_elem</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">parts</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                            <span class="n">max_index</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">max_index</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                            <span class="k">pass</span>
+
+        <span class="c1"># Increment to get next index</span>
+        <span class="n">next_index</span> <span class="o">=</span> <span class="n">max_index</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="c1"># Generate new signal ID</span>
+        <span class="n">signal_id</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span>
+
+        <span class="c1"># Create new MeasurementDetail element</span>
+        <span class="n">measurement_detail</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s1">&#39;MeasurementDetail&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Attempt to parse a common signal type, defaulting to provided string if not recognized</span>
+        <span class="n">parsed_signaltype</span> <span class="o">=</span> <span class="n">signaltype</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signaltype</span><span class="p">,</span> <span class="n">SignalType</span><span class="p">)</span> <span class="k">else</span> <span class="n">SignalType</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">signaltype</span><span class="p">)</span>
+        <span class="n">signaltype_str</span> <span class="o">=</span> <span class="n">parsed_signaltype</span><span class="o">.</span><span class="n">acronym</span> <span class="k">if</span> <span class="n">parsed_signaltype</span> <span class="o">!=</span> <span class="n">SignalType</span><span class="o">.</span><span class="n">UNKN</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_valid_acronym</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">signaltype</span><span class="p">))</span>
+        <span class="n">signalkind</span> <span class="o">=</span> <span class="n">parsed_signaltype</span><span class="o">.</span><span class="n">signalkind</span>
+
+        <span class="c1"># Attempt to create standard signal reference if signal type is recognized</span>
+        <span class="k">if</span> <span class="n">parsed_signaltype</span> <span class="o">!=</span> <span class="n">SignalType</span><span class="o">.</span><span class="n">UNKN</span><span class="p">:</span>
+            <span class="n">signalreference</span> <span class="o">=</span> <span class="n">SignalReference</span><span class="o">.</span><span class="n">tostring</span><span class="p">(</span><span class="n">signaltype_str</span><span class="p">,</span> <span class="n">signalkind</span><span class="p">,</span> <span class="n">sourceindex</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">signalreference</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">deviceacronym</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">signaltype_str</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="c1"># Add child elements</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">measurement_detail</span><span class="p">,</span> <span class="s1">&#39;DeviceAcronym&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">deviceacronym</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">measurement_detail</span><span class="p">,</span> <span class="s1">&#39;ID&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">deviceacronym</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">next_index</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">measurement_detail</span><span class="p">,</span> <span class="s1">&#39;SignalID&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">signal_id</span><span class="p">)</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">measurement_detail</span><span class="p">,</span> <span class="s1">&#39;PointTag&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">pointtag</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">measurement_detail</span><span class="p">,</span> <span class="s1">&#39;SignalReference&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">signalreference</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">measurement_detail</span><span class="p">,</span> <span class="s1">&#39;SignalAcronym&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">signaltype_str</span>
+        
+        <span class="k">if</span> <span class="n">sourceindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="p">(</span><span class="n">signalkind</span> <span class="o">==</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">ANGLE</span> <span class="ow">or</span> <span class="n">signalkind</span> <span class="o">==</span> <span class="n">SignalKind</span><span class="o">.</span><span class="n">MAGNITUDE</span><span class="p">):</span>
+            <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">measurement_detail</span><span class="p">,</span> <span class="s1">&#39;PhasorSourceIndex&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">sourceindex</span><span class="p">)</span>
+        
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">measurement_detail</span><span class="p">,</span> <span class="s1">&#39;Description&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">description</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">measurement_detail</span><span class="p">,</span> <span class="s1">&#39;Internal&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;true&#39;</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">measurement_detail</span><span class="p">,</span> <span class="s1">&#39;Enabled&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s1">&#39;true&#39;</span>
+
+        <span class="c1"># Format timestamp with timezone offset</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+
+        <span class="c1"># Get local offset</span>
+        <span class="n">local_offset</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">astimezone</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%z&#39;</span><span class="p">)</span>
+        <span class="n">formatted_offset</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">local_offset</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">local_offset</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;%Y-%m-%dT%H:%M:%S.%f&#39;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">formatted_offset</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">measurement_detail</span><span class="p">,</span> <span class="s1">&#39;UpdatedOn&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">timestamp</span>
+
+        <span class="c1"># Insert after last MeasurementDetail; else before first PhasorDetail;</span>
+        <span class="c1"># else before SchemaVersion; else after last DeviceDetail; else at end</span>
+        <span class="n">insert_index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+        <span class="n">last_measurement</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">first_phasor</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">schema_version</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">last_device</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;DeviceDetail&#39;</span><span class="p">:</span>
+                <span class="n">last_device</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="k">elif</span> <span class="n">child</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;MeasurementDetail&#39;</span><span class="p">:</span>
+                <span class="n">last_measurement</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="k">elif</span> <span class="n">child</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;PhasorDetail&#39;</span> <span class="ow">and</span> <span class="n">first_phasor</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">first_phasor</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="k">elif</span> <span class="n">child</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;SchemaVersion&#39;</span> <span class="ow">and</span> <span class="n">schema_version</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">schema_version</span> <span class="o">=</span> <span class="n">i</span>
+
+        <span class="k">if</span> <span class="n">last_measurement</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">insert_index</span> <span class="o">=</span> <span class="n">last_measurement</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">first_phasor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">insert_index</span> <span class="o">=</span> <span class="n">first_phasor</span>
+        <span class="k">elif</span> <span class="n">schema_version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">insert_index</span> <span class="o">=</span> <span class="n">schema_version</span>
+        <span class="k">elif</span> <span class="n">last_device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">insert_index</span> <span class="o">=</span> <span class="n">last_device</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="n">root</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">insert_index</span><span class="p">,</span> <span class="n">measurement_detail</span><span class="p">)</span>
+
+        <span class="c1"># Indent the entire tree to ensure proper formatting</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="s2">&quot;  &quot;</span><span class="p">)</span>
+
+        <span class="c1"># Save the updated XML</span>
+        <span class="n">tree</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">xml_declaration</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">signal_id</span></div>
+
+
+<div class="viewcode-block" id="Publisher.define_output_phasor">
+<a class="viewcode-back" href="../../sttp.html#sttp.publisher.Publisher.define_output_phasor">[docs]</a>
+    <span class="k">def</span> <span class="nf">define_output_phasor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deviceacronym</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">phasortype</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">phase</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sourceindex</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">destination_phasor_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Defines an output phasor in the publisher metadata. This phasor will</span>
+<span class="sd">        be persisted to the XML metadata file defined at &#39;metadata_path&#39; for</span>
+<span class="sd">        future runs.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        deviceacronym : str</span>
+<span class="sd">            Device `Acronym` of the output phasor</span>
+<span class="sd">        label : str</span>
+<span class="sd">            Label of the output phasor</span>
+<span class="sd">        phasortype : str</span>
+<span class="sd">            Type of the phasor, e.g., `V` for voltage or `I` for current</span>
+<span class="sd">        phase : str</span>
+<span class="sd">            Phase of the phasor, e.g., `+` for positive sequence, `A` for phase A</span>
+<span class="sd">        sourceindex : int</span>
+<span class="sd">            Source index of the phasor in the device</span>
+<span class="sd">        destination_phasor_id : int, optional</span>
+<span class="sd">            Destination phasor ID for cross-referencing (default is `0`)</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        int</span>
+<span class="sd">            Phasor `ID` of the output phasor</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_metadata_path</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="c1"># Ensure valid device acronym</span>
+        <span class="n">deviceacronym</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_valid_acronym</span><span class="p">(</span><span class="n">deviceacronym</span><span class="p">)</span>
+
+        <span class="c1"># Parse existing metadata</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">)</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
+
+        <span class="c1"># Check if phasor with this device acronym and source index already exists</span>
+        <span class="k">for</span> <span class="n">phasor</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;.//PhasorDetail&#39;</span><span class="p">):</span>
+            <span class="n">existing_device</span> <span class="o">=</span> <span class="n">phasor</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;DeviceAcronym&#39;</span><span class="p">)</span>
+            <span class="n">existing_sourceindex</span> <span class="o">=</span> <span class="n">phasor</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;SourceIndex&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">existing_device</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">existing_device</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="n">deviceacronym</span> <span class="ow">and</span>
+                <span class="n">existing_sourceindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">existing_sourceindex</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">sourceindex</span><span class="p">)):</span>
+                <span class="c1"># Record already exists, return phasor ID</span>
+                <span class="n">id_elem</span> <span class="o">=</span> <span class="n">phasor</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">id_elem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">id_elem</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">id_elem</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="c1"># Find the next available phasor ID across all devices</span>
+        <span class="n">max_id</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">for</span> <span class="n">phasor</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;.//PhasorDetail&#39;</span><span class="p">):</span>
+            <span class="n">id_elem</span> <span class="o">=</span> <span class="n">phasor</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">id_elem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">id_elem</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">phasor_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">id_elem</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+                    <span class="n">max_id</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">max_id</span><span class="p">,</span> <span class="n">phasor_id</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+        <span class="c1"># Increment to get next ID</span>
+        <span class="n">next_id</span> <span class="o">=</span> <span class="n">max_id</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="c1"># Create new PhasorDetail element</span>
+        <span class="n">phasor_detail</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">(</span><span class="s1">&#39;PhasorDetail&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Add child elements</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">phasor_detail</span><span class="p">,</span> <span class="s1">&#39;ID&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">next_id</span><span class="p">)</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">phasor_detail</span><span class="p">,</span> <span class="s1">&#39;DeviceAcronym&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">deviceacronym</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">phasor_detail</span><span class="p">,</span> <span class="s1">&#39;Label&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">label</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">phasor_detail</span><span class="p">,</span> <span class="s1">&#39;Type&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">phasortype</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">phasor_detail</span><span class="p">,</span> <span class="s1">&#39;Phase&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">phase</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">phasor_detail</span><span class="p">,</span> <span class="s1">&#39;DestinationPhasorID&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">destination_phasor_id</span><span class="p">)</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">phasor_detail</span><span class="p">,</span> <span class="s1">&#39;SourceIndex&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">sourceindex</span><span class="p">)</span>
+
+        <span class="c1"># Format timestamp with timezone offset</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+
+        <span class="c1"># Get local offset</span>
+        <span class="n">local_offset</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">astimezone</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%z&#39;</span><span class="p">)</span>
+        <span class="n">formatted_offset</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">local_offset</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">local_offset</span><span class="p">[</span><span class="mi">3</span><span class="p">:]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">timestamp</span> <span class="o">=</span> <span class="n">now</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;%Y-%m-%dT%H:%M:%S.%f&#39;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">formatted_offset</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">SubElement</span><span class="p">(</span><span class="n">phasor_detail</span><span class="p">,</span> <span class="s1">&#39;UpdatedOn&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">timestamp</span>
+
+        <span class="c1"># Insert after last PhasorDetail; else before SchemaVersion;</span>
+        <span class="c1"># else after last MeasurementDetail; else at end</span>
+        <span class="n">insert_index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+        <span class="n">last_phasor</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">schema_version</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">last_measurement</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">child</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">child</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;MeasurementDetail&#39;</span><span class="p">:</span>
+                <span class="n">last_measurement</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="k">elif</span> <span class="n">child</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;PhasorDetail&#39;</span><span class="p">:</span>
+                <span class="n">last_phasor</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="k">elif</span> <span class="n">child</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s1">&#39;SchemaVersion&#39;</span> <span class="ow">and</span> <span class="n">schema_version</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">schema_version</span> <span class="o">=</span> <span class="n">i</span>
+
+        <span class="k">if</span> <span class="n">last_phasor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">insert_index</span> <span class="o">=</span> <span class="n">last_phasor</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">schema_version</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">insert_index</span> <span class="o">=</span> <span class="n">schema_version</span>
+        <span class="k">elif</span> <span class="n">last_measurement</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">insert_index</span> <span class="o">=</span> <span class="n">last_measurement</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="n">root</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">insert_index</span><span class="p">,</span> <span class="n">phasor_detail</span><span class="p">)</span>
+
+        <span class="c1"># Indent the entire tree to ensure proper formatting</span>
+        <span class="n">ET</span><span class="o">.</span><span class="n">indent</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">space</span><span class="o">=</span><span class="s2">&quot;  &quot;</span><span class="p">)</span>
+
+        <span class="c1"># Save the updated XML</span>
+        <span class="n">tree</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">,</span> <span class="n">xml_declaration</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">next_id</span></div>
+
+
+<div class="viewcode-block" id="Publisher.get_signal_id">
+<a class="viewcode-back" href="../../sttp.html#sttp.publisher.Publisher.get_signal_id">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_signal_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">point_tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UUID</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets the signal ID for the specified point tag as defined in the metadata file.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        point_tag : str</span>
+<span class="sd">            Name of the point tag</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        UUID | None</span>
+<span class="sd">            Signal ID if found, otherwise None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_validate_metadata_path</span><span class="p">()</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="c1"># Parse existing metadata</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">)</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
+
+        <span class="c1"># Search for measurement with matching point tag</span>
+        <span class="k">for</span> <span class="n">measurement</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s1">&#39;.//MeasurementDetail&#39;</span><span class="p">):</span>
+            <span class="n">existing_point_tag</span> <span class="o">=</span> <span class="n">measurement</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;PointTag&#39;</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">existing_point_tag</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">existing_point_tag</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="n">point_tag</span><span class="p">:</span>
+                <span class="c1"># Found matching point tag, return signal ID</span>
+                <span class="n">signal_id_elem</span> <span class="o">=</span> <span class="n">measurement</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;SignalID&#39;</span><span class="p">)</span>
+                
+                <span class="k">if</span> <span class="n">signal_id_elem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">signal_id_elem</span><span class="o">.</span><span class="n">text</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">UUID</span><span class="p">(</span><span class="n">signal_id_elem</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+        
+        <span class="c1"># Point tag not found</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Publisher.get_valid_acronym">
+<a class="viewcode-back" href="../../sttp.html#sttp.publisher.Publisher.get_valid_acronym">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_valid_acronym</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">acronym</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Gets a valid acronym by converting to uppercase, removing spaces, and stripping invalid characters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Generate valid acronym from source_name</span>
+        <span class="n">acronym</span> <span class="o">=</span> <span class="n">acronym</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Remove any characters not matching the allowed pattern</span>
+        <span class="n">acronym</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[^A-Z0-9\-!_\.@#\$]&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">acronym</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">acronym</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_validate_metadata_path</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Metadata path is not set.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Metadata file not found at &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata_path</span><span class="si">}</span><span class="s2">&#39;. Set the &#39;metadata_path&#39; property to a valid file path.&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Publisher.publish_measurements">
 <a class="viewcode-back" href="../../sttp.html#sttp.publisher.Publisher.publish_measurements">[docs]</a>

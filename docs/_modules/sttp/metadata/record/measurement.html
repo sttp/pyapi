@@ -1,21 +1,23 @@
-
-
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../../">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>sttp.metadata.record.measurement &mdash; sttp/pyapi 0.7.3 documentation</title>
+  <title>sttp.metadata.record.measurement &mdash; sttp/pyapi 0.7.5 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=92fd9be5" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=8209df7b" />
 
   
     <link rel="shortcut icon" href="https://raw.githubusercontent.com/sttp/pyapi/main/docs/img/favicon.ico"/>
-      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
-      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="../../../../_static/documentation_options.js?v=b1f64a84"></script>
-      <script src="../../../../_static/doctools.js?v=92e14aea"></script>
-      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=b1f64a84"></script>
+        <script src="../../../../_static/doctools.js?v=92e14aea"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" /> 
@@ -99,47 +101,15 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 <span class="kn">from</span> <span class="nn">gsf</span> <span class="kn">import</span> <span class="n">Empty</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">IntEnum</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
 <span class="kn">from</span> <span class="nn">uuid</span> <span class="kn">import</span> <span class="n">UUID</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="kn">from</span> <span class="nn">sttp.metadata.signaltype</span> <span class="kn">import</span> <span class="n">SignalType</span>
+
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">.device</span> <span class="kn">import</span> <span class="n">DeviceRecord</span>
     <span class="kn">from</span> <span class="nn">.phasor</span> <span class="kn">import</span> <span class="n">PhasorRecord</span>
-
-<div class="viewcode-block" id="SignalType">
-<a class="viewcode-back" href="../../../../sttp.metadata.record.html#sttp.metadata.record.measurement.SignalType">[docs]</a>
-<span class="k">class</span> <span class="nc">SignalType</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Represents common signal types for STTP metadata. This list may</span>
-<span class="sd">    not be exhaustive for some STTP deployments. If value is set to</span>
-<span class="sd">    `UNKN`, check the string based `signalacronym` in the `MeasurementRecord`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">IPHM</span> <span class="o">=</span> <span class="mi">1</span>    <span class="c1"># Current phase magnitude</span>
-    <span class="n">IPHA</span> <span class="o">=</span> <span class="mi">2</span>    <span class="c1"># Current phase angle</span>
-    <span class="n">VPHM</span> <span class="o">=</span> <span class="mi">3</span>    <span class="c1"># Voltage phase magnitude</span>
-    <span class="n">VPHA</span> <span class="o">=</span> <span class="mi">4</span>    <span class="c1"># Voltage phase angle</span>
-    <span class="n">FREQ</span> <span class="o">=</span> <span class="mi">5</span>    <span class="c1"># Frequency</span>
-    <span class="n">DFDT</span> <span class="o">=</span> <span class="mi">6</span>    <span class="c1"># Frequency derivative, i.e., Δfreq / Δtime</span>
-    <span class="n">ALOG</span> <span class="o">=</span> <span class="mi">7</span>    <span class="c1"># Analog value (scalar)</span>
-    <span class="n">FLAG</span> <span class="o">=</span> <span class="mi">8</span>    <span class="c1"># Status flags (16-bit)</span>
-    <span class="n">DIGI</span> <span class="o">=</span> <span class="mi">9</span>    <span class="c1"># Digital value (16-bit)</span>
-    <span class="n">CALC</span> <span class="o">=</span> <span class="mi">10</span>   <span class="c1"># Calculated value</span>
-    <span class="n">STAT</span> <span class="o">=</span> <span class="mi">11</span>   <span class="c1"># Statistic value</span>
-    <span class="n">ALRM</span> <span class="o">=</span> <span class="mi">12</span>   <span class="c1"># Alarm state</span>
-    <span class="n">QUAL</span> <span class="o">=</span> <span class="mi">13</span>   <span class="c1"># Quality flags (16-bit)</span>
-    <span class="n">UNKN</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>   <span class="c1"># Unknown type, see `signalacronym`</span>
-
-<div class="viewcode-block" id="SignalType.parse">
-<a class="viewcode-back" href="../../../../sttp.metadata.record.html#sttp.metadata.record.measurement.SignalType.parse">[docs]</a>
-    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SignalType</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="bp">cls</span><span class="o">.</span><span class="n">UNKN</span><span class="p">)</span></div>
-</div>
-
-
 
 <div class="viewcode-block" id="MeasurementRecord">
 <a class="viewcode-back" href="../../../../sttp.metadata.record.html#sttp.metadata.record.measurement.MeasurementRecord">[docs]</a>
