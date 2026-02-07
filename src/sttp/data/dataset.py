@@ -351,7 +351,7 @@ class DataSet:
     def _value_to_xml_text(value, datatype: DataType) -> str:
         """Converts a Python value to XML text representation."""
         if datatype == DataType.BOOLEAN:
-            return 'true' if value else 'false'
+            return 'true' if (value if isinstance(value, bool) else str(value).lower() in ("true", "1", "yes")) else 'false'
         elif datatype == DataType.DATETIME:
             # Format as ISO 8601 with milliseconds and Z suffix
             dt_str = value.isoformat(timespec='milliseconds')

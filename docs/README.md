@@ -149,9 +149,6 @@ def main():
         
     finally:
         publisher.stop()
-
-if __name__ == "__main__":
-    main()
 ```
 
 ## Examples

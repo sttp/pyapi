@@ -30,11 +30,11 @@ import numpy as np
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../src')))
 
-from sttp.metadata.record.measurement import SignalType, MeasurementRecord
+from sttp.metadata.signaltype import SignalType
+from sttp.metadata.record.measurement import MeasurementRecord
 from sttp.publisher import Publisher
 from sttp.transport.measurement import Measurement
 from sttp.transport.subscriberconnection import SubscriberConnection
-from sttp.data.dataset import DataSet
 from sttp.ticks import Ticks
 from typing import List
 from threading import Timer as ThreadTimer
@@ -69,14 +69,35 @@ def run_publisher(port: int) -> bool:
         publisher.errormessage_logger = display_error_message
         
         # Define metadata - use path relative to this script file
-        metadata_path = os.path.join(os.path.dirname(__file__), "Metadata.xml")
-        dataset, err = DataSet.from_xml(open(metadata_path).read())
+        publisher.metadata_path = os.path.join(os.path.dirname(__file__), "Metadata.xml")
+
+        # Ensure output source is defined in metadata - this is used to group
+        # measurements for publication and identify the source to subscribers
+        device_acronym = publisher.define_output_source("Shelby")
+
+        # Ensure metadata for measurements are defined to publish
+        publisher.define_output_measurement(device_acronym, "TVA_SHELBY:ABBF", "Shelby ABB-521 Frequency", "FREQ")
+        publisher.define_output_measurement(device_acronym, "TVA_SHELBY:ABBD", "Shelby ABB-521 Frequency Delta (dF/dt)", "DFDT")
+        
+        # Ensure voltage phasor 1 angle/magnitude measurements exist
+        publisher.define_output_measurement(device_acronym, "TVA_SHELBY-BUS1:ABBVH", "Shelby ABB-521 500 kV Bus 1 Positive Sequence Voltage Phase Angle", "VPHA", 1)
+        publisher.define_output_measurement(device_acronym, "TVA_SHELBY-BUS1:ABBV", "Shelby ABB-521 500 kV Bus 1 Positive Sequence Voltage Magnitude", "VPHM", 1)
+        
+        # Ensure current phasor 2 angle/magnitude measurements exist
+        publisher.define_output_measurement(device_acronym, "TVA_SHELBY-CORD:ABBIH", "Shelby ABB-521 Cordova Positive Sequence Current Phase Angle", "IPHA", 2)
+        publisher.define_output_measurement(device_acronym, "TVA_SHELBY-CORD:ABBI", "Shelby ABB-521 Cordova Positive Sequence Current Magnitude", "IPHM", 2)
+    
+        # Ensure metadata for phasor measurements to publish exist
+        publisher.define_output_phasor(device_acronym, "500 kV Bus 1", "V", "+", 1)
+        publisher.define_output_phasor(device_acronym, "Cordova", "I", "+", 2)
+
+        # Load metadata from file and define it for publication - this is
+        # used to identify the measurements we publish to subscribers
+        err = publisher.load_metadata()
         
         if err is not None:
-            print(f"ERROR: Failed to load metadata: {err}")
+            print(f"ERROR: {err}", file=sys.stderr)
             return False
-        
-        publisher.define_metadata(dataset)
         
         # Filter metadata for measurements to publish from MeasurementDetail table
         measurements_to_publish = publisher.filter_metadata("SignalAcronym <> 'STAT'")  # List[MeasurementRecord]

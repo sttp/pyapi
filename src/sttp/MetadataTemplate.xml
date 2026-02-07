@@ -1,13 +1,16 @@
-<?xml version='1.0' encoding='utf-8'?>
-<NewDataSet xmlns:ns1="urn:schemas-microsoft-com:xml-msdata" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:schema id="NewDataSet">
-    <xs:element name="NewDataSet" ns1:IsDataSet="true" ns1:UseCurrentLocale="true">
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <xs:schema id="NewDataSet"
+    xmlns=""
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
       <xs:complexType>
         <xs:choice minOccurs="0" maxOccurs="unbounded">
           <xs:element name="DeviceDetail">
             <xs:complexType>
               <xs:sequence>
-                <xs:element name="UniqueID" ns1:DataType="System.Guid" type="xs:string" minOccurs="0" />
+                <xs:element name="UniqueID" msdata:DataType="System.Guid" type="xs:string" minOccurs="0" />
                 <xs:element name="OriginalSource" type="xs:string" minOccurs="0" />
                 <xs:element name="IsConcentrator" type="xs:boolean" minOccurs="0" />
                 <xs:element name="Acronym" type="xs:string" minOccurs="0" />
@@ -33,7 +36,7 @@
               <xs:sequence>
                 <xs:element name="DeviceAcronym" type="xs:string" minOccurs="0" />
                 <xs:element name="ID" type="xs:string" minOccurs="0" />
-                <xs:element name="SignalID" ns1:DataType="System.Guid" type="xs:string" minOccurs="0" />
+                <xs:element name="SignalID" msdata:DataType="System.Guid" type="xs:string" minOccurs="0" />
                 <xs:element name="PointTag" type="xs:string" minOccurs="0" />
                 <xs:element name="SignalReference" type="xs:string" minOccurs="0" />
                 <xs:element name="SignalAcronym" type="xs:string" minOccurs="0" />
@@ -70,11 +73,15 @@
       </xs:complexType>
     </xs:element>
   </xs:schema>
+  <!--
+  Example Metadata:
+
   <DeviceDetail>
-    <UniqueID>caa902a3-434c-4efb-b34d-ceb80a65ead6</UniqueID>
-    <IsConcentrator>0</IsConcentrator>
-    <Acronym>SHELBY</Acronym>
-    <Name>Shelby</Name>
+    <NodeID>f7a5235d-cb6f-4864-a96e-a8686f36e599</NodeID>
+    <UniqueID>c9650400-d17c-41df-b974-83a6662afab6</UniqueID>
+    <IsConcentrator>false</IsConcentrator>
+    <Acronym>TEST</Acronym>
+    <Name>Test</Name>
     <AccessID>0</AccessID>
     <ParentAcronym />
     <ProtocolName>STTP</ProtocolName>
@@ -86,105 +93,22 @@
     <Latitude>0.0</Latitude>
     <InterconnectionName />
     <ContactList />
-    <Enabled>1</Enabled>
-    <UpdatedOn>2026-02-07T21:27:24.282-06:00</UpdatedOn>
+    <Enabled>true</Enabled>
+    <UpdatedOn>2025-01-04T03:00:52.73-05:00</UpdatedOn>
   </DeviceDetail>
   <MeasurementDetail>
-    <DeviceAcronym>SHELBY</DeviceAcronym>
-    <ID>SHELBY:1</ID>
-    <SignalID>27123eb0-ff2f-4fd1-9f4f-1ad881aa32c7</SignalID>
-    <PointTag>TVA_SHELBYABBF</PointTag>
-    <SignalReference>FREQ-FQ</SignalReference>
+    <DeviceAcronym>TEST</DeviceAcronym>
+    <ID>TEST:1</ID>
+    <SignalID>83673c68-d59d-4926-b7e9-e7678f9f66b4</SignalID>
+    <PointTag>TEST_FREQ</PointTag>
+    <SignalReference>TEST_FREQ</SignalReference>
     <SignalAcronym>FREQ</SignalAcronym>
-    <Description>Shelby ABB-521 Frequency</Description>
+    <Description>Test Frequency</Description>
     <Internal>true</Internal>
     <Enabled>true</Enabled>
-    <UpdatedOn>2026-02-07T21:27:24.283-06:00</UpdatedOn>
+    <UpdatedOn>2025-01-04T03:00:52.77-05:00</UpdatedOn>
   </MeasurementDetail>
-  <MeasurementDetail>
-    <DeviceAcronym>SHELBY</DeviceAcronym>
-    <ID>SHELBY:2</ID>
-    <SignalID>fdb30004-cc43-4fc2-b157-1e91413aa686</SignalID>
-    <PointTag>TVA_SHELBYABBD</PointTag>
-    <SignalReference>DFDT-DF</SignalReference>
-    <SignalAcronym>DFDT</SignalAcronym>
-    <Description>Shelby ABB-521 Frequency Delta (dF/dt)</Description>
-    <Internal>true</Internal>
-    <Enabled>true</Enabled>
-    <UpdatedOn>2026-02-07T21:27:24.290-06:00</UpdatedOn>
-  </MeasurementDetail>
-  <MeasurementDetail>
-    <DeviceAcronym>SHELBY</DeviceAcronym>
-    <ID>SHELBY:3</ID>
-    <SignalID>34fee0a1-2e01-4212-ae15-cc31f81e0c00</SignalID>
-    <PointTag>TVA_SHELBY-BUS1ABBVH</PointTag>
-    <SignalReference>VPHA-PA1</SignalReference>
-    <SignalAcronym>VPHA</SignalAcronym>
-    <PhasorSourceIndex>1</PhasorSourceIndex>
-    <Description>Shelby ABB-521 500 kV Bus 1 Positive Sequence Voltage Phase Angle</Description>
-    <Internal>true</Internal>
-    <Enabled>true</Enabled>
-    <UpdatedOn>2026-02-07T21:27:24.291-06:00</UpdatedOn>
-  </MeasurementDetail>
-  <MeasurementDetail>
-    <DeviceAcronym>SHELBY</DeviceAcronym>
-    <ID>SHELBY:4</ID>
-    <SignalID>c94e7e09-ccbe-48c4-8113-3d08c2c25ceb</SignalID>
-    <PointTag>TVA_SHELBY-BUS1ABBV</PointTag>
-    <SignalReference>VPHM-PM1</SignalReference>
-    <SignalAcronym>VPHM</SignalAcronym>
-    <PhasorSourceIndex>1</PhasorSourceIndex>
-    <Description>Shelby ABB-521 500 kV Bus 1 Positive Sequence Voltage Magnitude</Description>
-    <Internal>true</Internal>
-    <Enabled>true</Enabled>
-    <UpdatedOn>2026-02-07T21:27:24.292-06:00</UpdatedOn>
-  </MeasurementDetail>
-  <MeasurementDetail>
-    <DeviceAcronym>SHELBY</DeviceAcronym>
-    <ID>SHELBY:5</ID>
-    <SignalID>206b4a18-f1a6-4eb5-b081-faa798f40363</SignalID>
-    <PointTag>TVA_SHELBY-CORDABBIH</PointTag>
-    <SignalReference>IPHA-PA2</SignalReference>
-    <SignalAcronym>IPHA</SignalAcronym>
-    <PhasorSourceIndex>2</PhasorSourceIndex>
-    <Description>Shelby ABB-521 Cordova Positive Sequence Current Phase Angle</Description>
-    <Internal>true</Internal>
-    <Enabled>true</Enabled>
-    <UpdatedOn>2026-02-07T21:27:24.297-06:00</UpdatedOn>
-  </MeasurementDetail>
-  <MeasurementDetail>
-    <DeviceAcronym>SHELBY</DeviceAcronym>
-    <ID>SHELBY:6</ID>
-    <SignalID>5c1c01a0-a658-4dab-84aa-7a9abd0f491a</SignalID>
-    <PointTag>TVA_SHELBY-CORDABBI</PointTag>
-    <SignalReference>IPHM-PM2</SignalReference>
-    <SignalAcronym>IPHM</SignalAcronym>
-    <PhasorSourceIndex>2</PhasorSourceIndex>
-    <Description>Shelby ABB-521 Cordova Positive Sequence Current Magnitude</Description>
-    <Internal>true</Internal>
-    <Enabled>true</Enabled>
-    <UpdatedOn>2026-02-07T21:27:24.305-06:00</UpdatedOn>
-  </MeasurementDetail>
-  <PhasorDetail>
-    <ID>1</ID>
-    <DeviceAcronym>SHELBY</DeviceAcronym>
-    <Label>500 kV Bus 1</Label>
-    <Type>V</Type>
-    <Phase>+</Phase>
-    <DestinationPhasorID>0</DestinationPhasorID>
-    <SourceIndex>1</SourceIndex>
-    <UpdatedOn>2026-02-07T21:27:24.305-06:00</UpdatedOn>
-  </PhasorDetail>
-  <PhasorDetail>
-    <ID>2</ID>
-    <DeviceAcronym>SHELBY</DeviceAcronym>
-    <Label>Cordova</Label>
-    <Type>I</Type>
-    <Phase>+</Phase>
-    <DestinationPhasorID>0</DestinationPhasorID>
-    <SourceIndex>2</SourceIndex>
-    <UpdatedOn>2026-02-07T21:27:24.311-06:00</UpdatedOn>
-  </PhasorDetail>
+  -->
   <SchemaVersion>
     <VersionNumber>9</VersionNumber>
   </SchemaVersion>

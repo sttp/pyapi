@@ -26,41 +26,15 @@
 from __future__ import annotations
 from gsf import Empty
 from typing import TYPE_CHECKING
-from enum import IntEnum
 from datetime import datetime
 from uuid import UUID
 import numpy as np
 
+from sttp.metadata.signaltype import SignalType
+
 if TYPE_CHECKING:
     from .device import DeviceRecord
     from .phasor import PhasorRecord
-
-class SignalType(IntEnum):
-    """
-    Represents common signal types for STTP metadata. This list may
-    not be exhaustive for some STTP deployments. If value is set to
-    `UNKN`, check the string based `signalacronym` in the `MeasurementRecord`.
-    """
-
-    IPHM = 1    # Current phase magnitude
-    IPHA = 2    # Current phase angle
-    VPHM = 3    # Voltage phase magnitude
-    VPHA = 4    # Voltage phase angle
-    FREQ = 5    # Frequency
-    DFDT = 6    # Frequency derivative, i.e., Δfreq / Δtime
-    ALOG = 7    # Analog value (scalar)
-    FLAG = 8    # Status flags (16-bit)
-    DIGI = 9    # Digital value (16-bit)
-    CALC = 10   # Calculated value
-    STAT = 11   # Statistic value
-    ALRM = 12   # Alarm state
-    QUAL = 13   # Quality flags (16-bit)
-    UNKN = -1   # Unknown type, see `signalacronym`
-
-    @classmethod
-    def parse(cls, name: str) -> SignalType:
-        return getattr(cls, name.upper(), cls.UNKN)
-
 
 class MeasurementRecord:
     """

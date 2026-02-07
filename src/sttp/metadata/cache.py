@@ -24,10 +24,11 @@
 # pyright: reportArgumentType=false
 
 from gsf import Empty
+from .signaltype import SignalType
 from ..data.dataset import DataSet
 from ..data.datarow import DataRow
 from ..data.datatype import default_datatype
-from .record.measurement import MeasurementRecord, SignalType
+from .record.measurement import MeasurementRecord
 from .record.device import DeviceRecord
 from .record.phasor import PhasorRecord
 from typing import List, Dict, Tuple

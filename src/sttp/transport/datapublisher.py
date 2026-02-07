@@ -25,18 +25,20 @@
 # Ported from cppapi/src/lib/transport/DataPublisher.cpp : class DataPublisher
 # Differences: Python uses socket server and threading; otherwise parity maintained.
 
-from ..data.dataset import DataSet
-from ..data.filterexpressionparser import FilterExpressionParser
 from .measurement import Measurement
 from .subscriberconnection import SubscriberConnection
-from ..metadata.record.measurement import MeasurementRecord as MetadataMeasurementRecord
 from .routingtables import RoutingTables
 from .constants import SecurityMode, ServerCommand, ServerResponse
+from ..data.dataset import DataSet
+from ..data.filterexpressionparser import FilterExpressionParser
+from ..metadata.record.measurement import MeasurementRecord as MetadataMeasurementRecord
 from typing import List, Callable, Set
 from uuid import UUID, uuid4
 from threading import Thread, RLock
 from concurrent.futures import ThreadPoolExecutor
 from queue import Queue
+from decimal import Decimal
+import os
 import socket
 import numpy as np
 
@@ -218,11 +220,8 @@ class DataPublisher:
     def define_metadata(self, metadata: DataSet):
         """
         Defines the publisher metadata from a DataSet.
-        Builds the ActiveMeasurements filtering metadata table from the source metadata.
+        Builds the ActiveMeasurements filtering metadata tables from the source metadata.
         """
-        import os
-        from ..data.dataset import DataSet
-        from decimal import Decimal
         
         self._metadata = metadata
         
@@ -467,7 +466,7 @@ class DataPublisher:
 
     def filter_metadata(self, filter_expression: str) -> List[MetadataMeasurementRecord]:
         """
-        Filters metadata using a filter expression against the MeasurementDetail table.
+        Filters metadata using a filter expression against the 'MeasurementDetail' table.
         
         This is for the publisher application to decide what measurements to publish.
         
