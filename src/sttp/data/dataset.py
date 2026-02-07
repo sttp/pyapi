@@ -438,7 +438,7 @@ class DataSet:
                 elif datatype == DataType.DATETIME:
                     datarow[index] = Empty.DATETIME if value is None else Convert.from_str(value, datetime)
                 elif datatype == DataType.BOOLEAN:
-                    datarow[index] = False if value is None else bool(value)
+                    datarow[index] = False if value is None else value.lower() in ("true", "1", "yes")
                 elif datatype == DataType.SINGLE:
                     datarow[index] = Empty.SINGLE if value is None else Convert.from_str(value, np.float32)
                 elif datatype == DataType.DOUBLE:

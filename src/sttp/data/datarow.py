@@ -180,7 +180,7 @@ class DataRow:
             if targettype == DataType.STRING:
                 return value, None
             if targettype == DataType.BOOLEAN:
-                return bool(value), None
+                return value.lower() in ("true", "1", "yes"), None
             if targettype == DataType.DATETIME:
                 return Convert.from_str(value, datetime), None
             if targettype == DataType.GUID:

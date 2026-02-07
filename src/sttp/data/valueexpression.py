@@ -47,7 +47,7 @@ class ValueExpression(Expression):
         if value is None:
             self._value = None
         elif valuetype == ExpressionValueType.BOOLEAN:
-            self._value = bool(value)
+            self._value = value.lower() in ("true", "1", "yes") if isinstance(value, str) else bool(value)
         elif valuetype == ExpressionValueType.INT32:
             self._value = np.int32(value)
         elif valuetype == ExpressionValueType.INT64:
@@ -220,7 +220,7 @@ class ValueExpression(Expression):
     def _datetimevalue(self) -> datetime:
         return Empty.DATETIME if self._value is None else self._value
 
-    def convert(self, target_typevalue: ExpressionValueType) -> Tuple["ValueExpression" | None, Exception | None]:
+    def convert(self, target_typevalue: ExpressionValueType) -> Tuple[ValueExpression | None, Exception | None]:
         """
         Attempts to convert the `ValueExpression` to the specified type.
         """
@@ -257,7 +257,7 @@ class ValueExpression(Expression):
 
         return None, TypeError("unexpected expression value type encountered")
 
-    def _convert_fromnumeric(self, value: int | float, from_typename: str, target_typevalue: ExpressionValueType) -> Tuple["ValueExpression" | None, Exception | None]:
+    def _convert_fromnumeric(self, value: int | float, from_typename: str, target_typevalue: ExpressionValueType) -> Tuple[ValueExpression | None, Exception | None]:
         try:
             if target_typevalue == ExpressionValueType.BOOLEAN:
                 return ValueExpression(target_typevalue, value != 0), None
@@ -281,27 +281,27 @@ class ValueExpression(Expression):
 
         return None, TypeError(f"cannot convert \"{from_typename}\" value ({value}) to \"{normalize_enumname(target_typevalue)}\"")
 
-    def _convert_fromboolean(self, target_typevalue: ExpressionValueType) -> Tuple["ValueExpression" | None, Exception | None]:
+    def _convert_fromboolean(self, target_typevalue: ExpressionValueType) -> Tuple[ValueExpression | None, Exception | None]:
         return self._convert_fromnumeric(self._booleanvalue_asint(), "Boolean", target_typevalue)
 
-    def _convert_fromint32(self, target_typevalue: ExpressionValueType) -> Tuple["ValueExpression" | None, Exception | None]:
+    def _convert_fromint32(self, target_typevalue: ExpressionValueType) -> Tuple[ValueExpression | None, Exception | None]:
         return self._convert_fromnumeric(self._int32value().item(), "Int32", target_typevalue)
 
-    def _convert_fromint64(self, target_typevalue: ExpressionValueType) -> Tuple["ValueExpression" | None, Exception | None]:
+    def _convert_fromint64(self, target_typevalue: ExpressionValueType) -> Tuple[ValueExpression | None, Exception | None]:
         return self._convert_fromnumeric(self._int64value().item(), "Int64", target_typevalue)
 
-    def _convert_fromdecimal(self, target_typevalue: ExpressionValueType) -> Tuple["ValueExpression" | None, Exception | None]:
+    def _convert_fromdecimal(self, target_typevalue: ExpressionValueType) -> Tuple[ValueExpression | None, Exception | None]:
         return self._convert_fromnumeric(self._decimalvalue(), "Decimal", target_typevalue)
 
-    def _convert_fromdouble(self, target_typevalue: ExpressionValueType) -> Tuple["ValueExpression" | None, Exception | None]:
+    def _convert_fromdouble(self, target_typevalue: ExpressionValueType) -> Tuple[ValueExpression | None, Exception | None]:
         return self._convert_fromnumeric(self._doublevalue().item(), "Double", target_typevalue)
 
-    def _convert_fromstring(self, target_typevalue: ExpressionValueType) -> Tuple["ValueExpression" | None, Exception | None]:
+    def _convert_fromstring(self, target_typevalue: ExpressionValueType) -> Tuple[ValueExpression | None, Exception | None]:
         value = self._stringvalue()
 
         try:
             if target_typevalue == ExpressionValueType.BOOLEAN:
-                return ValueExpression(target_typevalue, bool(value)), None
+                return ValueExpression(target_typevalue, value.lower() in ("true", "1", "yes")), None
 
             if target_typevalue == ExpressionValueType.INT32:
                 return ValueExpression(target_typevalue, np.int32(Decimal(value))), None
@@ -328,7 +328,7 @@ class ValueExpression(Expression):
 
         return None, TypeError(f"cannot convert \"String\" value ('{value}') to \"{normalize_enumname(target_typevalue)}\"")
 
-    def _convert_fromguid(self, target_typevalue: ExpressionValueType) -> Tuple["ValueExpression" | None, Exception | None]:
+    def _convert_fromguid(self, target_typevalue: ExpressionValueType) -> Tuple[ValueExpression | None, Exception | None]:
         value = self._guidvalue()
 
         if target_typevalue == ExpressionValueType.STRING:
@@ -339,7 +339,7 @@ class ValueExpression(Expression):
 
         return None, TypeError(f"cannot convert \"Guid\" to \"{normalize_enumname(target_typevalue)}\"")
 
-    def _convert_fromdatetime(self, target_typevalue: ExpressionValueType) -> Tuple["ValueExpression" | None, Exception | None]:
+    def _convert_fromdatetime(self, target_typevalue: ExpressionValueType) -> Tuple[ValueExpression | None, Exception | None]:
         value = self._datetimevalue()
 
         if target_typevalue == ExpressionValueType.STRING:
@@ -351,7 +351,7 @@ class ValueExpression(Expression):
         return self._convert_fromnumeric(value.timestamp(), "DateTime", target_typevalue)
 
     @staticmethod
-    def nullvalue(target_valuetype: ExpressionValueType) -> "ValueExpression":
+    def nullvalue(target_valuetype: ExpressionValueType) -> ValueExpression:
         """
         Gets a `ValueExpression` that represents a null, i.e., `None`, value of the specified `ExpressionValueType`.
         """
