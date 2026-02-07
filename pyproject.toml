@@ -45,4 +45,5 @@ package-dir = {"" = "src"}
 where = ["src"]
 
 [tool.setuptools.package-data]
+"sttp" = ["*.xml"]
 "sttp.transport" = ["*.xml"]
