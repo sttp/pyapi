@@ -444,14 +444,27 @@ class DataPublisher:
         self._filtering_metadata = filtering_metadata
         
         # Notify all subscribers that configuration metadata has changed
-        with self._subscriber_connections_lock:
-            for connection in self._subscriber_connections:
-                connection.send_response(ServerResponse.CONFIGURATIONCHANGED, ServerCommand.SUBSCRIBE)
+        self.broadcast_response(ServerResponse.CONFIGURATIONCHANGED, ServerCommand.SUBSCRIBE)
         
         self._dispatch_status_message(
             f"Metadata defined with {len(metadata)} tables"
         )
     
+    def broadcast_response(self, response_code: ServerResponse, command_code: ServerCommand, 
+                      data: bytes | bytearray | None = None, message: str | None = None):
+        """
+        Sends a server response to all connected subscribers.
+        
+        Args:
+            response_code: The server response to send.
+            command_code: The server command associated with the response.
+            data: Optional binary data to include in the response.
+            message: Optional message string to include in the response (takes precedence over data, if provided).
+        """
+        with self._subscriber_connections_lock:
+            for connection in self._subscriber_connections:
+                connection.send_response(response_code, command_code, data, message)
+
     def filter_metadata(self, filter_expression: str) -> List[MetadataMeasurementRecord]:
         """
         Filters metadata using a filter expression against the MeasurementDetail table.
