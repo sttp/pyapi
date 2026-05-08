@@ -720,8 +720,10 @@ class DataSubscriber:
 
         # Note: internal payload size at buffer[2:6] ignored - future versions of STTP will likely exclude this
         data = buffer[RESPONSEHEADER_SIZE:]
-        responsecode = ServerResponse(buffer[0])
-        commandcode = ServerCommand(buffer[1])
+
+        # int() coercion guards against numpy scalars
+        responsecode = ServerResponse(int(buffer[0]))
+        commandcode = ServerCommand(int(buffer[1]))
 
         if responsecode == ServerResponse.SUCCEEDED:
             self._handle_succeeded(commandcode, data)
@@ -928,7 +930,8 @@ class DataSubscriber:
             self.configurationchanged_callback()
 
     def _handle_datapacket(self, data: bytes):
-        datapacketflags = DataPacketFlags(data[0])
+        # int() coercion guards against numpy scalars
+        datapacketflags = DataPacketFlags(int(data[0]))
         compressed = datapacketflags & DataPacketFlags.COMPRESSED > 0
         compact = datapacketflags & DataPacketFlags.COMPACT > 0
 

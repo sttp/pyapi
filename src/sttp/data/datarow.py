@@ -115,7 +115,8 @@ class DataRow:
                 action = "assign"
                 preposition = "to"
 
-            return None, ValueError(f"cannot {action} \"{normalize_enumname(DataType(targettype))}\" value {preposition} DataColumn \"{column.name}\" for table \"{self._parent.name}\", column data type is \"{normalize_enumname(column.datatype)}\"")
+            # int() coercion guards against numpy scalars
+            return None, ValueError(f"cannot {action} \"{normalize_enumname(DataType(int(targettype)))}\" value {preposition} DataColumn \"{column.name}\" for table \"{self._parent.name}\", column data type is \"{normalize_enumname(column.datatype)}\"")
 
         if not read and column.computed:
             return None, ValueError(f"cannot assign value to DataColumn \"{column.name}\" for table \"{self._parent.name}\", column is computed with an expression")

@@ -207,8 +207,10 @@ class CompactMeasurement(Measurement):
         Sets byte level compact state flags with encoded time index and base time offset bits.
         """
 
-        # Decode compact state flags
-        flags = CompactStateFlags(value)
+        # Decode compact state flags. Coerce to a built-in int first - under Python 3.12+,
+        # IntFlag's stricter __new__ rejects a numpy scalar zero (np.int8(0)) with
+        # "ValueError: np.int8(0) is not a valid CompactStateFlags". Plain int(0) is fine.
+        flags = CompactStateFlags(int(value))
 
         self.flags = _map_to_fullflags(flags)
 
