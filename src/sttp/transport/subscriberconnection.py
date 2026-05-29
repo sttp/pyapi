@@ -736,7 +736,7 @@ class SubscriberConnection:
         """Handles base time update confirmation."""
         pass
 
-    def send_buffer_block(self, signalid: UUID, buffer: bytes | bytearray) -> bool:
+    def send_buffer_block(self, signalid: UUID, buffer: bytes | bytearray, require_confirmation: bool = True) -> bool:
         """
         Sends a buffer block measurement to the subscriber.
 
@@ -746,7 +746,7 @@ class SubscriberConnection:
         ::
 
             +0  uint32  SEQUENCE VALUE      (big-endian, ack tracker)
-            +4  byte    BUFFER BLOCK FLAGS  (Table 8: 0x08 COMPRESSED, 0x10 CACHE INDEX)
+            +4  byte    BUFFER BLOCK FLAGS  (Table 8: 0x01 REQUIRE CONFIRMATION, 0x08 COMPRESSED, 0x10 CACHE INDEX)
             +5  int32   SIGNAL INDEX        (big-endian, runtime ID resolved against active cache)
             +9  byte[]  PAYLOAD             (GZip-compressed when payload compression negotiated)
 
@@ -762,6 +762,13 @@ class SubscriberConnection:
             signal index cache for this connection (i.e., it is in the subscriber's subscription).
         buffer : bytes | bytearray
             Opaque payload bytes - STTP does not inspect these.
+        require_confirmation : bool, optional
+            When True (the default), sets the ``REQUIRE CONFIRMATION`` flag (IEEE 2664-2024 Table 8
+            bit ``0x01``) on the wire, instructing the receiver to emit a ``CONFIRM BUFFER BLOCK``
+            command on receipt. The pyapi publisher does not maintain a retransmission cache, but
+            the ack still lets the receiver behave correctly when paired with a API peer that
+            does. Set False for fire-and-forget delivery - useful for high-rate buffer-block streams
+            over reliable transports (TCP) where round-trip ack overhead is unnecessary.
 
         Returns
         -------
@@ -793,9 +800,18 @@ class SubscriberConnection:
 
         flags = BufferBlockFlags.NOFLAGS
 
+        if require_confirmation:
+            flags |= BufferBlockFlags.REQUIRECONFIRMATION
+
         if int(self._buffer_block_cache_index) == 1:
             flags |= BufferBlockFlags.CACHEINDEX
 
+        # KEY INDEX / payload encryption is a UDP-only concern (the data channel uses cipher
+        # keys negotiated separately to protect lossy traffic). pyapi currently sends buffer blocks
+        # over TCP command channel only, where TLS already covers confidentiality, so KEY INDEX
+        # is never set and the payload is never AES-encrypted on send. The receive path in
+        # `DataSubscriber._handle_bufferblock` does support decryption for parity with other APIs,
+        # whose publisher does emit encrypted buffer blocks over UDP when cipher keys are active.
         if self._using_payload_compression:
             payload = gzip.compress(bytes(buffer), compresslevel=1)
             flags |= BufferBlockFlags.COMPRESSED

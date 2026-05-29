@@ -1080,16 +1080,22 @@ class DataSubscriber:
     def _handle_bufferblock(self, data: bytes):
         # Buffer block received - wrap as a `BufferBlock` measurement and expose back to consumer.
         #
-        # Wire format (IEEE Std 2664-2024 § 5.5.10 Figure 34 with SIGNAL INDEX per corrigendum:
-        #   +0  uint32  SEQUENCE VALUE      (big-endian, ack tracker)
-        #   +4  byte    BUFFER BLOCK FLAGS  (Table 8: 0x08 COMPRESSED, 0x10 CACHE INDEX)
-        #   +5  int32   SIGNAL INDEX        (big-endian, runtime ID)
-        #   +9  byte[]  PAYLOAD             (GZip-compressed when the COMPRESSED flag is set)
+        # Wire format (IEEE Std 2664-2024 § 5.5.10 Figure 34 with SIGNAL INDEX per corrigendum):
+        #   +0  uint32  SEQUENCE VALUE      (cleartext, big-endian, ack tracker)
+        #   +4  byte    BUFFER BLOCK FLAGS  (cleartext, Table 8: 0x01 REQUIRE CONFIRMATION,
+        #                                    0x04 KEY INDEX, 0x08 COMPRESSED, 0x10 CACHE INDEX)
+        #   +5  int32   SIGNAL INDEX        (big-endian, runtime ID; AES-encrypted with the rest
+        #                                    when UDP cipher keys are active)
+        #   +9  byte[]  PAYLOAD             (GZip-compressed when COMPRESSED set;
+        #                                    AES-encrypted when KEY INDEX/cipher keys active)
+        # When both compression and encryption apply, compression happens first (per IEEE 2664).
         if len(data) < 9:
             return
 
         sequencenumber = BigEndian.to_uint32(data)
         buffercacheindex = int(np.int64(sequencenumber) - np.int64(self._bufferblock_expectedsequencenumber))
+        flags = BufferBlockFlags(int(data[4]))
+        require_confirmation = BufferBlockFlags.REQUIRECONFIRMATION in flags
 
         # Check if this buffer block has already been processed (e.g., mistaken retransmission due to timeout).
         # The block is "fresh" when its cache slot is past the end of the cache, or the slot is unfilled.
@@ -1097,28 +1103,49 @@ class DataSubscriber:
             return
 
         if buffercacheindex < len(self._bufferblock_cache) and self._bufferblock_cache[buffercacheindex].buffer is not None:
-            # Already seen and confirmed - the publisher resent it after our ack got lost; resend the ack but
-            # do not republish to the consumer.
-            self.send_servercommand(ServerCommand.CONFIRMBUFFERBLOCK, data[:4])
+            # Already seen and confirmed - the publisher resent it after our ack got lost; resend the ack
+            # (only if it requested one) but do not republish to the consumer.
+            if require_confirmation:
+                self.send_servercommand(ServerCommand.CONFIRMBUFFERBLOCK, data[:4])
             return
 
-        # Send confirmation that buffer block is received
-        self.send_servercommand(ServerCommand.CONFIRMBUFFERBLOCK, data[:4])
+        # Confirm only when the publisher set REQUIRE CONFIRMATION (IEEE 2664-2024 Table 8 bit 0x01).
+        # Sequence-number bookkeeping below continues either way so ordering / dropout detection still works.
+        if require_confirmation:
+            self.send_servercommand(ServerCommand.CONFIRMBUFFERBLOCK, data[:4])
 
-        flags = BufferBlockFlags(int(data[4]))
         signalindexcacheindex = 1 if BufferBlockFlags.CACHEINDEX in flags else 0
-        signalindex = BigEndian.to_int32(data[5:9])
+
+        # Decrypt the encrypted region (SIGNAL INDEX + PAYLOAD) when cipher keys are active.
+        # Per IEEE Std 2664-2024 § 5.5.10, SEQUENCE VALUE and FLAGS stay cleartext; SIGNAL INDEX
+        # and PAYLOAD are encrypted as a single AES-CBC block. The cipher key set is chosen by
+        # the KEY INDEX flag (Table 8 bit 0x04, parallel to DATA PACKET CIPHERINDEX).
+        encrypted_region = bytes(data[5:])
+
+        if self._key_ivs is not None:
+            key_ivs = self._key_ivs
+            buffer_block_key_index = 1 if BufferBlockFlags.KEYINDEX in flags else 0
+
+            try:
+                cipher = AES.new(key_ivs[buffer_block_key_index][KEY_INDEX], AES.MODE_CBC, key_ivs[buffer_block_key_index][IV_INDEX])
+                encrypted_region = cipher.decrypt(encrypted_region)
+            except Exception as ex:
+                self._dispatch_errormessage(f"Failed to decrypt buffer-block payload (seq {sequencenumber}): {ex}")
+                return
+
+        signalindex = BigEndian.to_int32(encrypted_region[:4])
 
         # Decompress when publisher set the COMPRESSED flag. IEEE Std 2664-2024 default
         # buffer-block compression algorithm is GZip (Annex / `BufferBlockPayloadCompressionAlgorithms`).
+        # Compression happens BEFORE encryption per IEEE 2664, so decryption happens before decompression.
         if BufferBlockFlags.COMPRESSED in flags:
             try:
-                payload = gzip.decompress(bytes(data[9:]))
+                payload = gzip.decompress(bytes(encrypted_region[4:]))
             except Exception as ex:
                 self._dispatch_errormessage(f"Failed to decompress GZip buffer-block payload (seq {sequencenumber}): {ex}")
                 return
         else:
-            payload = bytes(data[9:])
+            payload = bytes(encrypted_region[4:])
 
         self._signalindexcache_mutex.acquire()
 
@@ -1128,7 +1155,7 @@ class DataSubscriber:
             self._signalindexcache_mutex.release()
 
         signalid = signalindexCache.signalid(np.int32(signalindex))
-        bufferblockmeasurement = BufferBlock(signalid, payload)
+        bufferblockmeasurement = BufferBlock(signalid, payload, flags)
 
         # Determine if this is the next buffer block in the sequence
         if sequencenumber == self._bufferblock_expectedsequencenumber:

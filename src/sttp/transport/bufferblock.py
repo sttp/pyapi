@@ -26,6 +26,8 @@
 from gsf import Empty
 from uuid import UUID
 
+from .constants import BufferBlockFlags
+
 
 class BufferBlock:
     """
@@ -45,10 +47,12 @@ class BufferBlock:
 
     DEFAULT_SIGNALID = Empty.GUID
     DEFAULT_BUFFER: bytes | bytearray | None = None
+    DEFAULT_FLAGS = BufferBlockFlags.NOFLAGS
 
     def __init__(self,
                  signalid: UUID = ...,
-                 buffer: bytes | bytearray | None = ...
+                 buffer: bytes | bytearray | None = ...,
+                 flags: BufferBlockFlags = ...
                  ):
 
         self.signalid: UUID = BufferBlock.DEFAULT_SIGNALID if signalid is ... else signalid
@@ -57,6 +61,14 @@ class BufferBlock:
         """
 
         self._buffer: bytes | bytearray | None = BufferBlock.DEFAULT_BUFFER if buffer is ... else buffer
+
+        self.flags: BufferBlockFlags = BufferBlock.DEFAULT_FLAGS if flags is ... else flags
+        """
+        Defines the buffer block's flag byte as it arrived on the wire (IEEE 2664-2024 Table 8).
+        Exposed primarily so consumers can inspect ``REQUIRE CONFIRMATION`` and ``COMPRESSED``
+        state after the subscriber has already processed the ack and decompression. The runtime
+        view of the buffer (``BufferBlock.buffer``) is always the *uncompressed* payload.
+        """
 
     @property
     def buffer(self) -> bytes | bytearray | None:

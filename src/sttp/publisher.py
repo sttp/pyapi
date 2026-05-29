@@ -734,7 +734,7 @@ class Publisher:
             for connection in self._datapublisher._subscriber_connections:
                 self.send_userresponse(connection, responsecode, commandcode, data)
 
-    def send_buffer_block(self, connection: SubscriberConnection, signalid: UUID, buffer: bytes | bytearray) -> bool:
+    def send_buffer_block(self, connection: SubscriberConnection, signalid: UUID, buffer: bytes | bytearray, require_confirmation: bool = True) -> bool:
         """
         Sends a buffer block measurement to a specific connected subscriber.
 
@@ -750,6 +750,10 @@ class Publisher:
         buffer : bytes | bytearray
             Opaque payload - STTP does not inspect the bytes; the producer and consumer agree on
             the encoding.
+        require_confirmation : bool, optional
+            When True (the default), sets the ``REQUIRE CONFIRMATION`` flag (IEEE 2664-2024 Table 8
+            bit ``0x01``) so the receiver acknowledges with a ``CONFIRM BUFFER BLOCK`` command.
+            Set False for fire-and-forget delivery.
 
         Returns
         -------
@@ -757,9 +761,9 @@ class Publisher:
             True if the buffer block was sent on the wire, False on no-subscription / no-cache /
             signal-not-found / socket error (the underlying connection logs the reason).
         """
-        return connection.send_buffer_block(signalid, buffer)
+        return connection.send_buffer_block(signalid, buffer, require_confirmation)
 
-    def broadcast_buffer_block(self, signalid: UUID, buffer: bytes | bytearray) -> int:
+    def broadcast_buffer_block(self, signalid: UUID, buffer: bytes | bytearray, require_confirmation: bool = True) -> int:
         """
         Broadcasts a buffer block measurement to every connected subscriber that has the
         specified signal in its subscription.
@@ -770,6 +774,9 @@ class Publisher:
             Signal ID of the buffer block measurement.
         buffer : bytes | bytearray
             Opaque payload bytes.
+        require_confirmation : bool, optional
+            When True (the default), the ``REQUIRE CONFIRMATION`` flag is set on each emitted
+            buffer block. Set False for fire-and-forget broadcast.
 
         Returns
         -------
@@ -780,7 +787,7 @@ class Publisher:
 
         with self._datapublisher._subscriber_connections_lock:
             for connection in self._datapublisher._subscriber_connections:
-                if connection.send_buffer_block(signalid, buffer):
+                if connection.send_buffer_block(signalid, buffer, require_confirmation):
                     sent += 1
 
         return sent
