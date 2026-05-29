@@ -35,7 +35,7 @@ from .measurement import Measurement
 from .compactmeasurement import CompactMeasurement
 from .signalindexcache import SignalIndexCache
 from .constants import OperationalModes, OperationalEncoding, ServerCommand, ServerResponse
-from .constants import DataPacketFlags, Defaults
+from .constants import DataPacketFlags, BufferBlockFlags, Defaults
 from .tssc.encoder import Encoder as TSSCEncoder
 from ..ticks import Ticks
 from typing import List, Set, TYPE_CHECKING, Tuple
@@ -118,6 +118,15 @@ class SubscriberConnection:
         self._tssc_working_buffer = bytearray(TSSC_BUFFER_SIZE)
         self._tssc_reset_requested = False
         self._tssc_sequence_number = 0  # Start at 0, decoder expects 0 for first packet
+
+        # Buffer block emit state. Sequence number is incremented per outbound buffer block; the
+        # subscriber tracks the same counter and uses it to detect dropouts / duplicate retransmits.
+        # `_buffer_block_cache_index` mirrors `currentCacheIndex` from `gsfapi/SubscriberAdapter.cs`
+        # and selects which signal index cache the subscriber should resolve `signalIndex` against -
+        # we have a single active cache so this stays at 0.
+        self._buffer_block_sequence_number = np.uint32(0)
+        self._buffer_block_cache_index = np.uint8(0)
+        self._buffer_block_lock = Lock()
         
         # Base time offsets for compact encoding
         self._time_index = np.int32(0)
@@ -365,6 +374,8 @@ class SubscriberConnection:
                 self._handle_confirm_signal_index_cache(data)
             elif command == ServerCommand.CONFIRMNOTIFICATION:
                 self._handle_confirm_notification(data)
+            elif command == ServerCommand.CONFIRMBUFFERBLOCK:
+                self._handle_confirm_buffer_block(data)
             elif command == ServerCommand.CONFIRMUPDATEBASETIMES:
                 self._handle_confirm_update_base_times(data)
             elif command >= ServerCommand.USERCOMMAND00 and command <= ServerCommand.USERCOMMAND15:
@@ -700,10 +711,108 @@ class SubscriberConnection:
     def _handle_confirm_notification(self, data: bytearray):
         """Handles notification confirmation."""
         pass
-    
+
+    def _handle_confirm_buffer_block(self, data: bytearray):
+        """
+        Handles a `ConfirmBufferBlock` command from the subscriber.
+        """
+
+        # Payload is the 4-byte big-endian sequence number of the buffer block being acknowledged.
+        # Implemented with minimal "send-and-confirm", so it does not maintain a retransmission cache,
+        # the ack here is informational only - we log it for diagnostics and drop.
+        
+        # TODO: Match gsfapi's full retransmission behavior (cache + timer) here if buffer blocks ever
+        # need to flow over a lossy data channel, e.g., UDP.
+
+        if len(data) < 4:
+            return
+        
+        # Accepted; no further action under send-and-confirm.
+        self._parent._dispatch_status_message(
+            f"{self._connection_id} confirmed buffer block with sequence number {BigEndian.to_uint32(data[:4])}"
+        )
+
     def _handle_confirm_update_base_times(self, data: bytearray):
         """Handles base time update confirmation."""
         pass
+
+    def send_buffer_block(self, signalid: UUID, buffer: bytes | bytearray) -> bool:
+        """
+        Sends a buffer block measurement to the subscriber.
+
+        A buffer block carries an opaque byte payload associated with a specific signal ID. The wire
+        format follows IEEE Std 2664-2024 § 5.5.10 Figure 34 with SIGNAL INDEX per corrigendum:
+
+        ::
+
+            +0  uint32  SEQUENCE VALUE      (big-endian, ack tracker)
+            +4  byte    BUFFER BLOCK FLAGS  (Table 8: 0x08 COMPRESSED, 0x10 CACHE INDEX)
+            +5  int32   SIGNAL INDEX        (big-endian, runtime ID resolved against active cache)
+            +9  byte[]  PAYLOAD             (GZip-compressed when payload compression negotiated)
+
+        The COMPRESSED flag is set automatically when the session negotiated payload compression
+        (`OperationalModes.COMPRESSPAYLOADDATA`). GZip is the IEEE-mandated default for buffer-block
+        compression. To force compression off, simply send buffer blocks before compression is
+        negotiated or under a session that did not request it.
+
+        Parameters
+        ----------
+        signalid : UUID
+            Signal ID of the buffer block measurement. Must already be present in the active
+            signal index cache for this connection (i.e., it is in the subscriber's subscription).
+        buffer : bytes | bytearray
+            Opaque payload bytes - STTP does not inspect these.
+
+        Returns
+        -------
+        bool
+            True if the buffer block was sent, False if it could not be sent (no active subscription,
+            unknown signal, or socket error).
+        """
+        if not self._subscribed or self._stopped:
+            return False
+
+        if buffer is None:
+            buffer = b""
+
+        cache = self._signal_index_cache
+
+        if cache is None:
+            self._parent._dispatch_error_message(
+                f"Cannot send buffer block to {self._connection_id}: no active signal index cache"
+            )
+            return False
+
+        signal_index = cache.get_signal_index(signalid)
+
+        if signal_index < 0:
+            self._parent._dispatch_error_message(
+                f"Cannot send buffer block to {self._connection_id}: signal {signalid} not in subscription"
+            )
+            return False
+
+        flags = BufferBlockFlags.NOFLAGS
+
+        if int(self._buffer_block_cache_index) == 1:
+            flags |= BufferBlockFlags.CACHEINDEX
+
+        if self._using_payload_compression:
+            payload = gzip.compress(bytes(buffer), compresslevel=1)
+            flags |= BufferBlockFlags.COMPRESSED
+        else:
+            payload = bytes(buffer)
+
+        with self._buffer_block_lock:
+            sequence = self._buffer_block_sequence_number
+            self._buffer_block_sequence_number = np.uint32(self._buffer_block_sequence_number + 1)
+
+            packet = bytearray()
+            packet.extend(BigEndian.from_uint32(sequence))
+            packet.append(int(flags))
+            packet.extend(BigEndian.from_int32(np.int32(signal_index)))
+            packet.extend(payload)
+
+            return self.send_response(ServerResponse.BUFFERBLOCK, ServerCommand.SUBSCRIBE, data=bytes(packet))
     
     def _handle_user_command(self, commandcode: ServerCommand, data: bytearray):
         """Handles user-defined command."""

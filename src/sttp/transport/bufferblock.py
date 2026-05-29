@@ -26,30 +26,49 @@
 from gsf import Empty
 from uuid import UUID
 
+
 class BufferBlock:
     """
     BufferBlock defines an atomic unit of data, i.e., a binary buffer, for transport in STTP.
+    A buffer block is associated with a signal ID (a Guid) and an opaque payload; STTP itself
+    does not interpret the payload bytes - the publisher and subscriber agree on the meaning.
+
+    Wire format:
+
+    ::
+
+        +0  uint32  sequenceNumber (big-endian, used for retransmission/dedup tracking)
+        +4  byte    cacheIndex     (signal-index-cache selector)
+        +5  int32   signalIndex    (big-endian; runtime ID resolved against the cache)
+        +9  byte[]  buffer         (opaque payload)
     """
 
     DEFAULT_SIGNALID = Empty.GUID
-    DEFAULT_BUFFER:  bytearray | None = None
+    DEFAULT_BUFFER: bytes | bytearray | None = None
 
     def __init__(self,
                  signalid: UUID = ...,
-                 buffer: bytearray = ...
+                 buffer: bytes | bytearray | None = ...
                  ):
 
-        self.signalid = BufferBlock.DEFAULT_SIGNALID if signalid is ... else signalid
+        self.signalid: UUID = BufferBlock.DEFAULT_SIGNALID if signalid is ... else signalid
         """
         Defines measurement's globally unique identifier.
         """
 
-        self._buffer = BufferBlock.DEFAULT_BUFFER if buffer is ... else buffer
+        self._buffer: bytes | bytearray | None = BufferBlock.DEFAULT_BUFFER if buffer is ... else buffer
 
     @property
-    def buffer(self) -> bytearray | None:
+    def buffer(self) -> bytes | bytearray | None:
         """
         Gets measurement buffer as an atomic unit of data, i.e., a binary buffer.
         This buffer typically represents a partial image of a larger whole.
         """
         return self._buffer
+
+    @buffer.setter
+    def buffer(self, value: bytes | bytearray | None) -> None:
+        """
+        Sets the binary buffer for this buffer block.
+        """
+        self._buffer = value

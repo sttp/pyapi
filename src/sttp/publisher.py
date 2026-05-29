@@ -719,7 +719,7 @@ class Publisher:
     def broadcast_userresponse(self, responsecode: ServerResponse, commandcode: ServerCommand, data: bytes | bytearray | None = None):
         """
         Broadcasts a user response to all connected clients.
-        
+
         Parameters
         ----------
         responsecode : ServerResponse
@@ -729,10 +729,61 @@ class Publisher:
         data : bytes | bytearray | None
             Additional data to send with the response
         """
-        
+
         with self._datapublisher._subscriber_connections_lock:
             for connection in self._datapublisher._subscriber_connections:
                 self.send_userresponse(connection, responsecode, commandcode, data)
+
+    def send_buffer_block(self, connection: SubscriberConnection, signalid: UUID, buffer: bytes | bytearray) -> bool:
+        """
+        Sends a buffer block measurement to a specific connected subscriber.
+
+        A buffer block is an atomic, opaque byte payload addressed to a single signal ID. The
+        subscriber must already have the signal in its subscription / signal index cache.
+
+        Parameters
+        ----------
+        connection : SubscriberConnection
+            Subscriber to send the buffer block to.
+        signalid : UUID
+            Signal ID of the buffer block measurement.
+        buffer : bytes | bytearray
+            Opaque payload - STTP does not inspect the bytes; the producer and consumer agree on
+            the encoding.
+
+        Returns
+        -------
+        bool
+            True if the buffer block was sent on the wire, False on no-subscription / no-cache /
+            signal-not-found / socket error (the underlying connection logs the reason).
+        """
+        return connection.send_buffer_block(signalid, buffer)
+
+    def broadcast_buffer_block(self, signalid: UUID, buffer: bytes | bytearray) -> int:
+        """
+        Broadcasts a buffer block measurement to every connected subscriber that has the
+        specified signal in its subscription.
+
+        Parameters
+        ----------
+        signalid : UUID
+            Signal ID of the buffer block measurement.
+        buffer : bytes | bytearray
+            Opaque payload bytes.
+
+        Returns
+        -------
+        int
+            Number of subscribers the buffer block was successfully sent to.
+        """
+        sent = 0
+
+        with self._datapublisher._subscriber_connections_lock:
+            for connection in self._datapublisher._subscriber_connections:
+                if connection.send_buffer_block(signalid, buffer):
+                    sent += 1
+
+        return sent
 
 
     # Configuration properties (delegate to DataPublisher)

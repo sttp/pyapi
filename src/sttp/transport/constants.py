@@ -449,35 +449,79 @@ class DataPacketFlags(IntFlag):
 
     COMPACT = 0x02
     """
-    Determines if serialized measurement is compact. 
-    
+    Determines if serialized measurement is compact.
+
     Obsolete: Bit will be removed in future version. Currently this bit is always set.
     """
 
     CIPHERINDEX = 0x04
     """
     Determines which cipher index to use when encrypting data packet.
-    
-    Bit set = use odd cipher index (i.e., 1), bit clear = use even cipher index (i.e., 0).    
+
+    Bit set = use odd cipher index (i.e., 1), bit clear = use even cipher index (i.e., 0).
     """
 
     COMPRESSED = 0x08
     """
     Determines if data packet payload is compressed.
-    
+
     Bit set = payload compressed, bit clear = payload normal.
     """
 
     CACHEINDEX = 0x10
     """
     Determines which signal index cache to use when decoding a data packet. Used by STTP version 2 or greater.
-    
+
     Bit set = use odd cache index (i.e., 1), bit clear = use even cache index (i.e., 0).
     """
 
     NOFLAGS = 0x0
     """
     Defines state where there are no flags set.
+    """
+
+
+class BufferBlockFlags(IntFlag):
+    """
+    Enumeration of the possible flags for a buffer block.
+
+    Bit definitions follow IEEE Std 2664-2024 Table 8 (BUFFER BLOCK flags) and are intentionally
+    parallel to :class:`DataPacketFlags`. They occupy the single byte at offset +4 of the
+    ``ServerResponse.BUFFERBLOCK`` payload, immediately after the 4-byte SEQUENCE VALUE.
+    """
+
+    NOFLAGS = 0x0
+    """
+    Defines state where there are no flags set.
+    """
+
+    REQUIRECONFIRMATION = 0x01
+    """
+    Determines if BUFFER BLOCK requires confirmation with a CONFIRM BUFFER BLOCK command.
+
+    Bit set = require confirmation, bit clear = do not require confirmation.
+    """
+
+    KEYINDEX = 0x04
+    """
+    Determines which cipher key index to use when decrypting BUFFER BLOCK payload (UDP).
+
+    Bit set = use odd KEY INDEX, bit clear = use even KEY INDEX.
+    """
+
+    COMPRESSED = 0x08
+    """
+    Determines if BUFFER BLOCK payload is compressed.
+
+    Bit set = payload compressed with the negotiated buffer-block compression algorithm (default
+    GZip per IEEE Std 2664-2024 Annex), bit clear = payload uncompressed.
+    """
+
+    CACHEINDEX = 0x10
+    """
+    Determines which Signal Index Cache to use when decoding the BUFFER BLOCK payload.
+
+    Bit set = use odd CACHE INDEX, bit clear = use even CACHE INDEX.
     """
 
 

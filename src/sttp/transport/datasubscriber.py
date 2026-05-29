@@ -33,7 +33,7 @@ from ..metadata.record.measurement import MeasurementRecord
 from ..metadata.cache import MetadataCache
 from .bufferblock import BufferBlock
 from .constants import OperationalModes, OperationalEncoding, CompressionModes, Defaults
-from .constants import DataPacketFlags, ServerCommand, ServerResponse, StateFlags
+from .constants import DataPacketFlags, BufferBlockFlags, ServerCommand, ServerResponse, StateFlags
 from .subscriptioninfo import SubscriptionInfo
 from .subscriberconnector import SubscriberConnector
 from .signalindexcache import SignalIndexCache
@@ -1078,62 +1078,90 @@ class DataSubscriber:
         return measurements, None
 
     def _handle_bufferblock(self, data: bytes):
-        # Buffer block received - wrap as a BufferBlockMeasurement and expose back to consumer
+        # Buffer block received - wrap as a `BufferBlock` measurement and expose back to consumer.
+        #
+        # Wire format (IEEE Std 2664-2024 § 5.5.10 Figure 34 with SIGNAL INDEX per corrigendum:
+        #   +0  uint32  SEQUENCE VALUE      (big-endian, ack tracker)
+        #   +4  byte    BUFFER BLOCK FLAGS  (Table 8: 0x08 COMPRESSED, 0x10 CACHE INDEX)
+        #   +5  int32   SIGNAL INDEX        (big-endian, runtime ID)
+        #   +9  byte[]  PAYLOAD             (GZip-compressed when the COMPRESSED flag is set)
+        if len(data) < 9:
+            return
+
         sequencenumber = BigEndian.to_uint32(data)
-        buffercacheindex = int(sequencenumber - self._bufferblock_expectedsequencenumber)
+        buffercacheindex = int(np.int64(sequencenumber) - np.int64(self._bufferblock_expectedsequencenumber))
 
-        # Check if this buffer block has already been processed (e.g., mistaken retransmission due to timeout)
-        if buffercacheindex >= 0 and (buffercacheindex >= len(self._bufferblock_cache) and self._bufferblock_cache[buffercacheindex].buffer is None):
-            # Send confirmation that buffer block is received
+        # Check if this buffer block has already been processed (e.g., mistaken retransmission due to timeout).
+        # The block is "fresh" when its cache slot is past the end of the cache, or the slot is unfilled.
+        if buffercacheindex < 0:
+            return
+
+        if buffercacheindex < len(self._bufferblock_cache) and self._bufferblock_cache[buffercacheindex].buffer is not None:
+            # Already seen and confirmed - the publisher resent it after our ack got lost; resend the ack but
+            # do not republish to the consumer.
             self.send_servercommand(ServerCommand.CONFIRMBUFFERBLOCK, data[:4])
+            return
 
-            signalindexcacheindex = 1 if self.version > 1 and data[4:][0] > 0 else 0
-            data = data[5:] if self.version > 1 else data[4:]
+        # Send confirmation that buffer block is received
+        self.send_servercommand(ServerCommand.CONFIRMBUFFERBLOCK, data[:4])
 
-            # Get measurement key from signal index cache
-            signalindex = BigEndian.to_uint32(data)
+        flags = BufferBlockFlags(int(data[4]))
+        signalindexcacheindex = 1 if BufferBlockFlags.CACHEINDEX in flags else 0
+        signalindex = BigEndian.to_int32(data[5:9])
 
-            self._signalindexcache_mutex.acquire()
+        # Decompress when publisher set the COMPRESSED flag. IEEE Std 2664-2024 default
+        # buffer-block compression algorithm is GZip (Annex / `BufferBlockPayloadCompressionAlgorithms`).
+        if BufferBlockFlags.COMPRESSED in flags:
+            try:
+                payload = gzip.decompress(bytes(data[9:]))
+            except Exception as ex:
+                self._dispatch_errormessage(f"Failed to decompress GZip buffer-block payload (seq {sequencenumber}): {ex}")
+                return
+        else:
+            payload = bytes(data[9:])
+
+        self._signalindexcache_mutex.acquire()
+
+        try:
             signalindexCache = self._signalindexcache[signalindexcacheindex]
+        finally:
             self._signalindexcache_mutex.release()
 
-            signalid = signalindexCache.signalid(np.int32(signalindex))
-            bufferblockmeasurement = BufferBlock(signalid)
+        signalid = signalindexCache.signalid(np.int32(signalindex))
+        bufferblockmeasurement = BufferBlock(signalid, payload)
 
-            # Determine if this is the next buffer block in the sequence
-            if sequencenumber == self._bufferblock_expectedsequencenumber:
-                bufferblockmeasurements = np.empty(1 + len(self._bufferblock_cache), BufferBlock)
+        # Determine if this is the next buffer block in the sequence
+        if sequencenumber == self._bufferblock_expectedsequencenumber:
+            ready: List[BufferBlock] = [bufferblockmeasurement]
+            self._bufferblock_expectedsequencenumber = np.uint32(self._bufferblock_expectedsequencenumber + 1)
 
-                # Add the buffer block measurement to the list of measurements to be published
-                bufferblockmeasurements[0] = bufferblockmeasurement
-                self._bufferblock_expectedsequencenumber += 1
+            # Drain any contiguously-filled cached entries that were waiting on this sequence number.
+            # Slot 0 of the cache - if it exists - was already replaced by the new measurement on the line above,
+            # so we start at slot 1 (the entry whose sequence number is expected + 1, etc.).
+            drained = 0
+            
+            for i in range(1, len(self._bufferblock_cache)):
+                if self._bufferblock_cache[i].buffer is None:
+                    break
+                ready.append(self._bufferblock_cache[i])
+                self._bufferblock_expectedsequencenumber = np.uint32(self._bufferblock_expectedsequencenumber + 1)
+                drained = i
 
-                # Add cached buffer block measurements to the list of measurements to be published
-                for i in range(len(self._bufferblock_cache)):
-                    if self._bufferblock_cache[i].buffer is None:
-                        break
+            # Trim the cache: drop the entry we just published (slot 0) plus every contiguous filled slot we drained.
+            if self._bufferblock_cache:
+                self._bufferblock_cache = self._bufferblock_cache[drained + 1:]
 
-                    bufferblockmeasurements[i] = self._bufferblock_cache[i]
-                    self._bufferblock_expectedsequencenumber += 1
+            # Publish buffer block measurements - run callback directly from the socket processing thread
+            # so the consumer sees the buffer blocks in sequence order.
+            if self.newbufferblocks_callback is not None:
+                self.newbufferblocks_callback(ready)
+        else:
+            # Cache out-of-order delivery. Common only when data flows over UDP - on a TCP-only channel
+            # this branch should not normally execute.
+            while len(self._bufferblock_cache) <= buffercacheindex:
+                self._bufferblock_cache.append(BufferBlock())
 
-                # Remove published buffer block measurements from the buffer block queue
-                if len(self._bufferblock_cache) > 0:
-                    self._bufferblock_cache = self._bufferblock_cache[i:]
-
-                # Publish buffer block measurements
-                if self.newbufferblocks_callback is not None:
-                    # Do not use thread pool here, processing sequence may be important.
-                    # Execute callback directly from socket processing thread:
-                    self.newbufferblocks_callback(list(bufferblockmeasurements))
-            else:
-                # Ensure that the list has at least as many elements as it needs to cache this measurement.
-                # This edge case handles possible dropouts and/or out of order packet deliver when data
-                # transport is UDP - this use case is not expected when using a TCP only connection.
-                for _ in range(len(self._bufferblock_cache), buffercacheindex + 1):
-                    self._bufferblock_cache.append(BufferBlock())
-
-                # Insert this buffer block into the proper location in the list
-                self._bufferblock_cache[buffercacheindex] = bufferblockmeasurement
+            self._bufferblock_cache[buffercacheindex] = bufferblockmeasurement
 
     def _handle_notification(self, data: bytes):
         message = self.decodestr(data)
