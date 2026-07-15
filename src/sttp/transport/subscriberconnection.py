@@ -35,7 +35,7 @@ from .measurement import Measurement
 from .compactmeasurement import CompactMeasurement
 from .signalindexcache import SignalIndexCache
 from .constants import OperationalModes, OperationalEncoding, ServerCommand, ServerResponse
-from .constants import DataPacketFlags, BufferBlockFlags, Defaults
+from .constants import DataPacketFlags, BufferBlockFlags, Defaults, CompressionModes
 from .tssc.encoder import Encoder as TSSCEncoder
 from ..ticks import Ticks
 from typing import List, Set, TYPE_CHECKING, Tuple
@@ -57,6 +57,24 @@ TSSC_BUFFER_SIZE = 32768
 DEFAULT_LAGTIME = 10.0
 DEFAULT_LEADTIME = 5.0
 DEFAULT_PUBLISHINTERVAL = 1.0
+
+
+def should_gzip_compress(operational_modes, content_flag: OperationalModes) -> bool:
+    """
+    Determines whether GZip compression should be applied to a metadata or signal index cache
+    payload for the given negotiated `operational_modes`.
+
+    Content is compressed only when both the content's compression flag (e.g.,
+    `COMPRESSMETADATA` or `COMPRESSSIGNALINDEXCACHE`) and the `GZIP` compression mode are
+    negotiated. This matches the STTP C# reference (`DataPublisher.SerializeMetadata` /
+    `SerializeSignalIndexCache`), which uses `compress<Content> && compressionModes.HasFlag(GZip)`.
+    Honoring the GZip mode bit is required for interop: a subscriber (such as the .NET
+    `DataSubscriber` default) may request `COMPRESSMETADATA` without advertising `GZIP`, in which
+    case it expects uncompressed content.
+    """
+
+    modes = int(operational_modes)
+    return bool(modes & int(content_flag)) and bool(modes & int(CompressionModes.GZIP))
 
 
 class SubscriberConnection:
@@ -595,9 +613,9 @@ class SubscriberConnection:
             # with open("C:\\temp\\publisher_metadata.xml", "w", encoding="utf-8") as f:
             #     f.write(metadata_xml)
             
-            # Compress if requested
-            compress_metadata = bool(int(self._operational_modes) & int(OperationalModes.COMPRESSMETADATA))
-            
+            # Compress only when the subscriber negotiated both COMPRESSMETADATA and GZip
+            compress_metadata = should_gzip_compress(self._operational_modes, OperationalModes.COMPRESSMETADATA)
+
             if compress_metadata:
                 uncompressed_size = len(metadata_bytes)
                 metadata_bytes = gzip.compress(metadata_bytes)
@@ -1094,9 +1112,9 @@ class SubscriberConnection:
         binary_length = len(buffer) - 4
         buffer[binary_length_offset:binary_length_offset+4] = BigEndian.from_uint32(binary_length)
         
-        # Compress if requested
-        compress_cache = self._operational_modes & OperationalModes.COMPRESSSIGNALINDEXCACHE
-        
+        # Compress only when the subscriber negotiated both COMPRESSSIGNALINDEXCACHE and GZip
+        compress_cache = should_gzip_compress(self._operational_modes, OperationalModes.COMPRESSSIGNALINDEXCACHE)
+
         if compress_cache:
             compressed = bytearray(gzip.compress(bytes(buffer)))
             

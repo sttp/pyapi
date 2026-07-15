@@ -9,25 +9,29 @@
 #
 #  Spins up a real STTP Python publisher and a real STTP C# subscriber (the gsfapi "InteropTest"
 #  sample, run in --metadata mode) and exercises XML metadata exchange that includes date/time
-#  values. It verifies that the Python publisher's xs:dateTime serialization is accepted by the
-#  .NET DataSet parser used by the C# subscriber.
+#  values. It verifies two fixes end-to-end:
+#    1. xs:dateTime serialization  - the Python publisher emits a bare lexical value the .NET
+#       DataSet parser accepts (previously "...+00:Z", which C# rejects).
+#    2. metadata compression handshake - the Python publisher GZip-compresses metadata only when
+#       the subscriber negotiates GZip. The .NET-default subscriber requests CompressMetadata
+#       WITHOUT GZip, so it must receive uncompressed metadata; previously the publisher always
+#       compressed and C# failed on the 0x1F gzip magic byte.
 #
-#  The publisher's served metadata is seeded with a *timezone-aware UTC* UpdatedOn value. That is
-#  the exact input that, before the fix in src/sttp/data/dataset.py, produced the malformed
-#  "...+00:Z" lexical string that C# rejects. With the fix, the value is emitted as a bare
-#  xs:dateTime and the C# subscriber deserializes it successfully.
+#  By default it runs the exchange in BOTH compression negotiations (uncompressed and GZip) with a
+#  seeded *timezone-aware UTC* UpdatedOn sentinel, and both must succeed.
 #
-#  Exit code: 0 = interop succeeded (C# received and parsed the metadata, sentinel datetime found),
-#             non-zero = failure (build error, C# deserialization error, timeout, or value mismatch).
+#  Exit code: 0 = all selected exchanges succeeded, non-zero = failure (build error, C#
+#             deserialization error, timeout, or value mismatch).
 #
 #  Usage:
-#      python test/interop/run_metadata_interop.py [--baseline] [--keep] [--port N]
+#      python test/interop/run_metadata_interop.py [--baseline] [--compression {both,plain,gzip}]
+#                                                   [--keep] [--port N]
 #
-#      --baseline   Serve stock (naive) metadata without injecting a tz-aware value. Use this to
-#                   confirm the C# subscriber can receive Python metadata at all, isolating the
-#                   date issue from any operational-mode/gzip handshake problem.
-#      --keep       Do not delete the C# output directory (metadata-received.xml) on exit.
-#      --port N     TCP port for the publisher (default 7169).
+#      --baseline      Serve stock (naive) metadata without injecting a tz-aware value.
+#      --compression   Which negotiation(s) to exercise (default: both). "plain" = .NET default
+#                      (uncompressed, the path the compression fix repairs), "gzip" = compressed.
+#      --keep          Do not delete the C# output directory (metadata-received.xml) on exit.
+#      --port N        Base publisher TCP port (default 7169; each mode uses a distinct port).
 #
 #  Environment overrides:
 #      STTP_GSFAPI_ROOT   Path to the gsfapi repo (default: C:\\Projects\\sttp\\gsfapi)
@@ -158,22 +162,25 @@ def start_publisher(port, inject_sentinel):
     return publisher
 
 
-def run(args):
-    exe, lib = build_csharp_exe()
+def run_once(exe, port, inject_sentinel, use_gzip, out_dir):
+    """Run one publisher/subscriber metadata exchange in the given compression mode.
 
-    # C# writes metadata-received.xml into its working directory.
-    out_dir = os.path.join(HERE, '_artifacts')
-    os.makedirs(out_dir, exist_ok=True)
+    Returns True on success (C# exited 0 and, unless baseline, the sentinel round-tripped).
+    """
+    label = 'gzip (compressed)' if use_gzip else 'default (uncompressed)'
+    _log(f'=== Metadata exchange: {label} negotiation on port {port} ===')
 
     publisher = None
     try:
-        publisher = start_publisher(args.port, inject_sentinel=not args.baseline)
+        publisher = start_publisher(port, inject_sentinel=inject_sentinel)
         time.sleep(0.5)  # let the listener settle
 
-        _log(f'Launching C# subscriber: InteropTest.exe localhost {args.port} --metadata')
-        proc = subprocess.run(
-            [exe, 'localhost', str(args.port), '--metadata'],
-            cwd=out_dir, capture_output=True, text=True, timeout=45)
+        cmd = [exe, 'localhost', str(port), '--metadata']
+        if use_gzip:
+            cmd.append('--gzip')
+        _log('Launching C# subscriber: ' + ' '.join(os.path.basename(cmd[0]) if i == 0 else c
+                                                     for i, c in enumerate(cmd)))
+        proc = subprocess.run(cmd, cwd=out_dir, capture_output=True, text=True, timeout=45)
 
         stdout = proc.stdout or ''
         stderr = proc.stderr or ''
@@ -185,30 +192,49 @@ def run(args):
         print('---------------------')
         _log(f'C# subscriber exit code: {proc.returncode}')
 
-        ok = proc.returncode == 0
-        if not ok:
-            _log('FAIL: C# subscriber exited non-zero (metadata deserialization error or timeout).')
-            return 1
+        if proc.returncode != 0:
+            _log(f'FAIL [{label}]: C# subscriber exited non-zero (deserialization error or timeout).')
+            return False
 
-        if not args.baseline:
-            if SENTINEL_SECONDS in stdout:
-                _log(f'PASS: sentinel datetime {SENTINEL_SECONDS} round-tripped to the C# subscriber.')
-            else:
-                _log(f'FAIL: sentinel datetime {SENTINEL_SECONDS} not found in C# output.')
-                return 1
-        else:
-            _log('PASS (baseline): C# subscriber received and parsed Python metadata.')
+        if inject_sentinel and SENTINEL_SECONDS not in stdout:
+            _log(f'FAIL [{label}]: sentinel datetime {SENTINEL_SECONDS} not found in C# output.')
+            return False
 
-        return 0
+        detail = (f'sentinel {SENTINEL_SECONDS} round-tripped' if inject_sentinel
+                  else 'metadata received and parsed')
+        _log(f'PASS [{label}]: {detail}.')
+        return True
     finally:
         if publisher is not None:
             try:
                 publisher.stop()
             except Exception as ex:
                 _log(f'Error stopping publisher: {ex}')
+        time.sleep(0.3)  # allow the listening socket to release before the next run
+
+
+def run(args):
+    exe, _ = build_csharp_exe()
+
+    # C# writes metadata-received.xml into its working directory.
+    out_dir = os.path.join(HERE, '_artifacts')
+    os.makedirs(out_dir, exist_ok=True)
+
+    # Which compression negotiation(s) to exercise. "plain" is the .NET-default path the
+    # compression fix repairs; "gzip" is the compressed path.
+    modes = {'both': [False, True], 'plain': [False], 'gzip': [True]}[args.compression]
+
+    try:
+        results = []
+        for index, use_gzip in enumerate(modes):
+            ok = run_once(exe, args.port + index, inject_sentinel=not args.baseline,
+                          use_gzip=use_gzip, out_dir=out_dir)
+            results.append(ok)
+        return 0 if all(results) else 1
+    finally:
         if not args.keep:
-            received = os.path.join(out_dir, 'metadata-received.xml')
             try:
+                received = os.path.join(out_dir, 'metadata-received.xml')
                 if os.path.isfile(received):
                     os.remove(received)
                 if os.path.isdir(out_dir) and not os.listdir(out_dir):
@@ -223,8 +249,11 @@ def main():
     parser = argparse.ArgumentParser(description='STTP Python-publisher / C#-subscriber metadata interop harness')
     parser.add_argument('--baseline', action='store_true',
                         help='Serve stock (naive) metadata without the tz-aware sentinel')
+    parser.add_argument('--compression', choices=['both', 'plain', 'gzip'], default='both',
+                        help='Compression negotiation(s) to exercise (default: both). '
+                             '"plain" = .NET default (uncompressed), "gzip" = compressed.')
     parser.add_argument('--keep', action='store_true', help='Keep the C# output directory')
-    parser.add_argument('--port', type=int, default=7169, help='Publisher TCP port (default 7169)')
+    parser.add_argument('--port', type=int, default=7169, help='Base publisher TCP port (default 7169)')
     args = parser.parse_args()
 
     try:
