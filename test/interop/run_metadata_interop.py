@@ -213,8 +213,8 @@ def run(args):
                     os.remove(received)
                 if os.path.isdir(out_dir) and not os.listdir(out_dir):
                     os.rmdir(out_dir)
-            except OSError:
-                pass
+            except OSError as ex:
+                _log(f'Cleanup warning (ignored): {ex}')
         else:
             _log(f'Artifacts kept in {out_dir}')
 
