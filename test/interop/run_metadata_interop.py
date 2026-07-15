@@ -84,8 +84,8 @@ def _find_csc():
             first = out.splitlines()[0].strip() if out else ''
             if first and os.path.isfile(first):
                 return first
-        except Exception:
-            pass
+        except Exception as ex:
+            _log(f'vswhere probe failed ({ex}); continuing with fallback discovery')
 
     raise FileNotFoundError(
         'Could not locate Roslyn csc.exe. Set STTP_CSC to its path, or build the C# sample with '
