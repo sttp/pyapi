@@ -30,7 +30,7 @@ from .datatable import DataTable
 from .datatype import DataType, parse_xsddatatype
 from typing import Dict, Iterator, List, Tuple
 from decimal import Decimal
-from datetime import datetime
+from datetime import datetime, timezone
 from uuid import UUID
 from io import BytesIO, StringIO
 from xml.etree import ElementTree
@@ -51,10 +51,28 @@ Defines extended types for XSD elements, e.g., Guid and expression data types.
 
 def xsdformat(value: datetime) -> str:
     """
-    Converts date/time value to a string in XSD XML schema format.
+    Converts a date/time value to a canonical XSD `xs:dateTime` lexical string.
+
+    The result is formatted as `yyyy-MM-ddTHH:mm:ss[.ffffff]` with no timezone
+    designator and no UTC offset, matching the output of the .NET `DataSet` XML
+    serializer (default `DataSetDateTime.UnspecifiedLocal`) used by the STTP C#
+    implementation. Emitting a bare value ensures the C# subscriber accepts it and
+    round-trips it without a timezone shift.
+
+    Timezone-aware values are first normalized to their UTC wall-clock time and made
+    naive; naive values are treated as-is. Trailing fractional-second zeros are trimmed
+    without leaving a dangling decimal point.
     """
 
-    return value.isoformat(timespec="milliseconds")[:-1]  # 2 digit fractional second
+    if value.tzinfo is not None:
+        value = value.astimezone(timezone.utc).replace(tzinfo=None)
+
+    text = value.isoformat()  # naive -> no offset; omits fraction when microsecond is 0
+
+    if "." in text:
+        text = text.rstrip("0").rstrip(".")
+
+    return text
 
 
 class DataSet:
@@ -353,13 +371,8 @@ class DataSet:
         if datatype == DataType.BOOLEAN:
             return 'true' if (value if isinstance(value, bool) else str(value).lower() in ("true", "1", "yes")) else 'false'
         elif datatype == DataType.DATETIME:
-            # Format as ISO 8601 with milliseconds and Z suffix
-            dt_str = value.isoformat(timespec='milliseconds')
-            if '.' in dt_str:
-                dt_str = dt_str.rstrip('0')
-            if not dt_str.endswith('Z'):
-                dt_str += 'Z'
-            return dt_str
+            # Emit a bare xs:dateTime (no Z, no offset) for C# DataSet interop
+            return xsdformat(value)
         elif datatype == DataType.GUID:
             return str(value)
         elif datatype == DataType.DECIMAL:
